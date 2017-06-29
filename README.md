@@ -1,7 +1,7 @@
 
 # CREOSON
 
-CREOSON is an OpenSource initiative by Simplified Logic, Inc. to promote automation of PTC's CREO Parametric.
+CREOSON is an OpenSource initiative by [Simplified Logic, Inc.](http://www.simplifiedlogic.com) to promote automation of PTC's CREO Parametric.
 
 CREOSON uses simple JSON Requests to send commands/functions to CREO, JSON Responses are used to communicate the results of your requests.
 
