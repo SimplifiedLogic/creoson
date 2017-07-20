@@ -1,0 +1,22 @@
+{
+  "spec" : {
+    "function_description" : "Disconnect current session from Creo and cause Creo to exit.",
+    "command" : "connection",
+    "function" : "stop_creo",
+    "notes" : [ "NOTE that this will cause Creo to exit cleanly.", "If there is no current connection to Creo, this function will do nothing." ],
+    "request" : [ ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "connection",
+      "function" : "stop_creo"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

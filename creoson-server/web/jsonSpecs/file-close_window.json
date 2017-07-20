@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Close the window containing a model",
+    "command" : "file",
+    "function" : "close_window",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "close_window",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

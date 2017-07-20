@@ -1,0 +1,84 @@
+{
+  "spec" : {
+    "function_description" : "Set the value of a parameter",
+    "command" : "parameter",
+    "function" : "set",
+    "notes" : [ "One reason to encode values is if the value contains special characters, such as Creo symbols" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Parameter name",
+      "required" : true,
+      "wildcards_allowed" : true
+    }, {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Data type",
+      "default" : "STRING",
+      "valid_values" : "STRING, DOUBLE, INTEGER, BOOL, NOTE"
+    }, {
+      "name" : "value",
+      "type" : "depends on data type",
+      "description" : "Parameter value",
+      "default" : "Clears the parameter value if missing"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Whether the value is Base64-encoded",
+      "default" : "false"
+    }, {
+      "name" : "designate",
+      "type" : "boolean",
+      "description" : "Set parameter to be designated/not designated, blank=do not set",
+      "default" : "blank"
+    }, {
+      "name" : "no_create",
+      "type" : "boolean",
+      "description" : "If parameter does not already exist, do not create it",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "set",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "TEST",
+        "type" : "INTEGER",
+        "value" : 32
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "set",
+      "data" : {
+        "name" : "ALPHA",
+        "type" : "STRING",
+        "value" : "ZnJpZW5kbHk=",
+        "encoded" : true,
+        "designate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

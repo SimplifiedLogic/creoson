@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project name="creoson-intf" default="cleanup">
+	<property file="${basedir}/../build_vars.properties" />
+	<property name="source_dir" value="${basedir}/src" />
+	<property name="class_dir" value="${basedir}/classes" />
+	<property name="build.compiler" value="javac1.5" />
+	<property name="jar_ver" value="1.7.0" />
+
+	<target name="clean">
+		<delete dir="${class_dir}"/>
+		<mkdir dir="${class_dir}"/>
+		<delete>
+			<fileset dir="${out_dir}" includes="creoson-intf*.jar"/>
+		</delete>
+	</target>
+
+	<target name="compile" depends="clean">
+		<javac compiler="${build.compiler}" source="1.5" debug="true" debuglevel="lines,vars,source" srcdir="${source_dir}" destdir="${class_dir}">
+    		<classpath>
+				<path>
+	    			<fileset dir="${apache_commons_codec_dir}">
+	    				<include name="commons-codec-1.10.jar"/>
+	    			</fileset>
+				</path>
+    		</classpath>
+		</javac>
+		<jar destfile="${out_dir}/creoson-intf-${jar_ver}.jar" compress="false" index="true">
+			<fileset dir="${class_dir}"/>
+		</jar>
+	</target>
+
+	<target name="cleanup" depends="compile">
+		<delete dir="${class_dir}"/>
+	</target>
+
+</project>

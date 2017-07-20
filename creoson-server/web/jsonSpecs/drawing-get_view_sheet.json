@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "Get the sheet number that contains a drawing view",
+    "command" : "drawing",
+    "function" : "get_view_sheet",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "sheet" : 1
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "RIGHT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "sheet" : 2
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_sheet",
+      "data" : {
+        "view" : "FRONT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "sheet" : 1
+      }
+    }
+  } ]
+}

@@ -1,0 +1,48 @@
+{
+  "spec" : {
+    "function_description" : "Get the header of a family table",
+    "command" : "familytable",
+    "function" : "get_header",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    } ],
+    "response" : [ {
+      "name" : "columns",
+      "type" : "object_array:FamTableRowColumn",
+      "description" : "List of data about each column in the header"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "get_header",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "columns" : [ {
+          "colid" : "d0",
+          "datatype" : "DOUBLE",
+          "coltype" : "dimension"
+        }, {
+          "colid" : "BRACKET_WIDTH",
+          "datatype" : "DOUBLE",
+          "coltype" : "parameter"
+        }, {
+          "colid" : "HOLE_DIST",
+          "datatype" : "DOUBLE",
+          "coltype" : "parameter"
+        } ]
+      }
+    }
+  } ]
+}

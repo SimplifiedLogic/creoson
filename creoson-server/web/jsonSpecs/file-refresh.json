@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Refresh the window containing a model",
+    "command" : "file",
+    "function" : "refresh",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "refresh",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,0 +1,349 @@
+{
+  "spec" : {
+    "function_description" : "Get a hierarchy of components within an assembly",
+    "command" : "bom",
+    "function" : "get_paths",
+    "notes" : [ "Even if you do not set exclude_inactive to true, the function will still exclude any components with a status of INACTIVE or UNREGENERATED." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Current active model"
+    }, {
+      "name" : "paths",
+      "type" : "boolean",
+      "description" : "Whether to return component paths for each component",
+      "default" : "false"
+    }, {
+      "name" : "skeletons",
+      "type" : "boolean",
+      "description" : "Whether to include skeleton components",
+      "default" : "false"
+    }, {
+      "name" : "top_level",
+      "type" : "boolean",
+      "description" : "Whether to return only the top-level components in the assembly",
+      "default" : "false"
+    }, {
+      "name" : "get_transforms",
+      "type" : "boolean",
+      "description" : "Whether to return the 3D transform matrix for each component",
+      "default" : "false"
+    }, {
+      "name" : "exclude_inactive",
+      "type" : "boolean",
+      "description" : "Whether to exclude components which do not have an ACTIVE status",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Assembly file name"
+    }, {
+      "name" : "generic",
+      "type" : "string",
+      "description" : "Generic name for the assembly"
+    }, {
+      "name" : "children",
+      "type" : "object:BomChild",
+      "description" : "The hierarchy of component data, starting with the top-level assembly"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "bom",
+      "function" : "get_paths",
+      "data" : {
+        "file" : "plate_assy.asm"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "plate_assy.asm",
+        "generic" : "base_assy",
+        "children" : {
+          "file" : "plate_assy.asm",
+          "seq_path" : "root",
+          "children" : [ {
+            "file" : "bracket.prt",
+            "seq_path" : "root.1"
+          }, {
+            "file" : "bracket-2.prt",
+            "seq_path" : "root.2"
+          }, {
+            "file" : "plate_sub.asm",
+            "seq_path" : "root.3",
+            "children" : [ {
+              "file" : "bracket.prt",
+              "seq_path" : "root.3.1"
+            }, {
+              "file" : "nut.prt",
+              "seq_path" : "root.3.2"
+            } ]
+          }, {
+            "file" : "no_solid.prt",
+            "seq_path" : "root.4"
+          }, {
+            "file" : "short&lt;screw&gt;.prt",
+            "seq_path" : "root.5"
+          } ]
+        }
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "bom",
+      "function" : "get_paths",
+      "data" : {
+        "file" : "plate_assy.asm",
+        "paths" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "plate_assy.asm",
+        "generic" : "base_assy",
+        "children" : {
+          "file" : "plate_assy.asm",
+          "seq_path" : "root",
+          "children" : [ {
+            "file" : "bracket.prt",
+            "seq_path" : "root.1",
+            "path" : [ 39 ]
+          }, {
+            "file" : "bracket-2.prt",
+            "seq_path" : "root.2",
+            "path" : [ 40 ]
+          }, {
+            "file" : "plate_sub.asm",
+            "seq_path" : "root.3",
+            "path" : [ 41 ],
+            "children" : [ {
+              "file" : "bracket.prt",
+              "seq_path" : "root.3.1",
+              "path" : [ 41, 43 ]
+            }, {
+              "file" : "nut.prt",
+              "seq_path" : "root.3.2",
+              "path" : [ 41, 44 ]
+            } ]
+          }, {
+            "file" : "no_solid.prt",
+            "seq_path" : "root.3",
+            "path" : [ 41 ]
+          }, {
+            "file" : "short&lt;screw&gt;.prt",
+            "seq_path" : "root.4",
+            "path" : [ 54 ]
+          } ]
+        }
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "bom",
+      "function" : "get_paths",
+      "data" : {
+        "file" : "01-51300.asm",
+        "paths" : true,
+        "get_transforms" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "01-51300.asm",
+        "children" : {
+          "file" : "plate_assy.asm",
+          "seq_path" : "root",
+          "children" : [ {
+            "file" : "01-51243C.PRT",
+            "seq_path" : "root.1",
+            "path" : [ 27 ],
+            "transform" : {
+              "origin" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "x_axis" : {
+                "x" : 1.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "y_axis" : {
+                "x" : 0.0,
+                "y" : 1.0,
+                "z" : 0.0
+              },
+              "z_axis" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 1.0
+              },
+              "x_rot" : 0.0,
+              "y_rot" : 0.0,
+              "z_rot" : 0.0
+            }
+          }, {
+            "file" : "01-51243A.PRT",
+            "seq_path" : "root.2",
+            "path" : [ 29 ],
+            "transform" : {
+              "origin" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "x_axis" : {
+                "x" : 1.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "y_axis" : {
+                "x" : 0.0,
+                "y" : 1.0,
+                "z" : 0.0
+              },
+              "z_axis" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 1.0
+              },
+              "x_rot" : 0.0,
+              "y_rot" : 0.0,
+              "z_rot" : 0.0
+            }
+          }, {
+            "file" : "01-51243A.PRT",
+            "seq_path" : "root.3",
+            "path" : [ 66 ],
+            "transform" : {
+              "origin" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "x_axis" : {
+                "x" : 1.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "y_axis" : {
+                "x" : 0.0,
+                "y" : 0.8660254037844386,
+                "z" : -0.5
+              },
+              "z_axis" : {
+                "x" : 0.0,
+                "y" : 0.5,
+                "z" : 0.8660254037844386
+              },
+              "x_rot" : -30.000000000000004,
+              "y_rot" : 0.0,
+              "z_rot" : 0.0
+            }
+          }, {
+            "file" : "01-51243A.PRT",
+            "seq_path" : "root.4",
+            "path" : [ 67 ],
+            "transform" : {
+              "origin" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "x_axis" : {
+                "x" : 1.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "y_axis" : {
+                "x" : 0.0,
+                "y" : 0.5,
+                "z" : -0.8660254037844387
+              },
+              "z_axis" : {
+                "x" : 0.0,
+                "y" : 0.8660254037844387,
+                "z" : 0.5
+              },
+              "x_rot" : -60.00000000000001,
+              "y_rot" : 0.0,
+              "z_rot" : 0.0
+            }
+          }, {
+            "file" : "01-51243A.PRT",
+            "seq_path" : "root.5",
+            "path" : [ 68 ],
+            "transform" : {
+              "origin" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "x_axis" : {
+                "x" : 1.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "y_axis" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : -1.0
+              },
+              "z_axis" : {
+                "x" : 0.0,
+                "y" : 1.0,
+                "z" : 0.0
+              },
+              "x_rot" : -90.0,
+              "y_rot" : 0.0,
+              "z_rot" : 0.0
+            }
+          }, {
+            "file" : "01-51243D.PRT",
+            "seq_path" : "root.6",
+            "path" : [ 30 ],
+            "transform" : {
+              "origin" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "x_axis" : {
+                "x" : 1.0,
+                "y" : 0.0,
+                "z" : 0.0
+              },
+              "y_axis" : {
+                "x" : 0.0,
+                "y" : 1.0,
+                "z" : 0.0
+              },
+              "z_axis" : {
+                "x" : 0.0,
+                "y" : 0.0,
+                "z" : 1.0
+              },
+              "x_rot" : 0.0,
+              "y_rot" : 0.0,
+              "z_rot" : 0.0
+            }
+          } ]
+        }
+      }
+    }
+  } ]
+}

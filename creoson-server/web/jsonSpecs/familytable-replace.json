@@ -1,0 +1,67 @@
+{
+  "spec" : {
+    "function_description" : "Replace a model in an assembly with another instance in the same family table",
+    "command" : "familytable",
+    "function" : "replace",
+    "notes" : [ "You must specify either cur_inst or path." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name (usually an assembly)",
+      "default" : "Currently active model"
+    }, {
+      "name" : "cur_model",
+      "type" : "string",
+      "description" : "Generic model containing the instances",
+      "required" : true
+    }, {
+      "name" : "cur_inst",
+      "type" : "string",
+      "description" : "Instance name to replace"
+    }, {
+      "name" : "path",
+      "type" : "array:integer",
+      "description" : "Path to component to replace"
+    }, {
+      "name" : "new_inst",
+      "type" : "string",
+      "description" : "New instance name"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "replace",
+      "data" : {
+        "file" : "abc123.asm",
+        "cur_model" : "bracket.prt",
+        "cur_inst" : "wide_bracket",
+        "new_inst" : "thick_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "replace",
+      "data" : {
+        "file" : "abc123.asm",
+        "cur_model" : "bracket.prt",
+        "path" : [ 0, 5, 12 ],
+        "new_inst" : "thick_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Get the current length units for a model",
+    "command" : "file",
+    "function" : "get_length_units",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "units",
+      "type" : "string",
+      "description" : "Length units"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_length_units",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "units" : "cm"
+      }
+    }
+  } ]
+}

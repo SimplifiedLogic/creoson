@@ -1,0 +1,70 @@
+{
+  "spec" : {
+    "function_description" : "Delete one or more models from a drawing",
+    "command" : "drawing",
+    "function" : "delete_models",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "model",
+      "type" : "string",
+      "description" : "Model name",
+      "default" : "All models will be deleted from the drawing",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "delete_views",
+      "type" : "boolean",
+      "description" : "Whether to delete drawing views associated with the model",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_models",
+      "data" : {
+        "drawing" : "box.drw",
+        "model" : "screw.prt",
+        "delete_views" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_models",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_models",
+      "data" : {
+        "model" : "*w*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

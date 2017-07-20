@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Change Creo's working directory",
+    "command" : "creo",
+    "function" : "cd",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "New directory name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Name of new working directory"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "cd",
+      "data" : {
+        "dirname" : "c:\\myfiles\\testing"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/testing"
+      }
+    }
+  } ]
+}

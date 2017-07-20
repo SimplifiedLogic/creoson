@@ -1,0 +1,54 @@
+{
+  "spec" : {
+    "function_description" : "Regenerate one or more models",
+    "command" : "file",
+    "function" : "regenerate",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name; only used if files is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of file names",
+      "default" : "The file parameter is used"
+    }, {
+      "name" : "display",
+      "type" : "boolean",
+      "description" : "Display the model before regenerating",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "regenerate",
+      "data" : {
+        "file" : "box.prt",
+        "display" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "regenerate",
+      "data" : {
+        "files" : [ "able.prt", "baker.prt", "charlie.prt" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,0 +1,57 @@
+{
+  "spec" : {
+    "function_description" : "Execute an external .bat file to start Creo, then attempts to connect to Creo.",
+    "command" : "connection",
+    "function" : "start_creo",
+    "notes" : [ "The .bat file is restricted to a specific name to make the function more secure.", "Set retries to 0 to NOT attempt to connect to Creo.", "The server will pause for 3 seconds before attempting a connection, and will pause for 10 seconds between connection retries", "If Creo pops up a message after startup, this function may cause Creo to crash unless retries is set to 0." ],
+    "request" : [ {
+      "name" : "start_dir",
+      "type" : "string",
+      "description" : "Directory containing the .bat file",
+      "required" : true
+    }, {
+      "name" : "start_command",
+      "type" : "string",
+      "description" : "Name of the .bat file",
+      "required" : true,
+      "valid_values" : "nitro_proe_remote.bat"
+    }, {
+      "name" : "retries",
+      "type" : "integer",
+      "description" : "Number of retries to make when connecting",
+      "default" : "20"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "command" : "connection",
+      "function" : "start_creo",
+      "data" : {
+        "start_dir" : "C:/myfiles",
+        "start_command" : "nitro_proe_remote.bat",
+        "retries" : 5
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "command" : "connection",
+      "function" : "start_creo",
+      "data" : {
+        "start_dir" : "C:/myfiles",
+        "start_command" : "nitro_proe_remote.bat",
+        "retries" : 0
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

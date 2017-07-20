@@ -1,0 +1,210 @@
+{
+  "spec" : {
+    "function_description" : "Get the list of edges for a model for given surfaces",
+    "command" : "geometry",
+    "function" : "get_edges",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "surface_ids",
+      "type" : "array:integer",
+      "description" : "List of surface IDs",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "contourlist",
+      "type" : "object_array:ContourData",
+      "description" : "List of contour information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "geometry",
+      "function" : "get_edges",
+      "data" : {
+        "file" : "box.prt",
+        "surface_ids" : [ 43, 48 ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "contourlist" : [ {
+          "surface_id" : 43,
+          "traversal" : "external",
+          "edgelist" : [ {
+            "edge_id" : 126,
+            "length" : 56.862827029975136,
+            "start" : {
+              "x" : 363.8,
+              "y" : 200.0,
+              "z" : -150.0
+            },
+            "end" : {
+              "x" : 400.0,
+              "y" : 163.8,
+              "z" : -150.0
+            }
+          }, {
+            "edge_id" : 131,
+            "length" : 363.80000000000007,
+            "start" : {
+              "x" : 363.8,
+              "y" : 200.0,
+              "z" : -150.0
+            },
+            "end" : {
+              "x" : 0.0,
+              "y" : 200.0,
+              "z" : -150.0
+            }
+          }, {
+            "edge_id" : 47,
+            "length" : 200.0,
+            "start" : {
+              "x" : 0.0,
+              "y" : 200.0,
+              "z" : -150.0
+            },
+            "end" : {
+              "x" : 0.0,
+              "y" : 0.0,
+              "z" : -150.0
+            }
+          }, {
+            "edge_id" : 44,
+            "length" : 400.0,
+            "start" : {
+              "x" : 0.0,
+              "y" : 0.0,
+              "z" : -150.0
+            },
+            "end" : {
+              "x" : 400.0,
+              "y" : 0.0,
+              "z" : -150.0
+            }
+          }, {
+            "edge_id" : 130,
+            "length" : 163.8,
+            "start" : {
+              "x" : 400.0,
+              "y" : 0.0,
+              "z" : -150.0
+            },
+            "end" : {
+              "x" : 400.0,
+              "y" : 163.8,
+              "z" : 400.0
+            }
+          } ]
+        }, {
+          "surface_id" : 48,
+          "traversal" : "internal",
+          "edgelist" : [ {
+            "edge_id" : 91,
+            "length" : 98.78345852457763,
+            "start" : {
+              "x" : 124.08212623658257,
+              "y" : 132.63415039216727,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 61.1946233569836,
+              "y" : 132.63415039216727,
+              "z" : 150.0
+            }
+          }, {
+            "edge_id" : 92,
+            "length" : 98.78345852457714,
+            "start" : {
+              "x" : 61.1946233569836,
+              "y" : 132.63415039216727,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 124.08212623658257,
+              "y" : 132.63415039216727,
+              "z" : 150.0
+            }
+          } ]
+        }, {
+          "surface_id" : 48,
+          "traversal" : "external",
+          "edgelist" : [ {
+            "edge_id" : 190,
+            "length" : 363.80000000000007,
+            "start" : {
+              "x" : 363.8,
+              "y" : 176.3,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 0.0,
+              "y" : 176.3,
+              "z" : 150.0
+            }
+          }, {
+            "edge_id" : 191,
+            "length" : 19.63495410228761,
+            "start" : {
+              "x" : 376.3,
+              "y" : 163.8,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 363.8,
+              "y" : 176.3,
+              "z" : 150.0
+            }
+          }, {
+            "edge_id" : 194,
+            "length" : 163.8,
+            "start" : {
+              "x" : 376.3,
+              "y" : 0.0,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 376.3,
+              "y" : 163.8,
+              "z" : 150.0
+            }
+          }, {
+            "edge_id" : 196,
+            "length" : 376.30000000000007,
+            "start" : {
+              "x" : 0.0,
+              "y" : 0.0,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 376.3,
+              "y" : 0.0,
+              "z" : 150.0
+            }
+          }, {
+            "edge_id" : 197,
+            "length" : 176.3,
+            "start" : {
+              "x" : 0.0,
+              "y" : 176.3,
+              "z" : 150.0
+            },
+            "end" : {
+              "x" : 0.0,
+              "y" : 0.0,
+              "z" : 150.0
+            }
+          } ]
+        } ]
+      }
+    }
+  } ]
+}

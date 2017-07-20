@@ -1,0 +1,89 @@
+{
+  "spec" : {
+    "function_description" : "Set the value of a feature parameter",
+    "command" : "feature",
+    "function" : "set_param",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Feature name",
+      "default" : "All features are updated"
+    }, {
+      "name" : "param",
+      "type" : "string",
+      "description" : "Parameter name",
+      "required" : true
+    }, {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Parameter data type",
+      "default" : "STRING",
+      "valid_values" : "STRING, DOUBLE, INTEGER, BOOL, NOTE"
+    }, {
+      "name" : "value",
+      "type" : "depends on data type",
+      "description" : "Parameter value",
+      "default" : "Clears the parameter value if missing"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Value is Base64-encoded",
+      "default" : "false"
+    }, {
+      "name" : "designate",
+      "type" : "boolean",
+      "description" : "Set parameter to be designated/not designated, blank=do not set",
+      "default" : "blank"
+    }, {
+      "name" : "no_create",
+      "type" : "boolean",
+      "description" : "If parameter does not already exist, do not create it",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "set_param",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLANE_34",
+        "param" : "TEST",
+        "type" : "INTEGER",
+        "value" : 32
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "set_param",
+      "data" : {
+        "name" : "FLAT_1",
+        "param" : "ALPHA",
+        "type" : "STRING",
+        "value" : "ZnJpZW5kbHk=",
+        "encoded" : true,
+        "designate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

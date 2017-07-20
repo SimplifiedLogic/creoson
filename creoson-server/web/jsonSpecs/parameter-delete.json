@@ -1,0 +1,67 @@
+{
+  "spec" : {
+    "function_description" : "Delete a parameter",
+    "command" : "parameter",
+    "function" : "delete",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Parameter name",
+      "required" : true,
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "ALPHA"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "LM*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "delete",
+      "data" : {
+        "file" : "abc*.asm",
+        "name" : "MFG_ID"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

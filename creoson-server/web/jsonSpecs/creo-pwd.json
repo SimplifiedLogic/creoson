@@ -1,0 +1,28 @@
+{
+  "spec" : {
+    "function_description" : "Return Creo's current working directory",
+    "command" : "creo",
+    "function" : "pwd",
+    "request" : [ ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Full name of working directory"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "pwd"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/testing"
+      }
+    }
+  } ]
+}

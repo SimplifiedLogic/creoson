@@ -1,0 +1,44 @@
+{
+  "spec" : {
+    "function_description" : "Delete an entire family table",
+    "command" : "familytable",
+    "function" : "delete",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "delete",
+      "data" : {
+        "file" : "abc*.asm"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

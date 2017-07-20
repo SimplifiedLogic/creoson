@@ -1,0 +1,110 @@
+{
+  "spec" : {
+    "function_description" : "Create a new drawing from a template",
+    "command" : "drawing",
+    "function" : "create",
+    "request" : [ {
+      "name" : "model",
+      "type" : "string",
+      "description" : "Model name",
+      "default" : "Current active model"
+    }, {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "New drawing name",
+      "default" : "A name derived from the model's instance name"
+    }, {
+      "name" : "template",
+      "type" : "string",
+      "description" : "Template",
+      "required" : true
+    }, {
+      "name" : "scale",
+      "type" : "double",
+      "description" : "Drawing scale",
+      "default" : "1.0"
+    }, {
+      "name" : "display",
+      "type" : "boolean",
+      "description" : "Display the drawing after opening",
+      "default" : "false"
+    }, {
+      "name" : "activate",
+      "type" : "boolean",
+      "description" : "Activate the drawing window after opening",
+      "default" : "false"
+    }, {
+      "name" : "new_window",
+      "type" : "boolean",
+      "description" : "Open drawing in a new window",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "New drawing name"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create",
+      "data" : {
+        "model" : "box.prt",
+        "drawing" : "box-test.drw",
+        "template" : "main_template",
+        "scale" : 0.5,
+        "display" : true,
+        "activate" : true,
+        "new_window" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "drawing" : "box-test.drw"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create",
+      "data" : {
+        "model" : "thick_bracket&lt;bracket&gt;.prt",
+        "template" : "main_template",
+        "display" : true,
+        "activate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "drawing" : "thick_bracket.drw"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create",
+      "data" : {
+        "template" : "main_template",
+        "scale" : 0.5
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    }
+  } ]
+}

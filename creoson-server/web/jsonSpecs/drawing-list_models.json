@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "List the models contained in a drawing",
+    "command" : "drawing",
+    "function" : "list_models",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "model",
+      "type" : "string",
+      "description" : "Model name filter",
+      "default" : "no filter",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of model names in the drawing"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_models",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt", "screw.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_models",
+      "data" : {
+        "drawing" : "box.drw",
+        "model" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_models",
+      "data" : {
+        "model" : "*w*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "screw.prt" ]
+      }
+    }
+  } ]
+}

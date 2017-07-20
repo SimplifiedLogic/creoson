@@ -1,0 +1,50 @@
+{
+  "spec" : {
+    "function_description" : "Get the active model on a drawing",
+    "command" : "drawing",
+    "function" : "get_cur_model",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    } ],
+    "response" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Model name"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_cur_model",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "drawing" : "box.prt"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_cur_model"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "drawing" : "screw.prt"
+      }
+    }
+  } ]
+}

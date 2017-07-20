@@ -1,0 +1,21 @@
+{
+  "object_name" : "SurfaceData",
+  "description" : "Information about a surface",
+  "data" : [ {
+    "name" : "surface_id",
+    "type" : "integer",
+    "description" : "Surface ID"
+  }, {
+    "name" : "area",
+    "type" : "double",
+    "description" : "Surface area"
+  }, {
+    "name" : "min_extent",
+    "type" : "object:JLPoint",
+    "description" : "Minimum extent"
+  }, {
+    "name" : "max_extent",
+    "type" : "object:JLPoint",
+    "description" : "Maximum extent"
+  } ]
+}

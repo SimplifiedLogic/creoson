@@ -1,0 +1,61 @@
+{
+  "spec" : {
+    "function_description" : "Get the bounding box for a model",
+    "command" : "geometry",
+    "function" : "bound_box",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "xmin",
+      "type" : "double",
+      "description" : "Minimum X-coordinate of model"
+    }, {
+      "name" : "xmax",
+      "type" : "double",
+      "description" : "Maximum X-coordinate of model"
+    }, {
+      "name" : "ymin",
+      "type" : "double",
+      "description" : "Minimum Y-coordinate of model"
+    }, {
+      "name" : "ymax",
+      "type" : "double",
+      "description" : "Maximum Y-coordinate of model"
+    }, {
+      "name" : "zmin",
+      "type" : "double",
+      "description" : "Minimum Z-coordinate of model"
+    }, {
+      "name" : "zmax",
+      "type" : "double",
+      "description" : "Maximum Z-coordinate of model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "geometry",
+      "function" : "bound_box",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "xmin" : 5.0,
+        "xmax" : 30.0,
+        "ymin" : 12.5,
+        "ymax" : 15.0,
+        "zmin" : 7.0,
+        "zmax" : 15.3
+      }
+    }
+  } ]
+}

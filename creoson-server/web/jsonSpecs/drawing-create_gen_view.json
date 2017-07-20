@@ -1,0 +1,122 @@
+{
+  "spec" : {
+    "function_description" : "Create general view on a drawing",
+    "command" : "drawing",
+    "function" : "create_gen_view",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "New view name",
+      "default" : "The model_view parameter"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "default" : "Current active sheet on the drawing"
+    }, {
+      "name" : "model",
+      "type" : "string",
+      "description" : "Model for the view",
+      "default" : "Current active model on the drawing"
+    }, {
+      "name" : "model_view",
+      "type" : "string",
+      "description" : "Model view to use for the drawing view orientation",
+      "required" : true
+    }, {
+      "name" : "point",
+      "type" : "object:JLPoint",
+      "description" : "Coordinates for the view",
+      "required" : true
+    }, {
+      "name" : "scale",
+      "type" : "double",
+      "description" : "View scale",
+      "default" : "The sheet's scale"
+    }, {
+      "name" : "display_data",
+      "type" : "object:ViewDisplayData",
+      "description" : "Display parameters used to create the view",
+      "default" : "Creo defaults"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_gen_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "RIGHT_TEST",
+        "sheet" : 1,
+        "model" : "box.prt",
+        "model_view" : "RIGHT",
+        "point" : {
+          "x" : 10.0,
+          "y" : 3.25
+        },
+        "scale" : 0.25,
+        "display_data" : {
+          "cable_style" : "default",
+          "style" : "hidden_line",
+          "tangent_style" : "none",
+          "remove_quilt_hidden_lines" : true,
+          "show_concept_model" : false,
+          "show_weld_xsection" : false
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_gen_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "model_view" : "RIGHT",
+        "point" : {
+          "x" : 10.0,
+          "y" : 3.25
+        },
+        "display_data" : {
+          "style" : "hidden_line",
+          "tangent_style" : "none"
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_gen_view",
+      "data" : {
+        "model_view" : "RIGHT",
+        "point" : {
+          "x" : 10.0,
+          "y" : 3.25
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

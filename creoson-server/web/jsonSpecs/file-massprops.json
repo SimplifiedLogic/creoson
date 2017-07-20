@@ -1,0 +1,51 @@
+{
+  "spec" : {
+    "function_description" : "Get mass property information about a model",
+    "command" : "file",
+    "function" : "massprops",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "volume",
+      "type" : "double",
+      "description" : "Model volume"
+    }, {
+      "name" : "mass",
+      "type" : "double",
+      "description" : "Model mass"
+    }, {
+      "name" : "density",
+      "type" : "double",
+      "description" : "Model density"
+    }, {
+      "name" : "surface_area",
+      "type" : "double",
+      "description" : "Model surface area"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "massprops",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "volume" : 40762.91034040907,
+        "mass" : 40762.91034040907,
+        "density" : 1.0,
+        "surface_area" : 11820.348301046597
+      }
+    }
+  } ]
+}

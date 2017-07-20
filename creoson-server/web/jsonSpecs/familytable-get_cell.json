@@ -1,0 +1,67 @@
+{
+  "spec" : {
+    "function_description" : "Get one cell of a family table",
+    "command" : "familytable",
+    "function" : "get_cell",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Family Table instance name",
+      "required" : true
+    }, {
+      "name" : "colid",
+      "type" : "string",
+      "description" : "Column ID",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Family Table instance name"
+    }, {
+      "name" : "colid",
+      "type" : "string",
+      "description" : "Column ID"
+    }, {
+      "name" : "value",
+      "type" : "depends on data type",
+      "description" : "Cell value"
+    }, {
+      "name" : "datatype",
+      "type" : "string",
+      "description" : "Data type"
+    }, {
+      "name" : "coltype",
+      "type" : "string",
+      "description" : "Column Type; a string corresponding to the Creo column type"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "get_cell",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "thick_bracket",
+        "colid" : "BRACKET_WIDTH"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "colid" : "BRACKET_WIDTH",
+        "value" : 100.0,
+        "datatype" : "DOUBLE",
+        "coltype" : "parameter"
+      }
+    }
+  } ]
+}

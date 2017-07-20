@@ -1,0 +1,51 @@
+{
+  "spec" : {
+    "function_description" : "Delete a model or drawing note",
+    "command" : "note",
+    "function" : "delete",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model or drawing",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Note name",
+      "required" : true,
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "Note_23"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "delete",
+      "data" : {
+        "name" : "Note_17"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

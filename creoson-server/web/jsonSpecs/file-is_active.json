@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Check whether a model is the active model",
+    "command" : "file",
+    "function" : "is_active",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "active",
+      "type" : "boolean",
+      "description" : "Whether the file is the currently active model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "is_active",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "active" : true
+      }
+    }
+  } ]
+}

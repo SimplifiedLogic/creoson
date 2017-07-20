@@ -1,0 +1,82 @@
+{
+  "spec" : {
+    "function_description" : "Check whether parameter(s) exists on a model",
+    "command" : "parameter",
+    "function" : "exists",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Parameter name; only used if names is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "names",
+      "type" : "array:string",
+      "description" : "List of parameter names",
+      "default" : "The name parameter is used; if both are empty, then it checks for any parameter's existence"
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the parameter exists on the model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "MFG_ID"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PTC*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "exists",
+      "data" : {
+        "names" : [ "LM_LENGTH", "LM_WIDTH", "LM_HEIGHT" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

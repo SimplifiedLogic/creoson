@@ -1,0 +1,49 @@
+{
+  "spec" : {
+    "function_description" : "Save a model's current orientation as a new view",
+    "command" : "view",
+    "function" : "save",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "view",
+      "function" : "save",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "west_view"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "view",
+      "function" : "save",
+      "data" : {
+        "name" : "north"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

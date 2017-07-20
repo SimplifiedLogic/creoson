@@ -1,0 +1,70 @@
+{
+  "spec" : {
+    "function_description" : "Check whether a workspace exists",
+    "command" : "windchill",
+    "function" : "workspace_exists",
+    "request" : [ {
+      "name" : "workspace",
+      "type" : "string",
+      "description" : "Workspace name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the workspace exists"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "workspace_exists",
+      "data" : {
+        "workspace" : "freds_workspace"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "workspace_exists",
+      "data" : {
+        "workspace" : "sams_workspace"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "workspace_exists",
+      "data" : {
+        "server_url" : "Main_Server"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "Get the scale of a drawing view",
+    "command" : "drawing",
+    "function" : "get_view_scale",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "scale",
+      "type" : "double",
+      "description" : "View scale"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_scale",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "scale" : 0.5
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_scale",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "RIGHT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "scale" : 1.0
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_scale",
+      "data" : {
+        "view" : "FRONT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "scale" : 0.5
+      }
+    }
+  } ]
+}

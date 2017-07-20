@@ -1,0 +1,69 @@
+{
+  "spec" : {
+    "function_description" : "Get a hierarchical structure of a nested family table",
+    "command" : "familytable",
+    "function" : "list_tree",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "erase",
+      "type" : "boolean",
+      "description" : "Erase model and non-displayed models afterwards",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "total",
+      "type" : "integer",
+      "description" : "Count of all child instances including their decendants"
+    }, {
+      "name" : "children",
+      "type" : "object_array:FamTableInstance",
+      "description" : "List of child instances"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "list_tree",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "total" : 7,
+        "children" : [ {
+          "name" : "thick_bracket",
+          "total" : 3,
+          "children" : [ {
+            "name" : "thick_bracket-1",
+            "total" : 0
+          }, {
+            "name" : "thick_bracket-2",
+            "total" : 0
+          }, {
+            "name" : "thick_bracket-3",
+            "total" : 0
+          } ]
+        }, {
+          "name" : "wide_bracket",
+          "total" : 2,
+          "children" : [ {
+            "name" : "wide_bracket-1",
+            "total" : 0
+          }, {
+            "name" : "wide_bracket-2",
+            "total" : 0
+          } ]
+        } ]
+      }
+    }
+  } ]
+}

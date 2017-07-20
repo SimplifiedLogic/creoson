@@ -1,0 +1,59 @@
+{
+  "spec" : {
+    "function_description" : "Get the size of a drawing sheet",
+    "command" : "drawing",
+    "function" : "get_sheet_size",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "size",
+      "type" : "string",
+      "description" : "Sheet size"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_sheet_size",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "size" : "A4"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_sheet_size",
+      "data" : {
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "size" : "F"
+      }
+    }
+  } ]
+}

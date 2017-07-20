@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Return the server's execution directory",
+    "command" : "server",
+    "function" : "pwd",
+    "notes" : [ "*** WARNING *** WARNING *** WARNING ***", "-", "The endpoint for this function must be /server, not /creoson", "-", "*** WARNING *** WARNING *** WARNING ***" ],
+    "request" : [ ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Full name of working directory"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "server",
+      "function" : "pwd"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "c:/CreosonServer"
+      }
+    }
+  } ]
+}

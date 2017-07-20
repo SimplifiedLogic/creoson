@@ -1,0 +1,48 @@
+{
+  "spec" : {
+    "function_description" : "Save one or more models",
+    "command" : "file",
+    "function" : "save",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name; only used if files is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of file names",
+      "default" : "The file parameter is used"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "save",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "save",
+      "data" : {
+        "files" : [ "able.prt", "baker.prt", "charlie.prt" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

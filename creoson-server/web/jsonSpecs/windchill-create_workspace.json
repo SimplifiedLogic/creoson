@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Create a workspace",
+    "command" : "windchill",
+    "function" : "create_workspace",
+    "request" : [ {
+      "name" : "workspace",
+      "type" : "string",
+      "description" : "Workspace name",
+      "required" : true
+    }, {
+      "name" : "context",
+      "type" : "string",
+      "description" : "Windchill context",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "create_workspace",
+      "data" : {
+        "workspace" : "freds_workspace",
+        "context" : "ctx1"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

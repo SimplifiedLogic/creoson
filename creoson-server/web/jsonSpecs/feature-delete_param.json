@@ -1,0 +1,73 @@
+{
+  "spec" : {
+    "function_description" : "Delete a feature parameter",
+    "command" : "feature",
+    "function" : "delete_param",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Feature name",
+      "default" : "All feature names",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "param",
+      "type" : "string",
+      "description" : "Parameter name",
+      "default" : "All parameter names",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete_param",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "FLAT_3",
+        "param" : "ALPHA"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete_param",
+      "data" : {
+        "name" : "CS*",
+        "param" : "LM*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete_param",
+      "data" : {
+        "file" : "abc*.asm",
+        "param" : "MFG_ID"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

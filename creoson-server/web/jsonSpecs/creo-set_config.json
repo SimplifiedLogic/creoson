@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Set a Creo config option",
+    "command" : "creo",
+    "function" : "set_config",
+    "request" : [ {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Option name",
+      "required" : true
+    }, {
+      "name" : "value",
+      "type" : "string",
+      "description" : "New option value",
+      "default" : "Clear the option"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "set_config",
+      "data" : {
+        "name" : "allow_save_as_instance",
+        "value" : "no"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

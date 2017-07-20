@@ -1,0 +1,24 @@
+{
+  "spec" : {
+    "function_description" : "Check whether Creo is running.",
+    "command" : "connection",
+    "function" : "is_creo_running",
+    "notes" : [ "This function tests whether the current connection is still active; if there is no active connection, then it tries to make a new connection to Creo and returns whether the connection succeeds.", "The sessionId is optional, and ignored." ],
+    "request" : [ ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "command" : "connection",
+      "function" : "is_creo_running"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "running" : true
+      }
+    }
+  } ]
+}

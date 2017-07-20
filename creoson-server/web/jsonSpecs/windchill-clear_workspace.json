@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Clear a workspace",
+    "command" : "windchill",
+    "function" : "clear_workspace",
+    "request" : [ {
+      "name" : "workspace",
+      "type" : "string",
+      "description" : "Workspace name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "clear_workspace",
+      "data" : {
+        "workspace" : "test_workspace"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

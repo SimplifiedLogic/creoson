@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Set post-regeneration relations for a model",
+    "command" : "file",
+    "function" : "postregen_relations_set",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "relations",
+      "type" : "array:string",
+      "description" : "Relations text to import, one line per entry",
+      "default" : "Clear the relations if missing"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "postregen_relations_set",
+      "data" : {
+        "file" : "box.prt",
+        "relations" : [ "d2=bracket_width", "d3=hole_dist" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

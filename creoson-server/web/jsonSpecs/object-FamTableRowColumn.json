@@ -1,0 +1,23 @@
+{
+  "object_name" : "FamTableRowColumn",
+  "description" : "Information about one cell in a family table",
+  "data" : [ {
+    "name" : "colid",
+    "type" : "string",
+    "description" : "Column ID"
+  }, {
+    "name" : "value",
+    "type" : "depends on data type",
+    "description" : "Cell value"
+  }, {
+    "name" : "datatype",
+    "type" : "string",
+    "description" : "Data type",
+    "default" : "STRING",
+    "valid_values" : "STRING, DOUBLE, INTEGER, BOOL, NOTE"
+  }, {
+    "name" : "coltype",
+    "type" : "string",
+    "description" : "Column Type; a string corresponding to the Creo column type"
+  } ]
+}

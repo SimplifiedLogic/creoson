@@ -1,0 +1,50 @@
+{
+  "spec" : {
+    "function_description" : "Get the current drawing sheet",
+    "command" : "drawing",
+    "function" : "get_cur_sheet",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    } ],
+    "response" : [ {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_cur_sheet",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "sheet" : 1
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_cur_sheet"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "sheet" : 2
+      }
+    }
+  } ]
+}

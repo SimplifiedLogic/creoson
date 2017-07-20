@@ -1,0 +1,48 @@
+{
+  "spec" : {
+    "function_description" : "Rename a model",
+    "command" : "file",
+    "function" : "rename",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Old file name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "new_name",
+      "type" : "string",
+      "description" : "New file name",
+      "required" : true
+    }, {
+      "name" : "onlysession",
+      "type" : "boolean",
+      "description" : "Modify only in memory, not on disk",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "The new model name"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "rename",
+      "data" : {
+        "file" : "box.prt",
+        "new_name" : "box_flat.prt",
+        "onlysession" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "box_flat.prt"
+      }
+    }
+  } ]
+}

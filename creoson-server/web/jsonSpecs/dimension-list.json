@@ -1,0 +1,112 @@
+{
+  "spec" : {
+    "function_description" : "Get a list of dimensions from a model",
+    "command" : "dimension",
+    "function" : "list",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Dimension name; only used if names is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "names",
+      "type" : "array:string",
+      "description" : "List of dimension names",
+      "default" : "The name parameter is used; if both are empty, then all dimensions are listed"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Whether to return the values Base64-encoded",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "dimlist",
+      "type" : "object_array:DimData",
+      "description" : "List of dimension information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "d*1"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "d1",
+          "value" : 32.5,
+          "encoded" : false
+        }, {
+          "name" : "d11",
+          "value" : 5.0,
+          "encoded" : false
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "list",
+      "data" : {
+        "names" : [ "d1", "RADIUS", "ANGLE" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "ANGLE",
+          "value" : "MzAgASQCCg==",
+          "encoded" : true
+        }, {
+          "name" : "d1",
+          "value" : 32.5,
+          "encoded" : false
+        }, {
+          "name" : "RADIUS",
+          "value" : 2.5,
+          "encoded" : false
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "d1",
+        "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "d1",
+          "value" : "MzIuNQ==",
+          "encoded" : true
+        } ]
+      }
+    }
+  } ]
+}

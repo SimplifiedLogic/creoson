@@ -1,0 +1,142 @@
+{
+  "spec" : {
+    "function_description" : "Open one or more files in memory or from the drive",
+    "command" : "file",
+    "function" : "open",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name; only used if files is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of file names",
+      "default" : "The file parameter is used"
+    }, {
+      "name" : "generic",
+      "type" : "string",
+      "description" : "Generic model name (if file name represents an instance)"
+    }, {
+      "name" : "display",
+      "type" : "boolean",
+      "description" : "Display the model after opening",
+      "default" : "false"
+    }, {
+      "name" : "activate",
+      "type" : "boolean",
+      "description" : "Activate the model after opening",
+      "default" : "false"
+    }, {
+      "name" : "new_window",
+      "type" : "boolean",
+      "description" : "Open model in a new window",
+      "default" : "false"
+    }, {
+      "name" : "regen_force",
+      "type" : "boolean",
+      "description" : "Force regeneration after opening",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name of opened file(s)"
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "File names that were opened"
+    }, {
+      "name" : "revision",
+      "type" : "integer",
+      "description" : "Revision of file that was opened; if more than one file was opened, this field is not returned"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "open",
+      "data" : {
+        "file" : "thin_bracket.prt",
+        "generic" : "bracket",
+        "display" : true,
+        "activate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/somefiles/parts",
+        "files" : [ "thin_bracket&lt;bracket&gt;.prt" ],
+        "revision" : 23
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "open",
+      "data" : {
+        "file" : "abc*.asm",
+        "dirname" : "c:/mydir/parts",
+        "display" : true,
+        "activate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/mydir/parts",
+        "files" : [ "abc123.asm", "abc93939.asm" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "open",
+      "data" : {
+        "files" : [ "able.prt", "baker.prt", "charlie.prt" ],
+        "dirname" : "c:/mydir/parts",
+        "display" : true,
+        "activate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/mydir/parts",
+        "files" : [ "able.prt", "baker.prt", "charlie.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "open",
+      "data" : {
+        "file" : "nofile.prt",
+        "display" : true,
+        "activate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "message" : "Could not open file 'nofile.prt'.",
+        "error" : true
+      }
+    }
+  } ]
+}

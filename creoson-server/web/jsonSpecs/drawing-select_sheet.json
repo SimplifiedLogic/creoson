@@ -1,0 +1,49 @@
+{
+  "spec" : {
+    "function_description" : "Make a drawing sheet the current sheet",
+    "command" : "drawing",
+    "function" : "select_sheet",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "select_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "select_sheet",
+      "data" : {
+        "sheet" : 2
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

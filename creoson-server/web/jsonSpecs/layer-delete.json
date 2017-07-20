@@ -1,0 +1,67 @@
+{
+  "spec" : {
+    "function_description" : "Delete one or more layers",
+    "command" : "layer",
+    "function" : "delete",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Layer name",
+      "default" : "All layers will be deleted",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "01___PRT_ALL_DTM_PLN"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "*CSYS"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "delete",
+      "data" : {
+        "file" : "*.asm",
+        "name" : "*CSYS"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

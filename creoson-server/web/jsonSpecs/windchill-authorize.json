@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Set user's Windchill login/password",
+    "command" : "windchill",
+    "function" : "authorize",
+    "request" : [ {
+      "name" : "user",
+      "type" : "string",
+      "description" : "User's Windchill login",
+      "required" : true
+    }, {
+      "name" : "password",
+      "type" : "string",
+      "description" : "User's Windchill password",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "authorize",
+      "data" : {
+        "user" : "fmercer",
+        "password" : "abc123"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

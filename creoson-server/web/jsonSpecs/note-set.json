@@ -1,0 +1,63 @@
+{
+  "spec" : {
+    "function_description" : "Set the text of a model or drawing note",
+    "command" : "note",
+    "function" : "set",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model or drawing",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Note name",
+      "required" : true
+    }, {
+      "name" : "value",
+      "type" : "string",
+      "description" : "Note text with parameters not expanded",
+      "default" : "Clears the note if missing; embed newlines for line breaks"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Value is Base64-encoded",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "set",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "Note_23",
+        "value" : "This is a test note\nWith two lines"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "set",
+      "data" : {
+        "name" : "Note_17",
+        "value" : "ZnJpZW5kbHk=",
+        "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

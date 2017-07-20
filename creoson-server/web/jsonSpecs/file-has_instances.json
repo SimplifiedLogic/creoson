@@ -1,0 +1,53 @@
+{
+  "spec" : {
+    "function_description" : "Check whether a model has a family table",
+    "command" : "file",
+    "function" : "has_instances",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the file has a family table"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "has_instances",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "has_instances",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

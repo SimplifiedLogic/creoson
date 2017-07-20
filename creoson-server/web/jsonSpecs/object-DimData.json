@@ -1,0 +1,18 @@
+{
+  "object_name" : "DimData",
+  "description" : "Information about a Creo dimension",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Dimension name"
+  }, {
+    "name" : "value",
+    "type" : "depends on data type",
+    "description" : "Dimension value"
+  }, {
+    "name" : "encoded",
+    "type" : "boolean",
+    "description" : "Value is Base64-encoded",
+    "default" : "false"
+  } ]
+}

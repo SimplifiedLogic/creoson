@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Delete a workspace",
+    "command" : "windchill",
+    "function" : "delete_workspace",
+    "request" : [ {
+      "name" : "workspace",
+      "type" : "string",
+      "description" : "Workspace name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "delete_workspace",
+      "data" : {
+        "workspace" : "test_workspace"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

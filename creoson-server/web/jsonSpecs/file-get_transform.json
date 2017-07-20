@@ -1,0 +1,151 @@
+{
+  "spec" : {
+    "function_description" : "Get the 3D transform for a component in an assembly",
+    "command" : "file",
+    "function" : "get_transform",
+    "request" : [ {
+      "name" : "asm",
+      "type" : "string",
+      "description" : "Assembly name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "path",
+      "type" : "array:integer",
+      "description" : "Path to a component in the assembly",
+      "default" : "The transform is calculated for the assembly itself"
+    }, {
+      "name" : "csys",
+      "type" : "string",
+      "description" : "Coordinate system on the component to calculate the transform for",
+      "default" : "The component's default coordinate system"
+    } ],
+    "response" : [ {
+      "name" : "transform",
+      "type" : "object:JLTransform",
+      "description" : "The 3D transform from the assembly to the component's coordinate system"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_transform",
+      "data" : {
+        "asm" : "plate_assy.asm",
+        "path" : [ 54, 23, 45 ],
+        "csys" : "CS0"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "transform" : {
+          "origin" : {
+            "x" : 380.0000554810615,
+            "y" : 120.0,
+            "z" : 1.000000000017174E-20
+          },
+          "x_axis" : {
+            "x" : 0.0,
+            "y" : 1.0,
+            "z" : 0.0
+          },
+          "y_axis" : {
+            "x" : 1.0,
+            "y" : 0.0,
+            "z" : 0.0
+          },
+          "z_axis" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 1.0
+          },
+          "x_rot" : 0.0,
+          "y_rot" : 0.0,
+          "z_rot" : 0.0
+        }
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_transform",
+      "data" : {
+        "path" : [ 54, 23, 52 ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "transform" : {
+          "origin" : {
+            "x" : 305.0000554810615,
+            "y" : 19.999999999999996,
+            "z" : -4.592173826833917E-16
+          },
+          "x_axis" : {
+            "x" : 1.836909530733566E-16,
+            "y" : -1.0,
+            "z" : 0.0
+          },
+          "y_axis" : {
+            "x" : 1.0,
+            "y" : 1.836909530733566E-16,
+            "z" : 0.0
+          },
+          "z_axis" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 1.0
+          },
+          "x_rot" : 0.0,
+          "y_rot" : 0.0,
+          "z_rot" : 90.0
+        }
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_transform"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "transform" : {
+          "origin" : {
+            "x" : 50.0,
+            "y" : 20.0,
+            "z" : 0.0
+          },
+          "x_axis" : {
+            "x" : 1.0,
+            "y" : 0.0,
+            "z" : 0.0
+          },
+          "y_axis" : {
+            "x" : 0.0,
+            "y" : 1.0,
+            "z" : 0.0
+          },
+          "z_axis" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 1.0
+          },
+          "x_rot" : 0.0,
+          "y_rot" : 0.0,
+          "z_rot" : 0.0
+        }
+      }
+    }
+  } ]
+}

@@ -1,0 +1,17 @@
+{
+  "object_name" : "ServiceStatus",
+  "description" : "Status of service call, returned in each function response",
+  "data" : [ {
+    "name" : "error",
+    "type" : "boolean",
+    "description" : "Whether an error occurred on the call"
+  }, {
+    "name" : "message",
+    "type" : "string",
+    "description" : "An error message, if an error occurred"
+  }, {
+    "name" : "expired",
+    "type" : "boolean",
+    "description" : "Whether the user's session has expired"
+  } ]
+}

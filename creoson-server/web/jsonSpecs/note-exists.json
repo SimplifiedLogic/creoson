@@ -1,0 +1,82 @@
+{
+  "spec" : {
+    "function_description" : "Check whether note(s) exists on a model",
+    "command" : "note",
+    "function" : "exists",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Note name; only used if names is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "names",
+      "type" : "array:string",
+      "description" : "List of note names",
+      "default" : "The name parameter is used; if both are empty, then it checks for any note's existence"
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the note exists on the model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "NOTE_TEST"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "Note_2*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "exists",
+      "data" : {
+        "names" : [ "NOTE_TEST", "Note_33", "Note_23" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

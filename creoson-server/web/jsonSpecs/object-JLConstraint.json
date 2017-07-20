@@ -1,0 +1,34 @@
+{
+  "object_name" : "JLConstraint",
+  "description" : "An assembly constraint",
+  "notes" : [ "At this time, only constraint type \"csys\" is fully supported." ],
+  "data" : [ {
+    "name" : "type",
+    "type" : "string",
+    "description" : "Constraint type",
+    "required" : true,
+    "valid_values" : "align, auto, csys, def_placement, edge_on_srf, fix, insert, mate, orient, pnt_on_line, pnt_on_srf, substitute, tangent"
+  }, {
+    "name" : "asmref",
+    "type" : "string",
+    "description" : "Reference on the assembly"
+  }, {
+    "name" : "compref",
+    "type" : "string",
+    "description" : "Reference on the component"
+  }, {
+    "name" : "asmdatum",
+    "type" : "string",
+    "description" : "Datum side on the assembly (for appropriate constraint types)",
+    "valid_values" : "red, yellow"
+  }, {
+    "name" : "compdatum",
+    "type" : "string",
+    "description" : "Datum side on the component (for appropriate constraint types)",
+    "valid_values" : "red, yellow"
+  }, {
+    "name" : "offset",
+    "type" : "double",
+    "description" : "Offset from the assembly reference (for appropriate constraint types)"
+  } ]
+}

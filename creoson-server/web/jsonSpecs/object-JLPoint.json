@@ -1,0 +1,17 @@
+{
+  "object_name" : "JLPoint",
+  "description" : "A 3D coordinate",
+  "data" : [ {
+    "name" : "x",
+    "type" : "double",
+    "description" : "X-coordinate"
+  }, {
+    "name" : "y",
+    "type" : "double",
+    "description" : "Y-coordinate"
+  }, {
+    "name" : "z",
+    "type" : "double",
+    "description" : "Z-coordinate"
+  } ]
+}

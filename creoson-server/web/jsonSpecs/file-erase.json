@@ -1,0 +1,54 @@
+{
+  "spec" : {
+    "function_description" : "Erase one or more models from memory",
+    "command" : "file",
+    "function" : "erase",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name; only used if files is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of file names",
+      "default" : "The file parameter is used; if both are empty, then all models in memory are erased"
+    }, {
+      "name" : "erase_children",
+      "type" : "boolean",
+      "description" : "Erase children of the models too",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "erase",
+      "data" : {
+        "file" : "box.prt",
+        "erase_children" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "erase",
+      "data" : {
+        "files" : [ "able.prt", "baker.prt", "charlie.prt" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

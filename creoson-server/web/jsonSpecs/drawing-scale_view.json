@@ -1,0 +1,92 @@
+{
+  "spec" : {
+    "function_description" : "Set the scale of one or more drawing views",
+    "command" : "drawing",
+    "function" : "scale_view",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "default" : "All views will be scaled",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "scale",
+      "type" : "double",
+      "description" : "View scale",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "success_views",
+      "type" : "array:string",
+      "description" : "List of view which were successfully scaled"
+    }, {
+      "name" : "failed_views",
+      "type" : "array:string",
+      "description" : "List of view which failed to scale"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "scale_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT",
+        "scale" : 0.5
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "success_views" : [ "FRONT" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "scale_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "scale" : 0.5
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "success_views" : [ "FRONT" ],
+        "failed_views" : [ "RIGHT", "TOP" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "scale_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "*O*",
+        "scale" : 0.5
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "success_views" : [ "FRONT" ],
+        "failed_views" : [ "TOP" ]
+      }
+    }
+  } ]
+}

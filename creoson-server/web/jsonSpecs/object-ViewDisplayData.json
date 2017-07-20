@@ -1,0 +1,32 @@
+{
+  "object_name" : "ViewDisplayData",
+  "description" : "Creo display parameters used to create drawing views",
+  "data" : [ {
+    "name" : "cable_style",
+    "type" : "string",
+    "description" : "Cable Style",
+    "valid_values" : "default, centerline, thick"
+  }, {
+    "name" : "remove_quilt_hidden_lines",
+    "type" : "boolean",
+    "description" : "Whether to remove quilt hidden lines"
+  }, {
+    "name" : "show_concept_model",
+    "type" : "boolean",
+    "description" : "Whether to show the concept model"
+  }, {
+    "name" : "show_weld_xsection",
+    "type" : "boolean",
+    "description" : "Whether to show weld cross-section"
+  }, {
+    "name" : "style",
+    "type" : "string",
+    "description" : "Style",
+    "valid_values" : "default, follow_environment, hidden_line, no_hidden, shaded, wireframe"
+  }, {
+    "name" : "tangent_style",
+    "type" : "string",
+    "description" : "Tangent Style",
+    "valid_values" : "default, centerline, dimmed, none, phantom, solid"
+  } ]
+}

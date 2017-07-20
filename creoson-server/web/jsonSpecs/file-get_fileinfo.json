@@ -1,0 +1,46 @@
+{
+  "spec" : {
+    "function_description" : "Open one or more files in memory or from the drive",
+    "command" : "file",
+    "function" : "get_fileinfo",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name of the file"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name"
+    }, {
+      "name" : "revision",
+      "type" : "integer",
+      "description" : "Revision number of file"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_fileinfo",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "file" : "box.prt",
+        "revision" : 23
+      }
+    }
+  } ]
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/json2table.js" type="application/javascript"></script>
+    <link href="js/json2table.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+
+</head>
+
+<body>
+
+
+
+
+<div id="inner_tbl">
+
+</div>
+
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+
+    var testJson =   {
+        "function_description": "Open one or more files in memory or from the drive.",
+        "command": "file",
+        "function": "open",
+        "request": [
+            {
+                "name": "dirname",
+                "description": "Directory name",
+                "type": "string",
+                "default": "Current working directory"
+            },
+            {
+                "name": "file",
+                "description": "File name",
+                "type": "string",
+                "wildcards_allowed": true,
+                "default": "The files parameter is used"
+            },
+            {
+                "name": "files",
+                "description": "List of file names; only used if file is not given",
+                "type": "array:string",
+                "default": "The file parameter is used"
+            },
+            {
+                "name": "generic",
+                "description": "Generic model name (if file name represents an instance)",
+                "type": "string"
+            },
+            {
+                "name": "display",
+                "description": "Display the model after opening",
+                "type": "boolean",
+                "default": "false"
+            },
+            {
+                "name": "activate",
+                "description": "Activate the model after opening",
+                "type": "boolean",
+                "default": "false"
+            },
+            {
+                "name": "new_window",
+                "description": "Open model in a new window",
+                "type": "boolean",
+                "default": "false"
+            },
+            {
+                "name": "regen_force",
+                "description": "Force regeneration after opening",
+                "type": "boolean",
+                "default": "false"
+            }
+        ],
+        "response": [
+            {
+                "name": "dirname",
+                "description": "Directory name of opened file(s)",
+                "type": "string"
+            },
+            {
+                "name": "filenames",
+                "description": "File names that were opened",
+                "type": "array:string"
+            },
+            {
+                "name": "revision",
+                "description": "Revision of file that was opened; if more than one file was opened, this field is not returned",
+                "type": "integer"
+            }
+        ]
+    };
+
+    $("#inner_tbl").html(buildTable(testJson));
+
+
+</script>
+
+
+</html>

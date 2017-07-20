@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project name="creoson-jsonconst" default="cleanup">
+	<property file="${basedir}/../build_vars.properties" />
+	<property name="source_dir" value="${basedir}/src" />
+	<property name="class_dir" value="${basedir}/classes" />
+	<property name="build.compiler" value="javac1.5" />
+	<property name="jar_ver" value="1.2.0" />
+
+	<target name="clean">
+		<delete dir="${class_dir}"/>
+		<mkdir dir="${class_dir}"/>
+		<delete>
+			<fileset dir="${out_dir}" includes="creoson-jsonconst*.jar"/>
+		</delete>
+	</target>
+
+	<target name="compile" depends="clean">
+		<javac compiler="${build.compiler}" source="1.5" debug="true" debuglevel="lines,vars,source" srcdir="${source_dir}" destdir="${class_dir}">
+    		<classpath>
+				<path>
+	    			<fileset dir="${jackson_dir}">
+	    				<include name="jackson-core-2.0.5.jar"/>
+	    				<include name="jackson-annotations-2.0.5.jar"/>
+	    				<include name="jackson-databind-2.0.5.jar"/>
+	    			</fileset>
+				</path>
+    		</classpath>
+		</javac>
+		<jar destfile="${out_dir}/creoson-jsonconst-${jar_ver}.jar" compress="false" index="true">
+			<fileset dir="${class_dir}"/>
+		</jar>
+		<!--
+		<jar destfile="${out_dir}/creoson-json-${jar_ver}.jar" compress="false" index="true">
+			<fileset dir="${class_dir}"/>
+		</jar>
+		-->
+	</target>
+
+	<target name="cleanup" depends="compile">
+		<delete dir="${class_dir}"/>
+	</target>
+
+</project>

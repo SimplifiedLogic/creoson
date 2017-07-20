@@ -1,0 +1,61 @@
+{
+  "spec" : {
+    "function_description" : "Rename a feature",
+    "command" : "feature",
+    "function" : "rename",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "feat_id",
+      "type" : "integer",
+      "description" : "Feature ID",
+      "default" : "The name parameter is used"
+    }, {
+      "name" : "name",
+      "type" : "array:string",
+      "description" : "Feature name; only used if feat_id is not given"
+    }, {
+      "name" : "new_name",
+      "type" : "string",
+      "description" : "New name for the feature",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "rename",
+      "data" : {
+        "file" : "box.prt",
+        "feat_id" : 620,
+        "new_name" : "CURVE_7b"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "rename",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "CS3",
+        "new_name" : "CS3b"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

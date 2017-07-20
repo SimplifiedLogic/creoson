@@ -1,0 +1,38 @@
+{
+  "spec" : {
+    "function_description" : "Create a new model from a family table row",
+    "command" : "familytable",
+    "function" : "create_inst",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Instance name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "create_inst",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "wide_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "name" : "wide_bracket&lt;bracket&gt;.prt"
+      }
+    }
+  } ]
+}

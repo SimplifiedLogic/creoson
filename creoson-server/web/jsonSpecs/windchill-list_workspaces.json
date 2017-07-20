@@ -1,0 +1,28 @@
+{
+  "spec" : {
+    "function_description" : "Get a list of workspaces the user can access",
+    "command" : "windchill",
+    "function" : "list_workspaces",
+    "request" : [ ],
+    "response" : [ {
+      "name" : "workspaces",
+      "type" : "array:string",
+      "description" : "List of workspaces"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "list_workspaces"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "workspaces" : [ "freds_workspace", "engineering", "group_ws", "ws12345" ]
+      }
+    }
+  } ]
+}

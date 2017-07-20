@@ -1,0 +1,53 @@
+{
+  "spec" : {
+    "function_description" : "Create a new directory",
+    "command" : "creo",
+    "function" : "mkdir",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "New directory name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Full name of new working directory"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "mkdir",
+      "data" : {
+        "dirname" : "C:\\testfiles\\sub"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/testfiles/sub"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "mkdir",
+      "data" : {
+        "dirname" : "subdir"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/testing/subdir"
+      }
+    }
+  } ]
+}

@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Check whether a model exists in memory",
+    "command" : "file",
+    "function" : "exists",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the file is open in Creo"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

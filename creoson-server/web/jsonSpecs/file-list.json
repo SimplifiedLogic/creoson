@@ -1,0 +1,54 @@
+{
+  "spec" : {
+    "function_description" : "Get a list of files in the current Creo session that match patterns",
+    "command" : "file",
+    "function" : "list",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name; only used if files is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of file names",
+      "default" : "The file parameter is used; if both are empty, then all files are listed"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "list",
+      "data" : {
+        "file" : "box*.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt", "box_flat.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "list",
+      "data" : {
+        "files" : [ "able.prt", "baker.prt", "charlie.prt" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "baker.prt" ]
+      }
+    }
+  } ]
+}

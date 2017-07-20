@@ -1,0 +1,50 @@
+{
+  "spec" : {
+    "function_description" : "Delete a drawing sheet",
+    "command" : "drawing",
+    "function" : "delete_sheet",
+    "notes" : [ "An error will occur if you try to delete the only sheet in a drawing." ],
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_sheet",
+      "data" : {
+        "sheet" : 2
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

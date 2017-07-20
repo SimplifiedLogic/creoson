@@ -1,0 +1,128 @@
+{
+  "spec" : {
+    "function_description" : "Create projection view on a drawing",
+    "command" : "drawing",
+    "function" : "create_proj_view",
+    "notes" : [ "When specifying the view coordinates, you should specify only an X or a Y coordinate to avoid confusion.  If you specify both coordinates, it appears Creo may be using whichever has the larger absolute value." ],
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "New view name",
+      "default" : "Creo's default name for a new view"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "default" : "Current active sheet on the drawing"
+    }, {
+      "name" : "parent_view",
+      "type" : "string",
+      "description" : "Parent view for the projection view",
+      "required" : true
+    }, {
+      "name" : "point",
+      "type" : "object:JLPoint",
+      "description" : "Coordinates for the view, relative to the location of the parent view",
+      "required" : true
+    }, {
+      "name" : "display_data",
+      "type" : "object:ViewDisplayData",
+      "description" : "Display parameters used to create the view",
+      "default" : "The display parameters of the parent view"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_proj_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "RIGHT_TEST",
+        "sheet" : 1,
+        "parent_view" : "FRONT",
+        "point" : {
+          "x" : 10.0
+        },
+        "scale" : 0.25,
+        "display_data" : {
+          "cable_style" : "default",
+          "style" : "hidden_line",
+          "tangent_style" : "none",
+          "remove_quilt_hidden_lines" : true,
+          "show_concept_model" : false,
+          "show_weld_xsection" : false
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_proj_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "parent_view" : "FRONT",
+        "point" : {
+          "x" : 10.0
+        },
+        "display_data" : {
+          "style" : "hidden_line",
+          "tangent_style" : "none"
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_proj_view",
+      "data" : {
+        "view" : "TOP",
+        "parent_view" : "FRONT",
+        "point" : {
+          "y" : 3.25
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_proj_view",
+      "data" : {
+        "parent_view" : "LEFT",
+        "point" : {
+          "y" : 3.25
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "message" : "Parent view does not exist in drawing: LEFT",
+        "error" : true
+      }
+    }
+  } ]
+}

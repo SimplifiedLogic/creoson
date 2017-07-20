@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Get post-regeneration relations for a model",
+    "command" : "file",
+    "function" : "postregen_relations_get",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "relations",
+      "type" : "array:string",
+      "description" : "Exported relations text, one entry per line"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "postregen_relations_get",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "relations" : [ "d2=bracket_width", "d3=hole_dist" ]
+      }
+    }
+  } ]
+}

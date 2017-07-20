@@ -1,0 +1,21 @@
+{
+  "spec" : {
+    "function_description" : "Erase all non-displayed models from memory",
+    "command" : "file",
+    "function" : "erase_not_displayed",
+    "request" : [ ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "erase_not_displayed"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,0 +1,63 @@
+{
+  "spec" : {
+    "function_description" : "Set the location of a drawing view",
+    "command" : "drawing",
+    "function" : "set_view_loc",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    }, {
+      "name" : "point",
+      "type" : "object:JLPoint",
+      "description" : "Coordinates for the view",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "set_view_loc",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT",
+        "point" : {
+          "x" : 2.5,
+          "y" : 4.0,
+          "z" : 0.5
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "set_view_loc",
+      "data" : {
+        "view" : "RIGHT",
+        "point" : {
+          "x" : 13.0,
+          "y" : 4.0
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

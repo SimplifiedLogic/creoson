@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Check whether Creo errors have occurred opening a model",
+    "command" : "file",
+    "function" : "open_errors",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Current active model"
+    } ],
+    "response" : [ {
+      "name" : "errors",
+      "type" : "boolean",
+      "description" : "Whether errors exist in Creo"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "open_errors",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "errors" : false
+      }
+    }
+  } ]
+}

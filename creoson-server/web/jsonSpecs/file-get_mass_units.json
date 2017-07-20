@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Get the current mass units for a model",
+    "command" : "file",
+    "function" : "get_mass_units",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "units",
+      "type" : "string",
+      "description" : "Mass units"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_mass_units",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "units" : "kg"
+      }
+    }
+  } ]
+}

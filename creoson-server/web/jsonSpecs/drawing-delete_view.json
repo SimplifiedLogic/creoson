@@ -1,0 +1,62 @@
+{
+  "spec" : {
+    "function_description" : "Delete a drawing view",
+    "command" : "drawing",
+    "function" : "delete_view",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number; if filled in, the view will only be deleted if it is on that sheet",
+      "default" : "Delete the view from any sheet"
+    }, {
+      "name" : "del_children",
+      "type" : "boolean",
+      "description" : "Whether to also delete any children of the view",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT",
+        "sheet" : 1,
+        "del_children" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "RIGHT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

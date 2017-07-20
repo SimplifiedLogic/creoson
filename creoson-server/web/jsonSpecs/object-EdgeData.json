@@ -1,0 +1,21 @@
+{
+  "object_name" : "EdgeData",
+  "description" : "Information about an edge",
+  "data" : [ {
+    "name" : "edge_id",
+    "type" : "integer",
+    "description" : "Edge ID"
+  }, {
+    "name" : "length",
+    "type" : "double",
+    "description" : "Edge length"
+  }, {
+    "name" : "start",
+    "type" : "object:JLPoint",
+    "description" : "Edge start point"
+  }, {
+    "name" : "end",
+    "type" : "object:JLPoint",
+    "description" : "Edge end point"
+  } ]
+}

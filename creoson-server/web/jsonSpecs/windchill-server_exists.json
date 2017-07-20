@@ -1,0 +1,70 @@
+{
+  "spec" : {
+    "function_description" : "Check whether a server exists",
+    "command" : "windchill",
+    "function" : "server_exists",
+    "request" : [ {
+      "name" : "server_url",
+      "type" : "string",
+      "description" : "Server URL or Alias",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the server exists"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "server_exists",
+      "data" : {
+        "server_url" : "http://myserver.com/Windchill"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "server_exists",
+      "data" : {
+        "server_url" : "http://myserver.com"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "server_exists",
+      "data" : {
+        "server_url" : "Main_Server"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

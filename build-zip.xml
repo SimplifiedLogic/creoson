@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<project name="creoson-zipfile" default="cleanup">
+	<property file="${basedir}/build_vars.properties" />
+	<property name="root_dir" value="${basedir}" />
+	<property name="server_dir" value="${basedir}/creoson-server" />
+	<property name="batfile_dir" value="${server_dir}/src" />
+	<property name="extract_dir" value="${out_dir}" />
+	<property name="jar_ver" value="2.0.0" />
+
+	<target name="extract_setup">
+		<delete dir="${extract_dir}/extract_32"/>
+		<delete dir="${extract_dir}/extract_64"/>
+		<mkdir dir="${extract_dir}/extract_32"/>
+		<mkdir dir="${extract_dir}/extract_64"/>
+		<unzip src="${CreosonSetup_dir}/CreosonSetup-win32.zip" dest="${extract_dir}/extract_32"/>
+		<unzip src="${CreosonSetup_dir}/CreosonSetup-win64.zip" dest="${extract_dir}/extract_64"/>
+	</target>
+
+	<target name="gendoc">
+    		<java classname="com.simplifiedlogic.nitro.jshell.GenTemplates" >
+	    		<classpath>
+				<fileset dir="${out_dir}/">
+					<include name="CreosonServer*.jar"/>
+					<include name="creoson-json*.jar"/>
+					<include name="creoson-intf*.jar"/>
+				</fileset>
+				<fileset dir="${jackson_dir}/">
+					<include name="jackson*.jar"/>
+				</fileset>
+	    		</classpath>
+	    		<arg value="${server_dir}/web/jsonSpecs" />
+    		</java>
+	</target>
+	
+	<target name="zippit" depends="extract_setup, gendoc">
+	
+		<delete>
+			<fileset dir="${out_dir}" includes="CreosonServer-*win32.zip"/>
+		</delete>
+		<zip destfile="${out_dir}/CreosonServer-${jar_ver}-win32.zip">
+			<zipfileset dir="${out_dir}" includes="*.jar"/>
+			<zipfileset dir="${jackson_dir}" includes="jackson*.jar"/>
+			<zipfileset dir="${apache_commons_codec_dir}" includes="*commons-codec*.jar"/>
+			<zipfileset dir="${server_dir}" includes="web/**" excludes="web/.svn/**"/>
+			<zipfileset dir="${batfile_dir}" includes="creoson_run.bat"/>
+			<zipfileset dir="${extract_dir}/extract_32"/>
+			<zipfileset dir="${basedir}" includes="RELEASE_NOTES.txt,README.md,LICENSE"/>
+		</zip>
+
+		<delete>
+			<fileset dir="${out_dir}" includes="CreosonServer-*win64.zip"/>
+		</delete>
+		<zip destfile="${out_dir}/CreosonServer-${jar_ver}-win64.zip">
+			<zipfileset dir="${out_dir}" includes="*.jar"/>
+			<zipfileset dir="${jackson_dir}" includes="jackson*.jar"/>
+			<zipfileset dir="${apache_commons_codec_dir}" includes="*commons-codec*.jar"/>
+			<zipfileset dir="${server_dir}" includes="web/**,*.txt" excludes="web/.svn/**"/>
+			<zipfileset dir="${batfile_dir}" includes="creoson_run.bat"/>
+			<zipfileset dir="${extract_dir}/extract_64"/>
+			<zipfileset dir="${basedir}" includes="RELEASE_NOTES.txt,README.md,LICENSE"/>
+		</zip>
+	</target>
+
+	<target name="cleanup" depends="zippit">
+		<delete dir="${extract_dir}/extract_32"/>
+		<delete dir="${extract_dir}/extract_64"/>
+	</target>
+
+</project>

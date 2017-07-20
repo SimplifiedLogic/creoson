@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "Prompt the user to select one or more coordinate systems, and return their selections",
+    "command" : "feature",
+    "function" : "user_select_csys",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "max",
+      "type" : "integer",
+      "description" : "The maximum number of dimensions that the user can select",
+      "default" : "1"
+    } ],
+    "response" : [ {
+      "name" : "featlist",
+      "type" : "object_array:FeatureData",
+      "description" : "List of feature information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "user_select_csys",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "CS3",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 44,
+          "feat_number" : 3
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "user_select_csys",
+      "data" : {
+        "file" : "box.prt",
+        "max" : 2
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "CS3",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 44,
+          "feat_number" : 3
+        }, {
+          "name" : "CS0",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 40,
+          "feat_number" : 1
+        } ]
+      }
+    }
+  } ]
+}

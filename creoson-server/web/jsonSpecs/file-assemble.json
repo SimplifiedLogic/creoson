@@ -1,0 +1,158 @@
+{
+  "spec" : {
+    "function_description" : "Assemble a component into an assembly",
+    "command" : "file",
+    "function" : "assemble",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name of component",
+      "required" : true
+    }, {
+      "name" : "generic",
+      "type" : "string",
+      "description" : "Generic model name (if file name represents an instance)"
+    }, {
+      "name" : "into_asm",
+      "type" : "string",
+      "description" : "Target assembly",
+      "default" : "Currently active model"
+    }, {
+      "name" : "path",
+      "type" : "array:integer",
+      "description" : "Path to a component that the new part will be constrained to"
+    }, {
+      "name" : "ref_model",
+      "type" : "string",
+      "description" : "Reference model that the new part will be constrained to; only used if path is not given.  If there are multiple of this model in the assembly, the component will be assembled multiple times, once to each occurrence"
+    }, {
+      "name" : "transform",
+      "type" : "object:JLTransform",
+      "description" : "Transform structure for the initial position and orientation of the new component; only used if there are no constraints, or for certain constraint types"
+    }, {
+      "name" : "constraints",
+      "type" : "object_array:JLConstraint",
+      "description" : "Assembly constraints"
+    }, {
+      "name" : "package_assembly",
+      "type" : "boolean",
+      "description" : "Whether to package the component to the assembly; only used if there are no constraints specified",
+      "default" : "If there are no constraints, then the user will be prompted to constrain the component through the Creo user interface"
+    }, {
+      "name" : "walk_children",
+      "type" : "boolean",
+      "description" : "Whether to walk into subassemblies to find reference models to constrain to"
+    }, {
+      "name" : "assemble_to_root",
+      "type" : "boolean",
+      "description" : "Whether to always assemble to the root assembly, or assemble to the subassembly containing the reference path/model"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name of component"
+    }, {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "File name of component"
+    }, {
+      "name" : "revision",
+      "type" : "integer",
+      "description" : "Revision of file that was opened; if more than one file was opened, this field is not returned"
+    }, {
+      "name" : "featureid",
+      "type" : "integer",
+      "description" : "Last Feature ID of component after assembly"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "assemble",
+      "data" : {
+        "file" : "coupling.prt",
+        "into_asm" : "stub.asm",
+        "constraints" : [ {
+          "asmref" : "right_asm_ref",
+          "compref" : "asy_ref",
+          "type" : "csys"
+        } ],
+        "path" : [ 39, 78 ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "files" : [ "coupling.prt" ],
+        "revision" : 3,
+        "featureid" : 150
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "assemble",
+      "data" : {
+        "file" : "coupling.prt",
+        "into_asm" : "stub.asm",
+        "constraints" : [ {
+          "asmref" : "left_asm_ref",
+          "compref" : "asy_ref",
+          "type" : "csys"
+        } ],
+        "ref_model" : "hose.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "files" : [ "coupling.prt" ],
+        "revision" : 3,
+        "featureid" : 150
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "assemble",
+      "data" : {
+        "file" : "coupling.prt",
+        "into_asm" : "stub.asm",
+        "package_assembly" : true,
+        "transform" : {
+          "origin" : {
+            "x" : 100.0,
+            "z" : 0.0,
+            "y" : 50.0
+          },
+          "x_rot" : 180.0
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "files" : [ "coupling.prt" ],
+        "revision" : 3,
+        "featureid" : 150
+      }
+    }
+  } ]
+}

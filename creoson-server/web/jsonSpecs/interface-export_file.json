@@ -1,0 +1,116 @@
+{
+  "spec" : {
+    "function_description" : "Export a model to a file",
+    "command" : "interface",
+    "function" : "export_file",
+    "request" : [ {
+      "name" : "type",
+      "type" : "string",
+      "description" : "File type",
+      "required" : true,
+      "valid_values" : "DXF, IGES, PV, STEP, VRML"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Model name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Destination file name.  May also contain a path to the file.",
+      "default" : "The model name with the appropriate file extension, in Creo's working directory"
+    }, {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Destination directory",
+      "default" : "Creo's current working directory"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "double",
+      "description" : "Directory of the output file"
+    }, {
+      "name" : "filename",
+      "type" : "double",
+      "description" : "Name of the output file"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_file",
+      "data" : {
+        "file" : "box.prt",
+        "filename" : "box-export.igs",
+        "type" : "IGES"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "box-export.igs"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_file",
+      "data" : {
+        "file" : "box.prt",
+        "dirname" : "subdir",
+        "type" : "DXF"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts/subdir",
+        "filename" : "box.dxf"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_file",
+      "data" : {
+        "type" : "STEP"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "abc123.stp"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_file",
+      "data" : {
+        "filename" : "C:/testing/abc123.stp",
+        "type" : "STEP"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/testing",
+        "filename" : "abc123.stp"
+      }
+    }
+  } ]
+}

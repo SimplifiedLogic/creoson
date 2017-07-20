@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Get the parent instances of a model in a nested family table",
+    "command" : "familytable",
+    "function" : "get_parents",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    } ],
+    "response" : [ {
+      "name" : "parents",
+      "type" : "array:string",
+      "description" : "List of parent instance names, starting with the immediate parent and working back"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "get_parents",
+      "data" : {
+        "file" : "wide_bracket-1b&lt;bracket&gt;.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "parents" : [ "WIDE_BRACKET-1", "WIDE_BRACKET", "BRACKET" ]
+      }
+    }
+  } ]
+}

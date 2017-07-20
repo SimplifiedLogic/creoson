@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Select a workspace",
+    "command" : "windchill",
+    "function" : "set_workspace",
+    "request" : [ {
+      "name" : "workspace",
+      "type" : "string",
+      "description" : "Workspace name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "set_workspace",
+      "data" : {
+        "workspace" : "freds_workspace"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,0 +1,29 @@
+{
+  "spec" : {
+    "function_description" : "Run a Mapkey script in Creo",
+    "command" : "interface",
+    "function" : "mapkey",
+    "request" : [ {
+      "name" : "script",
+      "type" : "string",
+      "description" : "The mapkey script to run",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "mapkey",
+      "data" : {
+        "script" : "~ Select `main_dlg_cur` `View:casc340798662`;mapkey(continued) ~ Close `main_dlg_cur` `View:casc340798662`;mapkey(continued) ~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

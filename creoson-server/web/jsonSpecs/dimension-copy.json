@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "Copy dimension to another in the same model or another model",
+    "command" : "dimension",
+    "function" : "copy",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Source model",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Dimension name to copy",
+      "required" : true
+    }, {
+      "name" : "to_name",
+      "type" : "string",
+      "description" : "Destination dimension; the dimension must already exist",
+      "required" : true
+    }, {
+      "name" : "to_file",
+      "type" : "string",
+      "description" : "Destination model",
+      "default" : "The source model"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "copy",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "d2",
+        "to_name" : "d3"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "copy",
+      "data" : {
+        "file" : "box_flat.prt",
+        "name" : "RADIUS",
+        "to_file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "copy",
+      "data" : {
+        "name" : "RADIUS",
+        "to_file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

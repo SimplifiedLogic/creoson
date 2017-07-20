@@ -1,0 +1,76 @@
+{
+  "spec" : {
+    "function_description" : "Get the text of a model or drawing note",
+    "command" : "note",
+    "function" : "get",
+    "notes" : [ "Values will automatically be returned Base64-encoded if they are strings which contain non-ASCII data" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model or drawign"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Note name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Note name"
+    }, {
+      "name" : "value",
+      "type" : "string",
+      "description" : "Note text parameters not expanded"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Value is Base64-encoded"
+    }, {
+      "name" : "url",
+      "type" : "string",
+      "description" : "Note URL, if there is one"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "get",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "Note_23"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "name" : "Note_23",
+        "value" : "This is a test note\nWith two lines",
+        "encoded" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "get",
+      "data" : {
+        "name" : "Note_17"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "name" : "Note_17",
+        "value" : "ZnJpZW5kbHk=",
+        "encoded" : true
+      }
+    }
+  } ]
+}

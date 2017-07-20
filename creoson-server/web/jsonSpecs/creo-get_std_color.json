@@ -1,0 +1,47 @@
+{
+  "spec" : {
+    "function_description" : "Get one of Creo's standard colors",
+    "command" : "creo",
+    "function" : "get_std_color",
+    "request" : [ {
+      "name" : "color_type",
+      "type" : "string",
+      "description" : "Color type",
+      "required" : true,
+      "valid_values" : "letter, highlight, drawing, background, half_tone, edge_highlight, dimmed, error, warning, sheetmetal, curve, presel_highlight, selected, secondary_selected, preview, secondary_preview, datum, quilt"
+    } ],
+    "response" : [ {
+      "name" : "red",
+      "type" : "integer",
+      "description" : "Red value (0-255)"
+    }, {
+      "name" : "green",
+      "type" : "integer",
+      "description" : "Green value (0-255)"
+    }, {
+      "name" : "blue",
+      "type" : "integer",
+      "description" : "Blue value (0-255)"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "get_std_color",
+      "data" : {
+        "color_type" : "highlight"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "red" : 255,
+        "green" : 127,
+        "blue" : 127
+      }
+    }
+  } ]
+}

@@ -1,0 +1,66 @@
+{
+  "spec" : {
+    "function_description" : "Import a program file for a model",
+    "command" : "interface",
+    "function" : "import_program",
+    "notes" : [ "Cannot specify both file and filename parameters" ],
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Source directory",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Source file name",
+      "default" : "The model name with the appropriate file extension"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Destination Model name",
+      "default" : "Currently active model, or the model for the filename parameter if given"
+    } ],
+    "response" : [ {
+      "name" : "file",
+      "type" : "double",
+      "description" : "Name of the model updated"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "import_program",
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "box.prt"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "import_program",
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "filename" : "abc123.als"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "abc123.asm"
+      }
+    }
+  } ]
+}

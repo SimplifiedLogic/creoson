@@ -1,0 +1,18 @@
+{
+  "object_name" : "ContourData",
+  "description" : "Information about a contour, which is a collection of connected edges",
+  "data" : [ {
+    "name" : "surface_id",
+    "type" : "integer",
+    "description" : "Surface ID"
+  }, {
+    "name" : "traversal",
+    "type" : "string",
+    "description" : "Traversal type",
+    "valid_values" : "internal, external"
+  }, {
+    "name" : "edgelist",
+    "type" : "object_array:EdgeData",
+    "description" : "List of edges"
+  } ]
+}

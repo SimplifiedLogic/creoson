@@ -1,0 +1,59 @@
+{
+  "spec" : {
+    "function_description" : "List the instance names in a family table",
+    "command" : "familytable",
+    "function" : "list",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Instance name filter",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "instances",
+      "type" : "array:string",
+      "description" : "List of matching instance names"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "list",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "instances" : [ "WIDE_BRACKET", "WIDE_THICK_BRACKET", "THICK_BRACKET" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "list",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "WIDE*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "instances" : [ "WIDE_BRACKET", "WIDE_THICK_BRACKET" ]
+      }
+    }
+  } ]
+}

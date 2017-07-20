@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->  
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->  
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
+<head>
+    <title>CREO|SON - Functions</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    <link rel="shortcut icon" href="favicon.ico">  
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css" type="text/css">
+    <!-- Plugins CSS -->    
+    <link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.css" type="text/css">
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css" type="text/css">
+    <link rel="stylesheet" href="assets/plugins/lightbox/dist/ekko-lightbox.min.css" type="text/css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css" type="text/css">
+    <link rel="stylesheet" href="assets/plugins/select2/dist/css/select2.css" type="text/css">
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+
+</head> 
+
+<body class="body-red">
+    <div class="page-wrapper">
+        <!-- ******Header****** -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <a href="index.html">
+                            <img src="img/CREOSON.png" style="max-width: 300px">
+                            <!--<span aria-hidden="true" class="icon_documents_alt icon"></span>-->
+                            <!--<span class="text-highlight">Pretty</span><span class="text-bold">Docs</span>-->
+                        </a>
+                    </h1>
+                </div><!--//branding-->
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Functions</li>
+                </ol>
+            </div><!--//container-->
+        </header><!--//header-->
+
+
+            <div class="doc-wrapper">
+            <div class="container">
+                <div id="doc-header" class="doc-header text-center">
+                    <h1 class="doc-title"><span aria-hidden="true" class="icon icon_puzzle_alt"></span> Functions</h1>
+                    <div class="meta"><i class="fa fa-search"></i> Search / Select a Function</div>
+                    Search: <select id="creosonFunctions" class="col-sm-6 col-md-4 col-lg-4" >
+                        <option value="intro">Intro Instructions</option>
+                        <!--NEW OPTIONS APPENDED DYNAMICALLY-->
+                    </select>
+                </div><!--//doc-header-->
+                <div class="doc-body">
+                    <div class="content-inner">
+                        <section id="important" class="doc-section-important">
+                            <h2 class="section-title">Before you Begin!</h2>
+
+                            <p>Use this page to query/navigate the CREOSON JSON Specifications.  Each CREOSON function will include an overview of the requirements and data formats as well as at least one example of how to use it.</p>
+                            <p>It is important to remember, you will need a <strong>sessionId</strong> from the CREOSON Micro-server in order to process CREOSON JSON requests to CREO.  Once you have obtained a sessionID using the <strong>connect</strong> command, you may reuse the same sessionID for all subsquent calls to CREO via CREOSON.</p>
+
+                            <div class="section-block">
+                                <div class="callout-block callout-warning">
+                                    <div class="icon-holder">
+                                        <i class="fa fa-hand-stop-o"></i>
+                                    </div><!--//icon-holder-->
+                                    <div class="content">
+                                        <h4 class="callout-title">IMPORTANT! GET a SessionID FIRST!</h4>
+                                        <blockquote><p>All CREOSON JSON requests require a <strong>sessionID</strong></p><p>Get a sessionID ONCE (1) at the start of your application using the <strong>connection/connect</strong> command/function, then reuse the same sessionID for all subsequent CREOSON JSON calls.</p></blockquote>
+
+                                    </div><!--//content-->
+                                </div><!--//callout-block-->
+                            </div><!--//section-block-->
+                        </section><!--//doc-section-->
+
+
+                        <!-- CONTENT SECTIONS ADDED HERE under content-inner class -->
+
+                    </div><!--//content-inner-->
+
+                </div><!--//doc-body-->              
+            </div><!--//container-->
+        </div><!--//doc-wrapper-->
+        
+        <div id="promo-block" class="promo-block promo-block-2">
+            <div class="container">
+                <div class="promo-block-inner">
+                    <h3 class="promo-title text-center"><i class="fa fa-heart"></i> <a href="http://www.simplifiedlogic.com" target="_blank">Nitro-CELL uses the core of CREOSON for Automation!</a></h3>
+                    <div class="row">
+                        <div class="figure-holder col-md-5 col-sm-6 col-xs-12">
+                            <div class="figure-holder-inner">
+                                <a href="https://www.youtube.com/playlist?list=PLcWd1Ea7i_tzsmpZLOos9d30WVNsYXQ7z" target="_blank"><img class="img-responsive" src="img/YouTube-logo-full_color.png" alt="AppKit Theme" /></a>
+                            </div>
+                        </div><!--//figure-holder-->
+                        <div class="content-holder col-md-7 col-sm-6 col-xs-12">
+                            <div class="content-holder-inner">
+                                <div class="desc">
+                                    <h4 class="content-title"><strong>CREO Automation using Excel?!</strong></h4>
+                                    <p><strong>YES!</strong> Check out Nitro-CELL!</p>
+                                    <p>Nitro-CELL drives CREO Parametric from any Excel Document.</p>
+                                    <p>Check out the Overview Videos, and Download a FREE Demo...</p>
+
+                                    <a class="btn btn-cta" href="http://download.nitromation.com/osgi/Nitro-CELL-win64.zip" target="_blank">Download 64-bit Nitro-CELL</a>
+                                    <a class="btn btn-cta" href="http://download.nitromation.com/osgi/Nitro-CELL-win32.zip" target="_blank">Download 32-bit Nitro-CELL</a>
+                                </div><!--//desc-->
+                                <div class="author"><a href="http://www.simplifiedlogic.com">- The Simplified Logic Development Team</a></div>
+                            </div><!--//content-holder-inner-->
+                        </div><!--//content-holder-->
+                    </div><!--//row-->
+                </div><!--//promo-block-inner-->  
+            </div><!--//container-->
+        </div><!--//promo-block-->
+        
+    </div><!--//page-wrapper-->
+
+    <footer class="footer text-center">
+        <div class="container">
+            <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
+
+            <small class="copyright">CREOSON is NOT affiliated with PTC - so please do NOT contact PTC for Support!</small><br>
+            <small class="copyright">CREOSON was developed and OpenSourced by Simplified Logic, Inc. Google Analytics used only for Documentation Usage</small><br>
+            <small class="copyright">This Site was Perfectly Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a>.</small>
+
+        </div><!--//container-->
+    </footer><!--//footer-->
+
+    <!--SPECIAL THANKS TO MSIE FOR -NOT- SUPPORTING NATIVE PROMISE EXECUTIONS! :( -->
+    <script type="text/javascript" src="assets/plugins/bluebird/bluebird.js"></script>
+
+    <!-- Main Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>
+    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>  
+    <script type="text/javascript" src="assets/plugins/lightbox/dist/ekko-lightbox.min.js"></script>                                                                 
+    <script type="text/javascript" src="assets/plugins/jquery-match-height/jquery.matchHeight-min.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    <script type="text/javascript" src="assets/plugins/select2/dist/js/select2.js"></script>
+
+
+    <!--Spec Table Generation-->
+    <script src="js/json2table.js" type="application/javascript"></script>
+    <link href="js/json2table.css" rel="stylesheet">
+
+    <script>
+        // this is like - really important - don't change this!
+        jQuery.ajaxSetup({async:false});
+
+
+        // setup the variables..
+        var jsonSpecs = [];
+        var jsonSpecs_failed = [];
+
+        function getCreosonFunctions () {
+            jQuery.getJSON('jsonSpecs/creosonFunctions.json', function () {
+
+            }).done(function(data) {
+               jsonSpecs = data.creosonFunctions;
+            }).fail(function() {
+               console.log('unable to open creosonFunctions.json');
+            })
+        }
+
+        getCreosonFunctions();
+
+
+        function genSpecTable (jsonObj,targetDiv) {
+            $("#"+targetDiv).html(buildTable(jsonObj));
+        }
+
+        function getSpecData (jsonFileName) {
+            return new Promise (function (resolve, reject) {
+
+                jQuery.getJSON('jsonSpecs/' + jsonFileName, function () {
+                    console.log('opened ---> '+jsonFileName);
+                })
+                .done(function(data) {
+                   resolve(data);
+                })
+                .fail(function() {
+                    console.log('error - file not found!');
+                    jsonSpecs_failed.push(jsonFileName);
+                    //reject('failed to open spec file! : '+jsonFileName);
+                    resolve();
+                })
+                .always(function () {
+                    //resolve()
+                });
+
+            })
+        }
+
+
+
+
+        // START - GENERATE A CODE SECTION
+        function genCodeSection(data) {
+
+                if (data.hasOwnProperty('object_name')) {
+
+                    var cmdName = 'object';
+                    var fncName = data.object_name;
+
+                } else {
+
+                    var cmdName = data.spec.command;
+                    var fncName = data.spec.function;
+
+                }
+
+                // create section templates
+                var functionSection = $('<section>', {
+                    'id': cmdName + '-' + fncName,
+                    'class': 'doc-section'
+                }).append(
+                    $('<h2>', {
+                        'class': 'section-title'
+                    }).text(cmdName + ' : ' + fncName)
+                );
+
+                var sectionBlock = $('<div>', {
+                    'class': 'section-block'
+                });
+
+                var codeBlock = $('<div>', {
+                    'class': 'code-block',
+                    'id': cmdName + '-' + fncName + '-spec'
+                });
+
+                $(functionSection).append(sectionBlock);
+                $(sectionBlock).append(codeBlock);
+                $('.content-inner').append(functionSection);
+
+            }
+        // END - GENERATE A CODE SECTION
+
+
+
+
+
+        // START - GENERATE SPEC & EXAMPLES
+
+        function loadSpecData (jsonFileName) {
+
+            console.log("loading specification data : "+jsonFileName);
+
+            getSpecData(jsonFileName).then(function (data) {
+                //console.log('---_ GO THIS --: ' + JSON.stringify(data));
+
+                if (data === undefined) {
+                    return;
+                }
+
+                // generate a code section
+                genCodeSection(data);
+
+                // GENERATE EXAMPLES
+                if (data.hasOwnProperty('object_name')) {
+
+                    genSpecTable(data,'object-'+data.object_name+'-spec');
+
+                } else {
+
+                    genSpecTable(data.spec, data.spec.command + '-' + data.spec.function + '-spec');
+
+                }
+
+                return data;
+
+            }).then(function (data) {
+
+                if (data === undefined) {
+                    return;
+                }
+
+                // GENERATE EXAMPLES
+                if (data.hasOwnProperty('spec')) {
+
+                    var exampleCounter = 1;
+
+                    // Generate Examples from stored JSON Data
+                    for (var x in data.examples) {
+                        var exampleObj = data.examples[x];
+
+                        var cmdName = data.spec.command;
+                        var fncName = data.spec.function;
+
+                        // START - GENERATE THE -REQUEST- EXAMPLE
+                            var requestBlock = $('<h4>').text(cmdName + '-' + fncName + ' : Example ' + exampleCounter + ' Request');
+
+
+                            $('#' + cmdName + '-' + fncName)
+                                .append(requestBlock)
+                                .append(
+                                    $('<pre>', {
+                                        'class': 'language-json',
+                                        'id': cmdName+ '-' + fncName + '-request' + x
+                                    }).append(
+                                        $('<code>')
+                                            .append(JSON.stringify(exampleObj.request, null, 2))
+                                    ));
+
+                            Prism.highlightElement($('#' + cmdName + '-' + fncName + '-request' + x)[0]);
+                        // END - GENERATE THE -REQUEST- EXAMPLE
+
+                        // START - GENERATE THE -RESPONSE- EXAMPLE
+                            var requestBlock = $('<h4>').text(cmdName + '-' +fncName+' : Example '+ exampleCounter + ' Response');
+
+                            $('#' + cmdName + '-' + fncName)
+                                .append(requestBlock)
+                                .append($('<pre>', {
+                                    'class' : 'language-json',
+                                    'id' : cmdName+'-'+fncName+'-respone'+x
+                                }).append(
+                                    $('<code>')
+                                        .append(JSON.stringify(exampleObj.response,null,2))
+                                ));
+
+                            Prism.highlightElement($('#'+cmdName+'-'+fncName+'-respone'+x)[0]);
+                        // END - GENERATE THE -RESPONSE- EXAMPLE
+
+                        // ADD HR SEPARATOR FOR EXAMPLES
+                        if (data.examples.length >= 1 && exampleCounter <= data.examples.length-1) {
+                            $('#' + cmdName + '-' + fncName).append($('<hr>'));
+                            //exampleCounter++;
+                        }
+
+                        exampleCounter++;
+
+                    }
+
+                }
+            }).then(function() {
+
+                console.log("failed files: "+JSON.stringify(jsonSpecs_failed));
+
+            }).catch(function (e) {
+                console.log('something went drastically wrong: '+e);
+            })
+
+        };
+        // END - GENERATE SPEC & EXAMPLES
+
+
+
+
+
+        $().ready(function () {
+
+            // init the select2 widget
+            $('#creosonFunctions').select2();
+
+            $('#creosonFunctions').on('change', function () {
+
+                var jsonFileName = $('#creosonFunctions').val();
+
+                if (jsonFileName == "intro") {
+                    // show the basic instructions
+                    $('.doc-section-important').removeClass('hidden');
+                    $('.doc-section').remove();
+
+                } else {
+
+                    // hide basic instructions and remove any doc-sections
+                    $('.doc-section-important').addClass('hidden');
+                    $('.doc-section').remove();
+
+                    loadSpecData(jsonFileName);
+                }
+
+            })
+
+            // populate the select2 widget
+            for (var i in jsonSpecs) {
+                var specName = jsonSpecs[i];
+
+                var creosonCmd = specName.split('-')[0];
+                var creosonFnc = specName.split('.json')[0].split('-')[1];
+
+                $('#creosonFunctions').append(
+                    $('<option>').text(creosonCmd + ' : '+creosonFnc).val(specName)
+                )
+            }
+
+        })
+
+
+
+    </script>
+
+
+</body>
+
+
+
+<!--GOOGLE ANALYTICS-->
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-101614187-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+
+</html>
+

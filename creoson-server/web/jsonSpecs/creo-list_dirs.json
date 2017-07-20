@@ -1,0 +1,51 @@
+{
+  "spec" : {
+    "function_description" : "List subdirectories of Creo's current working directory",
+    "command" : "creo",
+    "function" : "list_dirs",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name filter",
+      "default" : "All subdirectories are listed",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "dirlist",
+      "type" : "array:string",
+      "description" : "List of subdirectories"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "list_dirs"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirlist" : [ "project", "testing", "working" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "list_dirs",
+      "data" : {
+        "dirname" : "*ing"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirlist" : [ "testing", "working" ]
+      }
+    }
+  } ]
+}

@@ -1,0 +1,50 @@
+{
+  "spec" : {
+    "function_description" : "Get the number of sheets on a drawing",
+    "command" : "drawing",
+    "function" : "get_num_sheets",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    } ],
+    "response" : [ {
+      "name" : "num_sheets",
+      "type" : "integer",
+      "description" : "Number of sheets"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_num_sheets",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "num_sheets" : 2
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_num_sheets"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "num_sheets" : 3
+      }
+    }
+  } ]
+}

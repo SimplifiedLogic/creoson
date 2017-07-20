@@ -1,0 +1,158 @@
+{
+  "spec" : {
+    "function_description" : "Get a list of parameters from one or more models",
+    "command" : "parameter",
+    "function" : "list",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Parameter name; only used if names is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "names",
+      "type" : "array:string",
+      "description" : "List of parameter names",
+      "default" : "The name parameter is used; if both are empty, then all parameters are listed"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Whether to return the values Base64-encoded",
+      "default" : "false"
+    }, {
+      "name" : "value",
+      "type" : "string",
+      "description" : "Parameter value filter",
+      "default" : "no filter",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "paramlist",
+      "type" : "object_array:ParameterData",
+      "description" : "List of parameter information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PTC*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "paramlist" : [ {
+          "name" : "PTC_BRAND",
+          "type" : "STRING",
+          "value" : "ALPHA",
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "box.prt"
+        }, {
+          "name" : "PTC_LIFETIME",
+          "type" : "INTEGER",
+          "value" : 95,
+          "designate" : true,
+          "encoded" : false,
+          "owner_name" : "box.prt"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "list",
+      "data" : {
+        "names" : [ "LM_LENGTH", "LM_WIDTH", "LM_HEIGHT" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "paramlist" : [ {
+          "name" : "LM_LENGTH",
+          "type" : "DOUBLE",
+          "value" : 12.5,
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "abc123.asm"
+        }, {
+          "name" : "LM_HEIGHT",
+          "type" : "DOUBLE",
+          "value" : 5.5,
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "abc123.asm"
+        }, {
+          "name" : "LM_WIDTH",
+          "type" : "DOUBLE",
+          "value" : 15.5,
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "abc123.asm"
+        }, {
+          "name" : "LM_LENGTH",
+          "type" : "DOUBLE",
+          "value" : 30.0,
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "box.prt"
+        }, {
+          "name" : "LM_HEIGHT",
+          "type" : "DOUBLE",
+          "value" : 12.3,
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "box.prt"
+        }, {
+          "name" : "LM_WIDTH",
+          "type" : "DOUBLE",
+          "value" : 20.37,
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "box.prt"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "MFG_ID",
+        "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "paramlist" : [ {
+          "name" : "MFG_ID",
+          "type" : "STRING",
+          "value" : "ZnJpZW5kbHk=",
+          "designate" : false,
+          "encoded" : true,
+          "owner_name" : "box.prt"
+        } ]
+      }
+    }
+  } ]
+}

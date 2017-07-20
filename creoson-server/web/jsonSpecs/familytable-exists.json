@@ -1,0 +1,42 @@
+{
+  "spec" : {
+    "function_description" : "Check whether an instance exists in a family table",
+    "command" : "familytable",
+    "function" : "exists",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Instance name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the instance exists in the model's family table; returns false if there is no family table in the model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "exists",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "thick_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

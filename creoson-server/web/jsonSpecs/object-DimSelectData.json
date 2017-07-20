@@ -1,0 +1,26 @@
+{
+  "object_name" : "DimSelectData",
+  "description" : "Information about a dimension that the user has selected",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Dimension name"
+  }, {
+    "name" : "value",
+    "type" : "depends on data type",
+    "description" : "Dimension value"
+  }, {
+    "name" : "encoded",
+    "type" : "boolean",
+    "description" : "Value is Base64-encoded",
+    "default" : "false"
+  }, {
+    "name" : "file",
+    "type" : "string",
+    "description" : "Model name that owns the dimension"
+  }, {
+    "name" : "relation_id",
+    "type" : "integer",
+    "description" : "Relation ID for the dimension's model"
+  } ]
+}

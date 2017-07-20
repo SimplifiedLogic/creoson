@@ -1,0 +1,44 @@
+R E L E A S E   N O T E S
+=========================
+
+2.0.0
+	- First release built from new source code directories
+	- Added new functions:
+		connection
+			is_creo_running
+			kill_creo
+			start_creo
+			stop_creo
+
+1.1.8
+	- Added new functions:
+		file
+			assemble
+			get_transform
+
+1.1.7
+	- New function families: bom, dimension
+	- Added new functions to existing families:
+		feature
+			user_select_csys
+		file
+			get_length_units
+			get_mass_units
+			set_length_units
+			set_mass_units
+		geometry
+			get_edges
+			get_surfaces
+
+1.1.6
+	- New function families: drawing, windchill, server
+	- Added new "/server" endpoint for server functions
+	- Renamed two parameters on drawing-create: file->model, name->drawing
+	- Renamed "proe" family of functions to "creo" family  
+
+1.1.5
+	- Administrative tweaks, mainly file names and web pages
+
+1.1.4
+	- Initial pre-release
+	- Function families: familytable, feature, file (most), geometry (1), interface, layer, note, parameter, proe, view

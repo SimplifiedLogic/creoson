@@ -1,0 +1,80 @@
+{
+  "spec" : {
+    "function_description" : "Set a dimension value",
+    "command" : "dimension",
+    "function" : "set",
+    "notes" : [ "One reason to encode values is if the value contains special characters, such as Creo symbols" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Dimension name",
+      "required" : true
+    }, {
+      "name" : "value",
+      "type" : "depends on data type",
+      "description" : "Dimension value",
+      "default" : "Clears the dimension value if missing"
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Whether the value is Base64-encoded",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "set",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "d3",
+        "value" : 32.0,
+        "encoded" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "set",
+      "data" : {
+        "name" : "RADIUS",
+        "value" : 2.5,
+        "encoded" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "set",
+      "data" : {
+        "name" : "ANGLE",
+        "value" : "MzAgASQCCg==",
+        "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

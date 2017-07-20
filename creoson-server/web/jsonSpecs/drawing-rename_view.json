@@ -1,0 +1,41 @@
+{
+  "spec" : {
+    "function_description" : "Rename a drawing view",
+    "command" : "drawing",
+    "function" : "rename_view",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "Old view name",
+      "required" : true
+    }, {
+      "name" : "new_view",
+      "type" : "string",
+      "description" : "New view name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "rename_view",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT",
+        "new_view" : "FRONT_test"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

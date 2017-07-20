@@ -1,0 +1,85 @@
+{
+  "spec" : {
+    "function_description" : "Display or hide a dimension in Creo",
+    "command" : "dimension",
+    "function" : "show",
+    "notes" : [ "You can show a dimension on a specific occurrence of a part in an assembly, but if you hide a dimension it will be hidden on all occurrences of the component." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name containing the dimension",
+      "default" : "The currently active model"
+    }, {
+      "name" : "assembly",
+      "type" : "string",
+      "description" : "Assembly name; only used if path is given",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Dimension name",
+      "required" : true
+    }, {
+      "name" : "path",
+      "type" : "array:integer",
+      "description" : "Path to occurrence of the model within the assembly; the dimension will only be shown for that occurrence",
+      "default" : "All occurrences of the component are affected"
+    }, {
+      "name" : "show",
+      "type" : "boolean",
+      "description" : "Whether to show (or hide) the dimension",
+      "default" : "true (show)"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "show",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "d3",
+        "show" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "show",
+      "data" : {
+        "file" : "bolt.prt",
+        "assembly" : "engine.asm",
+        "name" : "d5",
+        "path" : [ 51, 12 ],
+        "show" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "show",
+      "data" : {
+        "name" : "d1",
+        "show" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

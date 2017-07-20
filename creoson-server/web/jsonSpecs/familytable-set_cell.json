@@ -1,0 +1,46 @@
+{
+  "spec" : {
+    "function_description" : "Set the value of one cell of a family table",
+    "command" : "familytable",
+    "function" : "set_cell",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Family Table instance name",
+      "required" : true
+    }, {
+      "name" : "colid",
+      "type" : "string",
+      "description" : "Column ID",
+      "required" : true
+    }, {
+      "name" : "value",
+      "type" : "depends on data type",
+      "description" : "Cell value"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "set_cell",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "thick_bracket",
+        "colid" : "BRACKET_WIDTH",
+        "value" : 120.0
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

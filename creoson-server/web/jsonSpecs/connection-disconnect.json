@@ -1,0 +1,21 @@
+{
+  "spec" : {
+    "function_description" : "Disconnect from CREOSON",
+    "command" : "connection",
+    "function" : "disconnect",
+    "request" : [ ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "connection",
+      "function" : "disconnect"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

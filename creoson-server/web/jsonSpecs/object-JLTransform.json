@@ -1,0 +1,34 @@
+{
+  "object_name" : "JLTransform",
+  "description" : "A 3D Transform matrix for a component",
+  "notes" : [ "On input, you may set either the axes or the rotations but you may not set both" ],
+  "data" : [ {
+    "name" : "origin",
+    "type" : "object:JLPoint",
+    "description" : "Matrix origin"
+  }, {
+    "name" : "x_axis",
+    "type" : "object:JLPoint",
+    "description" : "Matrix X Axis"
+  }, {
+    "name" : "y_axis",
+    "type" : "object:JLPoint",
+    "description" : "Matrix Y Axis"
+  }, {
+    "name" : "z_axis",
+    "type" : "object:JLPoint",
+    "description" : "Matrix Z Axis"
+  }, {
+    "name" : "x_rot",
+    "type" : "double",
+    "description" : "X rotation in degrees"
+  }, {
+    "name" : "y_rot",
+    "type" : "double",
+    "description" : "Y rotation in degrees"
+  }, {
+    "name" : "z_rot",
+    "type" : "double",
+    "description" : "Z rotation in degrees"
+  } ]
+}

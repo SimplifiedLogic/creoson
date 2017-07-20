@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Delete an instance from a family table",
+    "command" : "familytable",
+    "function" : "delete_inst",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Instance name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "delete_inst",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "thick_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

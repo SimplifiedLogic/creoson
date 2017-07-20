@@ -1,0 +1,27 @@
+{
+  "object_name" : "BomChild",
+  "description" : "Data for a component in a BOM hierarchy",
+  "data" : [ {
+    "name" : "file",
+    "type" : "string",
+    "description" : "Model name of the component",
+    "required" : true
+  }, {
+    "name" : "seq_path",
+    "type" : "string",
+    "description" : "Dot-separated list of sequence numbers showing the order of component within the assembly",
+    "required" : true
+  }, {
+    "name" : "path",
+    "type" : "array:integer",
+    "description" : "Creo's component path for the component"
+  }, {
+    "name" : "transform",
+    "type" : "object:JLTransform",
+    "description" : "3D Transform for the component"
+  }, {
+    "name" : "children",
+    "type" : "object_array:BomChild",
+    "description" : "Data for the child components of the component"
+  } ]
+}

@@ -1,0 +1,53 @@
+{
+  "spec" : {
+    "function_description" : "Get the value of a Creo config option",
+    "command" : "creo",
+    "function" : "get_config",
+    "request" : [ {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Option name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "values",
+      "type" : "array:string",
+      "description" : "List of option values (some options can have multiple values)"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "get_config",
+      "data" : {
+        "name" : "allow_save_as_instance"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "values" : [ "yes" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "get_config",
+      "data" : {
+        "name" : "search_path"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "values" : [ "C:/myfiles/parts", "C:/somefiles/parts" ]
+      }
+    }
+  } ]
+}

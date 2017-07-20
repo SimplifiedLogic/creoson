@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "Prompt the user to select one or more dimensions, and return their selections",
+    "command" : "dimension",
+    "function" : "user_select",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "max",
+      "type" : "integer",
+      "description" : "The maximum number of dimensions that the user can select",
+      "default" : "1"
+    } ],
+    "response" : [ {
+      "name" : "dimlist",
+      "type" : "object_array:DimSelectData",
+      "description" : "List of selected dimension information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "user_select",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "d1",
+          "value" : 32.5,
+          "encoded" : false,
+          "file" : "box.prt",
+          "relation_id" : 23
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "user_select",
+      "data" : {
+        "file" : "box.prt",
+        "max" : 2
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "ANGLE",
+          "value" : "MzAgASQCCg==",
+          "encoded" : true,
+          "file" : "box.prt",
+          "relation_id" : 145
+        }, {
+          "name" : "d1",
+          "value" : 32.5,
+          "encoded" : false,
+          "file" : "box.prt",
+          "relation_id" : 23
+        } ]
+      }
+    }
+  } ]
+}

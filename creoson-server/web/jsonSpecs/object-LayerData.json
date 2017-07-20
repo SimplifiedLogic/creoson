@@ -1,0 +1,18 @@
+{
+  "object_name" : "LayerData",
+  "description" : "Information about a layer",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Layer name"
+  }, {
+    "name" : "status",
+    "type" : "string",
+    "description" : "Layer status",
+    "valid_values" : "BLANK, DISPLAY, HIDDEN, NORMAL"
+  }, {
+    "name" : "id",
+    "type" : "integer",
+    "description" : "Layer ID"
+  } ]
+}

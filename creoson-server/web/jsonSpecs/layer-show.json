@@ -1,0 +1,90 @@
+{
+  "spec" : {
+    "function_description" : "Show/Hide one or more layers",
+    "command" : "layer",
+    "function" : "show",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Layer name",
+      "default" : "All layers will be deleted",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "show",
+      "type" : "boolean",
+      "description" : "Whether to show or hide the layers",
+      "default" : "true (show)"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "show",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "01___PRT_ALL_DTM_PLN",
+        "show" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "show",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "*DTM*",
+        "show" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "show",
+      "data" : {
+        "file" : "*.asm",
+        "name" : "*CSYS"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "show",
+      "data" : {
+        "file" : "*.asm",
+        "name" : "*CSYS",
+        "show" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

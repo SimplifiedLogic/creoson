@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Add a new instance to a family table; creates a family table if one does not exist",
+    "command" : "familytable",
+    "function" : "add_inst",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "New instance name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "add_inst",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "light_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

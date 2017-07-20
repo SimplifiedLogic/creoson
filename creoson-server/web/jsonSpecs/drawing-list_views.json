@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "List the views contained in a drawing",
+    "command" : "drawing",
+    "function" : "list_views",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name filter",
+      "default" : "no filter",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "views",
+      "type" : "array:string",
+      "description" : "List of views in the drawing"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_views",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "views" : [ "FRONT", "RIGHT", "TOP" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_views",
+      "data" : {
+        "drawing" : "box.drw",
+        "model" : "RIGHT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "views" : [ "RIGHT" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_views",
+      "data" : {
+        "model" : "*o*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "views" : [ "FRONT", "TOP" ]
+      }
+    }
+  } ]
+}

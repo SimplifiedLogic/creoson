@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Back up a model",
+    "command" : "file",
+    "function" : "backup",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "required" : true,
+      "default" : "Currently active model"
+    }, {
+      "name" : "target_dir",
+      "type" : "string",
+      "description" : "Target directory name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "backup",
+      "data" : {
+        "file" : "box.prt",
+        "target_dir" : "c:/somefiles/parts"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

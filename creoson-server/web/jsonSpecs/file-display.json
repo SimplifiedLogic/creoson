@@ -1,0 +1,34 @@
+{
+  "spec" : {
+    "function_description" : "Display a model in a window",
+    "command" : "file",
+    "function" : "display",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "required" : true
+    }, {
+      "name" : "activate",
+      "type" : "boolean",
+      "description" : "Activate the model after displaying",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "display",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

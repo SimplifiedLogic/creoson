@@ -1,0 +1,41 @@
+{
+  "object_name" : "ParameterData",
+  "description" : "Information about a Creo parameter",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Parameter name"
+  }, {
+    "name" : "value",
+    "type" : "depends on data type",
+    "description" : "Parameter value"
+  }, {
+    "name" : "type",
+    "type" : "string",
+    "description" : "Data type",
+    "default" : "STRING",
+    "valid_values" : "STRING, DOUBLE, INTEGER, BOOL, NOTE"
+  }, {
+    "name" : "designate",
+    "type" : "boolean",
+    "description" : "Value is designated",
+    "default" : "false"
+  }, {
+    "name" : "encoded",
+    "type" : "boolean",
+    "description" : "Value is Base64-encoded",
+    "default" : "false"
+  }, {
+    "name" : "owner_name",
+    "type" : "string",
+    "description" : "Owner Name (model or feature name)"
+  }, {
+    "name" : "owner_id",
+    "type" : "integer",
+    "description" : "Owner ID (if owner is a feature)"
+  }, {
+    "name" : "owner_type",
+    "type" : "string",
+    "description" : "Owner type (if owner is a feature)"
+  } ]
+}

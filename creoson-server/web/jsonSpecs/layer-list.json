@@ -1,0 +1,99 @@
+{
+  "spec" : {
+    "function_description" : "List layers that match criteria",
+    "command" : "layer",
+    "function" : "list",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Layer name",
+      "default" : "All layers are listed",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "layers",
+      "type" : "object_array:LayerData",
+      "description" : "List of layer data"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "layers" : [ {
+          "name" : "01___PRT_ALL_DTM_PLN",
+          "status" : "NORMAL",
+          "id" : 17
+        }, {
+          "name" : "01___PRT_DEF_DTM_PLN",
+          "status" : "NORMAL",
+          "id" : 19
+        }, {
+          "name" : "02___PRT_ALL_AXES",
+          "status" : "NORMAL",
+          "id" : 22
+        }, {
+          "name" : "03___PRT_ALL_CURVES",
+          "status" : "NORMAL",
+          "id" : 25
+        }, {
+          "name" : "04___PRT_ALL_DTM_PNT",
+          "status" : "NORMAL",
+          "id" : 28
+        }, {
+          "name" : "05___PRT_ALL_DTM_CSYS",
+          "status" : "NORMAL",
+          "id" : 32
+        }, {
+          "name" : "05___PRT_DEF_DTM_CSYS",
+          "status" : "NORMAL",
+          "id" : 33
+        }, {
+          "name" : "06___PRT_ALL_SURFS",
+          "status" : "NORMAL",
+          "id" : 38
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "list",
+      "data" : {
+        "name" : "*CSYS"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "layers" : [ {
+          "name" : "05___PRT_ALL_DTM_CSYS",
+          "status" : "NORMAL",
+          "id" : 32
+        }, {
+          "name" : "05___PRT_DEF_DTM_CSYS",
+          "status" : "NORMAL",
+          "id" : 33
+        } ]
+      }
+    }
+  } ]
+}

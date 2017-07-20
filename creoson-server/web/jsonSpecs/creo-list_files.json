@@ -1,0 +1,51 @@
+{
+  "spec" : {
+    "function_description" : "List files in Creo's current working directory",
+    "command" : "creo",
+    "function" : "list_files",
+    "request" : [ {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "File name filter",
+      "default" : "All files are listed",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "filelist",
+      "type" : "array:string",
+      "description" : "List of files"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "list_files"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "filelist" : [ "notes.txt", "box.prt", "bracket.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "list_files",
+      "data" : {
+        "dirname" : "*prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirlist" : [ "box.prt", "bracket.prt" ]
+      }
+    }
+  } ]
+}

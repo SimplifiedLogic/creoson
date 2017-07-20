@@ -1,0 +1,101 @@
+{
+  "spec" : {
+    "function_description" : "Get the list of surfaces for a model",
+    "command" : "geometry",
+    "function" : "get_surfaces",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "surflist",
+      "type" : "object_array:SurfaceData",
+      "description" : "List of surface information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "geometry",
+      "function" : "get_surfaces",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "surflist" : [ {
+          "surface_id" : 43,
+          "area" : 79718.7771691097,
+          "min_extent" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : -150.0
+          },
+          "max_extent" : {
+            "x" : 400.0,
+            "y" : 200.0,
+            "z" : -150.0
+          }
+        }, {
+          "surface_id" : 48,
+          "area" : 63202.03595752723,
+          "min_extent" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 150.0
+          },
+          "max_extent" : {
+            "x" : 376.3,
+            "y" : 176.3,
+            "z" : 150.0
+          }
+        }, {
+          "surface_id" : 53,
+          "area" : 119837.85406364943,
+          "min_extent" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : -150.0
+          },
+          "max_extent" : {
+            "x" : 400.0,
+            "y" : 0.0,
+            "z" : 150.0
+          }
+        }, {
+          "surface_id" : 55,
+          "area" : 46898.69161398972,
+          "min_extent" : {
+            "x" : 400.0,
+            "y" : 0.0,
+            "z" : -150.0
+          },
+          "max_extent" : {
+            "x" : 400.0,
+            "y" : 163.8,
+            "z" : 136.31679862020587
+          }
+        }, {
+          "surface_id" : 57,
+          "area" : 104162.0513380309,
+          "min_extent" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : -150.0
+          },
+          "max_extent" : {
+            "x" : 363.8,
+            "y" : 200.0,
+            "z" : 136.31679862020587
+          }
+        } ]
+      }
+    }
+  } ]
+}

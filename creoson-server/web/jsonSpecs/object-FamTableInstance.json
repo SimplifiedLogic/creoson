@@ -1,0 +1,17 @@
+{
+  "object_name" : "FamTableInstance",
+  "description" : "Information about an instance in a nested family table",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Name of the family table instance"
+  }, {
+    "name" : "total",
+    "type" : "integer",
+    "description" : "Count of all child instances including their decendants"
+  }, {
+    "name" : "children",
+    "type" : "object_array:FamTableInstance",
+    "description" : "List of child instances"
+  } ]
+}

@@ -1,0 +1,97 @@
+{
+  "spec" : {
+    "function_description" : "Delete files from a directory working directory",
+    "command" : "creo",
+    "function" : "delete_files",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "File name filter; only used if filenames is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "filenames",
+      "type" : "array:string",
+      "description" : "List of file names",
+      "default" : "The filename parameter is used; if both are blank, all files will be deleted"
+    } ],
+    "response" : [ {
+      "name" : "filelist",
+      "type" : "array:string",
+      "description" : "List of deleted files"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "delete_files"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "filelist" : [ "notes.txt", "box.prt", "bracket.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "delete_files",
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "*prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirlist" : [ "box.prt", "bracket.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "delete_files",
+      "data" : {
+        "filenames" : [ "box.prt", "notes.txt", "nofile.txt" ],
+        "filename" : "nofile.txt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirlist" : [ "box.prt", "notes.txt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "delete_files",
+      "data" : {
+        "filenames" : [ "box.prt", "notes.txt", "nofile.txt" ],
+        "filename" : "nofile.txt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirlist" : [ "box.prt", "notes.txt" ]
+      }
+    }
+  } ]
+}

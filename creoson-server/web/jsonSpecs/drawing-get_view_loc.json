@@ -1,0 +1,52 @@
+{
+  "spec" : {
+    "function_description" : "Get the location of a drawing view",
+    "command" : "drawing",
+    "function" : "get_view_loc",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "x",
+      "type" : "double",
+      "description" : "X-coordinate of the view"
+    }, {
+      "name" : "y",
+      "type" : "double",
+      "description" : "Y-coordinate of the view"
+    }, {
+      "name" : "z",
+      "type" : "double",
+      "description" : "Z-coordinate of the view"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_view_loc",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "x" : 2.5,
+        "y" : 4.0,
+        "z" : 0.5
+      }
+    }
+  } ]
+}

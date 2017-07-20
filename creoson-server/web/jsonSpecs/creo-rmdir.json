@@ -1,0 +1,44 @@
+{
+  "spec" : {
+    "function_description" : "Delete a new directory",
+    "command" : "creo",
+    "function" : "rmdir",
+    "notes" : [ "Directory must be empty before deleting" ],
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name to delete",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "rmdir",
+      "data" : {
+        "dirname" : "C:\\testfiles\\sub"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "rmdir",
+      "data" : {
+        "dirname" : "subdir"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

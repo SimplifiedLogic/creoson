@@ -1,0 +1,78 @@
+{
+  "spec" : {
+    "function_description" : "Set the scale of a drawing sheet",
+    "command" : "drawing",
+    "function" : "scale_sheet",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet Number",
+      "required" : true
+    }, {
+      "name" : "scale",
+      "type" : "double",
+      "description" : "View scale",
+      "required" : true
+    }, {
+      "name" : "model",
+      "type" : "string",
+      "description" : "Drawing model to scale",
+      "default" : "The active model on the drawing"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "scale_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1,
+        "scale" : 0.5,
+        "model" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "scale_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 2,
+        "scale" : 1.0
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "scale_sheet",
+      "data" : {
+        "sheet" : 1,
+        "scale" : 0.5
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

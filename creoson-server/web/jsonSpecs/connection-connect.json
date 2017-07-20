@@ -1,0 +1,21 @@
+{
+  "spec" : {
+    "function_description" : "Connect to CREOSON",
+    "command" : "connection",
+    "function" : "connect",
+    "request" : [ ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "command" : "connection",
+      "function" : "connect"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "sessionId" : "~sessionId~"
+    }
+  } ]
+}

@@ -1,0 +1,43 @@
+{
+  "spec" : {
+    "function_description" : "Select a Windchill server",
+    "command" : "windchill",
+    "function" : "set_server",
+    "request" : [ {
+      "name" : "server_url",
+      "type" : "string",
+      "description" : "Server URL or Alias",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "set_server",
+      "data" : {
+        "server_url" : "http://myserver.com/Windchill"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "set_server",
+      "data" : {
+        "server_url" : "Main_Server"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

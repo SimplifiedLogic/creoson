@@ -1,0 +1,21 @@
+{
+  "spec" : {
+    "function_description" : "Kill primary Creo processes.",
+    "command" : "connection",
+    "function" : "kill_creo",
+    "notes" : [ "This will kill the 'xtop.exe' and 'nmsd.exe' processes by name.", "The sessionId is optional, and ignored." ],
+    "request" : [ ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "command" : "connection",
+      "function" : "kill_creo"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

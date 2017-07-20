@@ -1,0 +1,33 @@
+{
+  "spec" : {
+    "function_description" : "Get the active model from Creo",
+    "command" : "file",
+    "function" : "get_active",
+    "request" : [ ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name of current model"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name of current model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_active"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "file" : "box.prt"
+      }
+    }
+  } ]
+}

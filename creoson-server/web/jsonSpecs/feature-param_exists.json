@@ -1,0 +1,90 @@
+{
+  "spec" : {
+    "function_description" : "Check whether parameter(s) exists on a feature",
+    "command" : "feature",
+    "function" : "param_exists",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Feature name",
+      "required" : true
+    }, {
+      "name" : "param",
+      "type" : "string",
+      "description" : "Parameter name; only used if params is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "params",
+      "type" : "array:string",
+      "description" : "List of parameter names",
+      "default" : "The param parameter is used; if both are empty, then it checks for any parameter's existence"
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the parameter exists on the model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "param_exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLN_34",
+        "param" : "MFG_ID"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "param_exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLN_34",
+        "param" : "PTC*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "param_exists",
+      "data" : {
+        "name" : "CS3",
+        "params" : [ "LM_LENGTH", "LM_WIDTH", "LM_HEIGHT" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  } ]
+}

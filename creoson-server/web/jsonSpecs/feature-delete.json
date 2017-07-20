@@ -1,0 +1,137 @@
+{
+  "spec" : {
+    "function_description" : "Delete one or more features that match criteria",
+    "command" : "feature",
+    "function" : "delete",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Feature name; only used if names is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "names",
+      "type" : "array:string",
+      "description" : "List of feature names",
+      "default" : "The name parameter is used; if both are empty, then all features may be deleted"
+    }, {
+      "name" : "status",
+      "type" : "string",
+      "description" : "Feature status pattern",
+      "default" : "All feature statuses",
+      "wildcards_allowed" : true,
+      "valid_values" : "ACTIVE, INACTIVE, FAMILY_TABLE_SUPPRESSED, SIMP_REP_SUPPRESSED, PROGRAM_SUPPRESSED, SUPPRESSED, UNREGENERATED"
+    }, {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Feature type pattern",
+      "default" : "All feature types",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "clip",
+      "type" : "boolean",
+      "description" : "Whether to clip-delete ANY features from this feature through the end of the structure",
+      "default" : "false"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "CS3"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLN_*",
+        "clip" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "names" : [ "PLN_34", "CS3", "FLAT_3" ],
+        "clip" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "status" : "*SUPPRESSED*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLN_*",
+        "status" : "*SUPPRESSED*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "delete",
+      "data" : {
+        "file" : "box.prt",
+        "type" : "DATUM_*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

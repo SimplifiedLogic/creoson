@@ -1,0 +1,49 @@
+{
+  "spec" : {
+    "function_description" : "Set the active model on a drawing",
+    "command" : "drawing",
+    "function" : "set_cur_model",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "model",
+      "type" : "string",
+      "description" : "Model name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "set_cur_model",
+      "data" : {
+        "drawing" : "box.drw",
+        "model" : "screw.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "set_cur_model",
+      "data" : {
+        "model" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,0 +1,61 @@
+{
+  "spec" : {
+    "function_description" : "Get one row of a family table",
+    "command" : "familytable",
+    "function" : "get_row",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Family Table instance name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "instance",
+      "type" : "string",
+      "description" : "Family Table instance name"
+    }, {
+      "name" : "columns",
+      "type" : "object_array:FamTableRowColumn",
+      "description" : "List of data about each column in the row"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "get_row",
+      "data" : {
+        "file" : "bracket.prt",
+        "instance" : "thick_bracket"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "columns" : [ {
+          "colid" : "d0",
+          "value" : 45.0,
+          "datatype" : "DOUBLE",
+          "coltype" : "dimension"
+        }, {
+          "colid" : "BRACKET_WIDTH",
+          "value" : 100.0,
+          "datatype" : "DOUBLE",
+          "coltype" : "parameter"
+        }, {
+          "colid" : "HOLE_DIST",
+          "value" : 50.0,
+          "datatype" : "DOUBLE",
+          "coltype" : "parameter"
+        } ]
+      }
+    }
+  } ]
+}

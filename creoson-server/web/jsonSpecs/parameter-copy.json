@@ -1,0 +1,85 @@
+{
+  "spec" : {
+    "function_description" : "Copy parameter to another in the same model or another model",
+    "command" : "parameter",
+    "function" : "copy",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Source model",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Parameter name to copy",
+      "required" : true,
+      "wildcards_allowed" : true
+    }, {
+      "name" : "to_name",
+      "type" : "string",
+      "description" : "Destination parameter"
+    }, {
+      "name" : "to_file",
+      "type" : "string",
+      "description" : "Destination model",
+      "default" : "The source model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "designate",
+      "type" : "boolean",
+      "description" : "Set copied parameter to be designated/not designated, blank=do not set",
+      "default" : "blank"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "copy",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "ALPHA",
+        "to_name" : "BETA"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "copy",
+      "data" : {
+        "file" : "box_flat.prt",
+        "name" : "LM_*",
+        "to_file" : "box.prt",
+        "designate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "copy",
+      "data" : {
+        "name" : "MFG_ID",
+        "to_file" : "box*.prt",
+        "designate" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

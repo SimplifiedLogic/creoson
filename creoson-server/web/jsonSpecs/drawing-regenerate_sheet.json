@@ -1,0 +1,49 @@
+{
+  "spec" : {
+    "function_description" : "Regenerate a sheet on a drawing",
+    "command" : "drawing",
+    "function" : "regenerate_sheet",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number (0 for all sheets)",
+      "default" : "All sheets will be regenerated"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "regenerate_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "regenerate_sheet",
+      "data" : {
+        "sheet" : 2
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}
