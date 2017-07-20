@@ -1,4 +1,3 @@
-
 # CREOSON
 
 CREOSON is an OpenSource initiative by [Simplified Logic, Inc.](http://www.simplifiedlogic.com) to promote automation of PTC's CREO Parametric.
@@ -56,7 +55,7 @@ If you need professional help with your automation, send us an email with your g
 
 ### Why JSON?!
 
-JSON was chosen becasue it is super generic and easy to work with.
+JSON was chosen because it is super generic and easy to work with.
 
 Typically, CREO Parametric automation options are limited to a specific set of core languages like C/C++/C#, Java and Visual Basic.  JSON enables you to use ANY programming/scripting language to manipulate CREO Parametric via CREOSON.  So you can use scripting languages like Ruby, Python, PHP or even Web Technologies like AJAX to perform operations in CREO quite easily - and faster!
 
@@ -67,11 +66,33 @@ CREOSON uses a Micro-Server to "listen" for JSON requests and then handles/trans
 
 
 
-# Development
+# SOURCE CODE
+----
+Sub-project folders -- these contain the project source and Ant build script for each Creoson jar file:
+
+* creofuncs
+* creoson-core
+* creoson-intf
+* creoson-json
+* creoson-json-const
+* creoson-server -- also contains the website files
+
+### Files in the root directory
+
+* BUILD_README.txt -- short doc explaining how to build the project from scratch
+* build_vars.properties -- properties file used for builds which contain settings that the users are going to have to set manually -- the Creo location and the location of the CreosonSetup application.
+* The various root-level build files -- build-javadoc.xml, build-zip.xml, build-all.xml
+* RELEASE_NOTES.txt -- release notes
+* creoson_source_doc.pdf -- high-level documentation about how the source code is organised
+
+
+
+# Contribute!
 ----
 Want to contribute? Great!
 
 Sign up with GitHub, pull the source and start to help!
+
 
 
 # License
