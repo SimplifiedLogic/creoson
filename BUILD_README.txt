@@ -25,6 +25,9 @@ releases were built with version 2.0.5 of jackson-core, jackson-annotations,
 and jackson-databind.
 https://github.com/FasterXML/jackson
 
+5) An output directory to which the built jars will be written.
+
+
 Before doing any builds, you must first edit "build_vars.properties" file and 
 update the entries to point to the directories for these two items.
 
