@@ -6,8 +6,10 @@ CREOSON uses simple JSON Requests to send commands/functions to CREO, JSON Respo
 
 
 
-# Get the Pre-Packaged Distribution!
-If you are not a "developer"... the Pre-Packaged Distribution is available as either a 32-bit or 64-bit distribution and has the correct version of Java already baked-in!  So it is literally a download, unzip and run CREOSON Micro-Server!
+# Pre-Packaged Download(s)!
+If you are not a "developer"... and don't want to build CREOSON from "scratch" ... a Pre-Packaged Distribution is available for 32-bit or 64-bit CREO.  The Pre-Packaged Distributions have everything (including the correct version of Java) already baked-in and ready to rock!
+
+You can literally download, unzip and run CREOSON Micro-Server immediately!
 
  Pre-Packaged Distributions are located here:
  - --> [Download CRESOSON Releases](https://github.com/SimplifiedLogic/creoson/releases) <--
