@@ -275,7 +275,7 @@ public class JLBom implements IJLBom {
                     if (childModel==null)
                     	childModel = session.getModelFromDescr(desc);
                     if (childModel!=null && childModel instanceof CallSolid) {
-                        // System.out.println(indent + "checking children for " + instname);
+                        // System.out.println(indent + "checking children for " + child.getFilename());
                         walkGetPaths(session, baseAssembly, (CallSolid)childModel, child, indent+"  ", newseq, curPath, pathlen+1, skeleton, toplevel, paths, incTransform, transformAsTable, excludeInactive, simpRep);
                     }
                 }

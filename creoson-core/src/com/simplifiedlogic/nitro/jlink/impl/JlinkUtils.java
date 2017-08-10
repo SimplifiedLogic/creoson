@@ -1326,12 +1326,51 @@ public class JlinkUtils {
 				CallSimpRepCompItemPath cpath;
 				for (int i=0; i<len; i++) {
 					item = items.get(i);
+					int actionType = item.getAction();
+
+					boolean skip=false;
+					switch (actionType) {
+						// ignore "empty" action types
+						case -1: 
+						case SimpRepActionType._SIMPREP_NONE:
+							skip=true; 
+							break;
+							
+						// do NOT ignore reverse action types
+						case SimpRepActionType._SIMPREP_REVERSE:
+							break;
+							
+						// ignore action type which matches the default (exclude)
+						case SimpRepActionType._SIMPREP_EXCLUDE:
+							if (data.isDefaultExclude())
+								skip=true;
+							break;
+							
+						// ignore action type which matches the default (include)
+						case SimpRepActionType._SIMPREP_INCLUDE:
+							if (!data.isDefaultExclude())
+								skip=true;
+							break;
+							
+						// by default ignore all other action types
+						default:
+							skip=true;
+							break;
+					}
+					
+					if (skip) {
+						//System.out.println("skipping action type: " + actionType);
+						continue;
+					}
+
 					path = item.getItemPath();
 					if (path instanceof CallSimpRepCompItemPath) {
 						cpath = (CallSimpRepCompItemPath)path;
 						seq = cpath.getItemPath();
-						if (seq!=null)
+						if (seq!=null) {
+							//System.out.println("Simp Rep: " + item.getAction() + "  " + intSeqToList(seq));
 							data.addItem(intSeqToList(seq));
+						}
 					}
 				}
 			}
