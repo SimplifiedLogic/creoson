@@ -1,0 +1,57 @@
+{
+  "spec" : {
+    "function_description" : "Get the 2D bounding box for a drawing view",
+    "command" : "drawing",
+    "function" : "view_bound_box",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "xmin",
+      "type" : "double",
+      "description" : "Minimum X-coordinate of drawing view"
+    }, {
+      "name" : "xmax",
+      "type" : "double",
+      "description" : "Maximum X-coordinate of drawing view"
+    }, {
+      "name" : "ymin",
+      "type" : "double",
+      "description" : "Minimum Y-coordinate of drawing view"
+    }, {
+      "name" : "ymax",
+      "type" : "double",
+      "description" : "Maximum Y-coordinate of drawing view"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "view_bound_box",
+      "data" : {
+        "drawing" : "box.drw",
+        "view" : "FRONT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "xmin" : 5.0,
+        "xmax" : 30.0,
+        "ymin" : 12.5,
+        "ymax" : 15.0
+      }
+    }
+  } ]
+}

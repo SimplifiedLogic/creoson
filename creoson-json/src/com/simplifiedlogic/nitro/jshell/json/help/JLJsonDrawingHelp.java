@@ -74,6 +74,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		list.add(helpSelectSheet());
 		list.add(helpSetCurModel());
 		list.add(helpSetViewLoc());
+		list.add(helpViewBoundingBox());
 		return list;
 	}
 	
@@ -687,6 +688,11 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	arg.setDefaultValue("Creo defaults");
     	spec.addArgument(arg);
         
+    	arg = new FunctionArgument(PARAM_EXPLODED, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to create the view as an exploded view");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
     	
     	ex = new FunctionExample();
@@ -709,6 +715,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	rec.put(PARAM_SHOW_CONCEPT_MODEL, false);
     	rec.put(PARAM_SHOW_WELD_XSECTION, false);
     	ex.addInput(PARAM_DISPLAY_DATA, rec);
+    	ex.addInput(PARAM_EXPLODED, true);
     	template.addExample(ex);
     	
     	ex = new FunctionExample();
@@ -772,6 +779,11 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	arg.setDefaultValue("The display parameters of the parent view");
     	spec.addArgument(arg);
         
+    	arg = new FunctionArgument(PARAM_EXPLODED, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to create the view as an exploded view");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
     	
     	ex = new FunctionExample();
@@ -792,6 +804,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	rec.put(PARAM_SHOW_CONCEPT_MODEL, false);
     	rec.put(PARAM_SHOW_WELD_XSECTION, false);
     	ex.addInput(PARAM_DISPLAY_DATA, rec);
+    	ex.addInput(PARAM_EXPLODED, false);
     	template.addExample(ex);
     	
     	ex = new FunctionExample();
@@ -1225,6 +1238,53 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	obj.add(arg);
 
         return obj;
+    }
+    
+	private FunctionTemplate helpViewBoundingBox() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_VIEW_BOUND_BOX);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Get the 2D bounding box for a drawing view");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_VIEW, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_XMIN, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Minimum X-coordinate of drawing view");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_XMAX, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Maximum X-coordinate of drawing view");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_YMIN, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Minimum Y-coordinate of drawing view");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_YMAX, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Maximum Y-coordinate of drawing view");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_VIEW, "FRONT");
+    	ex.addOutput(OUTPUT_XMIN, 5.0);
+    	ex.addOutput(OUTPUT_XMAX, 30.0);
+    	ex.addOutput(OUTPUT_YMIN, 12.5);
+    	ex.addOutput(OUTPUT_YMAX, 15.0);
+    	template.addExample(ex);
+
+        return template;
     }
     
 }

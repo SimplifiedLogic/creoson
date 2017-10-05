@@ -45,6 +45,22 @@ public class JLBoxMaker {
 		try {
 	    	CallPoint3D min = outline.get(0);
 	    	CallPoint3D max = outline.get(1);
+	    	return create(min, max);
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+	}
+
+	/**
+	 * Create a JLBox from a pair of Creo Point3D objects
+	 * @param min The minimum point
+	 * @param max The maximum point
+	 * @return The resulting JShell box
+	 * @throws JLIException
+	 */
+	public static JLBox create(CallPoint3D min, CallPoint3D max) throws JLIException {
+		try {
 	    	JLBox box = new JLBox();
 	    	
 	    	box.setXmin(min.get(0));

@@ -54,6 +54,7 @@ public interface JLDrawingRequestParams {
     public static final String FUNC_SET_CUR_MODEL	= "set_cur_model";
     public static final String FUNC_SET_VIEW_LOC	= "set_view_loc";
     public static final String FUNC_SCALE_VIEW		= "scale_view";
+    public static final String FUNC_VIEW_BOUND_BOX	= "view_bound_box";
 
     // request fields
     public static final String PARAM_MODEL		= "model";
@@ -72,6 +73,7 @@ public interface JLDrawingRequestParams {
     public static final String PARAM_DEL_CHILDREN	= "del_children";
     public static final String PARAM_MODEL_VIEW	= "model_view";
     public static final String PARAM_PARENT_VIEW	= "parent_view";
+    public static final String PARAM_EXPLODED	= "exploded";
 
     // view display data params
     public static final String PARAM_DISPLAY_DATA				= "display_data";

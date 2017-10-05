@@ -53,6 +53,7 @@ import com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2Ds;
 import com.simplifiedlogic.nitro.jlink.calls.view2d.CallViewDisplay;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.ViewDisplayData;
 import com.simplifiedlogic.nitro.jlink.data.ViewScaleResults;
@@ -60,6 +61,7 @@ import com.simplifiedlogic.nitro.jlink.intf.IJLDrawing;
 import com.simplifiedlogic.nitro.jlink.intf.IJLTransfer;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
+import com.simplifiedlogic.nitro.util.JLBoxMaker;
 import com.simplifiedlogic.nitro.util.JLConnectionUtil;
 import com.simplifiedlogic.nitro.util.JLPointMaker;
 import com.simplifiedlogic.nitro.util.ModelLooper;
@@ -925,10 +927,11 @@ public class JLDrawing implements IJLDrawing {
 			JLPoint location,
 			double scale,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
         
-        createGeneralView(drawingName, newViewName, sheet, modelName, modelViewName, location, scale, displayData, sess);
+        createGeneralView(drawingName, newViewName, sheet, modelName, modelViewName, location, scale, displayData, exploded, sess);
 	}
 
 	@Override
@@ -941,6 +944,7 @@ public class JLDrawing implements IJLDrawing {
 			JLPoint location,
 			double scale,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			AbstractJLISession sess) throws JLIException {
     	
 		DebugLogging.sendDebugMessage("drawing.create_gen_view: " + drawingName, NitroConstants.DEBUG_KEY);
@@ -1008,6 +1012,7 @@ public class JLDrawing implements IJLDrawing {
 	        		orient);
 	        if (scale>0.0)
 	        	instr.setScale(scale);
+        	instr.setExploded(exploded);
 	        
 	        CallView2D view = drw.createView(instr);
 	        if (displayData!=null)
@@ -1048,10 +1053,11 @@ public class JLDrawing implements IJLDrawing {
 			String parentViewName,
 			JLPoint location,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
         
-        createProjectionView(drawingName, newViewName, sheet, parentViewName, location, displayData, sess);
+        createProjectionView(drawingName, newViewName, sheet, parentViewName, location, displayData, exploded, sess);
 	}
 
 	@Override
@@ -1062,6 +1068,7 @@ public class JLDrawing implements IJLDrawing {
 			String parentViewName,
 			JLPoint location,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			AbstractJLISession sess) throws JLIException {
     	
 		DebugLogging.sendDebugMessage("drawing.create_proj_view: " + drawingName, NitroConstants.DEBUG_KEY);
@@ -1125,6 +1132,7 @@ public class JLDrawing implements IJLDrawing {
 	        CallProjectionViewCreateInstructions instr = CallProjectionViewCreateInstructions.create(
 	        		parentView, 
 	        		loc);
+        	instr.setExploded(exploded);
 	        
 	        CallView2D view = drw.createView(instr);
 	        if (displayData!=null)
@@ -1625,6 +1633,74 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#viewBoundingBox(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public JLBox viewBoundingBox(String filename, String viewName, String sessionId) throws JLIException {
+    	
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return viewBoundingBox(filename, viewName, sess);
+    }
+    
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#viewBoundingBox(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    @Override
+    public JLBox viewBoundingBox(String filename, String viewName, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.view_bound_box: " + viewName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (viewName==null || viewName.trim().length()==0)
+    		throw new JLIException("No view name parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        
+	        CallDrawing drw = (CallDrawing)m;
+	        CallView2D view = drw.getViewByName(viewName);
+	        if (view==null)
+	        	throw new JLIException("View not found in drawing: " + viewName);
+
+	        CallOutline3D outline = view.getOutline();
+
+	        if (outline==null)
+	        	throw new JLIException("No outline found for drawing view");
+	        
+	        int sheet = view.getSheetNumber();
+	        CallPoint3D ptMin = screenToDrawingPoint(drw, sheet, outline.get(0));
+	        CallPoint3D ptMax = screenToDrawingPoint(drw, sheet, outline.get(1));
+
+	        return JLBoxMaker.create(ptMin, ptMax);
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.view_bound_box,"+viewName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
+    
     /**
      * Convert a Creo PlotPaperSize to a standard string representing the size
      * @param paperSize The Creo paper size

@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.ViewDisplayData;
 import com.simplifiedlogic.nitro.jlink.data.ViewScaleResults;
@@ -79,6 +80,7 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		else if (function.equals(FUNC_SCALE_VIEW)) return actionScaleView(sessionId, input);
 		else if (function.equals(FUNC_GET_VIEW_SCALE)) return actionGetViewScale(sessionId, input);
 		else if (function.equals(FUNC_GET_VIEW_SHEET)) return actionGetViewSheet(sessionId, input);
+		else if (function.equals(FUNC_VIEW_BOUND_BOX)) return actionViewBoundingBox(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -266,13 +268,14 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		JLPoint pt = readPoint(pointObj);
 		Map<String, Object> displayObj = checkMapParameter(input, PARAM_DISPLAY_DATA, false);
 		ViewDisplayData displayData = makeDisplayData(displayObj);
+		boolean exploded = checkFlagParameter(input, PARAM_EXPLODED, false, false);
 
 		double scale = 0.0;
 		Double scaleObj = checkDoubleParameter(input, PARAM_SCALE, true);
 		if (scaleObj!=null)
 			scale = scaleObj.doubleValue();
 
-		drawHandler.createGeneralView(drawing, view, sheet, model, modelView, pt, scale, displayData, sessionId);
+		drawHandler.createGeneralView(drawing, view, sheet, model, modelView, pt, scale, displayData, exploded, sessionId);
 		
 		return null;
 	}
@@ -286,8 +289,9 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		JLPoint pt = readPoint(pointObj);
 		Map<String, Object> displayObj = checkMapParameter(input, PARAM_DISPLAY_DATA, false);
 		ViewDisplayData displayData = makeDisplayData(displayObj);
+		boolean exploded = checkFlagParameter(input, PARAM_EXPLODED, false, false);
 
-		drawHandler.createProjectionView(drawing, view, sheet, parentView, pt, displayData, sessionId);
+		drawHandler.createProjectionView(drawing, view, sheet, parentView, pt, displayData, exploded, sessionId);
 		
 		return null;
 	}
@@ -393,6 +397,23 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		out.put(OUTPUT_SHEET, sheet);
 		return out;
+	}
+
+	private Hashtable<String, Object> actionViewBoundingBox(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String drawing = checkStringParameter(input, PARAM_DRAWING, false);
+        String view = checkStringParameter(input, PARAM_VIEW, false);
+        
+        JLBox box = drawHandler.viewBoundingBox(drawing, view, sessionId);
+        
+        if (box!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			out.put(OUTPUT_XMIN, box.getXmin());
+			out.put(OUTPUT_XMAX, box.getXmax());
+			out.put(OUTPUT_YMIN, box.getYmin());
+			out.put(OUTPUT_YMAX, box.getYmax());
+        	return out;
+        }
+        return null;
 	}
 
 	private ViewDisplayData makeDisplayData(Map<String, Object> displayData) throws JLIException {

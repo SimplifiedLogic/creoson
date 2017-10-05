@@ -37,4 +37,8 @@ public interface JLDrawingResponseParams {
 	public static final String OUTPUT_FAILED_VIEWS	= "failed_views";
 	public static final String OUTPUT_SUCCESS_VIEWS	= "success_views";
 
+    public static final String OUTPUT_XMIN	= "xmin";
+	public static final String OUTPUT_XMAX	= "xmax";
+	public static final String OUTPUT_YMIN	= "ymin";
+	public static final String OUTPUT_YMAX	= "ymax";
 }

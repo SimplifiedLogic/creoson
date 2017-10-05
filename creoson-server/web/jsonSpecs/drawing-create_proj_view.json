@@ -34,6 +34,11 @@
       "type" : "object:ViewDisplayData",
       "description" : "Display parameters used to create the view",
       "default" : "The display parameters of the parent view"
+    }, {
+      "name" : "exploded",
+      "type" : "boolean",
+      "description" : "Whether to create the view as an exploded view",
+      "default" : "false"
     } ],
     "response" : [ ]
   },
@@ -58,7 +63,8 @@
           "remove_quilt_hidden_lines" : true,
           "show_concept_model" : false,
           "show_weld_xsection" : false
-        }
+        },
+        "exploded" : false
       }
     },
     "response" : {

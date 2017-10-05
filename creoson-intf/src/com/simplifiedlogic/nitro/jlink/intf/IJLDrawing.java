@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.jlink.intf;
 import java.util.List;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.ViewDisplayData;
 import com.simplifiedlogic.nitro.jlink.data.ViewScaleResults;
@@ -113,6 +114,7 @@ public interface IJLDrawing {
 			JLPoint location,
 			double scale,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			String sessionId) throws JLIException;
 	public void createGeneralView(
 			String drawingName, 
@@ -123,6 +125,7 @@ public interface IJLDrawing {
 			JLPoint location,
 			double scale,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			AbstractJLISession sess) throws JLIException;
 
 	public void createProjectionView(
@@ -132,6 +135,7 @@ public interface IJLDrawing {
 			String parentViewName,
 			JLPoint location,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			String sessionId) throws JLIException;
 	public void createProjectionView(
 			String drawingName, 
@@ -140,6 +144,7 @@ public interface IJLDrawing {
 			String parentViewName,
 			JLPoint location,
 			ViewDisplayData displayData,
+			boolean exploded, 
 			AbstractJLISession sess) throws JLIException;
 	
 	public List<String> listViews(String drawingName, String viewName, String sessionId) throws JLIException;
@@ -165,5 +170,8 @@ public interface IJLDrawing {
 
 	public int getViewSheet(String filename, String viewName, String sessionId) throws JLIException;
 	public int getViewSheet(String filename, String viewName, AbstractJLISession sess) throws JLIException;
+
+    public JLBox viewBoundingBox(String filename, String viewName, String sessionId) throws JLIException;
+    public JLBox viewBoundingBox(String filename, String viewName, AbstractJLISession sess) throws JLIException;
 
 }
