@@ -18,6 +18,7 @@
  */
 package com.simplifiedlogic.nitro.jlink.impl;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -846,8 +847,11 @@ public class JLNote implements IJLNote {
             		textExpanded = text;
                 encoded = NitroUtils.hasBinary(text);
             }
-            if (encoded)
-                outvals.setValue(text.getBytes());
+            if (encoded) {
+                outvals.setValue(text.getBytes(Charset.forName("UTF-8")));
+                if (textExpanded!=null)
+                	outvals.setValueExpanded(textExpanded.getBytes(Charset.forName("UTF-8")));
+            }
             else {
             	outvals.setValue(text);
             	outvals.setValueExpanded(textExpanded);
@@ -876,7 +880,7 @@ public class JLNote implements IJLNote {
                 encoded = NitroUtils.hasBinary(text);
             }
             if (encoded)
-                outvals.setValue(text.getBytes());
+                outvals.setValue(text.getBytes(Charset.forName("UTF-8")));
             else {
             	outvals.setValue(text);
             	outvals.setValueExpanded(textExpanded);

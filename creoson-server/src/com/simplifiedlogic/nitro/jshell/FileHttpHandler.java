@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.sql.Timestamp;
 
 import com.sun.net.httpserver.Headers;
@@ -60,7 +61,7 @@ public class FileHttpHandler implements HttpHandler {
 			String response = "403 (Forbidden)\n";
 			t.sendResponseHeaders(403, response.length());
 			OutputStream os = t.getResponseBody();
-			os.write(response.getBytes());
+			os.write(response.getBytes(Charset.forName("UTF-8")));
 			os.close();
 			return;
 		}
@@ -74,7 +75,7 @@ public class FileHttpHandler implements HttpHandler {
 			String response = "404 (Not Found)\n";
 			t.sendResponseHeaders(404, response.length());
 			OutputStream os = t.getResponseBody();
-			os.write(response.getBytes());
+			os.write(response.getBytes(Charset.forName("UTF-8")));
 			os.close();
 			return;
 		}

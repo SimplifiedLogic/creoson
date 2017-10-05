@@ -18,6 +18,7 @@
  */
 package com.simplifiedlogic.nitro.jlink.impl;
 
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Vector;
 
@@ -590,7 +591,7 @@ public class JLDimension implements IJLDimension {
         }
         out.setName(dim.getName());
         if (encoded) {
-            out.setValue(value.toString().getBytes());
+            out.setValue(value.toString().getBytes(Charset.forName("UTF-8")));
             out.setEncoded(true);
         }
         else {

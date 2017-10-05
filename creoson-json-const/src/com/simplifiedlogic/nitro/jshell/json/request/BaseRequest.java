@@ -62,6 +62,17 @@ public class BaseRequest {
 	}
 
 	/**
+	 * Forwarding method for getting a data item from the request
+	 * @param key The item's key
+	 * @return The value for the key, or null if there was no value
+	 */
+	public Object get(String key) {
+		if (data==null)
+			return null;
+		return data.get(key);
+	}
+
+	/**
 	 * Get the user's session ID
 	 * @return The session ID
 	 */

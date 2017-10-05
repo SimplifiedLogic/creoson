@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.data;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 /**
  * Information about a model/drawing note
@@ -31,7 +32,7 @@ public class NoteData implements Serializable {
 	
 	private String name;
 	private Object value;
-	private String valueExpanded;
+	private Object valueExpanded;
 	private boolean encoded;
 	private String url;
 	
@@ -70,6 +71,18 @@ public class NoteData implements Serializable {
 		if (name==null)
 			return -1;
 		return ParamNameCompare.compareStrings(name, data.getName());
+	}
+	
+	/**
+	 * @return The parameter value as a decoded string, if it's marked encoded
+	 */
+	public String getDecodedStringValue() {
+		String val;
+		if (encoded && value instanceof byte[])
+			val = new String((byte[])value, Charset.forName("UTF-8"));
+		else
+			val = String.valueOf(value);
+		return val;
 	}
 	
 	/**
@@ -126,14 +139,14 @@ public class NoteData implements Serializable {
 	/**
 	 * @return Note text with parameters expanded
 	 */
-	public String getValueExpanded() {
+	public Object getValueExpanded() {
 		return valueExpanded;
 	}
 
 	/**
 	 * @param valueExpanded Note text with parameters expanded
 	 */
-	public void setValueExpanded(String valueExpanded) {
+	public void setValueExpanded(Object valueExpanded) {
 		this.valueExpanded = valueExpanded;
 	}
 }

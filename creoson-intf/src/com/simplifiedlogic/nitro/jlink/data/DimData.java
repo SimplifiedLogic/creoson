@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.data;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 
 /**
  * Information about a Creo dimension
@@ -79,7 +80,7 @@ public class DimData implements Serializable {
 	public String getDecodedStringValue() {
 		String val;
 		if (encoded && value instanceof byte[])
-			val = new String((byte[])value);
+			val = new String((byte[])value, Charset.forName("UTF-8"));
 		else
 			val = String.valueOf(value);
 		return val;

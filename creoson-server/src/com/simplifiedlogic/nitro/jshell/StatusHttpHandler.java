@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.jshell;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.Charset;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -49,7 +50,7 @@ public class StatusHttpHandler implements HttpHandler {
 			// this is used to check whether the server is running
 			t.sendResponseHeaders(200, 0);
 			OutputStream os = t.getResponseBody();
-			os.write("Connected!".getBytes());
+			os.write("Connected!".getBytes(Charset.forName("UTF-8")));
 			os.close();
 		}
 	}

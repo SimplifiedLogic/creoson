@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Hashtable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,10 +75,10 @@ public class ServerHttpHandler implements HttpHandler {
 		System.out.println("    " + response);
 		
 		// format and return the response to the user
-		t.sendResponseHeaders(200, response.getBytes().length);
+		t.sendResponseHeaders(200, response.getBytes(Charset.forName("UTF-8")).length);
 		t.getResponseHeaders().set("Content-Type", "application/json, charset=UTF-8");
 		OutputStream os = t.getResponseBody();
-		os.write(response.getBytes());
+		os.write(response.getBytes(Charset.forName("UTF-8")));
 		os.close();
 	}
 

@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.impl;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1224,7 +1225,7 @@ public class JlinkUtils {
         }
         out.setName(param.getName().toUpperCase());
         if (encoded) {
-            out.setValue(value.toString().getBytes());
+            out.setValue(value.toString().getBytes(Charset.forName("UTF-8")));
         }
         else {
             out.setValue(value);
@@ -1562,6 +1563,33 @@ public class JlinkUtils {
     	}
     	return buf.toString();
     }
+
+	/**
+	 * Debugging function to print out a byte array
+	 * @param data The array to print out
+	 */
+	public static void showHexBytes(byte[] data) {
+		if (data==null) return;
+		for (int i=0; i<data.length; i++) {
+			System.out.print(data[i]);
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
+
+	/**
+	 * Debugging function to print out the bytes in a string
+	 * @param str The string to print out
+	 */
+	public static void showHexString(String str) {
+		if (str==null) return;
+		System.out.println(str);
+		for (int i=0; i<str.length(); i++) {
+			System.out.print((int)str.charAt(i));
+			System.out.print(" ");
+		}
+		System.out.println();
+	}
 
     /**
      * Interface for the special handler used by the regenerate function

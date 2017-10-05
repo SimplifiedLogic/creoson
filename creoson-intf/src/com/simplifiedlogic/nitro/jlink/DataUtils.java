@@ -20,6 +20,7 @@ package com.simplifiedlogic.nitro.jlink;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,7 +192,7 @@ public class DataUtils {
             in = decodeBase64(in);
         }
         if (in instanceof byte[])
-            return new String((byte[])in);
+            return new String((byte[])in, Charset.forName("UTF-8"));
         else
             return in.toString();
     }
@@ -258,7 +259,7 @@ public class DataUtils {
      * @return The Base64-encoded value
      */
     public static byte[] encodeBase64(Object input) {
-        return Base64.encodeBase64(input.toString().getBytes());
+        return Base64.encodeBase64(input.toString().getBytes(Charset.forName("UTF-8")));
     }
     
     /**
@@ -273,7 +274,7 @@ public class DataUtils {
     public static Object decodeBase64(Object input) {
         // assume that a byte array came from java and is already decoded
         if (input instanceof String)
-            return new String(Base64.decodeBase64((String)input));
+            return new String(Base64.decodeBase64((String)input), Charset.forName("UTF-8"));
         else 
             return input;
     }

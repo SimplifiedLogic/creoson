@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.sql.Timestamp;
 
 import com.simplifiedlogic.nitro.jshell.json.JShellJsonHandler;
@@ -62,7 +63,7 @@ public class JshellHttpHandler implements HttpHandler {
 			bos.write(buffer, 0, len);
 		}
 		bos.close();
-		String data = new String(bos.toByteArray());
+		String data = new String(bos.toByteArray(), Charset.forName("UTF-8"));
 		logit("Request: \n    " + data);
 
 		// pass the data to the handler and receive a response
@@ -70,11 +71,11 @@ public class JshellHttpHandler implements HttpHandler {
 		logit("    " + response);
 		
 		// format and return the response to the user
-		t.sendResponseHeaders(200, response.getBytes().length);
+		t.sendResponseHeaders(200, response.getBytes(Charset.forName("UTF-8")).length);
 //		t.getResponseHeaders().set("Content-Type", "application/json");
 		t.getResponseHeaders().set("Content-Type", "application/json, charset=UTF-8");
 		OutputStream os = t.getResponseBody();
-		os.write(response.getBytes());
+		os.write(response.getBytes(Charset.forName("UTF-8")));
 		os.close();
 	}
 

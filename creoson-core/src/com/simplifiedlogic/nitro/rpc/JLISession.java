@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.rpc;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -359,8 +360,8 @@ public class JLISession extends AbstractJLISession {
             return;
 
         OutputStream os = new FileOutputStream(logfile, true);
-        os.write(text.toString().getBytes());
-        os.write("\n".getBytes());
+        os.write(text.toString().getBytes(Charset.forName("UTF-8")));
+        os.write("\n".getBytes(Charset.forName("UTF-8")));
         os.close();
     }
 }
