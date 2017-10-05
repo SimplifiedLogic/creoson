@@ -271,8 +271,15 @@ public class JLFeature implements IJLFeature {
 	        CallFeature oldFeat = solid.getFeatureByName(newName);
 	        if (oldFeat!=null)
 	        	throw new JLIException("A feature already exists with that name");
-	        
-	        feat.setName(newName);
+
+	        // catch bad-input exceptions which occur when the feature is not allowed to
+	        // be renamed.  There doesn't seem to be a way to detect that beforehand.
+	        try {
+	        	feat.setName(newName);
+	        }
+	        catch (XToolkitBadInputs e) {
+	        	throw new JLIException("Not allowed to rename feature: " + feat.getName());
+	        }
 	    	
 	        return;
     	}
