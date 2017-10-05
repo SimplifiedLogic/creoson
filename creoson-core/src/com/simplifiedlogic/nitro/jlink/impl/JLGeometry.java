@@ -24,7 +24,6 @@ import java.util.Vector;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcGeometry.ContourTraversal;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.geometry.CallContour;
@@ -41,6 +40,7 @@ import com.simplifiedlogic.nitro.jlink.data.ContourData;
 import com.simplifiedlogic.nitro.jlink.data.EdgeData;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.SurfaceData;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLGeometry;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
@@ -94,6 +94,12 @@ public class JLGeometry implements IJLGeometry {
 	        CallSolid solid = (CallSolid)m;
 	        
 	        CallOutline3D outline = solid.getGeomOutline();
+	        // attempt at an alternate method which produced wrong results
+//	        ModelItemTypes types = ModelItemTypes.create();
+//	        types.append(ModelItemType.ITEM_AXIS);
+//	        types.append(ModelItemType.ITEM_COORD_SYS);
+//	        types.append(ModelItemType.ITEM_POINT);
+//	        CallOutline3D outline = solid.evalOutline(null, types);
 
 	        if (outline==null)
 	        	throw new JLIException("No outline found for part");

@@ -30,19 +30,21 @@ import com.ptc.pfc.pfcSolid.MassProperty;
 import com.ptc.pfc.pfcSolid.Solid;
 import com.ptc.pfc.pfcUnits.UnitSystem;
 import com.ptc.pfc.pfcUnits.UnitSystems;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyMember;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatures;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
+import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItemTypes;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitConversionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystem;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystems;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcSolid.Solid
@@ -90,6 +92,16 @@ public class CallSolid extends CallFamilyMember {
 	public CallOutline3D getGeomOutline() throws jxthrowable {
 		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,GetGeomOutline", 0, NitroConstants.DEBUG_JLINK_KEY);
 		Outline3D outline = getSolid().GetGeomOutline();
+		if (outline==null)
+			return null;
+		return new CallOutline3D(outline);
+	}
+
+	public CallOutline3D evalOutline(CallTransform3D transform, CallModelItemTypes types) throws jxthrowable {
+		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,EvalOutline", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Outline3D outline = getSolid().EvalOutline(
+				transform!=null ? transform.getTransform() : null,
+				types!=null ? types.getItemTypes() : null);
 		if (outline==null)
 			return null;
 		return new CallOutline3D(outline);
