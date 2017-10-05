@@ -1,6 +1,26 @@
 R E L E A S E   N O T E S
 =========================
 
+2.1.0
+	- Added new functions:
+		drawing
+			view_bound_box
+		view
+			list_exploded
+		windchill
+			file_checked_out
+	- Modified functions:
+		bom
+			get_paths - better handling of action types when reading in Simplified Reps
+		drawing
+			create_gen_view - add "exploded" parameter
+			create_proj_view - add "exploded" parameter
+		feature
+			rename - catch error when trying to rename a feature that can't be renamed
+		interface
+			export_file - add "geom_flags" parameter for DXF, IGES, and STEP export types
+	- Modified input and output to handle Unicode strings using UTF-8 character set
+
 2.0.0
 	- First release built from new source code directories
 	- Added new functions:
