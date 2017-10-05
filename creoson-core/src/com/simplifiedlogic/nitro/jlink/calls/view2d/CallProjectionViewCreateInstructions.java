@@ -48,6 +48,11 @@ public class CallProjectionViewCreateInstructions extends CallView2DCreateInstru
 		return new CallProjectionViewCreateInstructions(instr);
 	}
 	
+	public void setExploded(boolean value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("ProjectionViewCreateInstructions,SetExploded", 0, NitroConstants.DEBUG_JLINK_KEY);
+        getProjectionInstr().SetExploded(value);
+	}
+
 	public ProjectionViewCreateInstructions getProjectionInstr() {
 		return (ProjectionViewCreateInstructions)super.getInstr();
 	}

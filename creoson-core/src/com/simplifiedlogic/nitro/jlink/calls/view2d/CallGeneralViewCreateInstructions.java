@@ -57,6 +57,11 @@ public class CallGeneralViewCreateInstructions extends CallView2DCreateInstructi
         getGeneralInstr().SetScale(scale);
 	}
 
+	public void setExploded(boolean value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("GeneralViewCreateInstructions,SetExploded", 0, NitroConstants.DEBUG_JLINK_KEY);
+        getGeneralInstr().SetExploded(value);
+	}
+
 	public GeneralViewCreateInstructions getGeneralInstr() {
 		return (GeneralViewCreateInstructions)super.getInstr();
 	}
