@@ -5,7 +5,7 @@
 	<property name="server_dir" value="${basedir}/creoson-server" />
 	<property name="batfile_dir" value="${server_dir}/src" />
 	<property name="extract_dir" value="${out_dir}" />
-	<property name="jar_ver" value="2.0.0" />
+	<property name="jar_ver" value="2.1.0" />
 
 	<target name="extract_setup">
 		<delete dir="${extract_dir}/extract_32"/>
