@@ -93,13 +93,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (note.getName()!=null)
         		out.put(OUTPUT_NAME, note.getName());
-        	if (note.getValue()!=null) {
-//        		if (note.getValue() instanceof byte[])
-//        			out.put(OUTPUT_VALUE, String.valueOf(note.getValue()));
-//        		else
-//        			out.put(OUTPUT_VALUE, note.getValue().toString());
+        	if (note.getValue()!=null)
         		out.put(OUTPUT_VALUE, note.getValue());
-        	}
         	if (note.getValueExpanded()!=null)
         		out.put(OUTPUT_VALUE_EXPANDED, note.getValueExpanded());
         	out.put(OUTPUT_ENCODED, note.isEncoded());
@@ -142,13 +137,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
 				outNote = new Hashtable<String, Object>();
 	        	if (note.getName()!=null)
 	        		outNote.put(OUTPUT_NAME, note.getName());
-	        	if (note.getValue()!=null) {
-//	        		if (note.getValue() instanceof byte[])
-//	        			outNote.put(OUTPUT_VALUE, String.valueOf(note.getValue()));
-//	        		else
-//	        			outNote.put(OUTPUT_VALUE, note.getValue().toString());
+	        	if (note.getValue()!=null)
 	        		out.put(OUTPUT_VALUE, note.getValue());
-	        	}
 	        	if (note.getValueExpanded()!=null)
 	        		outNote.put(OUTPUT_VALUE_EXPANDED, note.getValueExpanded());
 	        	outNote.put(OUTPUT_ENCODED, note.isEncoded());
