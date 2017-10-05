@@ -22,16 +22,19 @@ import java.util.List;
 import java.util.Vector;
 
 import com.ptc.cipjava.jxthrowable;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
+import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
+import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.view.CallView;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLView;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
 import com.simplifiedlogic.nitro.util.JLConnectionUtil;
+import com.simplifiedlogic.nitro.util.ModelItemLooper;
 import com.simplifiedlogic.nitro.util.ViewLooper;
 
 /**
@@ -199,6 +202,60 @@ public class JLView implements IJLView {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLView#listExploded(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<String> listExploded(String modelName, String viewName, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return listExploded(modelName, viewName, sess);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLView#listExploded(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public List<String> listExploded(String modelName, String viewName, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("view.list_exploded: " + viewName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, modelName, false);
+	        if (m instanceof CallDrawing) {
+	        	if (modelName==null)
+	        		throw new JLIException("Active model is a drawing");
+	        	else
+	        		throw new JLIException("Model is a drawing: " + modelName);
+	        }
+
+	        ListExplodedLooper looper = new ListExplodedLooper();
+	        looper.setNamePattern(viewName);
+	        looper.loop(m);
+	        
+	        return looper.out;
+	        
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("view.list_exploded,"+viewName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
     /**
      * An implementation of ViewLooper which collects a list of view names for a model
      * @author Adam Andrews
@@ -222,6 +279,40 @@ public class JLView implements IJLView {
                 if (name!=null)
                 	out.add(name);
         	}
+        	return false;
+		}
+    }
+
+    /**
+     * An implementation of ModelItemLooper which collects a list of exploded view names for a model
+     * @author Adam Andrews
+     *
+     */
+    private class ListExplodedLooper extends ModelItemLooper {
+
+        /**
+         * An output list of view names
+         */
+        List<String> out = new Vector<String>();
+        
+        /**
+         * Constructor needed to initialize model item type
+         */
+        public ListExplodedLooper() {
+            setSearchType(ModelItemType.ITEM_EXPLODED_STATE);
+        }
+        
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.util.ViewLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.view.CallView)
+		 */
+		@Override
+        public boolean loopAction(CallModelItem item) throws JLIException, jxthrowable {
+            if (currentName==null)
+                currentName = item.getName();
+	        String name = null;
+   			name = item.getName();
+            if (name!=null)
+            	out.add(name);
         	return false;
 		}
     }

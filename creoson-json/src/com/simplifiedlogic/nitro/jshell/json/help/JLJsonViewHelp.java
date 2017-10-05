@@ -45,6 +45,7 @@ public class JLJsonViewHelp extends JLJsonCommandHelp implements JLViewRequestPa
 		List<FunctionTemplate> list = new ArrayList<FunctionTemplate>();
 		list.add(helpActivate());
 		list.add(helpList());
+		list.add(helpListExploded());
 		list.add(helpSave());
 		return list;
 	}
@@ -59,7 +60,7 @@ public class JLJsonViewHelp extends JLJsonCommandHelp implements JLViewRequestPa
 	private FunctionTemplate helpList() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("List features that match criteria");
+    	spec.setFunctionDescription("List views that match criteria");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -71,7 +72,7 @@ public class JLJsonViewHelp extends JLJsonCommandHelp implements JLViewRequestPa
     	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
     	arg.setDescription("View name");
     	arg.setWildcards(true);
-    	arg.setDefaultValue("All features are listed");
+    	arg.setDefaultValue("All views are listed");
     	spec.addArgument(arg);
 
     	ret = new FunctionReturn(OUTPUT_VIEWLIST, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
@@ -89,6 +90,44 @@ public class JLJsonViewHelp extends JLJsonCommandHelp implements JLViewRequestPa
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_NAME, "*O*");
     	ex.addOutput(OUTPUT_VIEWLIST, new String[] {"FRONT", "TOP","BOTTOM"});
+    	template.addExample(ex);
+
+    	return template;
+	}
+
+	private FunctionTemplate helpListExploded() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_EXPLODED);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List views that match criteria and are exploded");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View name");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All views are listed");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_VIEWLIST, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of view names");
+    	spec.addReturn(ret);
+    	
+    	FunctionExample ex;
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addOutput(OUTPUT_VIEWLIST, new String[] {"Exp001", "BACK_EXP"});
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "*A*");
+    	ex.addOutput(OUTPUT_VIEWLIST, new String[] {"BACK_EXP"});
     	template.addExample(ex);
 
     	return template;

@@ -34,4 +34,6 @@ public interface IJLView {
 	public void save(String modelName, String viewName, String sessionId) throws JLIException;
 	public void save(String modelName, String viewName, AbstractJLISession sess) throws JLIException;
 	
+	public List<String> listExploded(String modelName, String viewName, String sessionId) throws JLIException;
+	public List<String> listExploded(String modelName, String viewName, AbstractJLISession sess) throws JLIException;
 }

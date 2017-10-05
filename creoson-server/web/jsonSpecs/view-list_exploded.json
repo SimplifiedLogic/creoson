@@ -1,8 +1,8 @@
 {
   "spec" : {
-    "function_description" : "List views that match criteria",
+    "function_description" : "List views that match criteria and are exploded",
     "command" : "view",
-    "function" : "list",
+    "function" : "list_exploded",
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -25,7 +25,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "view",
-      "function" : "list",
+      "function" : "list_exploded",
       "data" : {
         "file" : "box.prt"
       }
@@ -35,17 +35,17 @@
         "error" : false
       },
       "data" : {
-        "viewlist" : [ "FRONT", "BACK", "RIGHT", "LEFT", "TOP", "BOTTOM" ]
+        "viewlist" : [ "Exp001", "BACK_EXP" ]
       }
     }
   }, {
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "view",
-      "function" : "list",
+      "function" : "list_exploded",
       "data" : {
         "file" : "box.prt",
-        "name" : "*O*"
+        "name" : "*A*"
       }
     },
     "response" : {
@@ -53,7 +53,7 @@
         "error" : false
       },
       "data" : {
-        "viewlist" : [ "FRONT", "TOP", "BOTTOM" ]
+        "viewlist" : [ "BACK_EXP" ]
       }
     }
   } ]

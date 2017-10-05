@@ -52,6 +52,8 @@ public class JLJsonViewHandler extends JLJsonCommandHandler implements JLViewReq
 		
 		if (function.equals(FUNC_LIST))
 			return actionList(sessionId, input);
+		else if (function.equals(FUNC_LIST_EXPLODED))
+			return actionListExploded(sessionId, input);
 		else if (function.equals(FUNC_ACTIVATE))
 			return actionActivate(sessionId, input);
 		else if (function.equals(FUNC_SAVE))
@@ -67,6 +69,21 @@ public class JLJsonViewHandler extends JLJsonCommandHandler implements JLViewReq
         String viewName = checkStringParameter(input, PARAM_NAME, false);
 
         List<String> result = viewHandler.list(modelName, viewName, sessionId);
+        
+        if (result!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+        	out.put(OUTPUT_VIEWLIST, result);
+        	return out;
+        }
+        return null;
+	}
+	
+	private Hashtable<String, Object> actionListExploded(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String modelName = checkStringParameter(input, PARAM_MODEL, false);
+        String viewName = checkStringParameter(input, PARAM_NAME, false);
+
+        List<String> result = viewHandler.listExploded(modelName, viewName, sessionId);
         
         if (result!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

@@ -30,6 +30,7 @@ public interface JLViewRequestParams {
 
     // function names
     public static final String FUNC_LIST			= "list";
+    public static final String FUNC_LIST_EXPLODED	= "list_exploded";
     public static final String FUNC_ACTIVATE		= "activate";
     public static final String FUNC_SAVE			= "save";
 
