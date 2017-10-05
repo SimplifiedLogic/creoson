@@ -105,18 +105,19 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         String model = checkStringParameter(input, PARAM_MODEL, false);
         String filename = checkStringParameter(input, PARAM_FILENAME, false);
         String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+        String geomType = checkStringParameter(input, PARAM_GEOM_FLAGS, false);
 
         ExportResults results = null;
         if (TYPE_DXF.equalsIgnoreCase(type))
-        	results = intfHandler.exportDXF(model, filename, dirname, sessionId);
+        	results = intfHandler.exportDXF(model, filename, dirname, geomType, sessionId);
 //        else if (TYPE_CATIA.equalsIgnoreCase(type))
-//        	results = intfHandler.exportCATIA(model, filename, dirname, sessionId);
+//        	results = intfHandler.exportCATIA(model, filename, dirname, geomType, sessionId);
         else if (TYPE_IGES.equalsIgnoreCase(type))
-        	results = intfHandler.exportIGES(model, filename, dirname, sessionId);
+        	results = intfHandler.exportIGES(model, filename, dirname, geomType, sessionId);
         else if (TYPE_PV.equalsIgnoreCase(type))
         	results = intfHandler.exportPV(model, filename, dirname, sessionId);
         else if (TYPE_STEP.equalsIgnoreCase(type))
-        	results = intfHandler.exportSTEP(model, filename, dirname, sessionId);
+        	results = intfHandler.exportSTEP(model, filename, dirname, geomType, sessionId);
         else if (TYPE_VRML.equalsIgnoreCase(type))
         	results = intfHandler.exportVRML(model, filename, dirname, sessionId);
         

@@ -43,6 +43,21 @@ public class CallGeometryFlags {
 		flags.SetAsSolids(value);
 	}
 
+	public void setAsSurfaces(boolean value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("GeometryFlags,SetAsSurfaces", 0, NitroConstants.DEBUG_JLINK_KEY);
+		flags.SetAsSurfaces(value);
+	}
+
+	public void setAsWireframe(boolean value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("GeometryFlags,SetAsWireframe", 0, NitroConstants.DEBUG_JLINK_KEY);
+		flags.SetAsWireframe(value);
+	}
+
+	public void setAsQuilts(boolean value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("GeometryFlags,SetAsQuilts", 0, NitroConstants.DEBUG_JLINK_KEY);
+		flags.SetAsQuilts(value);
+	}
+
 	public static CallGeometryFlags create() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("pfcExport,GeometryFlags_Create", 0, NitroConstants.DEBUG_JLINK_KEY);
 		GeometryFlags flags = pfcExport.GeometryFlags_Create();

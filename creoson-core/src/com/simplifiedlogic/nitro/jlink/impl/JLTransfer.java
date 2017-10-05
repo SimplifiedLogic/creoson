@@ -63,6 +63,8 @@ public class JLTransfer implements IJLTransfer {
     public static final int TRAN_PV         = 11;
     public static final int TRAN_DXF		= 12;
     public static final int TRAN_PDF        = 13;
+    
+    public static final String OPTION_INTF3D_OUT_DEFAULT = "intf3d_out_default_option";
 
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportProgram(java.lang.String, java.lang.String)
@@ -134,24 +136,26 @@ public class JLTransfer implements IJLTransfer {
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportSTEP(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportSTEP(String model, String filename, String dirname, String sessionId)
+	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportSTEP(model, filename, dirname, sess);
+        return exportSTEP(model, filename, dirname, geomType, sess);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportSTEP(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportSTEP(String model, String filename, String dirname, AbstractJLISession sess)
+	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportSTEP: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
+
+		validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -181,7 +185,7 @@ public class JLTransfer implements IJLTransfer {
 	        
 	        CallGeometryFlags geomFlags = CallGeometryFlags.create();
 	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_STEP, ))
-	        geomFlags.setAsSolids(true);
+	        resolveGeomFlags(session, geomFlags, geomType);
 
 	        AssemblyConfiguration assemConfig = null;
 	        if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_SINGLE_FILE))
@@ -230,24 +234,26 @@ public class JLTransfer implements IJLTransfer {
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportIGES(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportIGES(String model, String filename, String dirname, String sessionId)
+	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportIGES(model, filename, dirname, sess);
+        return exportIGES(model, filename, dirname, geomType, sess);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportIGES(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportIGES(String model, String filename, String dirname, AbstractJLISession sess)
+	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportIGES: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
+
+		validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -277,7 +283,7 @@ public class JLTransfer implements IJLTransfer {
 	        
 	        CallGeometryFlags geomFlags = CallGeometryFlags.create();
 	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_IGES, ))
-	        geomFlags.setAsSolids(true);
+	        resolveGeomFlags(session, geomFlags, geomType);
 
 	        AssemblyConfiguration assemConfig = null;
 //	        if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_FLAT_FILE))
@@ -427,6 +433,8 @@ public class JLTransfer implements IJLTransfer {
 		if (sess==null)
 			throw new JLIException("No session found");
 
+		validateGeomType(geomType);
+
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
     		start = System.currentTimeMillis();
@@ -458,7 +466,7 @@ public class JLTransfer implements IJLTransfer {
 	        
 	        GeometryFlags geomFlags = pfcExport.GeometryFlags_Create();
 	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_CATIA, ))
-	        geomFlags.SetAsSolids(true);
+	        resolveGeomFlags(session, geomFlags, geomType);
 
 	        AssemblyConfiguration assemConfig = null;
 	        if (session.IsConfigurationSupported(ExportType.EXPORT_CATIA, AssemblyConfiguration.EXPORT_ASM_SINGLE_FILE))
@@ -589,24 +597,26 @@ public class JLTransfer implements IJLTransfer {
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportDXF(String model, String filename, String dirname, String sessionId)
+	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportDXF(model, filename, dirname, sess);
+        return exportDXF(model, filename, dirname, geomType, sess);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportDXF(String model, String filename, String dirname, AbstractJLISession sess)
+	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportDXF: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
+
+		validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -641,7 +651,7 @@ public class JLTransfer implements IJLTransfer {
 	        
 	        CallGeometryFlags geomFlags = CallGeometryFlags.create();
 	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_DXF, ))
-	        geomFlags.setAsSolids(true);
+	        resolveGeomFlags(session, geomFlags, geomType);
 
 	        CallExportInstructions pxi = CallExportInstructions.createDXFExport();
 
@@ -1308,6 +1318,42 @@ public class JLTransfer implements IJLTransfer {
             throw new JLIException("Unknown file extension");
         
         return filename.substring(0, pos) + ext;
+    }
+
+    public static void validateGeomType(String geomType) throws JLIException {
+        if (geomType==null ||
+        	geomType.equals(GEOM_SOLIDS) ||
+        	geomType.equals(GEOM_SURFACES) ||
+        	geomType.equals(GEOM_WIREFRAME) ||
+        	geomType.equals(GEOM_QUILTS) ||
+        	geomType.equals(GEOM_WIREFRAME_SURFACES) ||
+        	geomType.equals(GEOM_DEFAULT))
+        	return;
+        
+        throw new JLIException("Invalid geometry type: " + geomType);
+    	
+    }
+
+    public static void resolveGeomFlags(CallSession session, CallGeometryFlags geomFlags, String geomType) throws jxthrowable {
+        if (geomType!=null && geomType.equals(GEOM_DEFAULT)) {
+            geomType = session.getConfigOption(OPTION_INTF3D_OUT_DEFAULT);
+            // worry about Creo's names for the options changing to be different from ours...
+        }
+
+        if (geomType==null)
+        	geomFlags.setAsSolids(true);
+        else if (geomType.equals(GEOM_SOLIDS))
+        	geomFlags.setAsSolids(true);
+        else if (geomType.equals(GEOM_SURFACES))
+        	geomFlags.setAsSurfaces(true);
+        else if (geomType.equals(GEOM_WIREFRAME))
+        	geomFlags.setAsWireframe(true);
+        else if (geomType.equals(GEOM_QUILTS))
+        	geomFlags.setAsQuilts(true);
+        else if (geomType.equals(GEOM_WIREFRAME_SURFACES)) {
+        	geomFlags.setAsWireframe(true);
+        	geomFlags.setAsSurfaces(true);
+        }
     }
 
 }

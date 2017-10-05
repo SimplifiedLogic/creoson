@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.jshell.json.help;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.simplifiedlogic.nitro.jlink.intf.IJLTransfer;
 import com.simplifiedlogic.nitro.jshell.json.request.JLInterfaceRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLInterfaceResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionArgument;
@@ -161,6 +162,8 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_EXPORT_FILE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Export a model to a file");
+    	spec.addFootnote("The " + PARAM_GEOM_FLAGS + " option only applies to " + TYPE_DXF + ", " + TYPE_IGES + " and " + TYPE_STEP + " exports.");
+    	spec.addFootnote("Setting " + PARAM_GEOM_FLAGS + " to '" + IJLTransfer.GEOM_DEFAULT + "' will cause it to check the Creo config option 'intf3d_out_default_option' for the setting");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -192,6 +195,19 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("Creo's current working directory");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_GEOM_FLAGS, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Geometry type for the export.");
+    	arg.setDefaultValue(IJLTransfer.GEOM_SOLIDS);
+    	arg.setValidValues(new String[] {
+    			IJLTransfer.GEOM_SOLIDS,
+    			IJLTransfer.GEOM_SURFACES,
+    			IJLTransfer.GEOM_WIREFRAME,
+    			IJLTransfer.GEOM_WIREFRAME_SURFACES,
+    			IJLTransfer.GEOM_QUILTS,
+    			IJLTransfer.GEOM_DEFAULT
+        	});
+    	spec.addArgument(arg);
+
     	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
@@ -206,6 +222,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_FILENAME, "box-export.igs");
     	ex.addInput(PARAM_TYPE, TYPE_IGES);
+    	ex.addInput(PARAM_GEOM_FLAGS, IJLTransfer.GEOM_WIREFRAME);
     	ex.addOutput(OUTPUT_DIRNAME, "C:/myfiles/parts");
     	ex.addOutput(OUTPUT_FILENAME, "box-export.igs");
     	template.addExample(ex);
@@ -227,6 +244,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	ex = new FunctionExample();
     	ex.addInput(PARAM_FILENAME, "C:/testing/abc123.stp");
     	ex.addInput(PARAM_TYPE, TYPE_STEP);
+    	ex.addInput(PARAM_GEOM_FLAGS, IJLTransfer.GEOM_SURFACES);
     	ex.addOutput(OUTPUT_DIRNAME, "C:/testing");
     	ex.addOutput(OUTPUT_FILENAME, "abc123.stp");
     	template.addExample(ex);

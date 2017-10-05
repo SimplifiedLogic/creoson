@@ -56,6 +56,14 @@ public interface IJLTransfer {
     public static final String EXT_PV         = ".pvz";
     public static final String EXT_DXF        = ".dxf";
     public static final String EXT_PDF        = ".pdf";
+    
+    public static final String GEOM_DEFAULT		= "default";
+    public static final String GEOM_SOLIDS		= "solids";
+    public static final String GEOM_SURFACES	= "surfaces";
+    public static final String GEOM_WIREFRAME	= "wireframe";
+    public static final String GEOM_WIREFRAME_SURFACES	= "wireframe_surfaces";
+    public static final String GEOM_QUILTS		= "quilts";
+    
 
 	public abstract ExportResults exportProgram(String model, String sessionId) throws JLIException;
 	public abstract ExportResults exportProgram(String model, AbstractJLISession sess) throws JLIException;
@@ -81,14 +89,14 @@ public interface IJLTransfer {
 			String filename, Double height, Double width, Integer dpi, Integer depth, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportSTEP(String model, 
-			String filename, String dirname, String sessionId) throws JLIException;
+			String filename, String dirname, String geomType, String sessionId) throws JLIException;
 	public abstract ExportResults exportSTEP(String model, 
-			String filename, String dirname, AbstractJLISession sess) throws JLIException;
+			String filename, String dirname, String geomType, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportIGES(String model, 
-			String filename, String dirname, String sessionId) throws JLIException;
+			String filename, String dirname, String geomType, String sessionId) throws JLIException;
 	public abstract ExportResults exportIGES(String model, 
-			String filename, String dirname, AbstractJLISession sess) throws JLIException;
+			String filename, String dirname, String geomType, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportVRML(String model, 
 			String filename, String dirname, String sessionId) throws JLIException;
@@ -106,9 +114,9 @@ public interface IJLTransfer {
 			String filename, String dirname, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportDXF(String model, 
-			String filename, String dirname, String sessionId) throws JLIException;
+			String filename, String dirname, String geomType, String sessionId) throws JLIException;
 	public abstract ExportResults exportDXF(String model, 
-			String filename, String dirname, AbstractJLISession sess) throws JLIException;
+			String filename, String dirname, String geomType, AbstractJLISession sess) throws JLIException;
 	
 	public abstract String importProgram(String dirname, String filename, String model, 
 			String sessionId) throws JLIException;

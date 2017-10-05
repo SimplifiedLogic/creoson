@@ -3,6 +3,7 @@
     "function_description" : "Export a model to a file",
     "command" : "interface",
     "function" : "export_file",
+    "notes" : [ "The geom_flags option only applies to DXF, IGES and STEP exports.", "Setting geom_flags to 'default' will cause it to check the Creo config option 'intf3d_out_default_option' for the setting" ],
     "request" : [ {
       "name" : "type",
       "type" : "string",
@@ -24,6 +25,12 @@
       "type" : "string",
       "description" : "Destination directory",
       "default" : "Creo's current working directory"
+    }, {
+      "name" : "geom_flags",
+      "type" : "string",
+      "description" : "Geometry type for the export.",
+      "default" : "solids",
+      "valid_values" : "solids, surfaces, wireframe, wireframe_surfaces, quilts, default"
     } ],
     "response" : [ {
       "name" : "dirname",
@@ -43,7 +50,8 @@
       "data" : {
         "file" : "box.prt",
         "filename" : "box-export.igs",
-        "type" : "IGES"
+        "type" : "IGES",
+        "geom_flags" : "wireframe"
       }
     },
     "response" : {
@@ -100,7 +108,8 @@
       "function" : "export_file",
       "data" : {
         "filename" : "C:/testing/abc123.stp",
-        "type" : "STEP"
+        "type" : "STEP",
+        "geom_flags" : "surfaces"
       }
     },
     "response" : {
