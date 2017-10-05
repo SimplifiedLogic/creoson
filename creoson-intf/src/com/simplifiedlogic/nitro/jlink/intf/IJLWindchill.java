@@ -52,4 +52,7 @@ public interface IJLWindchill {
 	public abstract void deleteWorkspace(String workspace, String sessionId) throws JLIException;
 	public abstract void deleteWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
 
+	public abstract boolean fileCheckedOut(String workspace, String fileName, String sessionId) throws JLIException;
+	public abstract boolean fileCheckedOut(String workspace, String fileName, AbstractJLISession sess) throws JLIException;
+
 }

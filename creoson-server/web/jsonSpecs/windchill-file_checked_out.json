@@ -1,27 +1,33 @@
 {
   "spec" : {
-    "function_description" : "Check whether a workspace exists",
+    "function_description" : "Check whether a file is checked out in a workspace",
     "command" : "windchill",
-    "function" : "workspace_exists",
+    "function" : "file_checked_out",
     "request" : [ {
       "name" : "workspace",
       "type" : "string",
       "description" : "Workspace name",
       "required" : true
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "File name",
+      "required" : true
     } ],
     "response" : [ {
-      "name" : "exists",
+      "name" : "checked_out",
       "type" : "boolean",
-      "description" : "Whether the workspace exists"
+      "description" : "Whether the file is checked out in the workspace"
     } ]
   },
   "examples" : [ {
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "windchill",
-      "function" : "workspace_exists",
+      "function" : "file_checked_out",
       "data" : {
-        "workspace" : "freds_workspace"
+        "workspace" : "freds_workspace",
+        "filename" : "box.prt"
       }
     },
     "response" : {
@@ -29,16 +35,17 @@
         "error" : false
       },
       "data" : {
-        "exists" : true
+        "checked_out" : true
       }
     }
   }, {
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "windchill",
-      "function" : "workspace_exists",
+      "function" : "file_checked_out",
       "data" : {
-        "workspace" : "sams_workspace"
+        "workspace" : "freds_workspace",
+        "filename" : "box-x.prt"
       }
     },
     "response" : {
@@ -46,7 +53,7 @@
         "error" : false
       },
       "data" : {
-        "exists" : false
+        "checked_out" : false
       }
     }
   } ]

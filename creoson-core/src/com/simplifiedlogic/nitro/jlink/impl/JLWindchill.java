@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcExceptions.XToolkitBadContext;
+import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallWorkspaceDefinition;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallWorkspaceDefinitions;
@@ -565,6 +567,70 @@ public class JLWindchill implements IJLWindchill {
     	}
 	}
     
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#fileCheckedOut(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean fileCheckedOut(String workspace, String fileName, String sessionId) throws JLIException {
+		
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return fileCheckedOut(workspace, fileName, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#fileCheckedOut(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public boolean fileCheckedOut(String workspace, String fileName, AbstractJLISession sess) throws JLIException {
+		
+		DebugLogging.sendDebugMessage("windchill.file_checked_out: " + fileName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (workspace==null || workspace.trim().length()==0)
+    		throw new JLIException("No workspace parameter given");
+
+    	if (fileName==null || fileName.trim().length()==0)
+    		throw new JLIException("No file name parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return false;
+	
+	        CallServer server = session.getActiveServer();
+	        if (server==null)
+	        	throw new JLIException("No server is selected.");
+
+	        try {
+				boolean checkedOut = server.isObjectCheckedOut(workspace, fileName);
+	
+				return checkedOut;
+	        }
+	        catch (XToolkitNotFound e) {
+	        	return false;
+	        }
+	        catch (XToolkitBadContext e) {
+	        	return false;
+	        }
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("windchill.file_checked_out: " + fileName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
     /**
      * Check whether a given workspace exists on a server
      * @param server The server containing the workspace

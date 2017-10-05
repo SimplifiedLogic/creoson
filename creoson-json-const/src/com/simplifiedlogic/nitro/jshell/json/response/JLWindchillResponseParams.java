@@ -28,5 +28,6 @@ public interface JLWindchillResponseParams {
 	// response fields
     public static final String OUTPUT_EXISTS		= "exists";
     public static final String OUTPUT_WORKSPACES	= "workspaces";
+    public static final String OUTPUT_CHECKED_OUT	= "checked_out";
 
 }

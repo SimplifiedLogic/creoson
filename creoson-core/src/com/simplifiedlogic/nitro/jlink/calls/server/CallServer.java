@@ -67,6 +67,11 @@ public class CallServer extends CallServerLocation {
 		getServer().RemoveObjects(modelNames!=null ? modelNames.getSeq() : null);
 	}
 	
+	public boolean isObjectCheckedOut(String workspaceName, String objectName) throws jxthrowable {
+		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Server.IsObjectCheckedOut", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return getServer().IsObjectCheckedOut(workspaceName, objectName);
+	}
+
 	public Server getServer() {
 		return (Server)getLocation();
 	}

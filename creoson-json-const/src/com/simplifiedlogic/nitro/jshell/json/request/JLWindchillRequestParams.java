@@ -38,6 +38,7 @@ public interface JLWindchillRequestParams {
     public static final String FUNC_CREATE_WORKSPACE	= "create_workspace";
     public static final String FUNC_CLEAR_WORKSPACE		= "clear_workspace";
     public static final String FUNC_DELETE_WORKSPACE	= "delete_workspace";
+    public static final String FUNC_FILE_CHECKED_OUT	= "file_checked_out";
     
     // request fields
     public static final String PARAM_USER		= "user";
@@ -45,5 +46,6 @@ public interface JLWindchillRequestParams {
     public static final String PARAM_SERVER_URL	= "server_url";
     public static final String PARAM_WORKSPACE	= "workspace";
     public static final String PARAM_CONTEXT	= "context";
-    
+    public static final String PARAM_FILENAME	= "filename";
+
 }

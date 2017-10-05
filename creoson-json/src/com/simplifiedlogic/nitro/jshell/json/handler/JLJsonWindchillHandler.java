@@ -59,6 +59,7 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 		else if (function.equals(FUNC_SET_WORKSPACE)) return actionSetWorkspace(sessionId, input);
 		else if (function.equals(FUNC_SERVER_EXISTS)) return actionServerExists(sessionId, input);
 		else if (function.equals(FUNC_WORKSPACE_EXISTS)) return actionWorkspaceExists(sessionId, input);
+		else if (function.equals(FUNC_FILE_CHECKED_OUT)) return actionFileCheckedOut(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -143,6 +144,17 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 		windHandler.deleteWorkspace(workspace, sessionId);
 		
 		return null;
+	}
+
+	private Hashtable<String, Object> actionFileCheckedOut(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		String workspace = checkStringParameter(input, PARAM_WORKSPACE, true);
+		String fileName = checkStringParameter(input, PARAM_FILENAME, true);
+		
+		boolean checkedOut = windHandler.fileCheckedOut(workspace, fileName, sessionId);
+		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        out.put(OUTPUT_CHECKED_OUT, checkedOut);
+       	return out;
 	}
 
 }

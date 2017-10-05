@@ -52,6 +52,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 		list.add(helpSetServer());
 		list.add(helpSetWorkspace());
 		list.add(helpWorkspaceExists());
+		list.add(helpFileCheckedOut());
 		return list;
 	}
 	
@@ -215,11 +216,6 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
     	ex.addOutput(OUTPUT_EXISTS, false);
     	template.addExample(ex);
     	
-    	ex = new FunctionExample();
-    	ex.addInput(PARAM_SERVER_URL, "Main_Server");
-    	ex.addOutput(OUTPUT_EXISTS, true);
-    	template.addExample(ex);
-    	
         return template;
     }
     	
@@ -284,6 +280,44 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_WORKSPACE, "test_workspace");
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    	
+	private FunctionTemplate helpFileCheckedOut() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_FILE_CHECKED_OUT);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Check whether a file is checked out in a workspace");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_WORKSPACE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Workspace name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_FILENAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_CHECKED_OUT, FunctionSpec.TYPE_BOOL);
+    	ret.setDescription("Whether the file is checked out in the workspace");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_WORKSPACE, "freds_workspace");
+    	ex.addInput(PARAM_FILENAME, "box.prt");
+    	ex.addOutput(OUTPUT_CHECKED_OUT, true);
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_WORKSPACE, "freds_workspace");
+    	ex.addInput(PARAM_FILENAME, "box-x.prt");
+    	ex.addOutput(OUTPUT_CHECKED_OUT, false);
     	template.addExample(ex);
     	
         return template;
