@@ -64,6 +64,7 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		else if (function.equals(FUNC_REGENERATE)) return actionRegenerate(sessionId, input);
 		else if (function.equals(FUNC_REGENERATE_SHEET)) return actionRegenerateSheet(sessionId, input);
 		else if (function.equals(FUNC_SELECT_SHEET)) return actionSelectSheet(sessionId, input);
+		else if (function.equals(FUNC_ADD_SHEET)) return actionAddSheet(sessionId, input);
 		else if (function.equals(FUNC_DELETE_SHEET)) return actionDeleteSheet(sessionId, input);
 		else if (function.equals(FUNC_GET_CUR_SHEET)) return actionGetCurSheet(sessionId, input);
 		else if (function.equals(FUNC_GET_NUM_SHEETS)) return actionGetNumSheets(sessionId, input);
@@ -185,6 +186,14 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		int sheet = checkIntParameter(input, PARAM_SHEET, true, 0);
 		
 		drawHandler.selectSheet(drawing, sheet, sessionId);
+		
+		return null;
+	}
+
+	private Hashtable<String, Object> actionAddSheet(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		String drawing = checkStringParameter(input, PARAM_DRAWING, false);
+		
+		drawHandler.addSheet(drawing, sessionId);
 		
 		return null;
 	}

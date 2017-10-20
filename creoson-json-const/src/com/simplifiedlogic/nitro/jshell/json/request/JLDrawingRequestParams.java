@@ -34,6 +34,7 @@ public interface JLDrawingRequestParams {
     public static final String FUNC_CREATE_GEN_VIEW	= "create_gen_view";
     public static final String FUNC_CREATE_PROJ_VIEW	= "create_proj_view";
     public static final String FUNC_DELETE_MODELS	= "delete_models";
+    public static final String FUNC_ADD_SHEET		= "add_sheet";
     public static final String FUNC_DELETE_SHEET	= "delete_sheet";
     public static final String FUNC_DELETE_VIEW		= "delete_view";
     public static final String FUNC_GET_CUR_MODEL	= "get_cur_model";

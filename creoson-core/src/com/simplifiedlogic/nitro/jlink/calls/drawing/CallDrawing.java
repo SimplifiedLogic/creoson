@@ -66,6 +66,11 @@ public class CallDrawing extends CallModel2D {
 		return getDrawing().GetCurrentSheetNumber();
 	}
 	
+	public void addSheet() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Drawing,AddSheet", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getDrawing().AddSheet();
+	}
+
 	public void deleteSheet(int sheetNumber) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Drawing,DeleteSheet", 0, NitroConstants.DEBUG_JLINK_KEY);
 		getDrawing().DeleteSheet(sheetNumber);

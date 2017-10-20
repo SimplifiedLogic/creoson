@@ -50,6 +50,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 	public List<FunctionTemplate> getHelp() {
 		List<FunctionTemplate> list = new ArrayList<FunctionTemplate>();
 		list.add(helpAddModel());
+		list.add(helpAddSheet());
 		list.add(helpCreate());
 		list.add(helpCreateGeneralView());
 		list.add(helpCreateProjectionView());
@@ -411,6 +412,29 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	
     	ex = new FunctionExample();
     	ex.addInput(PARAM_SHEET, 2);
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    
+	private FunctionTemplate helpAddSheet() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_ADD_SHEET);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Add a drawing sheet");
+    	FunctionArgument arg;
+    	
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
     	template.addExample(ex);
     	
         return template;

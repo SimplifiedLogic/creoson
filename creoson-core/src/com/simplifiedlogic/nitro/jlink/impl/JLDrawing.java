@@ -591,6 +591,50 @@ public class JLDrawing implements IJLDrawing {
 	}
 
 	@Override
+	public void addSheet(String filename, String sessionId)
+			throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        addSheet(filename, sess);
+	}
+
+	@Override
+	public void addSheet(String filename, 
+			AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.add_sheet: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing))
+	        	throw new JLIException("Model is not a drawing");
+	        
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        drw.addSheet();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.add_sheet,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	@Override
 	public void deleteSheet(String filename, int sheet, String sessionId)
 			throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
