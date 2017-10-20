@@ -2733,6 +2733,57 @@ public class JLFile implements IJLFile {
     	}
     }
 
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#listSimpReps(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public List<String> listSimpReps(String filename, String name, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return listSimpReps(filename, name, sess);
+    }
+
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#listSimpReps(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    @Override
+    public List<String> listSimpReps(String filename, String name, AbstractJLISession sess) throws JLIException { 
+		DebugLogging.sendDebugMessage("file.list_simp_reps: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            if (NitroUtils.isPattern(filename))
+                throw new JLIException("Name patterns are not supported for this command");
+            
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        
+            ListSimpRepLooper looper = new ListSimpRepLooper();
+            looper.setNamePattern(name);
+            
+            looper.loop(m);
+
+            return looper.output;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.list_simp_reps,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
+
     /**
      * Walk the hierarchy of an assembly to find a list of sub-components to assemble a new component to
      * 
@@ -3052,6 +3103,45 @@ public class JLFile implements IJLFile {
         }
     }
     
+    /**
+     * Implementation of ModelItemLooper which loops over Simplified Reps and 
+     * outputs a list of names
+     * @author Adam Andrews
+     *
+     */
+    private class ListSimpRepLooper extends ModelItemLooper {
+        /**
+         * The output list of dimension data
+         */
+        public Vector<String> output = null;
+        
+        /**
+         * Default constructor which sets the search type.
+         */
+        public ListSimpRepLooper() {
+            setSearchType(ModelItemType.ITEM_SIMPREP);
+        }
+        
+        /* (non-Javadoc)
+         * @see com.simplifiedlogic.nitro.util.ModelItemLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem)
+         */
+        public boolean loopAction(CallModelItem item) throws JLIException, jxthrowable {
+        	try {
+	            if (currentName==null)
+	                currentName = item.getName();
+	            if (output==null)
+	                output = new Vector<String>();
+
+	         	output.add(item.getName());
+        	}
+        	catch (jxthrowable e) {
+//        		e.printStackTrace();
+        		System.err.println("Error looping through Simplified Reps: " + e.getLocalizedMessage());
+        	}
+        	return false;
+        }
+    }
+
     /**
      * Implentation of java.lang.Comparable which allows model items to be sorted by name
      * @author Adam Andrews

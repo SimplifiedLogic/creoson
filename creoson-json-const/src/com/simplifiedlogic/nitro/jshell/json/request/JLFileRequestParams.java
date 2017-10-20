@@ -59,6 +59,7 @@ public interface JLFileRequestParams {
 	public static final String FUNC_SET_MASS_UNITS		= "set_mass_units";
 	public static final String FUNC_ASSEMBLE		= "assemble";
 	public static final String FUNC_GET_TRANSFORM	= "get_transform";
+	public static final String FUNC_LIST_SIMP_REPS	= "list_simp_reps";
 	
 	// request fields
     public static final String PARAM_MODEL       = "file";
@@ -67,6 +68,7 @@ public interface JLFileRequestParams {
     public static final String PARAM_NEWNAME     = "new_name";
     public static final String PARAM_DIRNAME     = "dirname";
     public static final String PARAM_TARGETDIR   = "target_dir";
+    public static final String PARAM_REP         = "rep";
     public static final String PARAM_DISPLAY     = "display";
     public static final String PARAM_ACTIVATE    = "activate";
     public static final String PARAM_ONLYSESSION = "onlysession";

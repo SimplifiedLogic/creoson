@@ -187,4 +187,7 @@ public interface IJLFile {
     public abstract void closeWindow(String filename, String sessionId) throws JLIException;
     public abstract void closeWindow(String filename, AbstractJLISession sess) throws JLIException;
 
+    public List<String> listSimpReps(String filename, String name, String sessionId) throws JLIException;
+    public List<String> listSimpReps(String filename, String name, AbstractJLISession sess) throws JLIException;
+
 }

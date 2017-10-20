@@ -90,6 +90,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 		else if (function.equals(FUNC_SET_MASS_UNITS)) return actionSetMassUnits(sessionId, input);
 		else if (function.equals(FUNC_ASSEMBLE)) return actionAssemble(sessionId, input);
 		else if (function.equals(FUNC_GET_TRANSFORM)) return actionGetTransform(sessionId, input);
+		else if (function.equals(FUNC_LIST_SIMP_REPS)) return actionListSimpReps(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -528,6 +529,21 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         fileHandler.closeWindow(filename, sessionId);
 		
+        return null;
+	}
+
+	private Hashtable<String, Object> actionListSimpReps(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String repname = checkStringParameter(input, PARAM_REP, false);
+        
+        List<String> reps = fileHandler.listSimpReps(filename, repname, sessionId);
+
+        if (reps!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+       		out.put(OUTPUT_REPS, reps);
+        	return out;
+        }
+
         return null;
 	}
 

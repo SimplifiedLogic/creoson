@@ -30,6 +30,7 @@ public interface JLFileResponseParams {
     public static final String OUTPUT_GENERIC	= "generic";
     public static final String OUTPUT_DIRNAME	= "dirname";
     public static final String OUTPUT_FILES		= "files";
+    public static final String OUTPUT_REPS		= "reps";
     public static final String OUTPUT_EXISTS	= "exists";
     public static final String OUTPUT_ERRORS	= "errors";
     public static final String OUTPUT_INSTANCES	= "instances";

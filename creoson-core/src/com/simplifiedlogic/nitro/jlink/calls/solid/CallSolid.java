@@ -156,6 +156,14 @@ public class CallSolid extends CallFamilyMember {
 		return new CallSimpRep(rep);
 	}
 	
+	public CallSimpRep getSimpRep(String simpRepName) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,GetSimpRep", 0, NitroConstants.DEBUG_JLINK_KEY);
+		SimpRep rep = getSolid().GetSimpRep(simpRepName);
+		if (rep==null)
+			return null;
+		return new CallSimpRep(rep);
+	}
+
 	public boolean hasRetrievalErrors() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,HasRetrievalErrors", 0, NitroConstants.DEBUG_JLINK_KEY);
 		return getSolid().HasRetrievalErrors();

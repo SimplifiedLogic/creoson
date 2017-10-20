@@ -1,0 +1,73 @@
+{
+  "spec" : {
+    "function_description" : "List simplified reps in a model",
+    "command" : "file",
+    "function" : "list_simp_reps",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "rep",
+      "type" : "string",
+      "description" : "Simplified rep name pattern",
+      "default" : "All simplified reps",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "list_simp_reps",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "reps" : [ "LASER_CUT", "SHORT", "HAND_CUT" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "list_simp_reps",
+      "data" : {
+        "rep" : "SHORT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "reps" : [ "SHORT" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "list_simp_reps",
+      "data" : {
+        "file" : "box.prt",
+        "rep" : "*CUT*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "reps" : [ "LASER_CUT", "HAND_CUT" ]
+      }
+    }
+  } ]
+}

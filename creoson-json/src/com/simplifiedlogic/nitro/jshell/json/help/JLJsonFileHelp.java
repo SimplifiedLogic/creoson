@@ -67,6 +67,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpIsActive());
 		list.add(helpList());
 		list.add(helpListInstances());
+		list.add(helpListSimpReps());
 		list.add(helpMassprops());
 		list.add(helpOpen());
 		list.add(helpOpenErrors());
@@ -1198,6 +1199,47 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    
+	private FunctionTemplate helpListSimpReps() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_SIMP_REPS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List simplified reps in a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_REP, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Simplified rep name pattern");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All simplified reps");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_REPS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of simplified rep names");
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addOutput(OUTPUT_REPS, new String[] {"LASER_CUT","SHORT","HAND_CUT"});
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_REP, "SHORT");
+    	ex.addOutput(OUTPUT_REPS, new String[] {"SHORT"});
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_REP, "*CUT*");
+    	ex.addOutput(OUTPUT_REPS, new String[] {"LASER_CUT","HAND_CUT"});
     	template.addExample(ex);
     	
         return template;
