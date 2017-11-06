@@ -421,6 +421,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_ADD_SHEET);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Add a drawing sheet");
+    	spec.addFootnote("Position is a value between 1 and the number of sheets plus one.  Set to 0 to add the sheet last.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
@@ -428,10 +429,20 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	arg.setDefaultValue("Current active drawing");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_POSITION, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Position to add the sheet");
+    	arg.setDefaultValue("Sheet will be added to the end");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_DRAWING, "box.drw");
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_POSITION, 1);
     	template.addExample(ex);
     	
     	ex = new FunctionExample();

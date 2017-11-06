@@ -591,15 +591,15 @@ public class JLDrawing implements IJLDrawing {
 	}
 
 	@Override
-	public void addSheet(String filename, String sessionId)
+	public void addSheet(String filename, int position, String sessionId)
 			throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
         
-        addSheet(filename, sess);
+        addSheet(filename, position, sess);
 	}
 
 	@Override
-	public void addSheet(String filename, 
+	public void addSheet(String filename, int position, 
 			AbstractJLISession sess) throws JLIException {
     	
 		DebugLogging.sendDebugMessage("drawing.add_sheet: " + filename, NitroConstants.DEBUG_KEY);
@@ -621,8 +621,20 @@ public class JLDrawing implements IJLDrawing {
 	        	throw new JLIException("Model is not a drawing");
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        
+
+	        int numSheets=0;
+	        if (position>0) {
+		        numSheets = drw.getNumberOfSheets();
+		        
+		        if (position>numSheets+1)
+		        	throw new JLIException("Invalid sheet number, must be 1-" + (numSheets+1) + " or 0 for last sheet");
+	        }
+
 	        drw.addSheet();
+	        
+	        if (position>0 && position<=numSheets) {
+	        	drw.reorderSheet(numSheets+1, position);
+	        }
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);

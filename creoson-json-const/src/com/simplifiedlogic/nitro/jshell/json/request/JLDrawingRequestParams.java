@@ -75,6 +75,7 @@ public interface JLDrawingRequestParams {
     public static final String PARAM_MODEL_VIEW	= "model_view";
     public static final String PARAM_PARENT_VIEW	= "parent_view";
     public static final String PARAM_EXPLODED	= "exploded";
+    public static final String PARAM_POSITION	= "position";
 
     // view display data params
     public static final String PARAM_DISPLAY_DATA				= "display_data";

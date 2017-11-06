@@ -75,8 +75,8 @@ public interface IJLDrawing {
 	public void selectSheet(String filename, int sheet, AbstractJLISession sess) 
 		throws JLIException;
 
-	public void addSheet(String drawingName, String sessionId) throws JLIException;
-	public void addSheet(String drawingName, AbstractJLISession sess) throws JLIException;
+	public void addSheet(String drawingName, int position, String sessionId) throws JLIException;
+	public void addSheet(String drawingName, int position, AbstractJLISession sess) throws JLIException;
 
 	public void deleteSheet(String filename, int sheet, String sessionId) 
 		throws JLIException;

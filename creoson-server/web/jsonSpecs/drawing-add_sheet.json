@@ -3,11 +3,17 @@
     "function_description" : "Add a drawing sheet",
     "command" : "drawing",
     "function" : "add_sheet",
+    "notes" : [ "Position is a value between 1 and the number of sheets plus one.  Set to 0 to add the sheet last." ],
     "request" : [ {
       "name" : "drawing",
       "type" : "string",
       "description" : "Drawing name",
       "default" : "Current active drawing"
+    }, {
+      "name" : "position",
+      "type" : "integer",
+      "description" : "Position to add the sheet",
+      "default" : "Sheet will be added to the end"
     } ],
     "response" : [ ]
   },
@@ -18,6 +24,21 @@
       "function" : "add_sheet",
       "data" : {
         "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "add_sheet",
+      "data" : {
+        "drawing" : "box.drw",
+        "position" : 1
       }
     },
     "response" : {

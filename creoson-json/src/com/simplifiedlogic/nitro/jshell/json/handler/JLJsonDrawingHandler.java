@@ -192,8 +192,9 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 
 	private Hashtable<String, Object> actionAddSheet(String sessionId, Hashtable<String, Object> input) throws JLIException {
 		String drawing = checkStringParameter(input, PARAM_DRAWING, false);
+		int position = checkIntParameter(input, PARAM_POSITION, true, 0);
 		
-		drawHandler.addSheet(drawing, sessionId);
+		drawHandler.addSheet(drawing, position, sessionId);
 		
 		return null;
 	}

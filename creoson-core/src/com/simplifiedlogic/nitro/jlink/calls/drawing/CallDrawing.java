@@ -95,6 +95,11 @@ public class CallDrawing extends CallModel2D {
 		return new CallSheetData(data);
 	}
 
+	public void reorderSheet(int fromSheetNumber, int to) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Drawing,ReorderSheet", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getDrawing().ReorderSheet(fromSheetNumber, to);
+	}
+
 	public CallDetailItem createDetailItem(CallDetailCreateInstructions instructions) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Drawing,CreateDetailItem", 0, NitroConstants.DEBUG_JLINK_KEY);
 		DetailItem item = getDrawing().CreateDetailItem(instructions.getInst());
