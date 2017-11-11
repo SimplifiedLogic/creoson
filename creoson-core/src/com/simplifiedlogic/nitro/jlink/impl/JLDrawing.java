@@ -144,6 +144,15 @@ public class JLDrawing implements IJLDrawing {
             	if (scale>0.0) {
             		drw.setSheetScale(1, scale, m);
             	}
+
+            	if (drw.isCommonNameModifiable()) {
+	        		int extpos = NitroUtils.findFileExtension(drw.getFileName());
+	        		String commonName = extpos>=0 ? drw.getFileName().substring(0, extpos) : drw.getFileName();
+	        		drw.setCommonName(commonName);
+            	}
+            	else
+            		System.err.println("Common name for " + drw.getFileName() + " is not modifiable");
+
             	if (display) {
                     if (newwin) {
                     	CallWindow win = session.createModelWindow(drw);

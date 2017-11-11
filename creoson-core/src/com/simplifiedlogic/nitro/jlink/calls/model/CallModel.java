@@ -93,6 +93,21 @@ public class CallModel implements CallParameterOwner {
 		return m.GetInstanceName();
 	}
 
+	public String getCommonName() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model,GetCommonName", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return m.GetCommonName();
+	}
+
+	public void setCommonName(String value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model,SetCommonName", 0, NitroConstants.DEBUG_JLINK_KEY);
+		m.SetCommonName(value);
+	}
+
+	public boolean isCommonNameModifiable() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model,IsCommonNameModifiable", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return m.IsCommonNameModifiable();
+	}
+
 	public CallModelItem getItemById(ModelItemType type, int id) throws jxthrowable {
 		ModelItem item = null;
         try {
