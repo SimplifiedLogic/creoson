@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.util;
 import java.io.File;
 import java.io.FileFilter;
 
+import com.ptc.cipjava.jxthrowable;
 import com.simplifiedlogic.nitro.jlink.impl.NitroUtils;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 
@@ -87,7 +88,7 @@ public class FileListFilter extends LooperBase implements FileFilter {
             return NitroUtils.removeNumericExtension(name); 
     }
     
-    protected void processObjectByName(String name) throws JLIException,Exception {
+    protected void processObjectByName(String name) throws JLIException,jxthrowable {
         // unused
     }
 

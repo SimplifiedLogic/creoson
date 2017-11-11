@@ -226,7 +226,7 @@ public abstract class FeatureLooper extends LooperBase {
             this.typePattern = typePattern;
 	}
 
-    protected void processObjectByName(String name) throws JLIException,Exception {
+    protected void processObjectByName(String name) throws JLIException,jxthrowable {
     	
     }
 

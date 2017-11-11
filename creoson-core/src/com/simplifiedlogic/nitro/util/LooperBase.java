@@ -20,6 +20,7 @@ package com.simplifiedlogic.nitro.util;
 
 import java.util.List;
 
+import com.ptc.cipjava.jxthrowable;
 import com.simplifiedlogic.nitro.jlink.impl.NitroUtils;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 
@@ -203,7 +204,7 @@ public abstract class LooperBase {
      * @throws JLIException
      * @throws Exception
      */
-    protected abstract void processObjectByName(String name) throws JLIException,Exception;
+    protected abstract void processObjectByName(String name) throws JLIException,jxthrowable;
 
     /**
      * @return Returns the isNamePattern.
