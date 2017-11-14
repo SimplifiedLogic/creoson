@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Clear a workspace",
+    "function_description" : "Clear a workspace on the active server",
     "command" : "windchill",
     "function" : "clear_workspace",
     "request" : [ {

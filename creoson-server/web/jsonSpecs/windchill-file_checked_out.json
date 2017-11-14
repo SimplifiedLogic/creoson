@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Check whether a file is checked out in a workspace",
+    "function_description" : "Check whether a file is checked out in a workspace on the active server",
     "command" : "windchill",
     "function" : "file_checked_out",
     "request" : [ {

@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Get a list of workspaces the user can access",
+    "function_description" : "Get a list of workspaces the user can access on the active server",
     "command" : "windchill",
     "function" : "list_workspaces",
     "request" : [ ],

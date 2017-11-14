@@ -1,0 +1,51 @@
+{
+  "spec" : {
+    "function_description" : "Get a list of files in a workspace on the active server",
+    "command" : "windchill",
+    "function" : "list_workspace_files",
+    "request" : [ {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "File name pattern",
+      "default" : "All files",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "filelist",
+      "type" : "array:string",
+      "description" : "List of files in the workspace"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "list_workspace_files"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "filelist" : [ "able.prt", "baker.prt", "abc123.asm", "abc93939.asm" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "list_workspace_files",
+      "data" : {
+        "filename" : "abc*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "filelist" : [ "abc123.asm", "abc93939.asm" ]
+      }
+    }
+  } ]
+}

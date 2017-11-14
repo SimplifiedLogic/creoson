@@ -40,6 +40,9 @@ public interface IJLWindchill {
 	public abstract void setWorkspace(String workspace, String sessionId) throws JLIException;
 	public abstract void setWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
 
+	public abstract String getWorkspace(String sessionId) throws JLIException;
+	public abstract String getWorkspace(AbstractJLISession sess) throws JLIException;
+
 	public abstract boolean workspaceExists(String workspace, String sessionId) throws JLIException;
 	public abstract boolean workspaceExists(String workspace, AbstractJLISession sess) throws JLIException;
 
@@ -54,5 +57,8 @@ public interface IJLWindchill {
 
 	public abstract boolean fileCheckedOut(String workspace, String fileName, String sessionId) throws JLIException;
 	public abstract boolean fileCheckedOut(String workspace, String fileName, AbstractJLISession sess) throws JLIException;
+
+	public List<String> listWorkspaceFiles(String filename, String workspace, String sessionId) throws JLIException;
+	public List<String> listWorkspaceFiles(String filename, String workspace, AbstractJLISession sess) throws JLIException;
 
 }

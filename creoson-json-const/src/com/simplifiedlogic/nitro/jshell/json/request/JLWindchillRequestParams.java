@@ -34,11 +34,13 @@ public interface JLWindchillRequestParams {
     public static final String FUNC_SERVER_EXISTS		= "server_exists";
     public static final String FUNC_LIST_WORKSPACES		= "list_workspaces";
     public static final String FUNC_SET_WORKSPACE		= "set_workspace";
+    public static final String FUNC_GET_WORKSPACE		= "get_workspace";
     public static final String FUNC_WORKSPACE_EXISTS	= "workspace_exists";
     public static final String FUNC_CREATE_WORKSPACE	= "create_workspace";
     public static final String FUNC_CLEAR_WORKSPACE		= "clear_workspace";
     public static final String FUNC_DELETE_WORKSPACE	= "delete_workspace";
     public static final String FUNC_FILE_CHECKED_OUT	= "file_checked_out";
+    public static final String FUNC_LIST_WORKSPACE_FILES	= "list_workspace_files";
     
     // request fields
     public static final String PARAM_USER		= "user";

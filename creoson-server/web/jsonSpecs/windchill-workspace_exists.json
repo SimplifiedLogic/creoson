@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Check whether a workspace exists",
+    "function_description" : "Check whether a workspace exists on the active server",
     "command" : "windchill",
     "function" : "workspace_exists",
     "request" : [ {

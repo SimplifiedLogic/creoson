@@ -1,0 +1,28 @@
+{
+  "spec" : {
+    "function_description" : "Retrieve the name of the active workspace on the active server",
+    "command" : "windchill",
+    "function" : "get_workspace",
+    "request" : [ ],
+    "response" : [ {
+      "name" : "workspace",
+      "type" : "string",
+      "description" : "Workspace name"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "get_workspace"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "workspace" : "freds_workspace"
+      }
+    }
+  } ]
+}

@@ -57,9 +57,11 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 		else if (function.equals(FUNC_LIST_WORKSPACES)) return actionListWorkspaces(sessionId, input);
 		else if (function.equals(FUNC_SET_SERVER)) return actionSetServer(sessionId, input);
 		else if (function.equals(FUNC_SET_WORKSPACE)) return actionSetWorkspace(sessionId, input);
+		else if (function.equals(FUNC_GET_WORKSPACE)) return actionGetWorkspace(sessionId, input);
 		else if (function.equals(FUNC_SERVER_EXISTS)) return actionServerExists(sessionId, input);
 		else if (function.equals(FUNC_WORKSPACE_EXISTS)) return actionWorkspaceExists(sessionId, input);
 		else if (function.equals(FUNC_FILE_CHECKED_OUT)) return actionFileCheckedOut(sessionId, input);
+		else if (function.equals(FUNC_LIST_WORKSPACE_FILES)) return actionListWorkspaceFiles(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -111,6 +113,14 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 		return null;
 	}
 
+	private Hashtable<String, Object> actionGetWorkspace(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		String workspace = windHandler.getWorkspace(sessionId);
+		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        out.put(OUTPUT_WORKSPACE, workspace);
+       	return out;
+	}
+
 	private Hashtable<String, Object> actionWorkspaceExists(String sessionId, Hashtable<String, Object> input) throws JLIException {
 		String workspace = checkStringParameter(input, PARAM_WORKSPACE, true);
 		
@@ -154,6 +164,17 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 		
 		Hashtable<String, Object> out = new Hashtable<String, Object>();
         out.put(OUTPUT_CHECKED_OUT, checkedOut);
+       	return out;
+	}
+
+	private Hashtable<String, Object> actionListWorkspaceFiles(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		String fileName = checkStringParameter(input, PARAM_FILENAME, true);
+		String workspace = checkStringParameter(input, PARAM_WORKSPACE, true);
+		
+		List<String> files = windHandler.listWorkspaceFiles(fileName, workspace, sessionId);
+		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        out.put(OUTPUT_FILELIST, files);
        	return out;
 	}
 

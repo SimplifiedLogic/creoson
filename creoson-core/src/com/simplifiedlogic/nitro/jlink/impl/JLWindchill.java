@@ -20,6 +20,7 @@ package com.simplifiedlogic.nitro.jlink.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitBadContext;
@@ -36,6 +37,7 @@ import com.simplifiedlogic.nitro.jlink.intf.JShellProvider;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
 import com.simplifiedlogic.nitro.util.JLConnectionUtil;
+import com.simplifiedlogic.nitro.util.WorkspaceFileLooper;
 
 /**
  * @author Adam Andrews
@@ -348,6 +350,55 @@ public class JLWindchill implements IJLWindchill {
 	}
 
 	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#getWorkspace(java.lang.String)
+	 */
+	@Override
+	public String getWorkspace(String sessionId) throws JLIException {
+		
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return getWorkspace(sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#getWorkspace(com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public String getWorkspace(AbstractJLISession sess) throws JLIException {
+		
+		DebugLogging.sendDebugMessage("windchill.get_workspace", NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	
+	        CallServer server = session.getActiveServer();
+	        if (server==null)
+	        	throw new JLIException("No server is selected.");
+
+	        String activeWorkspace = server.getActiveWorkspace();
+
+	        return activeWorkspace;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("windchill.get_workspace", start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#workspaceExists(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -631,6 +682,69 @@ public class JLWindchill implements IJLWindchill {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#listWorkspaceFiles(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<String> listWorkspaceFiles(String filename, String workspace, String sessionId) throws JLIException {
+		
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return listWorkspaceFiles(filename, workspace, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#listWorkspaceFiles(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public List<String> listWorkspaceFiles(String filename, String workspace, AbstractJLISession sess) throws JLIException {
+		
+		DebugLogging.sendDebugMessage("windchill.list_workspace_files: " + workspace, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (workspace==null || workspace.trim().length()==0)
+    		throw new JLIException("No workspace parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	
+	        CallServer server = session.getActiveServer();
+	        if (server==null)
+	        	throw new JLIException("No server is selected.");
+
+			if (!workspaceExists(server, workspace))
+				throw new JLIException("Workspace '" + workspace + "' does not exist");
+
+	        ListLooper looper = new ListLooper();
+            looper.setNamePattern(filename);
+	        looper.setSession(session);
+	        looper.setServerAlias(server.getAlias());
+	        looper.setWorkspace(workspace);
+	        looper.loop();
+	        if (looper.output==null)
+	            return new Vector<String>();
+	        else
+	        	return looper.output;
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("windchill.list_workspace_files: " + workspace, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
     /**
      * Check whether a given workspace exists on a server
      * @param server The server containing the workspace
@@ -652,5 +766,30 @@ public class JLWindchill implements IJLWindchill {
         	}
         }
         return found;
+    }
+
+    /**
+     * An implementation of WorkspaceFileLooper which gets a list of 
+     * workspace file names
+     * @author Adam Andrews
+     */
+    private static class ListLooper extends WorkspaceFileLooper {
+        /**
+         * An output list of model names
+         */
+        public List<String> output = null;
+
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.util.WorkspaceFileLooper#loopAction(java.lang.String)
+		 */
+		@Override
+		public boolean loopAction(String fileName) throws JLIException, jxthrowable {
+            if (output==null)
+                output = new Vector<String>();
+            output.add(fileName);
+
+			return false;
+		}
+        
     }
 }

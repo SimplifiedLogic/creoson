@@ -30,9 +30,9 @@ import com.ptc.pfc.pfcModel.Models;
 import com.ptc.pfc.pfcProToolkit.Dll;
 import com.ptc.pfc.pfcSelect.Selections;
 import com.ptc.pfc.pfcServer.Server;
+import com.ptc.pfc.pfcSession.FileListOpt;
 import com.ptc.pfc.pfcSession.Session;
 import com.ptc.pfc.pfcWindow.Window;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallColorRGB;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawingCreateOptions;
@@ -46,6 +46,7 @@ import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcSession.Session
@@ -243,6 +244,14 @@ public class CallSession {
 		return new CallModels(models);
 	}
 	
+	public CallStringSeq listFiles(String filter, FileListOpt version, String path) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Session,ListFiles", 0, NitroConstants.DEBUG_JLINK_KEY);
+		stringseq values = session.ListFiles(filter, version, path);
+		if (values==null)
+			return null;
+		return new CallStringSeq(values);
+	}
+
 	public CallDrawing createDrawingFromTemplate(String name, String template, CallModelDescriptor drawingModel, CallDrawingCreateOptions options) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Session,createDrawingFromTemplate", 0, NitroConstants.DEBUG_JLINK_KEY);
 		Drawing drw = session.CreateDrawingFromTemplate(

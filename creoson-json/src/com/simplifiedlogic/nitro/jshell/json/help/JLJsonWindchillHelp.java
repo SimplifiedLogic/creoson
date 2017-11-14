@@ -51,8 +51,10 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 		list.add(helpServerExists());
 		list.add(helpSetServer());
 		list.add(helpSetWorkspace());
+		list.add(helpGetWorkspace());
 		list.add(helpWorkspaceExists());
 		list.add(helpFileCheckedOut());
+		list.add(helpListWorkspaceFiles());
 		return list;
 	}
 	
@@ -152,7 +154,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 	private FunctionTemplate helpListWorkspaces() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_WORKSPACES);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Get a list of workspaces the user can access");
+    	spec.setFunctionDescription("Get a list of workspaces the user can access on the active server");
     	FunctionReturn ret;
 
     	ret = new FunctionReturn(OUTPUT_WORKSPACES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
@@ -171,7 +173,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 	private FunctionTemplate helpSetWorkspace() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_WORKSPACE);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Select a workspace");
+    	spec.setFunctionDescription("Select a workspace on the active server");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_WORKSPACE, FunctionSpec.TYPE_STRING);
@@ -188,10 +190,29 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
         return template;
     }
     	
+	private FunctionTemplate helpGetWorkspace() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_WORKSPACE);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Retrieve the name of the active workspace on the active server");
+    	FunctionReturn ret;
+
+    	ret = new FunctionReturn(OUTPUT_WORKSPACE, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Workspace name");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addOutput(PARAM_WORKSPACE, "freds_workspace");
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    	
 	private FunctionTemplate helpWorkspaceExists() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_WORKSPACE_EXISTS);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Check whether a workspace exists");
+    	spec.setFunctionDescription("Check whether a workspace exists on the active server");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -222,7 +243,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 	private FunctionTemplate helpCreateWorkspace() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_CREATE_WORKSPACE);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Create a workspace");
+    	spec.setFunctionDescription("Create a workspace on the active server");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_WORKSPACE, FunctionSpec.TYPE_STRING);
@@ -248,7 +269,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 	private FunctionTemplate helpClearWorkspace() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_CLEAR_WORKSPACE);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Clear a workspace");
+    	spec.setFunctionDescription("Clear a workspace on the active server");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_WORKSPACE, FunctionSpec.TYPE_STRING);
@@ -268,7 +289,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 	private FunctionTemplate helpDeleteWorkspace() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_WORKSPACE);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Delete a workspace");
+    	spec.setFunctionDescription("Delete a workspace on the active server");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_WORKSPACE, FunctionSpec.TYPE_STRING);
@@ -288,7 +309,7 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
 	private FunctionTemplate helpFileCheckedOut() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_FILE_CHECKED_OUT);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Check whether a file is checked out in a workspace");
+    	spec.setFunctionDescription("Check whether a file is checked out in a workspace on the active server");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -318,6 +339,37 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
     	ex.addInput(PARAM_WORKSPACE, "freds_workspace");
     	ex.addInput(PARAM_FILENAME, "box-x.prt");
     	ex.addOutput(OUTPUT_CHECKED_OUT, false);
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    	
+	private FunctionTemplate helpListWorkspaceFiles() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_WORKSPACE_FILES);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Get a list of files in a workspace on the active server");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_FILENAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name pattern");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All files");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_FILELIST, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of files in the workspace");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addOutput(OUTPUT_FILELIST, new String[] {"able.prt", "baker.prt", "abc123.asm", "abc93939.asm"});
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_FILENAME, "abc*");
+    	ex.addOutput(OUTPUT_FILELIST, new String[] {"abc123.asm", "abc93939.asm"});
     	template.addExample(ex);
     	
         return template;

@@ -40,6 +40,7 @@ import com.ptc.pfc.pfcLayer.DisplayStatus;
 import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
+import com.ptc.pfc.pfcServer.Server;
 import com.ptc.pfc.pfcSimpRep.SimpRepActionType;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
@@ -1589,6 +1590,51 @@ public class JlinkUtils {
 			System.out.print(" ");
 		}
 		System.out.println();
+	}
+
+	/**
+	 * Construct a URL for a Windchill workspace of the form wtws://<server-alias>/<workspace>/
+	 * @param server The JLink server object
+	 * @param workspace The Windchill workspace name
+	 * @return The URL for the workspace
+	 * @throws jxthrowable
+	 */
+	public static String makeWindchillUrl(Server server, String workspace) throws jxthrowable {
+		return makeWindchillUrl(server.GetAlias(), workspace);
+	}
+	
+	/**
+	 * Construct a URL for a Windchill workspace of the form wtws://<server-alias>/<workspace>/
+	 * @param serverAlias The Windchill server alias
+	 * @param workspace The Windchill workspace name
+	 * @return The URL for the workspace
+	 * @throws jxthrowable
+	 */
+	public static String makeWindchillUrl(String serverAlias, String workspace) throws jxthrowable {
+		StringBuffer buf = new StringBuffer();
+		buf.append("wtws://");
+		buf.append(serverAlias);
+		buf.append("/");
+		buf.append(workspace);
+		buf.append("/");
+		
+		return buf.toString();
+	}
+	
+	/**
+	 * Take a Windchill workspace file URL and strip out file name.
+	 * @param fileUrl The URL for the Windchill workspace file
+	 * @return The file name portion of the fileUrl
+	 */
+	public static String stripWindchillUrl(String fileUrl) {
+		int pos1 = fileUrl.lastIndexOf('/');
+		int pos2 = fileUrl.lastIndexOf('\\');
+		if (pos1<0 && pos2<0)
+			return fileUrl;
+		if (pos2>pos1)
+			return fileUrl.substring(pos2+1);
+		else
+			return fileUrl.substring(pos1+1);
 	}
 
     /**

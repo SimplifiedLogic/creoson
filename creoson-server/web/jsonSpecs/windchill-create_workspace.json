@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Create a workspace",
+    "function_description" : "Create a workspace on the active server",
     "command" : "windchill",
     "function" : "create_workspace",
     "request" : [ {
