@@ -502,11 +502,11 @@ public class JlinkUtils {
     	CallModel am = session.getCurrentModel();
     	if (am==null)
     		return false;
-    	String amf = am.getDescr().getPath() + am.getDescr().getFileName();
-    	String mf = m.getDescr().getPath() + m.getDescr().getFileName();
     	if (am.getModel().equals(m.getModel()))
     		return true;
-    	if (amf.equals(mf))
+    	String amf = getPath(am) + am.getDescr().getFileName();
+    	String mf = getPath(m) + m.getDescr().getFileName();
+    	if (amf.equalsIgnoreCase(mf))
     		return true;
 
     	return false;

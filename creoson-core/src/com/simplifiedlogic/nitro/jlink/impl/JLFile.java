@@ -643,7 +643,7 @@ public class JLFile implements IJLFile {
 	            m.backup(descr);
 //	            m.copy(filename, null); // alternate way to do it
 	            descr = m.getDescr();
-	            descr.setPath(savepath);
+	            descr.setPath(savepath);  // does not appear to affect the model's actual descr
 	            
 	            descr = m.getDescr();
 	        }
@@ -964,7 +964,7 @@ public class JLFile implements IJLFile {
 	        }
 	        else {
 	            filename = m.getFileName();
-	            dirname = m.getDescr().getPath();
+	            dirname = JlinkUtils.getPath(m);
 	        }
 	        
 	        out.setDirname(dirname.replace('\\', '/'));
@@ -1273,7 +1273,7 @@ public class JLFile implements IJLFile {
 
 	        CallFamilyTableRows rows = solid.listRows();
 	        FileListInstancesResults results = new FileListInstancesResults();
-	        results.setDirname(solid.getDescr().getPath().replace('\\', '/'));
+	        results.setDirname(JlinkUtils.getPath(solid).replace('\\', '/'));
 	        results.setGeneric(generic);
 	        
 	        CallFamilyTableRow onerow;
