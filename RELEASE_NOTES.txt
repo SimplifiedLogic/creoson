@@ -1,6 +1,23 @@
 R E L E A S E   N O T E S
 =========================
 
+2.1.1
+	- Added new functions:
+		drawing
+			add_sheet
+		file
+			list_simp_reps
+		windchill
+			get_workspace
+			list_workspace_files
+	- Modified functions:
+		drawing
+			create - set drawing's common name
+		file
+			get_active - return the drive letter in file location
+			is_active - use the drive letter in file location
+			list_instances - return the drive letter in file location
+	
 2.1.0
 	- Added new functions:
 		drawing
