@@ -187,10 +187,11 @@ public class JLBom implements IJLBom {
         		continue;
             component = (CallComponentFeat)feat;
             try {
-            	// System.out.println("Comp ID:" + component.getId() + ", status=" + component.getStatus());
-                if (component.getStatus()!=FeatureStatus._FEAT_ACTIVE) {
+            	int status = component.getStatus();
+            	// System.out.println("Comp ID:" + component.getId() + ", status=" + status);
+                if (status!=FeatureStatus._FEAT_ACTIVE) {
                 	if (!excludeInactive) {
-                        if (component.getStatus()!=FeatureStatus._FEAT_INACTIVE && component.getStatus()!=FeatureStatus._FEAT_UNREGENERATED)
+                        if (status!=FeatureStatus._FEAT_INACTIVE && status!=FeatureStatus._FEAT_UNREGENERATED)
                     		continue;
                 	}
                 	else
