@@ -45,7 +45,7 @@ public abstract class FeatureLooper extends LooperBase {
     private boolean isNamePattern = false;
     private boolean isTypePattern = false;
     private boolean isStatusPattern = false;
-    private boolean visibleOnly = true; // default to true, but can be overridden
+    private boolean visibleOnly = true; // default to true, but can be overridden 
     
     /**
      * The status of the current feature in the loop
