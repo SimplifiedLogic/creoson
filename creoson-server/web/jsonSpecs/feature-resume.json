@@ -3,6 +3,7 @@
     "function_description" : "Resume one or more features that match criteria",
     "command" : "feature",
     "function" : "resume",
+    "notes" : [ "Will only resume visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

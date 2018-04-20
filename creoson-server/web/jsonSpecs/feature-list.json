@@ -3,6 +3,7 @@
     "function_description" : "List feature parameters that match criteria",
     "command" : "feature",
     "function" : "list",
+    "notes" : [ "Will only list parameters on visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

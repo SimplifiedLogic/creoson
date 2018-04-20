@@ -3,6 +3,7 @@
     "function_description" : "Suppress one or more features that match criteria",
     "command" : "feature",
     "function" : "suppress",
+    "notes" : [ "Will only suppress visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

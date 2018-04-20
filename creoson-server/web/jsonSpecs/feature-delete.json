@@ -3,6 +3,7 @@
     "function_description" : "Delete one or more features that match criteria",
     "command" : "feature",
     "function" : "delete",
+    "notes" : [ "Will only delete visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

@@ -3,6 +3,7 @@
     "function_description" : "Delete a feature parameter",
     "command" : "feature",
     "function" : "delete_param",
+    "notes" : [ "Will only delete parameters from visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

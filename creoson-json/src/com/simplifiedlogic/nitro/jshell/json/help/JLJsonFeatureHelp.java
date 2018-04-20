@@ -135,6 +135,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Delete one or more features that match criteria");
+    	spec.addFootnote("Will only delete visible features.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -214,6 +215,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("List features that match criteria");
+    	spec.addFootnote("Will only list visible features.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -447,6 +449,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_RESUME);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Resume one or more features that match criteria");
+    	spec.addFootnote("Will only resume visible features.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -515,6 +518,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SUPPRESS);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Suppress one or more features that match criteria");
+    	spec.addFootnote("Will only suppress visible features.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -589,6 +593,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_PARAM);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Delete a feature parameter");
+    	spec.addFootnote("Will only delete parameters from visible features.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -690,6 +695,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("List feature parameters that match criteria");
+    	spec.addFootnote("Will only list parameters on visible features.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -895,6 +901,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_PARAM);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Set the value of a feature parameter");
+    	spec.addFootnote("Will only set parameters on visible features.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);

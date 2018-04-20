@@ -3,6 +3,7 @@
     "function_description" : "Set the value of a feature parameter",
     "command" : "feature",
     "function" : "set_param",
+    "notes" : [ "Will only set parameters on visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
