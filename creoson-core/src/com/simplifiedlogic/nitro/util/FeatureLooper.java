@@ -45,6 +45,7 @@ public abstract class FeatureLooper extends LooperBase {
     private boolean isNamePattern = false;
     private boolean isTypePattern = false;
     private boolean isStatusPattern = false;
+    private boolean visibleOnly = true; // default to true, but can be overridden
     
     /**
      * The status of the current feature in the loop
@@ -88,7 +89,7 @@ public abstract class FeatureLooper extends LooperBase {
         }
 
         // list the solid's features by feature type
-        CallFeatures featList = solid.listFeaturesByType(Boolean.FALSE, searchType);
+        CallFeatures featList = solid.listFeaturesByType(Boolean.valueOf(visibleOnly), searchType);
         if (featList==null)
         	return;
         processLoop(featList);
@@ -243,4 +244,19 @@ public abstract class FeatureLooper extends LooperBase {
 	public void setIncludeUnnamed(boolean includeUnnamed) {
 		this.includeUnnamed = includeUnnamed;
 	}
+
+	/**
+	 * @return visibleOnly Whether to skip over invisible features
+	 */
+	public boolean isVisibleOnly() {
+		return visibleOnly;
+	}
+
+	/**
+	 * @param visibleOnly Whether to skip over invisible features
+	 */
+	public void setVisibleOnly(boolean visibleOnly) {
+		this.visibleOnly = visibleOnly;
+	}
+
 }
