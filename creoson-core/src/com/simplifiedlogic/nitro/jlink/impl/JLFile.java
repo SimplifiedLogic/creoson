@@ -908,7 +908,7 @@ public class JLFile implements IJLFile {
 	        }
     	}
     	catch (jxthrowable e) {
-    		System.err.println("Error regenerating: " + e.getLocalizedMessage());
+    		System.err.println("Error regenerating: " + e.getMessage());
     		throw JlinkUtils.createException(e);
     	}
     	finally {
@@ -3136,7 +3136,7 @@ public class JLFile implements IJLFile {
         	}
         	catch (jxthrowable e) {
 //        		e.printStackTrace();
-        		System.err.println("Error looping through Simplified Reps: " + e.getLocalizedMessage());
+        		System.err.println("Error looping through Simplified Reps: " + e.getMessage());
         	}
         	return false;
         }
