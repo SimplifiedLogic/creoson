@@ -32,6 +32,7 @@ public interface JLLayerRequestParams {
     public static final String FUNC_LIST		= "list";
     public static final String FUNC_DELETE		= "delete";
     public static final String FUNC_SHOW		= "show";
+    public static final String FUNC_EXISTS		= "exists";
 
     // request fields
     public static final String PARAM_MODEL      = "file";

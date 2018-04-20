@@ -59,6 +59,8 @@ public class JLJsonLayerHandler extends JLJsonCommandHandler implements JLLayerR
 			return actionDelete(sessionId, input);
 		else if (function.equals(FUNC_SHOW))
 			return actionShow(sessionId, input);
+		else if (function.equals(FUNC_EXISTS))
+			return actionExists(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -112,6 +114,18 @@ public class JLJsonLayerHandler extends JLJsonCommandHandler implements JLLayerR
         layerHandler.show(modelName, layerName, show, sessionId);
         
         return null;
+	}
+	
+	private Hashtable<String, Object> actionExists(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String modelName = checkStringParameter(input, PARAM_MODEL, false);
+        String layerName = checkStringParameter(input, PARAM_NAME, false);
+
+        boolean exists = layerHandler.exists(modelName, layerName, sessionId);
+        
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        out.put(OUTPUT_EXISTS, exists);
+        return out;
 	}
 	
 }

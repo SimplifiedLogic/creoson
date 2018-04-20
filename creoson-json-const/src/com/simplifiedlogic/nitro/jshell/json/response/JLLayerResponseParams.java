@@ -27,6 +27,7 @@ public interface JLLayerResponseParams {
 
 	// response fields
     public static final String OUTPUT_LAYERS	= "layers";
+    public static final String OUTPUT_EXISTS	= "exists";
     public static final String OUTPUT_NAME		= "name";
     public static final String OUTPUT_STATUS	= "status";
     public static final String OUTPUT_ID		= "id";

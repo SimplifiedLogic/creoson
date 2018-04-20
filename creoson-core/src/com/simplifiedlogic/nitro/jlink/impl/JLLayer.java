@@ -151,6 +151,55 @@ public class JLLayer implements IJLLayer {
 	}
 
 	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLLayer#exists(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean exists(String filename, String layerName, String sessionId) throws JLIException {
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return exists(filename, layerName, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLLayer#exists(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public boolean exists(String filename, String layerName, AbstractJLISession sess)
+			throws JLIException {
+
+		DebugLogging.sendDebugMessage("layer.exists: " + layerName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return false;
+	
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+
+	        ExistsLooper looper = new ExistsLooper();
+	        looper.setNamePattern(layerName);
+	        
+	        looper.loop(m);
+	        return looper.exists;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("layer.exists,"+layerName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLLayer#show(java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
@@ -418,4 +467,36 @@ public class JLLayer implements IJLLayer {
         }
 	}
 
+	/**
+	 * An implementation of ModelItemLooper which checks whether a layer exists
+	 * @author Adam Andrews
+	 *
+	 */
+	private static class ExistsLooper extends ModelItemLooper {
+		/**
+		 * Output value indicating whether the layer exists
+		 */
+		boolean exists = false;
+
+        /**
+         * Constructor needed to initialize model item type
+         */
+        public ExistsLooper() {
+            setSearchType(ModelItemType.ITEM_LAYER);
+        }
+        
+        /* (non-Javadoc)
+         * @see com.simplifiedlogic.nitro.util.ModelItemLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem)
+         */
+        public boolean loopAction(CallModelItem item) throws JLIException, jxthrowable {
+        	if (item instanceof CallLayer) {
+    	    	exists=true;
+    	    	return true;
+        	}
+
+        	return false;
+        }
+	}
+
+    
 }

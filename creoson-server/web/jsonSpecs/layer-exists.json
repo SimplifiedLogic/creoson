@@ -1,0 +1,77 @@
+{
+  "spec" : {
+    "function_description" : "Check whether layer(s) exists on a model",
+    "command" : "layer",
+    "function" : "exists",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Layer name",
+      "default" : "All layers are listed",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "exists",
+      "type" : "boolean",
+      "description" : "Whether the layer exists on the model"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "exists",
+      "data" : {
+        "name" : "*CSYS"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "layer",
+      "function" : "exists",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "BAKER"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "exists" : false
+      }
+    }
+  } ]
+}

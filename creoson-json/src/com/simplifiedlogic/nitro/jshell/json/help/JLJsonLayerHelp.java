@@ -114,6 +114,7 @@ public class JLJsonLayerHelp extends JLJsonCommandHelp implements JLLayerRequest
 	public List<FunctionTemplate> getHelp() {
 		List<FunctionTemplate> list = new ArrayList<FunctionTemplate>();
 		list.add(helpDelete());
+		list.add(helpExists());
 		list.add(helpList());
 		list.add(helpShow());
 		return list;
@@ -282,6 +283,49 @@ public class JLJsonLayerHelp extends JLJsonCommandHelp implements JLLayerRequest
     	ex.addInput(PARAM_MODEL, "*.asm");
     	ex.addInput(PARAM_NAME, "*CSYS");
     	ex.addInput(PARAM_SHOW, false);
+    	template.addExample(ex);
+
+    	return template;
+	}
+
+	private FunctionTemplate helpExists() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_EXISTS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Check whether layer(s) exists on a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Layer name");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All layers are listed");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_EXISTS, FunctionSpec.TYPE_BOOL);
+    	ret.setDescription("Whether the layer exists on the model");
+    	spec.addReturn(ret);
+    	
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+		ex.addOutput(OUTPUT_EXISTS, true);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "*CSYS");
+		ex.addOutput(OUTPUT_EXISTS, true);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "BAKER");
+		ex.addOutput(OUTPUT_EXISTS, false);
     	template.addExample(ex);
 
     	return template;

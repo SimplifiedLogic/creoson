@@ -37,6 +37,9 @@ public interface IJLLayer {
 	public List<LayerData> list(String filename, String layerName, String sessionId) throws JLIException;
 	public List<LayerData> list(String filename, String layerName, AbstractJLISession sess) throws JLIException;
 
+	public boolean exists(String filename, String layerName, String sessionId) throws JLIException;
+	public boolean exists(String filename, String layerName, AbstractJLISession sess) throws JLIException;
+
 	public void show(String filename, String layerName, boolean show, String sessionId) throws JLIException;
 	public void show(String filename, String layerName, boolean show, AbstractJLISession sess) throws JLIException;
 
