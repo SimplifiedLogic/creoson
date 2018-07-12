@@ -661,6 +661,8 @@ public class JLFeature implements IJLFeature {
 
 	        DeleteParamLooper2 looper = new DeleteParamLooper2();
 	        looper.setNamePattern(featName);
+	        if (featName==null)
+	        	looper.setIncludeUnnamed(true);
 	    	looper.paramName = paramName;
 
 	        looper.loop(solid);
@@ -884,6 +886,8 @@ public class JLFeature implements IJLFeature {
 	        looper.designate = designate;
 	        looper.encoded = encoded;
 	        looper.noCreate = noCreate;
+	        if (featName==null)
+	        	looper.setIncludeUnnamed(true);
 	        looper.loop(solid);
     	}
     	catch (jxthrowable e) {
@@ -918,7 +922,7 @@ public class JLFeature implements IJLFeature {
     }
     
     /**
-     * An implmentation of FeatureLooper which collects a list of feature data
+     * An implementation of FeatureLooper which collects a list of feature data
      * @author Adam Andrews
      *
      */
@@ -1034,6 +1038,8 @@ public class JLFeature implements IJLFeature {
 	    		looper.setNamePattern(featureName);
 	        looper.setStatusPattern(featureStatus);
 	        looper.setTypePattern(featureType);
+	        if (featureName==null && featureNameList==null)
+	        	looper.setIncludeUnnamed(true);
 	        looper.clip = clip;
 
 	        looper.loop(solid);
@@ -1114,6 +1120,8 @@ public class JLFeature implements IJLFeature {
 	        looper.setNamePattern(featureName);
 	        looper.setStatusPattern(featureStatus);
 	        looper.setTypePattern(featureType);
+	        if (featureName==null)
+	        	looper.setIncludeUnnamed(true);
 
 	        looper.loop(solid);
 	        
@@ -1189,7 +1197,7 @@ public class JLFeature implements IJLFeature {
      */
     private class SuppressLooper extends ModelLooper {
     	/**
-    	 * Name or pattern of the feature to resume
+    	 * Name or pattern of the feature to suppress
     	 */
     	String featureName;
     	/**
@@ -1222,6 +1230,8 @@ public class JLFeature implements IJLFeature {
 	        looper.setNamePattern(featureName);
 	        looper.setStatusPattern(featureStatus);
 	        looper.setTypePattern(featureType);
+	        if (featureName==null)
+	        	looper.setIncludeUnnamed(true);
 	        looper.clip = clip;
 
 	        looper.loop(solid);
@@ -1272,7 +1282,7 @@ public class JLFeature implements IJLFeature {
             if (!JlinkUtils.isSuppressed(feat)) {
                 if (featOps==null)
                     featOps = CallFeatureOperations.create();
-    
+
                 // accumulate the suppress operation and feature object
                 CallSuppressOperation supop = feat.createSuppressOp();
                 supop.setClip(clip);
