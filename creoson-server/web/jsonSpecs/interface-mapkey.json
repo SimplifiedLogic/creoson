@@ -3,6 +3,7 @@
     "function_description" : "Run a Mapkey script in Creo",
     "command" : "interface",
     "function" : "mapkey",
+    "notes" : [ "Make sure to remove any \"mapkey(continued)\" clauses from the script argument.  The tilde at the start of a line should occur immediately after the semicolon at the end of the previous line." ],
     "request" : [ {
       "name" : "script",
       "type" : "string",
@@ -17,7 +18,7 @@
       "command" : "interface",
       "function" : "mapkey",
       "data" : {
-        "script" : "~ Select `main_dlg_cur` `View:casc340798662`;mapkey(continued) ~ Close `main_dlg_cur` `View:casc340798662`;mapkey(continued) ~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;"
+        "script" : "~ Select `main_dlg_cur` `View:casc340798662`;~ Close `main_dlg_cur` `View:casc340798662`;~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;"
       }
     },
     "response" : {

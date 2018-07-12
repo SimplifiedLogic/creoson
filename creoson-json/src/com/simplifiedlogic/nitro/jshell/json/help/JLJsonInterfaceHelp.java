@@ -392,6 +392,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_MAPKEY);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Run a Mapkey script in Creo");
+    	spec.addFootnote("Make sure to remove any \"mapkey(continued)\" clauses from the "+PARAM_SCRIPT+" argument.  The tilde at the start of a line should occur immediately after the semicolon at the end of the previous line.");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_SCRIPT, FunctionSpec.TYPE_STRING);
@@ -402,7 +403,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionExample ex;
 
     	ex = new FunctionExample();
-    	ex.addInput(PARAM_SCRIPT, "~ Select `main_dlg_cur` `View:casc340798662`;mapkey(continued) ~ Close `main_dlg_cur` `View:casc340798662`;mapkey(continued) ~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;");
+    	ex.addInput(PARAM_SCRIPT, "~ Select `main_dlg_cur` `View:casc340798662`;~ Close `main_dlg_cur` `View:casc340798662`;~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;");
     	template.addExample(ex);
 
     	return template;
