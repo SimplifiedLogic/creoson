@@ -29,6 +29,7 @@ import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XInvalidFileName;
 import com.ptc.pfc.pfcExceptions.XStringTooLong;
 import com.ptc.pfc.pfcExceptions.XToolkitBadInputs;
+import com.ptc.pfc.pfcExceptions.XToolkitCheckoutConflict;
 import com.ptc.pfc.pfcExceptions.XToolkitCommError;
 import com.ptc.pfc.pfcExceptions.XToolkitError;
 import com.ptc.pfc.pfcExceptions.XToolkitInvalidName;
@@ -341,14 +342,27 @@ public class JlinkUtils {
      * @return A friendlier text message for the Exception.
      */
     public static String ptcError(Exception e, String msg) {
+    	// this if is here because this exception is a child of XToolkitError
+    	if (e instanceof XToolkitCheckoutConflict) { 
+    		msg = "Windchill Checkout Conflict";
+    		try {
+    			msg+=": "+((XToolkitCheckoutConflict)e).GetConflictDescription();
+    		}
+    		catch (Exception e2) {
+    			// ignore
+    		}
+    		return msg;
+     	}
         if (e instanceof XToolkitError) 
             return toolkitError((XToolkitError)e, msg);
+
         if (e instanceof XStringTooLong)
             msg = "Error: String too long";
         else if (e instanceof XUnknownModelExtension)
             msg = "Error: Unknown Model Extension";
         else if (e instanceof XInvalidFileName)
             msg = "Error: Invalid File Name";
+
         if (msg==null)
             msg = "An error occurred which PTC does not explain; please review your latest actions for problems";
         return msg;
@@ -429,7 +443,7 @@ public class JlinkUtils {
             case -46: return "Bad Dim Attach";
             case -47: return "Not Displayed";
             case -48: return "Can't Modify";
-            case -49: return "Out Conflict";
+            case -49: return "Checkout Conflict";
             case -50: return "Create View Bad Sheet";
             case -51: return "Create View Bad Model";
             case -52: return "Create View Bad Parent";
