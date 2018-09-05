@@ -256,6 +256,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionTemplate template = new FunctionTemplate(COMMAND, use3d ? FUNC_EXPORT_3DPDF : FUNC_EXPORT_PDF);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Export a model to a " + (use3d?"3D ":"") + "PDF file");
+    	spec.addFootnote("When "+PARAM_USE_DRW_SETTINGS+" is true, the Font Stroke option will be set to Stroke All Fonts, and the Color Depth option will be set to Grayscale.");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -287,6 +288,11 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Destination directory");
     	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_USE_DRW_SETTINGS, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to use special settings for exporting drawings");
+    	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
     	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);

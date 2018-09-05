@@ -21,8 +21,10 @@ package com.simplifiedlogic.nitro.jshell.creo;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcArgument.pfcArgument;
 import com.ptc.pfc.pfcDrawing.Drawing;
+import com.ptc.pfc.pfcExport.PDFColorDepth;
 import com.ptc.pfc.pfcExport.PDFExportInstructions;
 import com.ptc.pfc.pfcExport.PDFExportMode;
+import com.ptc.pfc.pfcExport.PDFFontStrokeMode;
 import com.ptc.pfc.pfcExport.PDFOption;
 import com.ptc.pfc.pfcExport.PDFOptionType;
 import com.ptc.pfc.pfcExport.PDFOptions;
@@ -51,6 +53,8 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
  * <li>The width of the image. (optional)
  * 
  * <li>The DPI of the image. (optional)
+ * 
+ * <li>A boolean flag indicating whether to use drawing settings instead of model settings. (optional)
  * </ol>
  * @author Adam Andrews
  *
@@ -71,6 +75,7 @@ public class ExportPDF implements CreoFunctionInterface {
 		Double height = (Double)args[2];
 		Double width = (Double)args[3];
 		Integer dpi = (Integer)args[4];
+		Boolean useDrawingSettings = (Boolean)args[5];
 
 		PDFExportInstructions pxi = pfcExport.PDFExportInstructions_Create();
 		
@@ -97,6 +102,19 @@ public class ExportPDF implements CreoFunctionInterface {
 			opt = pfcExport.PDFOption_Create();
 			opt.SetOptionType(PDFOptionType.PDFOPT_EXPORT_MODE);
 			opt.SetOptionValue(pfcArgument.CreateIntArgValue(PDFExportMode._PDF_3D_AS_NAMED_VIEWS));
+			opts.append(opt);
+		}
+		
+		if (useDrawingSettings!=null && useDrawingSettings.booleanValue()) {
+			System.out.println("using drawing settings");
+			opt = pfcExport.PDFOption_Create();
+			opt.SetOptionType(PDFOptionType.PDFOPT_FONT_STROKE);
+			opt.SetOptionValue(pfcArgument.CreateIntArgValue(PDFFontStrokeMode._PDF_STROKE_ALL_FONTS));
+			opts.append(opt);
+
+			opt = pfcExport.PDFOption_Create();
+			opt.SetOptionType(PDFOptionType.PDFOPT_COLOR_DEPTH);
+			opt.SetOptionValue(pfcArgument.CreateIntArgValue(PDFColorDepth._PDF_CD_GRAY));
 			opts.append(opt);
 		}
 

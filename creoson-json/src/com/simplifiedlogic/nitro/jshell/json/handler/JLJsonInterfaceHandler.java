@@ -134,12 +134,13 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         String model = checkStringParameter(input, PARAM_MODEL, false);
         String filename = checkStringParameter(input, PARAM_FILENAME, false);
         String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+        boolean useDrawingSettings = checkFlagParameter(input, PARAM_USE_DRW_SETTINGS, false, false);
 
         Double height = checkDoubleParameter(input, PARAM_HEIGHT, false);
         Double width = checkDoubleParameter(input, PARAM_WIDTH, false);
         Integer dpi = checkIntParameter(input, PARAM_DPI, false, null);
 
-        ExportResults results = intfHandler.exportPDF(model, filename, dirname, false, height, width, dpi, sessionId);
+        ExportResults results = intfHandler.exportPDF(model, filename, dirname, false, height, width, dpi, useDrawingSettings, sessionId);
         
         if (results!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
@@ -154,12 +155,13 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         String model = checkStringParameter(input, PARAM_MODEL, false);
         String filename = checkStringParameter(input, PARAM_FILENAME, false);
         String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+        boolean useDrawingSettings = checkFlagParameter(input, PARAM_USE_DRW_SETTINGS, false, false);
 
         Double height = checkDoubleParameter(input, PARAM_HEIGHT, false);
         Double width = checkDoubleParameter(input, PARAM_WIDTH, false);
         Integer dpi = checkIntParameter(input, PARAM_DPI, false, null);
 
-        ExportResults results = intfHandler.exportPDF(model, filename, dirname, true, height, width, dpi, sessionId);
+        ExportResults results = intfHandler.exportPDF(model, filename, dirname, true, height, width, dpi, useDrawingSettings, sessionId);
         
         if (results!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

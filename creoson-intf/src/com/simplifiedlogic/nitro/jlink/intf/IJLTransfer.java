@@ -64,6 +64,10 @@ public interface IJLTransfer {
     public static final String GEOM_WIREFRAME_SURFACES	= "wireframe_surfaces";
     public static final String GEOM_QUILTS		= "quilts";
     
+	public static final boolean EXPORT3D_YES = true;
+	public static final boolean EXPORT3D_NO = false;
+	public static final Boolean USE_DRAWING_SETTINGS_YES = Boolean.TRUE;
+	public static final Boolean USE_DRAWING_SETTINGS_NO = Boolean.FALSE;
 
 	public abstract ExportResults exportProgram(String model, String sessionId) throws JLIException;
 	public abstract ExportResults exportProgram(String model, AbstractJLISession sess) throws JLIException;
@@ -133,7 +137,25 @@ public interface IJLTransfer {
 	public abstract void mapkey(String script, 
 			AbstractJLISession sess) throws JLIException;
 	
-	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, String sessionId) throws JLIException;
-	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, AbstractJLISession sess) throws JLIException;
+	public ExportResults exportPDF(
+			String model, 
+			String filename, 
+			String dirname, 
+			boolean export3D, 
+			Double height, 
+			Double width, 
+			Integer dpi, 
+			Boolean useDrawingSettings, 
+			String sessionId) throws JLIException;
+	public ExportResults exportPDF(
+			String model, 
+			String filename, 
+			String dirname, 
+			boolean export3D, 
+			Double height, 
+			Double width, 
+			Integer dpi, 
+			Boolean useDrawingSettings, 
+			AbstractJLISession sess) throws JLIException;
 
 }

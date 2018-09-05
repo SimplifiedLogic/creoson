@@ -3,6 +3,7 @@
     "function_description" : "Export a model to a 3D PDF file",
     "command" : "interface",
     "function" : "export_3dpdf",
+    "notes" : [ "When use_drawing_settings is true, the Font Stroke option will be set to Stroke All Fonts, and the Color Depth option will be set to Grayscale." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -33,6 +34,11 @@
       "type" : "string",
       "description" : "Destination directory",
       "default" : "Creo's current working directory"
+    }, {
+      "name" : "use_drawing_settings",
+      "type" : "boolean",
+      "description" : "Whether to use special settings for exporting drawings",
+      "default" : "false"
     } ],
     "response" : [ {
       "name" : "dirname",

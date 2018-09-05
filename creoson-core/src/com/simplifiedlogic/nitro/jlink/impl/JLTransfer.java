@@ -1145,18 +1145,18 @@ public class JLTransfer implements IJLTransfer {
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, String sessionId) throws JLIException {
+	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
 		
-		return exportPDF(model, filename, dirname, export3D, height, width, dpi, sess);
+		return exportPDF(model, filename, dirname, export3D, height, width, dpi, useDrawingSettings, sess);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, AbstractJLISession sess)
+	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.export_pdf: " + model + (export3D?" (3D)":""), NitroConstants.DEBUG_KEY);
@@ -1206,7 +1206,8 @@ public class JLTransfer implements IJLTransfer {
 	            	filename,
 	            	height,
 	            	width,
-	            	dpi
+	            	dpi,
+	            	useDrawingSettings
 	            };
 	            String func;
 	            if (export3D)
