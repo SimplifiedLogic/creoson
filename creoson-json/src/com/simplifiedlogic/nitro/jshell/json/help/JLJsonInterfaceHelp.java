@@ -164,6 +164,8 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	spec.setFunctionDescription("Export a model to a file");
     	spec.addFootnote("The " + PARAM_GEOM_FLAGS + " option only applies to " + TYPE_DXF + ", " + TYPE_IGES + " and " + TYPE_STEP + " exports.");
     	spec.addFootnote("Setting " + PARAM_GEOM_FLAGS + " to '" + IJLTransfer.GEOM_DEFAULT + "' will cause it to check the Creo config option 'intf3d_out_default_option' for the setting");
+    	spec.addFootnote("The " + PARAM_ADVANCED + " option only applies to " + TYPE_DXF + ", " + TYPE_IGES + " and " + TYPE_STEP + " exports.");
+    	spec.addFootnote("The " + PARAM_ADVANCED + " option will only work with Creo 4 M030 or later.");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -206,6 +208,10 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     			IJLTransfer.GEOM_QUILTS,
     			IJLTransfer.GEOM_DEFAULT
         	});
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_ADVANCED, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to use the newer Creo 4 file export function.");
     	spec.addArgument(arg);
 
     	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);

@@ -13,6 +13,7 @@
 		<ant antfile="build.xml" dir="${root_dir}/creoson-intf"/>
 		<ant antfile="build.xml" dir="${root_dir}/creoson-core"/>
 		<ant antfile="build.xml" dir="${root_dir}/creofuncs"/>
+		<ant antfile="build.xml" dir="${root_dir}/creo4funcs"/>
 		<ant antfile="build.xml" dir="${root_dir}/creoson-json-const"/>
 		<ant antfile="build.xml" dir="${root_dir}/creoson-json"/>
 		<ant antfile="build-javadoc.xml" dir="${root_dir}"/>

@@ -93,14 +93,18 @@ public interface IJLTransfer {
 			String filename, Double height, Double width, Integer dpi, Integer depth, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportSTEP(String model, 
-			String filename, String dirname, String geomType, String sessionId) throws JLIException;
+			String filename, String dirname, String geomType, 
+			boolean advanced, String sessionId) throws JLIException;
 	public abstract ExportResults exportSTEP(String model, 
-			String filename, String dirname, String geomType, AbstractJLISession sess) throws JLIException;
+			String filename, String dirname, String geomType, 
+			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportIGES(String model, 
-			String filename, String dirname, String geomType, String sessionId) throws JLIException;
+			String filename, String dirname, String geomType, 
+			boolean advanced, String sessionId) throws JLIException;
 	public abstract ExportResults exportIGES(String model, 
-			String filename, String dirname, String geomType, AbstractJLISession sess) throws JLIException;
+			String filename, String dirname, String geomType, 
+			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportVRML(String model, 
 			String filename, String dirname, String sessionId) throws JLIException;
@@ -118,9 +122,11 @@ public interface IJLTransfer {
 			String filename, String dirname, AbstractJLISession sess) throws JLIException;
 	
 	public abstract ExportResults exportDXF(String model, 
-			String filename, String dirname, String geomType, String sessionId) throws JLIException;
+			String filename, String dirname, String geomType, 
+			boolean advanced, String sessionId) throws JLIException;
 	public abstract ExportResults exportDXF(String model, 
-			String filename, String dirname, String geomType, AbstractJLISession sess) throws JLIException;
+			String filename, String dirname, String geomType, 
+			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
 	public abstract String importProgram(String dirname, String filename, String model, 
 			String sessionId) throws JLIException;

@@ -52,6 +52,7 @@ public interface JLInterfaceRequestParams {
     public static final String PARAM_DEPTH    = "depth";
     public static final String PARAM_DRIVER   = "driver";
     public static final String PARAM_GEOM_FLAGS	= "geom_flags";
+    public static final String PARAM_ADVANCED	= "advanced";
 
     // export file types
     public static final String TYPE_PROPROGRAM = "Pro/PROGRAM";

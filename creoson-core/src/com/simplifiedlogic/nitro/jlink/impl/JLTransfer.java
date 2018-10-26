@@ -133,29 +133,30 @@ public class JLTransfer implements IJLTransfer {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportSTEP(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportSTEP(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, String sessionId)
+	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, boolean advanced, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportSTEP(model, filename, dirname, geomType, sess);
+        return exportSTEP(model, filename, dirname, geomType, advanced, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportSTEP(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportSTEP(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, AbstractJLISession sess)
+	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportSTEP: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
-		validateGeomType(geomType);
+		if (!advanced)
+			validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -183,37 +184,53 @@ public class JLTransfer implements IJLTransfer {
 
 	        NitroUtils.validateDirFile(dirname, filename, true);
 	        
-	        CallGeometryFlags geomFlags = CallGeometryFlags.create();
-	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_STEP, ))
-	        resolveGeomFlags(session, geomFlags, geomType);
-
-	        AssemblyConfiguration assemConfig = null;
-	        if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_SINGLE_FILE))
-	            assemConfig = AssemblyConfiguration.EXPORT_ASM_SINGLE_FILE;
-	        else if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_FLAT_FILE))
-	            assemConfig = AssemblyConfiguration.EXPORT_ASM_FLAT_FILE;
-	        else if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS))
-	            assemConfig = AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS;
-	        else if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_MULTI_FILES))
-	            assemConfig = AssemblyConfiguration.EXPORT_ASM_MULTI_FILES;
-	        if (assemConfig==null)
-	            throw new JLIException("Export configuration not supported");
-	        
-	        CallExportInstructions pxi = CallExportInstructions.createSTEP3DExport(assemConfig, geomFlags);
-
-	        if (dirname != null && !dirname.equals(olddir)) {
-	            JlinkUtils.changeDirectory(session, dirname);
-	            try {
-	            	m.export(filename, pxi);
-	            }
-	            finally {
-	            	JlinkUtils.changeDirectory(session, olddir);
-	            }
+	        if (!advanced) {
+		        CallGeometryFlags geomFlags = CallGeometryFlags.create();
+		        //if (session.IsGeometryRepSupported(ExportType.EXPORT_STEP, ))
+		        resolveGeomFlags(session, geomFlags, geomType);
+	
+		        AssemblyConfiguration assemConfig = null;
+		        if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_SINGLE_FILE))
+		            assemConfig = AssemblyConfiguration.EXPORT_ASM_SINGLE_FILE;
+		        else if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_FLAT_FILE))
+		            assemConfig = AssemblyConfiguration.EXPORT_ASM_FLAT_FILE;
+		        else if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS))
+		            assemConfig = AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS;
+		        else if (session.isConfigurationSupported(ExportType.EXPORT_STEP, AssemblyConfiguration.EXPORT_ASM_MULTI_FILES))
+		            assemConfig = AssemblyConfiguration.EXPORT_ASM_MULTI_FILES;
+		        if (assemConfig==null)
+		            throw new JLIException("Export configuration not supported");
+		        
+		        CallExportInstructions pxi = CallExportInstructions.createSTEP3DExport(assemConfig, geomFlags);
+	
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	m.export(filename, pxi);
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+		        	m.export(filename, pxi);
+		        }
 	        }
 	        else {
-	        	m.export(filename, pxi);
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	exportAdvanced(session, m, filename, ExportType.EXPORT_STEP, "export_profiles_step");
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+	            	exportAdvanced(session, m, filename, ExportType.EXPORT_STEP, "export_profiles_step");
+		        }
 	        }
-	        
+
 	        ExportResults result = new ExportResults();
 	        result.setDirname(dirname);
 	        result.setFilename(filename);
@@ -231,29 +248,30 @@ public class JLTransfer implements IJLTransfer {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportIGES(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportIGES(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, String sessionId)
+	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, boolean advanced, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportIGES(model, filename, dirname, geomType, sess);
+        return exportIGES(model, filename, dirname, geomType, advanced, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportIGES(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportIGES(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, AbstractJLISession sess)
+	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportIGES: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
-		validateGeomType(geomType);
+		if (!advanced)
+			validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -281,37 +299,53 @@ public class JLTransfer implements IJLTransfer {
 
 	        NitroUtils.validateDirFile(dirname, filename, true);
 	        
-	        CallGeometryFlags geomFlags = CallGeometryFlags.create();
-	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_IGES, ))
-	        resolveGeomFlags(session, geomFlags, geomType);
-
-	        AssemblyConfiguration assemConfig = null;
-//	        if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_FLAT_FILE))
-	                assemConfig = AssemblyConfiguration.EXPORT_ASM_FLAT_FILE;
-//	        else 
-//	            if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS))
-//	                assemConfig = AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS;
-//	        else 
-//	            if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_MULTI_FILES))
-//	                assemConfig = AssemblyConfiguration.EXPORT_ASM_MULTI_FILES;
-	        if (assemConfig==null)
-	            throw new JLIException("Export configuration not supported");
-	        
-	        CallExportInstructions pxi = CallExportInstructions.createIGES3DExport(assemConfig, geomFlags);
-
-	        if (dirname != null && !dirname.equals(olddir)) {
-	            JlinkUtils.changeDirectory(session, dirname);
-	            try {
-	            	m.export(filename, pxi);
-	            }
-	            finally {
-	            	JlinkUtils.changeDirectory(session, olddir);
-	            }
-	        }
+	        if (!advanced) {
+		        CallGeometryFlags geomFlags = CallGeometryFlags.create();
+		        //if (session.IsGeometryRepSupported(ExportType.EXPORT_IGES, ))
+		        resolveGeomFlags(session, geomFlags, geomType);
+	
+		        AssemblyConfiguration assemConfig = null;
+	//	        if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_FLAT_FILE))
+		                assemConfig = AssemblyConfiguration.EXPORT_ASM_FLAT_FILE;
+	//	        else 
+	//	            if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS))
+	//	                assemConfig = AssemblyConfiguration.EXPORT_ASM_ASSEMBLY_PARTS;
+	//	        else 
+	//	            if (session.IsConfigurationSupported(ExportType.EXPORT_IGES, AssemblyConfiguration.EXPORT_ASM_MULTI_FILES))
+	//	                assemConfig = AssemblyConfiguration.EXPORT_ASM_MULTI_FILES;
+		        if (assemConfig==null)
+		            throw new JLIException("Export configuration not supported");
+		        
+		        CallExportInstructions pxi = CallExportInstructions.createIGES3DExport(assemConfig, geomFlags);
+	
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	m.export(filename, pxi);
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+		        	m.export(filename, pxi);
+		        }
+	        }	        
 	        else {
-	        	m.export(filename, pxi);
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	exportAdvanced(session, m, filename, ExportType.EXPORT_IGES_3D, "export_profiles_iges");
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+	            	exportAdvanced(session, m, filename, ExportType.EXPORT_IGES_3D, "export_profiles_iges");
+		        }
 	        }
-	        
+
 	        ExportResults result = new ExportResults();
 	        result.setDirname(dirname);
 	        result.setFilename(filename);
@@ -376,7 +410,7 @@ public class JLTransfer implements IJLTransfer {
 	        dirname = JlinkUtils.resolveRelativePath(session, dirname);
 
 	        NitroUtils.validateDirFile(dirname, filename, true);
-	        
+
 	        CallExportInstructions pxi = CallExportInstructions.createVRMLExport(dirname);
 
 	        if (dirname != null && !dirname.equals(olddir)) {
@@ -594,29 +628,30 @@ public class JLTransfer implements IJLTransfer {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, String sessionId)
+	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, boolean advanced, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportDXF(model, filename, dirname, geomType, sess);
+        return exportDXF(model, filename, dirname, geomType, advanced, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, AbstractJLISession sess)
+	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportDXF: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
-		validateGeomType(geomType);
+		if (!advanced)
+			validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -649,25 +684,41 @@ public class JLTransfer implements IJLTransfer {
 
 	        NitroUtils.validateDirFile(dirname, filename, true);
 	        
-	        CallGeometryFlags geomFlags = CallGeometryFlags.create();
-	        //if (session.IsGeometryRepSupported(ExportType.EXPORT_DXF, ))
-	        resolveGeomFlags(session, geomFlags, geomType);
-
-	        CallExportInstructions pxi = CallExportInstructions.createDXFExport();
-
-	        if (dirname != null && !dirname.equals(olddir)) {
-	            JlinkUtils.changeDirectory(session, dirname);
-	            try {
-	            	m.export(filename, pxi);
-	            }
-	            finally {
-	            	JlinkUtils.changeDirectory(session, olddir);
-	            }
+	        if (!advanced) {
+		        CallGeometryFlags geomFlags = CallGeometryFlags.create();
+		        //if (session.IsGeometryRepSupported(ExportType.EXPORT_DXF, ))
+		        resolveGeomFlags(session, geomFlags, geomType);
+	
+		        CallExportInstructions pxi = CallExportInstructions.createDXFExport();
+	
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	m.export(filename, pxi);
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+		        	m.export(filename, pxi);
+		        }
 	        }
 	        else {
-	        	m.export(filename, pxi);
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	exportAdvanced(session, m, filename, ExportType.EXPORT_DXF, "export_profiles_dxf");
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+	            	exportAdvanced(session, m, filename, ExportType.EXPORT_DXF, "export_profiles_dxf");
+		        }
 	        }
-	        
+
 	        ExportResults result = new ExportResults();
 	        result.setDirname(dirname);
 	        result.setFilename(filename);
@@ -1355,6 +1406,22 @@ public class JLTransfer implements IJLTransfer {
         	geomFlags.setAsWireframe(true);
         	geomFlags.setAsSurfaces(true);
         }
+    }
+
+    public void exportAdvanced(CallSession session, CallModel model, String filename, ExportType exportType, String configOption) throws JLIException,jxthrowable {
+    	String prof = session.getConfigOption(configOption);
+//    	if (prof==null || prof.length()==0) {
+//    		// error?
+//    	}
+        Object[] inputs = new Object[] {
+            	model,
+            	filename,
+            	exportType,
+            	prof
+            };
+        String func="com.simplifiedlogic.nitro.jshell.creo.ExportGeometry";
+        
+    	JlinkUtils.callCreoFunction(func, inputs);
     }
 
 }
