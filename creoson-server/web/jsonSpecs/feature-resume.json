@@ -13,9 +13,13 @@
     }, {
       "name" : "name",
       "type" : "string",
-      "description" : "Feature name",
-      "default" : "All feature names",
+      "description" : "Feature name; only used if names is not given",
       "wildcards_allowed" : true
+    }, {
+      "name" : "names",
+      "type" : "array:string",
+      "description" : "List of feature names",
+      "default" : "The name parameter is used; if both are empty, then all features may be resumed"
     }, {
       "name" : "status",
       "type" : "string",
@@ -107,6 +111,36 @@
       "data" : {
         "file" : "box.prt",
         "type" : "DATUM_*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "resume",
+      "data" : {
+        "file" : "abc123.asm",
+        "name" : "bolt.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "resume",
+      "data" : {
+        "file" : "abc123.asm",
+        "names" : [ "bolt.prt", "nut.prt" ]
       }
     },
     "response" : {

@@ -294,23 +294,23 @@ public class JLFeature implements IJLFeature {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#resume(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#resume(java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
-	public void resume(String filename, String featureName,
+	public void resume(String filename, String featureName, List<String> featureNames, 
 			String featureStatus, String featureType, boolean withChildren,
 			String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        resume(filename, featureName, featureStatus, featureType, withChildren, sess);
+        resume(filename, featureName, featureNames, featureStatus, featureType, withChildren, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#resume(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#resume(java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public void resume(String filename, String featureName,
+	public void resume(String filename, String featureName, List<String> featureNames, 
 			String featureStatus, String featureType, boolean withChildren,
 			AbstractJLISession sess) throws JLIException {
 
@@ -336,7 +336,9 @@ public class JLFeature implements IJLFeature {
 	        	looper.setNamePattern(filename);
 		        looper.setDefaultToActive(true);
 		        looper.setSession(session);
-		    	if (featureName==null)
+		        if (featureNames!=null)
+		    		looper.featureNameList = featureNames;
+		    	else if (featureName==null)
 		    		looper.featureName = null;
 		    	else
 		    		looper.featureName = featureName;
@@ -400,23 +402,23 @@ public class JLFeature implements IJLFeature {
     }
     
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#suppress(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, boolean, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#suppress(java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, boolean, java.lang.String)
 	 */
 	@Override
-	public void suppress(String filename, String featureName,
+	public void suppress(String filename, String featureName, List<String> featureNames, 
 			String featureStatus, String featureType, boolean clip,
 			boolean withChildren, String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        suppress(filename, featureName, featureStatus, featureType, clip, withChildren, sess);
+        suppress(filename, featureName, featureNames, featureStatus, featureType, clip, withChildren, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#suppress(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#suppress(java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public void suppress(String filename, String featureName,
+	public void suppress(String filename, String featureName, List<String> featureNames, 
 			String featureStatus, String featureType, boolean clip,
 			boolean withChildren, AbstractJLISession sess) throws JLIException {
 
@@ -442,7 +444,9 @@ public class JLFeature implements IJLFeature {
 	        	looper.setNamePattern(filename);
 		        looper.setDefaultToActive(true);
 		        looper.setSession(session);
-		    	if (featureName==null)
+		        if (featureNames!=null)
+		    		looper.featureNameList = featureNames;
+		    	else if (featureName==null)
 		    		looper.featureName = null;
 		    	else
 		    		looper.featureName = featureName;
@@ -1095,6 +1099,10 @@ public class JLFeature implements IJLFeature {
     	 */
     	String featureName;
     	/**
+    	 * List of feature names to resume
+    	 */
+    	List<String> featureNameList;
+    	/**
     	 * Feature status filter
     	 */
     	String featureStatus;
@@ -1117,7 +1125,12 @@ public class JLFeature implements IJLFeature {
 			CallSolid solid = (CallSolid)m;
 			// call a sub-looper to accumulate resume operations
 	        ResumeLooper2 looper = new ResumeLooper2();
-	        looper.setNamePattern(featureName);
+	        if (featureNameList!=null)
+	    		looper.setNameList(featureNameList);
+	    	else if (featureName==null)
+	    		looper.setNamePattern(null);
+	    	else 
+	    		looper.setNamePattern(featureName);
 	        looper.setStatusPattern(featureStatus);
 	        looper.setTypePattern(featureType);
 	        if (featureName==null)
@@ -1201,6 +1214,10 @@ public class JLFeature implements IJLFeature {
     	 */
     	String featureName;
     	/**
+    	 * List of feature names to suppress
+    	 */
+    	List<String> featureNameList;
+    	/**
     	 * Feature status filter
     	 */
     	String featureStatus;
@@ -1209,7 +1226,7 @@ public class JLFeature implements IJLFeature {
     	 */
     	String featureType;
     	/**
-    	 * Whether to also resume children of the features
+    	 * Whether to also suppress children of the features
     	 */
     	boolean withChildren;
         /**
@@ -1227,7 +1244,12 @@ public class JLFeature implements IJLFeature {
 			CallSolid solid = (CallSolid)m;
 			// call a sub-looper to accumulate suppress operations
 	        SuppressLooper2 looper = new SuppressLooper2();
-	        looper.setNamePattern(featureName);
+	        if (featureNameList!=null)
+	    		looper.setNameList(featureNameList);
+	    	else if (featureName==null)
+	    		looper.setNamePattern(null);
+	    	else 
+	    		looper.setNamePattern(featureName);
 	        looper.setStatusPattern(featureStatus);
 	        looper.setTypePattern(featureType);
 	        if (featureName==null)

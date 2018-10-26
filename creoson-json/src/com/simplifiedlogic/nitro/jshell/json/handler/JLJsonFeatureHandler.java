@@ -150,11 +150,16 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 		
         String modelname = checkStringParameter(input, PARAM_MODEL, false);
         String featureName = checkStringParameter(input, PARAM_NAME, false);
+        List<String> featureNames = null;
+        Object namesObj = checkParameter(input, PARAM_NAMES, false);
+        if (namesObj!=null) {
+        	featureNames = getStringListValue(namesObj);
+        }
         String statusPattern = checkStringParameter(input, PARAM_STATUS, false);
         String typePattern = checkStringParameter(input, PARAM_TYPE, false);
         boolean withChildren = checkFlagParameter(input, PARAM_WCHILDREN, false, true);
 
-        featHandler.resume(modelname, featureName, statusPattern, typePattern, withChildren, sessionId);
+        featHandler.resume(modelname, featureName, featureNames, statusPattern, typePattern, withChildren, sessionId);
 
         return null;
 	}
@@ -163,12 +168,17 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 		
         String modelname = checkStringParameter(input, PARAM_MODEL, false);
         String featureName = checkStringParameter(input, PARAM_NAME, false);
+        List<String> featureNames = null;
+        Object namesObj = checkParameter(input, PARAM_NAMES, false);
+        if (namesObj!=null) {
+        	featureNames = getStringListValue(namesObj);
+        }
         String statusPattern = checkStringParameter(input, PARAM_STATUS, false);
         String typePattern = checkStringParameter(input, PARAM_TYPE, false);
         boolean clip = checkFlagParameter(input, PARAM_CLIP, false, false);
         boolean withChildren = checkFlagParameter(input, PARAM_WCHILDREN, false, true);
 
-        featHandler.suppress(modelname, featureName, statusPattern, typePattern, clip, withChildren, sessionId);
+        featHandler.suppress(modelname, featureName, featureNames, statusPattern, typePattern, clip, withChildren, sessionId);
 
         return null;
 	}

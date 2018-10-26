@@ -459,9 +459,14 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Feature name");
+    	arg.setDescription("Feature name; only used if " + PARAM_NAMES + " is not given");
     	arg.setWildcards(true);
-    	arg.setDefaultValue("All feature names");
+//    	arg.setDefaultValue("The " + PARAM_NAMES + " parameter is used; if both are empty, then all features may be resumed");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAMES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("List of feature names");
+    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used; if both are empty, then all features may be resumed");
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_STATUS, FunctionSpec.TYPE_STRING);
@@ -511,6 +516,16 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	ex.addInput(PARAM_TYPE, "DATUM_*");
     	template.addExample(ex);
 
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "abc123.asm");
+    	ex.addInput(PARAM_NAME, "bolt.prt");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "abc123.asm");
+    	ex.addInput(PARAM_NAMES, new String[] {"bolt.prt", "nut.prt"});
+    	template.addExample(ex);
+
         return template;
     }
     
@@ -528,9 +543,14 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Feature name");
+    	arg.setDescription("Feature name; only used if " + PARAM_NAMES + " is not given");
     	arg.setWildcards(true);
-    	arg.setDefaultValue("All feature names");
+//    	arg.setDefaultValue("The " + PARAM_NAMES + " parameter is used; if both are empty, then all features may be suppressed");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAMES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("List of feature names");
+    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used; if both are empty, then all features may be suppressed");
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_STATUS, FunctionSpec.TYPE_STRING);
@@ -584,6 +604,16 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_TYPE, "DATUM_*");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "abc123.asm");
+    	ex.addInput(PARAM_NAME, "bolt.prt");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "abc123.asm");
+    	ex.addInput(PARAM_NAMES, new String[] {"bolt.prt", "nut.prt"});
     	template.addExample(ex);
 
         return template;
