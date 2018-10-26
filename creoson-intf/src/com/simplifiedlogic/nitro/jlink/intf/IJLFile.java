@@ -91,6 +91,7 @@ public interface IJLFile {
     		String refModel,
     		boolean walkChildren,
     		boolean assembleToRoot,
+    		boolean suppress,
             String sessionId) throws JLIException;
     
     /** @deprecated - Use assemble(AssembleInstruction, sess) instead */
@@ -106,6 +107,7 @@ public interface IJLFile {
     		String refModel,
     		boolean walkChildren,
     		boolean assembleToRoot,
+    		boolean suppress,
             AbstractJLISession sess) throws JLIException;
     
 	public abstract void regenerate(String filename, List<String> filenames, 

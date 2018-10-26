@@ -948,6 +948,10 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	arg.setDescription("Whether to always assemble to the root assembly, or assemble to the subassembly containing the reference path/model");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_SUPPRESS, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to suppress the components immediately after assembling them");
+    	spec.addArgument(arg);
+
     	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory name of component");
     	spec.addReturn(ret);

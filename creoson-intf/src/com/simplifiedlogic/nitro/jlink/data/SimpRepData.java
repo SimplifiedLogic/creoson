@@ -91,6 +91,16 @@ public class SimpRepData {
 			return false;
 		}
 	}
+	
+	/**
+	 * Returns the number of items (component paths) in the simplified rep.
+	 * @return The number of items (component paths) in the simplified rep
+	 */
+	public int size() {
+		if (items==null)
+			return 0;
+		return items.size();
+	}
 
 	/**
 	 * @return Name of the simplified rep

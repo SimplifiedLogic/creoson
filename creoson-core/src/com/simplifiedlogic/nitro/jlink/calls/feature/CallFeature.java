@@ -22,6 +22,7 @@ import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcComponentFeat.ComponentFeat;
 import com.ptc.pfc.pfcFeature.DeleteOperation;
 import com.ptc.pfc.pfcFeature.Feature;
+import com.ptc.pfc.pfcFeature.FeaturePattern;
 import com.ptc.pfc.pfcFeature.Features;
 import com.ptc.pfc.pfcFeature.ResumeOperation;
 import com.ptc.pfc.pfcFeature.SuppressOperation;
@@ -30,7 +31,6 @@ import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ModelItems;
 import com.ptc.pfc.pfcModelItem.Parameter;
 import com.ptc.pfc.pfcModelItem.Parameters;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.componentfeat.CallComponentFeat;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItems;
@@ -39,6 +39,7 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameterOwner;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameters;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcFeature.Feature
@@ -147,6 +148,14 @@ public class CallFeature extends CallModelItem implements CallParameterOwner {
 		if (param==null)
 			return null;
 		return new CallParameter(param);
+	}
+
+	public CallFeaturePattern getPattern() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Feature,GetPattern", 0, NitroConstants.DEBUG_JLINK_KEY);
+		FeaturePattern pat = getFeature().GetPattern();
+		if (pat==null)
+			return null;
+		return new CallFeaturePattern(pat);
 	}
 
 	public Feature getFeature() {

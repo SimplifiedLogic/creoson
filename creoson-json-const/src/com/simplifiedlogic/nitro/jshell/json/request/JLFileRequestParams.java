@@ -99,6 +99,7 @@ public interface JLFileRequestParams {
     public static final String PARAM_REF_MODEL			= "ref_model";
     public static final String PARAM_WALK_CHILDREN		= "walk_children";
     public static final String PARAM_ASSEMBLE_TO_ROOT	= "assemble_to_root";
+    public static final String PARAM_SUPPRESS	= "suppress";
 
     // point/matrix/transform params
 	public static final String PARAM_X			= "x";

@@ -39,6 +39,7 @@ public class AssembleInstructions {
 	private String refModel;
 	private boolean walkChildren;
 	private boolean assembleToRoot;
+	private boolean suppress;
 	
 	public String getDirname() {
 		return dirname;
@@ -105,6 +106,12 @@ public class AssembleInstructions {
 	}
 	public void setAssembleToRoot(boolean assembleToRoot) {
 		this.assembleToRoot = assembleToRoot;
+	}
+	public boolean isSuppress() {
+		return suppress;
+	}
+	public void setSuppress(boolean suppress) {
+		this.suppress = suppress;
 	}
 	
 }

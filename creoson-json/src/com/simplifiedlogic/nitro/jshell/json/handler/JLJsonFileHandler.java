@@ -442,7 +442,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         boolean packageAssembly = checkFlagParameter(input, PARAM_PACKAGE_ASSEMBLY, false, false);
         String refModel = checkStringParameter(input, PARAM_REF_MODEL, false);
         boolean walkChildren = checkFlagParameter(input, PARAM_WALK_CHILDREN, false, false);
-        boolean assembleToRoot  = checkFlagParameter(input, PARAM_ASSEMBLE_TO_ROOT, false, false);
+        boolean assembleToRoot = checkFlagParameter(input, PARAM_ASSEMBLE_TO_ROOT, false, false);
+        boolean suppress = checkFlagParameter(input, PARAM_SUPPRESS, false, false);
 
         AssembleInstructions instr = new AssembleInstructions();
 
@@ -457,6 +458,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         instr.setRefModel(refModel);
         instr.setWalkChildren(walkChildren);
         instr.setAssembleToRoot(assembleToRoot);
+        instr.setSuppress(suppress);
 
         FileAssembleResults result = fileHandler.assemble(instr, sessionId);
         

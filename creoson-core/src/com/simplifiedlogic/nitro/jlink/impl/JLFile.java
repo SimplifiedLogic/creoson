@@ -46,7 +46,9 @@ import com.simplifiedlogic.nitro.jlink.calls.componentfeat.CallComponentFeat;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyTableRow;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyTableRows;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatures;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallSuppressOperation;
 import com.simplifiedlogic.nitro.jlink.calls.geometry.CallCoordSystem;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
@@ -1904,6 +1906,7 @@ public class JLFile implements IJLFile {
     			instro.getRefModel(),
     			instro.isWalkChildren(),
     			instro.isAssembleToRoot(),
+    			instro.isSuppress(),
     			sessionId);
     }
     
@@ -1923,6 +1926,7 @@ public class JLFile implements IJLFile {
     			instro.getRefModel(),
     			instro.isWalkChildren(),
     			instro.isAssembleToRoot(),
+    			instro.isSuppress(),
     			sess);
     }
     
@@ -1941,11 +1945,12 @@ public class JLFile implements IJLFile {
     		String refModel,
     		boolean walkChildren,
     		boolean assembleToRoot,
+    		boolean suppress,
             String sessionId) throws JLIException {
 
         JLISession sess = JLISession.getSession(sessionId);
         
-        return assemble(dirname, filename, genericName, intoAsm, componentPath, transData, constraints, packageAssembly, refModel, walkChildren, assembleToRoot, sess);
+        return assemble(dirname, filename, genericName, intoAsm, componentPath, transData, constraints, packageAssembly, refModel, walkChildren, assembleToRoot, suppress, sess);
     }
     
     /* (non-Javadoc)
@@ -1963,6 +1968,7 @@ public class JLFile implements IJLFile {
     		String refModel,
     		boolean walkChildren,
     		boolean assembleToRoot,
+    		boolean suppress,
             AbstractJLISession sess) throws JLIException {
     	
 		DebugLogging.sendDebugMessage("file.assemble: " + filename, NitroConstants.DEBUG_KEY);
@@ -2047,128 +2053,151 @@ public class JLFile implements IJLFile {
 	        CallModelDescriptor descr = m.getDescr();
 	        out.setFileRevision(descr.getFileVersion());
 
-	        if (((CallSolid)m).getIsSkeleton()) {
-	        	try {
-	        		assembly.assembleSkeleton((CallSolid)m);
-	        	}
-	        	catch (jxthrowable e) {
-	        		throw new JLIException("Pro/E does not allow you to assemble more than one skeleton into an assembly");
-	        	}
+	        // this is really only needed when suppress=true
+	        // required for WF5 and higher
+	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session);
 
-	        	CallSolid skel = assembly.getSkeleton();
-	            if (skel!=null) {
-	            	CallFeatures featList = assembly.listFeaturesByType(true, FeatureType.FEATTYPE_COMPONENT);
-	                if (featList!=null) {
-	                    int len = featList.getarraysize();
-	                    CallComponentFeat compFeat;
-	                    for (int i=0; i<len; i++) {
-	                        compFeat = (CallComponentFeat)featList.get(i);
-	                        String fname = compFeat.getModelDescr().getFileName();
-	                        if (fname.equalsIgnoreCase(filename)) {
-	        			        out.setFeatureId(compFeat.getId());
-	                        	break;
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	        else {
-	            List<WalkResult> subpaths = new Vector<WalkResult>();
-	            if (walkChildren || (componentPath==null && refModel!=null)) {
-	                if (subComponent==assembly)
-		                subpaths.add(new WalkResult(compPath, assembly, assembly));
-	                else if (subComponentPattern!=null && subComponentPattern.matcher(assemblyName.toUpperCase()).matches()) //assemblyName.matches(subComponentPattern))
-		                subpaths.add(new WalkResult(compPath, assembly, assembly));
-	                	
-	                ArrayList<Integer> curPath = new ArrayList<Integer>();
-	                ArrayList<String> assembliesProcessed = new ArrayList<String>();
-	                walkAssemble(session, assembly, assembly, "root", curPath, 0, (subComponent!=null ? subComponent.getFileName() : null), subComponentPattern, subpaths,
-	                        assembliesProcessed, !walkChildren, assembleToRoot);
-	                if (subpaths.size()==0) {
-	                    throw new JLIException("File '" + subComponent.getFileName() + "' does not exist in assembly");
-	                }
-	            }
-	            else {
-	            	if (subComponent!=null)
-	            		subpaths.add(new WalkResult(compPath, assembly, subComponent));
-	            }
-	            
-		        // assemble component
-		        CallTransform3D transform = CallTransform3D.create(JLMatrixMaker.export(initMatrix));
-
-		        // add constraints
-		        int len = 0;
-		        if (constraints!=null)
-		        	len = constraints.size();
-		        WalkResult res;
-		        if (len>0) {
-		        	int cntAssembled = 0;
-	                JLConstraint csys_con = getCsysConstraint(constraints);
-	                String asmrefCsys=null;
-	                if (csys_con!=null && csys_con.asmref!=null)
-	                	asmrefCsys = csys_con.asmref;
-		            int num_comps = subpaths.size();
-		            for (int i=0; i<num_comps; i++) {
-		                res = (WalkResult)subpaths.get(i);
-		                compPath = res.compPath;
-		                assembly = assembleToRoot ? (CallAssembly)assemblyModel : res.parent;
-		                subComponent = res.item;
-		                if (asmrefCsys!=null && asmrefCsys.indexOf('*')>=0) {
-		                    List<JLConstraint> other_con = getNonCsysConstraint(constraints);
-		                    //AssembleLooper looper = new AssembleLooper(assembly, subComponent, m, compPath, transform, csys_con, other_con);
-		                    AssembleLooper2 looper = new AssembleLooper2();
-		                    looper.setNamePattern(asmrefCsys);
-		                    
-		                    looper.loop(subComponent);
-		                    
-		                    if (looper.items!=null && looper.items.size()>0) {
-		                        Collections.sort(looper.items);
-		                        
-		                        int num_items = looper.items.size();
-		                        ModelItemEntry entry;
-		                        for (int k=0; k<num_items; k++) {
-		                            entry = (ModelItemEntry)looper.items.get(k);
-		                            assembleItem(assembly, subComponent, m, compPath, transform, csys_con, other_con, entry.item);
+	        try {
+		        if (((CallSolid)m).getIsSkeleton()) {
+		        	try {
+		        		assembly.assembleSkeleton((CallSolid)m);
+		        	}
+		        	catch (jxthrowable e) {
+		        		throw new JLIException("Pro/E does not allow you to assemble more than one skeleton into an assembly");
+		        	}
+	
+		        	CallSolid skel = assembly.getSkeleton();
+		            if (skel!=null) {
+		            	CallFeatures featList = assembly.listFeaturesByType(true, FeatureType.FEATTYPE_COMPONENT);
+		                if (featList!=null) {
+		                    int len = featList.getarraysize();
+		                    CallComponentFeat compFeat;
+		                    for (int i=0; i<len; i++) {
+		                        compFeat = (CallComponentFeat)featList.get(i);
+		                        String fname = compFeat.getModelDescr().getFileName();
+		                        if (fname.equalsIgnoreCase(filename)) {
+		        			        out.setFeatureId(compFeat.getId());
+		    	                    if (suppress) {
+		    	                    	suppressNewFeature(session, assembly, compFeat);
+		    	                    }
+		                        	break;
 		                        }
-		                        looper.items.clear();
-		                        cntAssembled += num_items;
 		                    }
 		                }
-		                else {
-		                	CallComponentConstraints constrs = null;
-		                	try {
-		                		constrs = makeConstraints(subComponent, m, compPath, constraints);
-		                	}
-		                	catch (JLIException e) {
-		                		// constraints are ANDed together, so if one of them fails then the whole set of constraints does
-		                		// if this fails, then fall through and let the check at the end throw an error
-		                		continue;
-		                	}
-		    
-		                    CallComponentFeat newfeat = (CallComponentFeat)assembly.assembleComponent((CallSolid)m, transform);
-		                    
-		                    if (constrs!=null)
-		                        newfeat.setConstraints(constrs, null);
-		                    cntAssembled++;
+		            }
+		        }
+		        else {
+		            List<WalkResult> subpaths = new Vector<WalkResult>();
+		            if (walkChildren || (componentPath==null && refModel!=null)) {
+		                if (subComponent==assembly)
+			                subpaths.add(new WalkResult(compPath, assembly, assembly));
+		                else if (subComponentPattern!=null && subComponentPattern.matcher(assemblyName.toUpperCase()).matches()) //assemblyName.matches(subComponentPattern))
+			                subpaths.add(new WalkResult(compPath, assembly, assembly));
+		                	
+		                ArrayList<Integer> curPath = new ArrayList<Integer>();
+		                ArrayList<String> assembliesProcessed = new ArrayList<String>();
+		                walkAssemble(session, assembly, assembly, "root", curPath, 0, (subComponent!=null ? subComponent.getFileName() : null), subComponentPattern, subpaths,
+		                        assembliesProcessed, !walkChildren, assembleToRoot);
+		                if (subpaths.size()==0) {
+		                    throw new JLIException("File '" + subComponent.getFileName() + "' does not exist in assembly");
 		                }
 		            }
-
-	                if (asmrefCsys!=null && cntAssembled==0)
-	                    throw new JLIException("No Coord Systems matching '" + asmrefCsys + "' were found in the assembly component");
-		        }
-		        else if (!packageAssembly) {
-		            try {
-		            	CallComponentFeat newfeat = (CallComponentFeat)assembly.assembleComponent((CallSolid)m, transform);
-		                int cid = newfeat.getId();
-		                out.setFeatureId(cid);
-
-		                newfeat.redefineThroughUI();
+		            else {
+		            	if (subComponent!=null)
+		            		subpaths.add(new WalkResult(compPath, assembly, subComponent));
 		            }
-		            catch (XToolkitUserAbort e) {
-		                // ignore user aborts
-		            }
+		            
+			        // assemble component
+			        CallTransform3D transform = CallTransform3D.create(JLMatrixMaker.export(initMatrix));
+	
+			        // add constraints
+			        int len = 0;
+			        if (constraints!=null)
+			        	len = constraints.size();
+			        WalkResult res;
+			        if (len>0) {
+			        	int cntAssembled = 0;
+		                JLConstraint csys_con = getCsysConstraint(constraints);
+		                String asmrefCsys=null;
+		                if (csys_con!=null && csys_con.asmref!=null)
+		                	asmrefCsys = csys_con.asmref;
+			            int num_comps = subpaths.size();
+			            for (int i=0; i<num_comps; i++) {
+			                res = (WalkResult)subpaths.get(i);
+			                compPath = res.compPath;
+			                assembly = assembleToRoot ? (CallAssembly)assemblyModel : res.parent;
+			                subComponent = res.item;
+			                if (asmrefCsys!=null && asmrefCsys.indexOf('*')>=0) {
+			                    List<JLConstraint> other_con = getNonCsysConstraint(constraints);
+			                    //AssembleLooper looper = new AssembleLooper(assembly, subComponent, m, compPath, transform, csys_con, other_con);
+			                    AssembleLooper2 looper = new AssembleLooper2();
+			                    looper.setNamePattern(asmrefCsys);
+			                    
+			                    looper.loop(subComponent);
+			                    
+			                    if (looper.items!=null && looper.items.size()>0) {
+			                        Collections.sort(looper.items);
+			                        
+			                        int num_items = looper.items.size();
+			                        ModelItemEntry entry;
+			                        for (int k=0; k<num_items; k++) {
+			                            entry = (ModelItemEntry)looper.items.get(k);
+			                            assembleItem(session, assembly, subComponent, m, compPath, transform, csys_con, other_con, entry.item, suppress);
+			                        }
+			                        looper.items.clear();
+			                        cntAssembled += num_items;
+			                    }
+			                }
+			                else {
+			                	CallComponentConstraints constrs = null;
+			                	try {
+			                		constrs = makeConstraints(subComponent, m, compPath, constraints);
+			                	}
+			                	catch (JLIException e) {
+			                		// constraints are ANDed together, so if one of them fails then the whole set of constraints does
+			                		// if this fails, then fall through and let the check at the end throw an error
+			                		continue;
+			                	}
+			    
+			                    CallComponentFeat newfeat = (CallComponentFeat)assembly.assembleComponent((CallSolid)m, transform);
+			                    
+			                    if (constrs!=null)
+			                        newfeat.setConstraints(constrs, null);
+	
+			                    if (suppress) {
+			                    	suppressNewFeature(session, assembly, newfeat);
+			                    }
+	
+			                    cntAssembled++;
+			                }
+			            }
+	
+		                if (asmrefCsys!=null && cntAssembled==0)
+		                    throw new JLIException("No Coord Systems matching '" + asmrefCsys + "' were found in the assembly component");
+			        }
+			        else if (!packageAssembly) {
+			            try {
+			            	CallComponentFeat newfeat = (CallComponentFeat)assembly.assembleComponent((CallSolid)m, transform);
+			                int cid = newfeat.getId();
+			                out.setFeatureId(cid);
+	
+			                newfeat.redefineThroughUI();
+	
+		                    if (suppress) {
+		                    	suppressNewFeature(session, assembly, newfeat);
+		                    }
+	
+			            }
+			            catch (XToolkitUserAbort e) {
+			                // ignore user aborts
+			            }
+			        }
+	
 		        }
-
+	        }
+	        finally {
+		        // this is really only needed when suppress=true
+	        	JlinkUtils.postfixResolveModeFix(session, resolveMode);
 	        }
 
 	        return out;
@@ -2320,6 +2349,7 @@ public class JLFile implements IJLFile {
      * @throws jxthrowable
      */
     private void assembleItem(
+    		CallSession session, 
     		CallAssembly assembly,
     		CallModel subComponent,
     		CallModel part,
@@ -2327,7 +2357,8 @@ public class JLFile implements IJLFile {
     		CallTransform3D transform,
             JLConstraint csys_con,
             List<JLConstraint> other_con,
-            CallModelItem item
+            CallModelItem item,
+            boolean suppress
             ) throws JLIException, jxthrowable {
         
     	CallComponentConstraints constrs = makeConstraints(subComponent, part, compPath, other_con);
@@ -2346,8 +2377,23 @@ public class JLFile implements IJLFile {
         
         if (constrs!=null)
             newfeat.setConstraints(constrs, null);
+
+        if (suppress) {
+        	suppressNewFeature(session, assembly, newfeat);
+        }
+
     }
-    
+
+    private void suppressNewFeature(CallSession session, CallAssembly assembly, CallFeature newfeat) throws jxthrowable {
+    	//System.out.println("Suppressing new feature: "+newfeat.getId());
+        CallFeatureOperations featOps = CallFeatureOperations.create();
+        CallSuppressOperation supop = newfeat.createSuppressOp();
+        supop.setClip(true);
+        featOps.append(supop);
+    	assembly.executeFeatureOps(featOps, null);
+//        JlinkUtils.regenerate(session, new RegenerateFeatureOps(assembly, featOps), true);
+    }
+
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#refresh(java.lang.String, java.lang.String)
      */
@@ -3201,4 +3247,43 @@ public class JLFile implements IJLFile {
 		}
     	
     }
+
+    /**
+     * Implementation of Regenerator which will execute feature operations.  
+	 * This was set up as a Regenerator because a regenerate is forced.
+     * @author Adam Andrews
+     *
+     */
+    private static class RegenerateFeatureOps implements JlinkUtils.Regenerator {
+
+    	/**
+    	 * The model containing the features
+    	 */
+    	private CallSolid solid;
+    	/**
+    	 * The feature operations to execute
+    	 */
+    	private CallFeatureOperations featOps;
+    	
+    	/**
+    	 * Default constructor
+    	 * @param solid The model containing the features
+    	 * @param featOps The list of feature operations to execute
+    	 */
+    	public RegenerateFeatureOps(CallSolid solid, CallFeatureOperations featOps) {
+    		this.solid = solid;
+    		this.featOps = featOps;
+    	}
+    	
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.jlink.impl.JlinkUtils.Regenerator#regenerate()
+		 */
+		@Override
+		public void regenerate() throws jxthrowable {
+            CallRegenInstructions inst = CallRegenInstructions.create(Boolean.FALSE, null, null); 
+            solid.executeFeatureOps(featOps, inst);
+		}
+    	
+    }
+
 }

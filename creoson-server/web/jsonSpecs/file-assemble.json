@@ -51,6 +51,10 @@
       "name" : "assemble_to_root",
       "type" : "boolean",
       "description" : "Whether to always assemble to the root assembly, or assemble to the subassembly containing the reference path/model"
+    }, {
+      "name" : "suppress",
+      "type" : "boolean",
+      "description" : "Whether to suppress the components immediately after assembling them"
     } ],
     "response" : [ {
       "name" : "dirname",
