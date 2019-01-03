@@ -1,6 +1,29 @@
 R E L E A S E   N O T E S
 =========================
 
+2.2.0
+	- Added new functions:
+		layer
+			exists
+	
+	- Modified functions:
+		bom
+			get_paths - speed up by removing unneeded function calls
+		crel
+			set_config - add "ignore_errors" parameter
+		feature
+			general looping - feature looping will now skip over invisible features
+					- if there is no feature-name pattern, the loop will include
+					  unnamed features
+			resume - add "names" parameter
+			suppress - add "names" parameter
+		file
+			assemble - add "suppress" parameter
+		interface
+			export_pdf - add "use_drawing_settings" parameter
+			export_3dpdf - add "use_drawing_settings" parameter
+			export_image - add "advanced" parameter for STEP, IGES, and DXF exports
+
 2.1.1
 	- Added new functions:
 		drawing
