@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2018 Simplified Logic, Inc
+ * Copyright 2000-2019 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -362,6 +362,8 @@ public class JlinkUtils {
             msg = "Error: Unknown Model Extension";
         else if (e instanceof XInvalidFileName)
             msg = "Error: Invalid File Name";
+//        else if (e instanceof XInAMethod)
+//            msg = "Error occurred inside a PTC method";  // best just go with the default error
 
         if (msg==null)
             msg = "An error occurred which PTC does not explain; please review your latest actions for problems";
