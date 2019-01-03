@@ -137,6 +137,9 @@
         "file" : "coupling.prt",
         "into_asm" : "stub.asm",
         "package_assembly" : true,
+        "constraints" : [ {
+          "type" : "fix"
+        } ],
         "transform" : {
           "origin" : {
             "x" : 100.0,

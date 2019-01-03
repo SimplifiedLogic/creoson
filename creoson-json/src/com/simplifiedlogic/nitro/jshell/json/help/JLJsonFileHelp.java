@@ -974,7 +974,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex.addInput(PARAM_MODEL, "coupling.prt");
     	ex.addInput(PARAM_INTOASM, "stub.asm");
         Map<String, Object> c1 = new HashMap<String, Object>();
-        c1.put(PARAM_TYPE, "csys");
+        c1.put(PARAM_TYPE, JLConstraintInput.CONSTRAINT_CSYS);
         c1.put(PARAM_ASMREF, "right_asm_ref");
         c1.put(PARAM_COMPREF, "asy_ref");
     	ex.addInput(PARAM_CONSTRAINTS, new Object[] {c1});
@@ -989,7 +989,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex.addInput(PARAM_MODEL, "coupling.prt");
     	ex.addInput(PARAM_INTOASM, "stub.asm");
         c1 = new HashMap<String, Object>();
-        c1.put(PARAM_TYPE, "csys");
+        c1.put(PARAM_TYPE, JLConstraintInput.CONSTRAINT_CSYS);
         c1.put(PARAM_ASMREF, "left_asm_ref");
         c1.put(PARAM_COMPREF, "asy_ref");
     	ex.addInput(PARAM_CONSTRAINTS, new Object[] {c1});
@@ -1004,6 +1004,9 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex.addInput(PARAM_MODEL, "coupling.prt");
     	ex.addInput(PARAM_INTOASM, "stub.asm");
     	ex.addInput(PARAM_PACKAGE_ASSEMBLY, true);
+        c1 = new HashMap<String, Object>();
+        c1.put(PARAM_TYPE, JLConstraintInput.CONSTRAINT_FIX);
+    	ex.addInput(PARAM_CONSTRAINTS, new Object[] {c1});
         Map<String, Object> trans = new Hashtable<String, Object>();
         trans.put(JLFileRequestParams.PARAM_ORIGIN, writePoint(100.0, 50.0, 0.0));
         trans.put(JLFileRequestParams.PARAM_X_ROT, 180.0);
