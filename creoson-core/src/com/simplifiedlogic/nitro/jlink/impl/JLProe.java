@@ -468,21 +468,21 @@ public class JLProe implements IJLProe {
 
 	
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#setConfig(java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#setConfig(java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
-	public void setConfig(String name, String value, String sessionId) throws JLIException {
+	public void setConfig(String name, String value, boolean ignoreErrors, String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        setConfig(name, value, sess);
+        setConfig(name, value, ignoreErrors, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#setConfig(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#setConfig(java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public void setConfig(String name, String value, AbstractJLISession sess) throws JLIException {
+	public void setConfig(String name, String value, boolean ignoreErrors, AbstractJLISession sess) throws JLIException {
 
 		DebugLogging.sendDebugMessage("proe.set_config", NitroConstants.DEBUG_KEY);
 		if (sess==null)
@@ -507,13 +507,22 @@ public class JLProe implements IJLProe {
 	        session.setConfigOption(name, value);
     	}
     	catch (XToolkitNotFound e) {
-    		throw new JLIException("Please check your config option name: " + name);
+    		if (ignoreErrors)
+    			System.err.println(JlinkUtils.ptcError(e, "ERROR setting config option "+name));
+    		else
+    			throw new JLIException("Please check your config option name: " + name);
     	}
     	catch (XToolkitBadInputs e) {
-    		throw new JLIException("Please check your config option value: " + value);
+    		if (ignoreErrors)
+    			System.err.println(JlinkUtils.ptcError(e, "ERROR setting config option "+name));
+    		else
+    			throw new JLIException("Please check your config option value: " + value);
     	}
     	catch (jxthrowable e) {
-    		throw JlinkUtils.createException(e);
+    		if (ignoreErrors)
+    			System.err.println(JlinkUtils.ptcError(e, "ERROR setting config option "+name));
+    		else
+    			throw JlinkUtils.createException(e);
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {

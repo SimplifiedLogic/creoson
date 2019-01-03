@@ -321,11 +321,22 @@ public class JLJsonCreoHelp extends JLJsonCommandHelp implements JLCreoRequestPa
     	arg.setDefaultValue("Clear the option");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_IGNORE_ERRORS, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to ignore errors that might occur when setting the config option");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_NAME, "allow_save_as_instance");
     	ex.addInput(PARAM_VALUE, "no");
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "allow_save_as_instance");
+    	ex.addInput(PARAM_VALUE, "no");
+    	ex.addInput(PARAM_IGNORE_ERRORS, true);
     	template.addExample(ex);
     	
         return template;

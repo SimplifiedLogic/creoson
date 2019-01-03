@@ -13,6 +13,11 @@
       "type" : "string",
       "description" : "New option value",
       "default" : "Clear the option"
+    }, {
+      "name" : "ignore_errors",
+      "type" : "boolean",
+      "description" : "Whether to ignore errors that might occur when setting the config option",
+      "default" : "false"
     } ],
     "response" : [ ]
   },
@@ -24,6 +29,22 @@
       "data" : {
         "name" : "allow_save_as_instance",
         "value" : "no"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "set_config",
+      "data" : {
+        "name" : "allow_save_as_instance",
+        "value" : "no",
+        "ignore_errors" : true
       }
     },
     "response" : {

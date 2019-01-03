@@ -51,6 +51,7 @@ public interface JLCreoRequestParams {
     public static final String PARAM_RED		= "red";
     public static final String PARAM_GREEN		= "green";
     public static final String PARAM_BLUE		= "blue";
+    public static final String PARAM_IGNORE_ERRORS	= "ignore_errors";
 
     // standard color values
 	public static final String STD_COLOR_LETTER 			= "letter";

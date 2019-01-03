@@ -175,8 +175,9 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
 	private Hashtable<String, Object> actionSetConfig(String sessionId, Hashtable<String, Object> input) throws JLIException {
         String name = checkStringParameter(input, PARAM_NAME, true);
         String value = checkStringParameter(input, PARAM_VALUE, false);
-        
-		proeHandler.setConfig(name, value, sessionId);
+        boolean ignoreErrors = checkFlagParameter(input, PARAM_IGNORE_ERRORS, false, false);
+       
+		proeHandler.setConfig(name, value, ignoreErrors, sessionId);
 		
 		return null;
 	}

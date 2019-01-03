@@ -66,8 +66,8 @@ public interface IJLProe {
 	public abstract void rmdir(String dirname, String sessionId) throws JLIException;
 	public abstract void rmdir(String dirname, AbstractJLISession sess) throws JLIException;
 
-	public void setConfig(String name, String value, String sessionId) throws JLIException;
-	public void setConfig(String name, String value, AbstractJLISession sess) throws JLIException;
+	public void setConfig(String name, String value, boolean ignoreErrors, String sessionId) throws JLIException;
+	public void setConfig(String name, String value, boolean ignoreErrors, AbstractJLISession sess) throws JLIException;
 
 	public List<String> getConfig(String name, String sessionId) throws JLIException;
 	public List<String> getConfig(String name, AbstractJLISession sess) throws JLIException;
