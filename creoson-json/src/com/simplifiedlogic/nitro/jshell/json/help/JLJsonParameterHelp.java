@@ -40,6 +40,8 @@ import com.simplifiedlogic.nitro.jshell.json.template.FunctionTemplate;
  */
 public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParameterRequestParams, JLParameterResponseParams {
 
+	public static final String OBJ_PARAMETER_DATA = "ParameterData";
+
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getHelp()
 	 */
@@ -272,7 +274,7 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	arg.setDefaultValue("no filter");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_PARAMLIST, FunctionSpec.TYPE_OBJARRAY, "ParameterData");
+    	ret = new FunctionReturn(OUTPUT_PARAMLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_PARAMETER_DATA);
     	ret.setDescription("List of parameter information");
     	spec.addReturn(ret);
 
@@ -376,7 +378,7 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     }
     
 	private FunctionObject helpParameterData() {
-    	FunctionObject obj = new FunctionObject("ParameterData");
+    	FunctionObject obj = new FunctionObject(OBJ_PARAMETER_DATA);
     	obj.setDescription("Information about a Creo parameter");
 
     	FunctionArgument arg;

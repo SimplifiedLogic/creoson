@@ -41,6 +41,8 @@ import com.simplifiedlogic.nitro.jshell.json.template.FunctionTemplate;
  */
 public class JLJsonLayerHelp extends JLJsonCommandHelp implements JLLayerRequestParams, JLLayerResponseParams {
 
+	public static final String OBJ_LAYER_DATA = "LayerData";
+
 	private String[] validStatuses;
 	private Map<String, Map<String, Object>> sampleLayers;
 	
@@ -147,7 +149,7 @@ public class JLJsonLayerHelp extends JLJsonCommandHelp implements JLLayerRequest
     	arg.setDefaultValue("All layers are listed");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_LAYERS, FunctionSpec.TYPE_OBJARRAY, "LayerData");
+    	ret = new FunctionReturn(OUTPUT_LAYERS, FunctionSpec.TYPE_OBJARRAY, OBJ_LAYER_DATA);
     	ret.setDescription("List of layer data");
     	spec.addReturn(ret);
     	
@@ -179,7 +181,7 @@ public class JLJsonLayerHelp extends JLJsonCommandHelp implements JLLayerRequest
 	}
 
 	private FunctionObject helpLayerData() {
-    	FunctionObject obj = new FunctionObject("LayerData");
+    	FunctionObject obj = new FunctionObject(OBJ_LAYER_DATA);
     	obj.setDescription("Information about a layer");
 
     	FunctionArgument arg;

@@ -39,6 +39,8 @@ import com.simplifiedlogic.nitro.jshell.json.template.FunctionTemplate;
  */
 public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestParams, JLNoteResponseParams {
 
+	public static final String OBJ_NOTE_DATA = "NoteData";
+
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getHelp()
 	 */
@@ -235,7 +237,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_ITEMLIST, FunctionSpec.TYPE_OBJARRAY, "NoteData");
+    	ret = new FunctionReturn(OUTPUT_ITEMLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_NOTE_DATA);
     	ret.setDescription("List of note information");
     	spec.addReturn(ret);
 
@@ -290,7 +292,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
 	}
 
 	private FunctionObject helpNoteData() {
-    	FunctionObject obj = new FunctionObject("NoteData");
+    	FunctionObject obj = new FunctionObject(OBJ_NOTE_DATA);
     	obj.setDescription("Information about a model/drawing note");
 
     	FunctionArgument arg;

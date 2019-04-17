@@ -16,7 +16,7 @@
     }, {
       "name" : "point",
       "type" : "object:JLPoint",
-      "description" : "Coordinates for the view",
+      "description" : "Coordinates for the view in Drawing Units",
       "required" : true
     } ],
     "response" : [ ]

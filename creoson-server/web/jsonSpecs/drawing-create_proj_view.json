@@ -27,7 +27,7 @@
     }, {
       "name" : "point",
       "type" : "object:JLPoint",
-      "description" : "Coordinates for the view, relative to the location of the parent view",
+      "description" : "Coordinates for the view, relative to the location of the parent view, in Drawing Units",
       "required" : true
     }, {
       "name" : "display_data",

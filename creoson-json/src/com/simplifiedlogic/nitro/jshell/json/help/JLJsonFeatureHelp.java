@@ -783,7 +783,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_PARAMLIST, FunctionSpec.TYPE_OBJARRAY, "ParameterData");
+    	ret = new FunctionReturn(OUTPUT_PARAMLIST, FunctionSpec.TYPE_OBJARRAY, JLJsonParameterHelp.OBJ_PARAMETER_DATA);
     	ret.setDescription("List of parameter information");
     	spec.addReturn(ret);
     	

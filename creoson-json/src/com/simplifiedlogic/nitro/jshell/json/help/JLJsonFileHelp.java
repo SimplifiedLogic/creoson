@@ -1092,8 +1092,8 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
      * @param z
      * @return The JSON data as a Hashtable
      */
-    protected Hashtable<String, Object> writePoint(double x, double y, double z) {
-		Hashtable<String, Object> out = new Hashtable<String, Object>();
+    protected static OrderedMap<String, Object> writePoint(double x, double y, double z) {
+    	OrderedMap<String, Object> out = new OrderedMap<String, Object>();
 		out.put(JLFileResponseParams.OUTPUT_X, x);
 		out.put(JLFileResponseParams.OUTPUT_Y, y);
 		out.put(JLFileResponseParams.OUTPUT_Z, z);
