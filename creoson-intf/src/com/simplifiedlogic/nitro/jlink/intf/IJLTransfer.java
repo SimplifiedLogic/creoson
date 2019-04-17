@@ -122,10 +122,10 @@ public interface IJLTransfer {
 			String filename, String dirname, AbstractJLISession sess) throws JLIException;
 	
 	public ExportResults exportDXF(String model, 
-			String filename, String dirname, String geomType, 
+			String filename, String dirname,  
 			boolean advanced, String sessionId) throws JLIException;
 	public ExportResults exportDXF(String model, 
-			String filename, String dirname, String geomType, 
+			String filename, String dirname,  
 			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
 	public String importProgram(String dirname, String filename, String model, 

@@ -638,30 +638,27 @@ public class JLTransfer implements IJLTransfer {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, boolean advanced, String sessionId)
+	public ExportResults exportDXF(String model, String filename, String dirname, boolean advanced, String sessionId)
 			throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        return exportDXF(model, filename, dirname, geomType, advanced, sess);
+        return exportDXF(model, filename, dirname, advanced, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportDXF(java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportDXF(String model, String filename, String dirname, String geomType, boolean advanced, AbstractJLISession sess)
+	public ExportResults exportDXF(String model, String filename, String dirname, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("transfer.exportDXF: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
-
-		if (!advanced)
-			validateGeomType(geomType);
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -697,10 +694,6 @@ public class JLTransfer implements IJLTransfer {
 	        NitroUtils.validateDirFile(dirname, filename, true);
 	        
 	        if (!advanced) {
-//		        CallGeometryFlags geomFlags = CallGeometryFlags.create();
-//		        //if (session.IsGeometryRepSupported(ExportType.EXPORT_DXF, ))
-//		        resolveGeomFlags(session, geomFlags, geomType);
-
 		        CallExportInstructions pxi = CallExportInstructions.createDXFExport();
 
 		        if (dirname != null && !dirname.equals(olddir)) {

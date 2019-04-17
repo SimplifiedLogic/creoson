@@ -110,7 +110,7 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 
         ExportResults results = null;
         if (TYPE_DXF.equalsIgnoreCase(type))
-        	results = intfHandler.exportDXF(model, filename, dirname, geomType, advanced, sessionId);
+        	results = intfHandler.exportDXF(model, filename, dirname, advanced, sessionId);
 //        else if (TYPE_CATIA.equalsIgnoreCase(type))
 //        	results = intfHandler.exportCATIA(model, filename, dirname, geomType, sessionId);
         else if (TYPE_IGES.equalsIgnoreCase(type))

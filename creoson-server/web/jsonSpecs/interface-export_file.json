@@ -3,7 +3,7 @@
     "function_description" : "Export a model to a file",
     "command" : "interface",
     "function" : "export_file",
-    "notes" : [ "The geom_flags option only applies to DXF, IGES and STEP exports.", "Setting geom_flags to 'default' will cause it to check the Creo config option 'intf3d_out_default_option' for the setting", "The advanced option only applies to DXF, IGES and STEP exports.", "The advanced option will only work with Creo 4 M030 or later." ],
+    "notes" : [ "The geom_flags option only applies to IGES and STEP exports.", "Setting geom_flags to 'default' will cause it to check the Creo config option 'intf3d_out_default_option' for the setting", "The advanced option will cause the Export to use settings defined in the appropriate \"export_profiles\" Creo Config Option for the file type.", "The advanced option only applies to DXF, IGES and STEP exports.", "The advanced option will only work with Creo 4 M030 or later." ],
     "request" : [ {
       "name" : "type",
       "type" : "string",
