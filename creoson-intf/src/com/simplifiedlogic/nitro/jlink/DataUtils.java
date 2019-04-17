@@ -56,6 +56,8 @@ public class DataUtils {
      * @throws IOException
      */
     public static int getIntValue(Object in, boolean encoded) throws NumberFormatException, IOException {
+    	if (in==null)
+    		return 0;
         if (in instanceof Integer) return ((Integer)in).intValue();
         if (in instanceof Short) return ((Short)in).intValue();
         if (in instanceof Long) return ((Long)in).intValue();
@@ -101,6 +103,8 @@ public class DataUtils {
      * @throws IOException
      */
     public static double getDoubleValue(Object in, boolean encoded) throws NumberFormatException, IOException {
+    	if (in==null)
+    		return 0.0;
         if (in instanceof Integer) return ((Integer)in).doubleValue();
         if (in instanceof Short) return ((Short)in).doubleValue();
         if (in instanceof Long) return ((Long)in).doubleValue();
@@ -142,6 +146,8 @@ public class DataUtils {
      * @return The boolean value of the object
      */
     public static boolean getBooleanValue(Object in, boolean encoded) {
+    	if (in==null)
+    		return false;
         if (in instanceof Boolean)
             return ((Boolean)in).booleanValue();
 
@@ -188,6 +194,8 @@ public class DataUtils {
      * @return The String value of the object
      */
     public static String getStringValue(Object in, boolean encoded) {
+    	if (in==null)
+    		return null;
         if (encoded) {
             in = decodeBase64(in);
         }
