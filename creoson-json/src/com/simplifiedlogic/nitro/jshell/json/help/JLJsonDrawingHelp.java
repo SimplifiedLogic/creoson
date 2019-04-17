@@ -43,6 +43,8 @@ import com.simplifiedlogic.nitro.jshell.json.template.FunctionTemplate;
 public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingRequestParams, JLDrawingResponseParams {
 
 	public static final String OBJ_VIEW_DISPLAY_DATA = "ViewDisplayData";
+	public static final String OBJ_VIEW_DETAIL_DATA = "ViewDetailData";
+	public static final String OBJ_SYMBOL_INST_DATA = "SymbolInstData";
 	
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getHelp()
@@ -54,7 +56,10 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		list.add(helpCreate());
 		list.add(helpCreateGeneralView());
 		list.add(helpCreateProjectionView());
+		list.add(helpCreateSymbol());
 		list.add(helpDeleteModels());
+		list.add(helpDeleteSymbolDef());
+		list.add(helpDeleteSymbolInst());
 		list.add(helpDeleteSheet());
 		list.add(helpDeleteView());
 		list.add(helpGetCurModel());
@@ -65,8 +70,12 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		list.add(helpGetViewLoc());
 		list.add(helpGetViewScale());
 		list.add(helpGetViewSheet());
+		list.add(helpIsSymbolLoaded());
 		list.add(helpListModels());
+		list.add(helpListSymbols());
+		list.add(helpListViewDetails());
 		list.add(helpListViews());
+		list.add(helpLoadSymbolDef());
 		list.add(helpRegenerate());
 		list.add(helpRegenerateSheet());
 		list.add(helpRenameView());
@@ -84,7 +93,9 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 	 */
 	public List<FunctionObject> getHelpObjects() {
 		List<FunctionObject> list = new ArrayList<FunctionObject>();
+		list.add(helpSymbolInstData());
 		list.add(helpViewDisplayData());
+		list.add(helpViewDetailData());
 		return list;
 	}
 	
@@ -709,7 +720,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_POINT, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
-    	arg.setDescription("Coordinates for the view");
+    	arg.setDescription("Coordinates for the view in Drawing Units");
     	arg.setRequired(true);
     	spec.addArgument(arg);
         
@@ -805,7 +816,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_POINT, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
-    	arg.setDescription("Coordinates for the view, relative to the location of the parent view");
+    	arg.setDescription("Coordinates for the view, relative to the location of the parent view, in Drawing Units");
     	arg.setRequired(true);
     	spec.addArgument(arg);
         
@@ -916,6 +927,70 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	return template;
 	}
 
+	private FunctionTemplate helpListViewDetails() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_VIEW_DETAILS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List the views contained in a drawing, with more details");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_VIEW, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View name filter");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("no filter");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_VIEWS, FunctionSpec.TYPE_OBJARRAY, OBJ_VIEW_DETAIL_DATA);
+    	ret.setDescription("List of views in the drawing");
+    	spec.addReturn(ret);
+
+    	FunctionExample ex;
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	Map<String, Object> rec;
+    	List<Map<String, Object>> params = new ArrayList<Map<String, Object>>();
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "FRONT");
+		rec.put(OUTPUT_SHEET, 1);
+        rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(2.5, 4.0, 0.0));
+		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "RIGHT");
+		rec.put(OUTPUT_SHEET, 1);
+        rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(6.0, 4.0, 0.0));
+		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "TOP");
+		rec.put(OUTPUT_SHEET, 1);
+        rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(2.5, 7.2, 0.0));
+		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+		ex.addOutput(OUTPUT_VIEWS, params);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	params = new ArrayList<Map<String, Object>>();
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "RIGHT");
+		rec.put(OUTPUT_SHEET, 1);
+        rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(6.0, 4.0, 0.0));
+		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+		ex.addOutput(OUTPUT_VIEWS, params);
+    	template.addExample(ex);
+
+    	return template;
+	}
+
 	private FunctionTemplate helpGetViewLoc() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_VIEW_LOC);
     	FunctionSpec spec = template.getSpec();
@@ -975,7 +1050,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_POINT, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
-    	arg.setDescription("Coordinates for the view");
+    	arg.setDescription("Coordinates for the view in Drawing Units");
     	arg.setRequired(true);
     	spec.addArgument(arg);
         
@@ -1275,6 +1350,30 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
         return obj;
     }
     
+	private FunctionObject helpViewDetailData() {
+    	FunctionObject obj = new FunctionObject(OBJ_VIEW_DETAIL_DATA);
+    	obj.setDescription("Information about a drawing view");
+
+    	FunctionArgument arg;
+    	arg = new FunctionArgument(OUTPUT_VIEW_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View name");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet Number");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_LOCATION, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	arg.setDescription("View Location in Drawing Units");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_TEXT_HEIGHT, FunctionSpec.TYPE_DOUBLE);
+    	arg.setDescription("Text Height in Drawing Units");
+    	obj.add(arg);
+
+        return obj;
+    }
+    
 	private FunctionTemplate helpViewBoundingBox() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_VIEW_BOUND_BOX);
     	FunctionSpec spec = template.getSpec();
@@ -1299,7 +1398,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	ret = new FunctionReturn(OUTPUT_XMAX, FunctionSpec.TYPE_DOUBLE);
     	ret.setDescription("Maximum X-coordinate of drawing view");
     	spec.addReturn(ret);
-        
+
     	ret = new FunctionReturn(OUTPUT_YMIN, FunctionSpec.TYPE_DOUBLE);
     	ret.setDescription("Minimum Y-coordinate of drawing view");
     	spec.addReturn(ret);
@@ -1322,4 +1421,273 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
         return template;
     }
     
+	private FunctionTemplate helpLoadSymbolDef() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LOAD_SYMBOL_DEF);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Load a Creo symbol definition file into Creo from disk");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_DIR, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Directory containing the symbol file; if relative, assumed to be relative to Creo's current working directory");
+    	arg.setRequired(false);
+    	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_FILE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Name of the symbol file");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_ID, FunctionSpec.TYPE_INTEGER);
+    	ret.setDescription("ID of the loaded symbol");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_NAME, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Symbol Name of the loaded symbol");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_DIR, "C:/somefiles/parts");
+    	ex.addInput(PARAM_SYMBOL_FILE, "my_symbol.sym");
+    	ex.addOutput(OUTPUT_ID, 3);
+    	ex.addOutput(OUTPUT_NAME, "MY_SYMBOL");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_DIR, "subdir");
+    	ex.addInput(PARAM_SYMBOL_FILE, "my_symbol.sym");
+    	ex.addOutput(OUTPUT_ID, 3);
+    	ex.addOutput(OUTPUT_NAME, "MY_SYMBOL");
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpIsSymbolLoaded() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IS_SYMBOL_DEF_LOADED);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Check whether a symbol definition file is loaded into Creo");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_FILE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Name of the symbol file");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_LOADED, FunctionSpec.TYPE_BOOL);
+    	ret.setDescription("Whether the symbol definition is loaded into Creo");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_FILE, "my_symbol.sym");
+    	ex.addOutput(OUTPUT_LOADED, true);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpCreateSymbol() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_CREATE_SYMBOL);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Add a symbol instance to a drawing");
+    	FunctionArgument arg;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_FILE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Name of the symbol file");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_POINT, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	arg.setDescription("Coordinates for the symbol in Drawing Units");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+        
+    	arg = new FunctionArgument(PARAM_REPLACE_VALUES, FunctionSpec.TYPE_OBJECT);
+    	arg.setDescription("Object containing replacement values for any variable text in the symbol");
+    	spec.addArgument(arg);
+        
+    	arg = new FunctionArgument(PARAM_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet number (0 for all sheets)");
+    	arg.setDefaultValue("The symbol will be added to all sheets");
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_FILE, "my_symbol.sym");
+    	Map<String, Object> rec = new OrderedMap<String, Object>();
+    	rec.put(JLFileRequestParams.PARAM_X, 13.0);
+    	rec.put(JLFileRequestParams.PARAM_Y, 4.0);
+    	ex.addInput(PARAM_POINT, rec);
+    	rec = new OrderedMap<String, Object>();
+    	rec.put("TEXT_VALUE", "A3");
+    	ex.addInput(PARAM_REPLACE_VALUES, rec);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpListSymbols() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_SYMBOLS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List symbols contained on a drawing");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_FILE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Symbol file name filter");
+    	arg.setDefaultValue("no filter");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet number (0 for all sheets)");
+    	arg.setDefaultValue("The symbol will be added to all sheets");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_SYMBOLS, FunctionSpec.TYPE_OBJARRAY, OBJ_SYMBOL_INST_DATA);
+    	ret.setDescription("List of symbols in the drawing");
+    	spec.addReturn(ret);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	List<Map<String, Object>> params = new ArrayList<Map<String, Object>>();
+    	Map<String, Object> rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_ID, 1);
+    	rec.put(OUTPUT_SYMBOL_NAME, "MY_SYMBOL");
+		rec.put(OUTPUT_SHEET, 1);
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_ID, 2);
+    	rec.put(OUTPUT_SYMBOL_NAME, "LAST_SYMBOL");
+		rec.put(OUTPUT_SHEET, 1);
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_ID, 3);
+    	rec.put(OUTPUT_SYMBOL_NAME, "NOTE_SYMBOL");
+		rec.put(OUTPUT_SHEET, 2);
+		ex.addOutput(OUTPUT_SYMBOLS, params);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_FILE, "my_symbol.sym");
+    	params = new ArrayList<Map<String, Object>>();
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_ID, 1);
+    	rec.put(OUTPUT_SYMBOL_NAME, "MY_SYMBOL");
+		rec.put(OUTPUT_SHEET, 1);
+    	rec = new OrderedMap<String, Object>();
+		ex.addOutput(OUTPUT_SYMBOLS, params);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionObject helpSymbolInstData() {
+    	FunctionObject obj = new FunctionObject(OBJ_SYMBOL_INST_DATA);
+    	obj.setDescription("Information about a drawing symbol");
+
+    	FunctionArgument arg;
+    	arg = new FunctionArgument(OUTPUT_ID, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Symbol ID");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_SYMBOL_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Symbol name");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet Number");
+    	obj.add(arg);
+
+        return obj;
+    }
+    
+	private FunctionTemplate helpDeleteSymbolDef() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_SYMBOL_DEF);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Delete a symbol definition and its instances from a drawing");
+    	FunctionArgument arg;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_FILE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Name of the symbol file");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_FILE, "my_symbol.sym");
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpDeleteSymbolInst() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_SYMBOL_INST);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Delete a specific symbol instance from a drawing");
+    	FunctionArgument arg;
+
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SYMBOL_ID, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("ID of the symbol instance");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SYMBOL_ID, 2);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	
 }

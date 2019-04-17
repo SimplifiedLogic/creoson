@@ -19,10 +19,14 @@
 package com.simplifiedlogic.nitro.jlink.intf;
 
 import java.util.List;
+import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
+import com.simplifiedlogic.nitro.jlink.data.SymbolDefData;
+import com.simplifiedlogic.nitro.jlink.data.SymbolInstData;
+import com.simplifiedlogic.nitro.jlink.data.ViewDetailData;
 import com.simplifiedlogic.nitro.jlink.data.ViewDisplayData;
 import com.simplifiedlogic.nitro.jlink.data.ViewScaleResults;
 import com.simplifiedlogic.nitro.rpc.JLIException;
@@ -43,9 +47,9 @@ public interface IJLDrawing {
 	public String create(String model, String drawing, String template, double scale, boolean display, boolean activate, boolean newwin, String sessionId) throws JLIException;
 	public String create(String model, String drawing, String template, double scale, boolean display, boolean activate, boolean newwin, AbstractJLISession sess) throws JLIException;
 
-	public abstract List<String> listModels(String drawingName, String modelName, String sessionId)
+	public List<String> listModels(String drawingName, String modelName, String sessionId)
 		throws JLIException;
-	public abstract List<String> listModels(String drawingName, String modelName, AbstractJLISession sess)
+	public List<String> listModels(String drawingName, String modelName, AbstractJLISession sess)
 		throws JLIException;
 
 	public void addModel(String drawingName, String modelName, String sessionId) throws JLIException;
@@ -60,14 +64,14 @@ public interface IJLDrawing {
 	public void setCurrentModel(String drawingName, String modelName, String sessionId) throws JLIException;
 	public void setCurrentModel(String drawingName, String modelName, AbstractJLISession sess) throws JLIException;
 
-	public abstract void regenerate(String filename, String sessionId)
+	public void regenerate(String filename, String sessionId)
 		throws JLIException;
-	public abstract void regenerate(String filename, AbstractJLISession sess)
+	public void regenerate(String filename, AbstractJLISession sess)
 		throws JLIException;
 
-	public abstract void regenerateSheet(String filename, int sheet, String sessionId)
+	public void regenerateSheet(String filename, int sheet, String sessionId)
 		throws JLIException;
-	public abstract void regenerateSheet(String filename, int sheet, AbstractJLISession sess)
+	public void regenerateSheet(String filename, int sheet, AbstractJLISession sess)
 		throws JLIException;
 
 	public void selectSheet(String filename, int sheet, String sessionId) 
@@ -153,6 +157,9 @@ public interface IJLDrawing {
 	public List<String> listViews(String drawingName, String viewName, String sessionId) throws JLIException;
 	public List<String> listViews(String drawingName, String viewName, AbstractJLISession sess) throws JLIException;
 	
+	public List<ViewDetailData> listViewDetails(String drawingName, String viewName, String sessionId) throws JLIException;
+	public List<ViewDetailData> listViewDetails(String drawingName, String viewName, AbstractJLISession sess) throws JLIException;
+
 	public JLPoint getViewLoc(String drawingName, String viewName, String sessionId) throws JLIException;
 	public JLPoint getViewLoc(String drawingName, String viewName, AbstractJLISession sess) throws JLIException;
 	
@@ -176,5 +183,23 @@ public interface IJLDrawing {
 
     public JLBox viewBoundingBox(String filename, String viewName, String sessionId) throws JLIException;
     public JLBox viewBoundingBox(String filename, String viewName, AbstractJLISession sess) throws JLIException;
+
+    public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, String sessionId) throws JLIException;
+    public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, AbstractJLISession sess) throws JLIException;
+
+    public boolean isSymbolDefLoaded(String filename, String symbolFile, String sessionId) throws JLIException;
+    public boolean isSymbolDefLoaded(String filename, String symbolFile, AbstractJLISession sess) throws JLIException;
+    
+    public void deleteSymbolDef(String filename, String symbolFile, String sessionId) throws JLIException;
+    public void deleteSymbolDef(String filename, String symbolFile, AbstractJLISession sess) throws JLIException;
+
+    public void createSymbol(String filename, String symbolFile, JLPoint location, Map<String, Object> replaceValues, int sheet, String sessionId) throws JLIException;
+    public void createSymbol(String filename, String symbolFile, JLPoint location, Map<String, Object> replaceValues, int sheet, AbstractJLISession sess) throws JLIException;
+    
+    public List<SymbolInstData> listSymbols(String filename, String symbolFile, int sheet, String sessionId) throws JLIException;
+    public List<SymbolInstData> listSymbols(String filename, String symbolFile, int sheet, AbstractJLISession sess) throws JLIException;
+
+    public void deleteSymbolInst(String filename, int symbolId, String sessionId) throws JLIException;
+    public void deleteSymbolInst(String filename, int symbolId, AbstractJLISession sess) throws JLIException;
 
 }

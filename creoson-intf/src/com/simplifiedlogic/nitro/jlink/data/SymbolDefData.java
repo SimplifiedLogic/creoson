@@ -16,25 +16,41 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jlink.calls.drawing;
-
-import com.ptc.pfc.pfcDrawing.Drawing;
-import com.ptc.pfc.pfcModel2D.Model2D;
-import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+package com.simplifiedlogic.nitro.jlink.data;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDrawing.Drawing
+ * Data about a drawing symbol definition
  * 
  * @author Adam Andrews
  *
  */
-public class CallDrawing extends CallModel2D {
+public class SymbolDefData {
 
-	public CallDrawing(Drawing m) {
-		super((Model2D)m);
+	private int id;
+	private String name;
+
+	/**
+	 * @return The symbol ID
+	 */
+	public int getId() {
+		return id;
 	}
-	
-	public Drawing getDrawing() {
-		return (Drawing)m;
+	/**
+	 * @param id The symbol ID
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	/**
+	 * @return The symbol name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name The symbol name
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 }

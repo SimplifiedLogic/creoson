@@ -1,0 +1,73 @@
+{
+  "spec" : {
+    "function_description" : "Load a Creo symbol definition file into Creo from disk",
+    "command" : "drawing",
+    "function" : "load_symbol_def",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "symbol_dir",
+      "type" : "string",
+      "description" : "Directory containing the symbol file; if relative, assumed to be relative to Creo's current working directory",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "symbol_file",
+      "type" : "string",
+      "description" : "Name of the symbol file",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "id",
+      "type" : "integer",
+      "description" : "ID of the loaded symbol"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Symbol Name of the loaded symbol"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "load_symbol_def",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_dir" : "C:/somefiles/parts",
+        "symbol_file" : "my_symbol.sym"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "id" : 3,
+        "name" : "MY_SYMBOL"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "load_symbol_def",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_dir" : "subdir",
+        "symbol_file" : "my_symbol.sym"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "id" : 3,
+        "name" : "MY_SYMBOL"
+      }
+    }
+  } ]
+}

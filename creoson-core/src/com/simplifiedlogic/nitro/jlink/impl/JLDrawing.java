@@ -18,30 +18,44 @@
  */
 package com.simplifiedlogic.nitro.jlink.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.CableDisplayStyle;
 import com.ptc.pfc.pfcBase.DisplayStyle;
 import com.ptc.pfc.pfcBase.TangentEdgeDisplayStyle;
+import com.ptc.pfc.pfcDetail.DetailType;
 import com.ptc.pfc.pfcDrawing.DrawingCreateOption;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
 import com.ptc.pfc.pfcExceptions.XToolkitFound;
+import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
 import com.ptc.pfc.pfcExceptions.XToolkitInUse;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.ptc.pfc.pfcModel.PlotPaperSize;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
+import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallMatrix3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallVector3D;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailItems;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailLeaders;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolDefInstructions;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolDefItem;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolInstInstructions;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolInstItem;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailVariantText;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailVariantTexts;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallFreeAttachment;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawingCreateOptions;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.sheet.CallSheetData;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
@@ -55,8 +69,12 @@ import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
+import com.simplifiedlogic.nitro.jlink.data.SymbolDefData;
+import com.simplifiedlogic.nitro.jlink.data.SymbolInstData;
+import com.simplifiedlogic.nitro.jlink.data.ViewDetailData;
 import com.simplifiedlogic.nitro.jlink.data.ViewDisplayData;
 import com.simplifiedlogic.nitro.jlink.data.ViewScaleResults;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLDrawing;
 import com.simplifiedlogic.nitro.jlink.intf.IJLTransfer;
 import com.simplifiedlogic.nitro.rpc.JLIException;
@@ -65,6 +83,7 @@ import com.simplifiedlogic.nitro.util.JLBoxMaker;
 import com.simplifiedlogic.nitro.util.JLConnectionUtil;
 import com.simplifiedlogic.nitro.util.JLPointMaker;
 import com.simplifiedlogic.nitro.util.ModelLooper;
+import com.simplifiedlogic.nitro.util.SheetLooper;
 import com.simplifiedlogic.nitro.util.View2DLooper;
 
 public class JLDrawing implements IJLDrawing {
@@ -511,31 +530,35 @@ public class JLDrawing implements IJLDrawing {
 	        	throw new JLIException("Model is not a drawing");
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        
-	        int numSheets = drw.getNumberOfSheets();
-	        
-	        if (sheet<0 || sheet>numSheets)
-	        	throw new JLIException("Invalid sheet number, must be 1" + (numSheets>1?"-"+numSheets:"") + " or 0 for all");
 
-	        // doing this because regenerating a non-current (non-visible?) sheet causes a General Error, at least in Creo 3 M090
-	        int curSheet = drw.getCurrentSheetNumber();
-	        int lastSheet = curSheet;
-	        if (sheet==0) {
-	        	for (int i=0; i<numSheets; i++) {
-	        		lastSheet = i+1;
-		        	drw.setCurrentSheetNumber(lastSheet);
-	        		drw.regenerateSheet(lastSheet);
-	        	}
-	        }
-	        else {
-	        	lastSheet = sheet;
-	        	if (lastSheet!=curSheet)
-		        	drw.setCurrentSheetNumber(lastSheet);
-	        	drw.regenerateSheet(lastSheet);
-	        }
-	        
-	        if (lastSheet!=curSheet)
-	        	drw.setCurrentSheetNumber(curSheet);
+	        RegenerateSheetLooper looper = new RegenerateSheetLooper();
+	        looper.setDrawing(drw);
+	        looper.setSheetno(sheet);
+	        looper.loop();
+//	        int numSheets = drw.getNumberOfSheets();
+//
+//	        if (sheet<0 || sheet>numSheets)
+//	        	throw new JLIException("Invalid sheet number, must be 1" + (numSheets>1?"-"+numSheets:"") + " or 0 for all");
+//
+//	        // doing this because regenerating a non-current (non-visible?) sheet causes a General Error, at least in Creo 3 M090
+//	        int curSheet = drw.getCurrentSheetNumber();
+//	        int lastSheet = curSheet;
+//	        if (sheet==0) {
+//	        	for (int i=0; i<numSheets; i++) {
+//	        		lastSheet = i+1;
+//		        	drw.setCurrentSheetNumber(lastSheet);
+//	        		drw.regenerateSheet(lastSheet);
+//	        	}
+//	        }
+//	        else {
+//	        	lastSheet = sheet;
+//	        	if (lastSheet!=curSheet)
+//		        	drw.setCurrentSheetNumber(lastSheet);
+//	        	drw.regenerateSheet(lastSheet);
+//	        }
+//	        
+//	        if (lastSheet!=curSheet)
+//	        	drw.setCurrentSheetNumber(curSheet);
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
@@ -1284,6 +1307,57 @@ public class JLDrawing implements IJLDrawing {
 	}
 
 	@Override
+	public List<ViewDetailData> listViewDetails(String drawingName, String viewName, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return listViewDetails(drawingName, viewName, sess);
+	}
+
+	@Override
+	public List<ViewDetailData> listViewDetails(String drawingName, String viewName, AbstractJLISession sess)
+			throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.list_view_details: " + drawingName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, drawingName, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (drawingName==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + drawingName);
+	        }
+	        
+	        ListViewDetailLooper looper = new ListViewDetailLooper();
+	        looper.setDrawing((CallDrawing)m);
+	        looper.setNamePattern(viewName);
+	        looper.loop();
+	        
+	        return looper.out;
+	        
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.list_view_details,"+drawingName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	@Override
 	public JLPoint getViewLoc(String drawingName, String viewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
         
@@ -1320,14 +1394,33 @@ public class JLDrawing implements IJLDrawing {
 	        }
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        CallView2D view = drw.getViewByName(viewName);
-	        if (view==null)
-	        	throw new JLIException("View not found in drawing: " + viewName);
+//	        CallView2D view = drw.getViewByName(viewName);
+//	        if (view==null)
+//	        	throw new JLIException("View not found in drawing: " + viewName);
+	        
+	        // need to loop even if there's a specific name, because the same name could be used on different sheets
+	        ListViewObjectLooper looper = new ListViewObjectLooper();
+	        looper.setDrawing(drw);
+	        looper.setNamePattern(viewName);
+	        looper.setSheetno(drw.getCurrentSheetNumber());
+	        looper.loop();
+
+	        if (looper.out==null || looper.out.size()==0) {
+	        	throw new JLIException("View not found in current drawing sheet: " + viewName);
+	        }
+	        CallView2D view = looper.out.get(0);
 	        
 	        JLPoint origin = getViewOrigin(view);
 	        CallPoint3D origin3D = JLPointMaker.create3D(origin);
 	        
-	        int sheetno = view.getSheetNumber();
+	        int sheetno = -1;
+	        try {
+	        	sheetno = view.getSheetNumber();
+	        }
+    		catch (XToolkitGeneralError e) {
+    			// this error was thrown for a view that was Suppressed
+    			throw new JLIException("Cannot get location, view is Erased");
+    		}
 	        origin3D = screenToDrawingPoint(drw, sheetno, origin3D);
 	        
 	        return JLPointMaker.create(origin3D);
@@ -1360,6 +1453,8 @@ public class JLDrawing implements IJLDrawing {
 
     	if (viewName==null || viewName.trim().length()==0)
     		throw new JLIException("No view name parameter given");
+    	if (point==null)
+    		throw new JLIException("No coordinates given");
 
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
@@ -1380,11 +1475,30 @@ public class JLDrawing implements IJLDrawing {
 	        }
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        CallView2D view = drw.getViewByName(viewName);
-	        if (view==null)
-	        	throw new JLIException("View not found in drawing: " + viewName);
+//	        CallView2D view = drw.getViewByName(viewName);
+//	        if (view==null)
+//	        	throw new JLIException("View not found in drawing: " + viewName);
 
-	        int sheetno = view.getSheetNumber();
+	        // need to loop even if there's a specific name, because the same name could be used on different sheets
+	        ListViewObjectLooper looper = new ListViewObjectLooper();
+	        looper.setDrawing(drw);
+	        looper.setNamePattern(viewName);
+	        looper.setSheetno(drw.getCurrentSheetNumber());
+	        looper.loop();
+
+	        if (looper.out==null || looper.out.size()==0) {
+	        	throw new JLIException("View not found in current drawing sheet: " + viewName);
+	        }
+	        CallView2D view = looper.out.get(0);
+
+	        int sheetno = -1;
+	        try {
+	        	sheetno = view.getSheetNumber();
+	        }
+    		catch (XToolkitGeneralError e) {
+    			// this error was thrown for a view that was Suppressed
+    			throw new JLIException("Cannot set location, view is Erased");
+    		}
 	        CallVector3D vector = null;
 	        if (relative) {
 
@@ -1457,15 +1571,23 @@ public class JLDrawing implements IJLDrawing {
 	        }
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        CallView2D view = drw.getViewByName(viewName);
-	        if (view==null)
-	        	throw new JLIException("View not found in drawing: " + viewName);
-	        
-	        if (sheetno>0 && sheetno!=view.getSheetNumber()) {
-	        	throw new JLIException("View does not exist on sheet " + sheetno);
+
+	        // need to loop even if there's a specific name, because the same name could be used on different sheets
+	        ListViewObjectLooper looper = new ListViewObjectLooper();
+	        looper.setDrawing(drw);
+	        looper.setNamePattern(viewName);
+	        looper.setSheetno(sheetno);
+	        looper.loop();
+
+	        if (looper.out==null || looper.out.size()==0) {
+	        	if (sheetno>0)
+	        		throw new JLIException("View " + viewName + "does not exist on sheet " + sheetno);
+	        	else
+	        		throw new JLIException("View not found in drawing: " + viewName);
 	        }
 	        
-	        view.delete(deleteChildren);
+	        for (CallView2D view : looper.out)
+	        	view.delete(deleteChildren);
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
@@ -1516,9 +1638,21 @@ public class JLDrawing implements IJLDrawing {
 	        }
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        CallView2D view = drw.getViewByName(viewName);
-	        if (view==null)
+//	        CallView2D view = drw.getViewByName(viewName);
+//	        if (view==null)
+//	        	throw new JLIException("View not found in drawing: " + viewName);
+
+	        // need to loop even if there's a specific name, because the same name could be used on different sheets
+	        ListViewObjectLooper looper = new ListViewObjectLooper();
+	        looper.setDrawing(drw);
+	        looper.setNamePattern(viewName);
+	        looper.setSheetno(drw.getCurrentSheetNumber());
+	        looper.loop();
+
+	        if (looper.out==null || looper.out.size()==0) {
 	        	throw new JLIException("View not found in drawing: " + viewName);
+	        }
+	        CallView2D view = looper.out.get(0);
 
 	        // call external creo function
             Object[] inputs = new Object[] {
@@ -1574,9 +1708,11 @@ public class JLDrawing implements IJLDrawing {
 	        if (!(m instanceof CallDrawing))
 	        	throw new JLIException("Model is not a drawing");
 	        
+	        CallDrawing drw = (CallDrawing)m;
 	        ScaleViewLooper looper = new ScaleViewLooper();
-	        looper.setDrawing((CallDrawing)m);
+	        looper.setDrawing(drw);
 	        looper.setNamePattern(viewName);
+	        looper.setSheetno(drw.getCurrentSheetNumber());
 	        looper.scale = scale;
 	        looper.loop();
 	        
@@ -1630,9 +1766,21 @@ public class JLDrawing implements IJLDrawing {
 	        	throw new JLIException("Model is not a drawing");
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        CallView2D view = drw.getViewByName(viewName);
-	        if (view==null)
-	        	throw new JLIException("View not found in drawing: " + viewName);
+//	        CallView2D view = drw.getViewByName(viewName);
+//	        if (view==null)
+//	        	throw new JLIException("View not found in drawing: " + viewName);
+	        
+	        // need to loop even if there's a specific name, because the same name could be used on different sheets
+	        ListViewObjectLooper looper = new ListViewObjectLooper();
+	        looper.setDrawing(drw);
+	        looper.setNamePattern(viewName);
+	        looper.setSheetno(drw.getCurrentSheetNumber());
+	        looper.loop();
+
+	        if (looper.out==null || looper.out.size()==0) {
+	        	throw new JLIException("View not found in current drawing sheet: " + viewName);
+	        }
+	        CallView2D view = looper.out.get(0);
 	        
 	        double scale = view.getScale();
 	        
@@ -1683,10 +1831,14 @@ public class JLDrawing implements IJLDrawing {
 	        CallView2D view = drw.getViewByName(viewName);
 	        if (view==null)
 	        	throw new JLIException("View not found in drawing: " + viewName);
-	        
-	        int sheetno = view.getSheetNumber();
-	        
-	        return sheetno;
+
+	        try {
+	        	return view.getSheetNumber();
+	        }
+    		catch (XToolkitGeneralError e) {
+    			// this error was thrown for a view that was Suppressed
+    			throw new JLIException("Cannot get sheet number, view is Erased");
+    		}
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
@@ -1741,16 +1893,35 @@ public class JLDrawing implements IJLDrawing {
 	        }
 	        
 	        CallDrawing drw = (CallDrawing)m;
-	        CallView2D view = drw.getViewByName(viewName);
-	        if (view==null)
-	        	throw new JLIException("View not found in drawing: " + viewName);
+//	        CallView2D view = drw.getViewByName(viewName);
+//	        if (view==null)
+//	        	throw new JLIException("View not found in drawing: " + viewName);
+
+	        // need to loop even if there's a specific name, because the same name could be used on different sheets
+	        ListViewObjectLooper looper = new ListViewObjectLooper();
+	        looper.setDrawing(drw);
+	        looper.setNamePattern(viewName);
+	        looper.setSheetno(drw.getCurrentSheetNumber());
+	        looper.loop();
+
+	        if (looper.out==null || looper.out.size()==0) {
+	        	throw new JLIException("View not found in current drawing sheet: " + viewName);
+	        }
+	        CallView2D view = looper.out.get(0);
 
 	        CallOutline3D outline = view.getOutline();
 
 	        if (outline==null)
 	        	throw new JLIException("No outline found for drawing view");
 	        
-	        int sheet = view.getSheetNumber();
+	        int sheet = -1;
+	        try {
+	        	sheet = view.getSheetNumber();
+	        }
+    		catch (XToolkitGeneralError e) {
+    			// this error was thrown for a view that was Suppressed
+    			throw new JLIException("Cannot get bounding box, view is Erased");
+    		}
 	        CallPoint3D ptMin = screenToDrawingPoint(drw, sheet, outline.get(0));
 	        CallPoint3D ptMax = screenToDrawingPoint(drw, sheet, outline.get(1));
 
@@ -1765,6 +1936,378 @@ public class JLDrawing implements IJLDrawing {
         	}
     	}
     }
+    
+	@Override
+	public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return loadSymbolDef(filename, symbolDir, symbolFile, sess);
+	}
+
+	@Override
+	public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.load_symbol: " + symbolFile, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (symbolFile==null || symbolFile.trim().length()==0)
+    		throw new JLIException("No symbol file parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        int extpos = NitroUtils.findFileExtension(symbolFile);
+	        if (extpos>=0)
+	        	symbolFile = symbolFile.substring(0, extpos);
+
+	    	CallDetailSymbolDefItem def = drw.retrieveSymbolDefinition(symbolFile, symbolDir, null, Boolean.TRUE);
+
+	    	CallDetailSymbolDefInstructions instDef = def.getInstructions();
+
+	    	SymbolDefData data = new SymbolDefData();
+	    	data.setId(instDef.getId());
+	    	data.setName(instDef.getName());
+
+	    	return data;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.load_symbol,"+symbolFile, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	@Override
+    public boolean isSymbolDefLoaded(String filename, String symbolFile, String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+        return isSymbolDefLoaded(filename, symbolFile, sess);
+	}
+
+	@Override
+    public boolean isSymbolDefLoaded(String filename, String symbolFile, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.is_symbol_def_loaded: " + symbolFile, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (symbolFile==null || symbolFile.trim().length()==0)
+    		throw new JLIException("No symbol file parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return false;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        String symbolName = getSymbolNameFromFile(symbolFile);
+	        
+	        CallDetailSymbolDefItem symbolDef = findSymbolDefItem(drw, symbolName);
+		    return symbolDef!=null;
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.is_symbol_def_loaded,"+symbolFile, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+    
+	@Override
+    public void deleteSymbolDef(String filename, String symbolFile, String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+		deleteSymbolDef(filename, symbolFile, sess);
+	}
+
+	@Override
+    public void deleteSymbolDef(String filename, String symbolFile, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.delete_symbol_def: " + symbolFile, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (symbolFile==null || symbolFile.trim().length()==0)
+    		throw new JLIException("No symbol file parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        int numSheets = drw.getNumberOfSheets();
+	        
+	        String symbolName = getSymbolNameFromFile(symbolFile);
+	        
+	    	for (int i=0; i<numSheets; i++) {
+	    		drw.setCurrentSheetNumber(i+1);
+
+		        CallDetailSymbolDefItem symbolDef = findSymbolDefItem(drw, symbolName);
+		        if (symbolDef!=null) {
+			        symbolDef.delete();
+		        }
+
+		        // regenerate sheet even if symbol not found; it may be needed to make old symbols go away
+//		        drw.regenerateSheet(i);
+	    	}
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.delete_symbol_def,"+symbolFile, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+    
+	@Override
+	public void createSymbol(String filename, String symbolFile, JLPoint location, Map<String, Object> replaceValues, int sheet, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        createSymbol(filename, symbolFile, location, replaceValues, sheet, sess);
+	}
+
+	@Override
+	public void createSymbol(String filename, String symbolFile, JLPoint location, Map<String, Object> replaceValues, int sheet, AbstractJLISession sess)
+			throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.create_symbol: " + symbolFile, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (symbolFile==null || symbolFile.trim().length()==0)
+    		throw new JLIException("No symbol file parameter given");
+    	if (location==null)
+    		throw new JLIException("No coordinates given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        String symbolName = getSymbolNameFromFile(symbolFile);
+
+	        //drw.getDrawing().GetDetailItem(DetailType.DETAIL_SYM_DEFINITION, id)
+	        CallDetailSymbolDefItem symbolDef = findSymbolDefItem(drw, symbolName);
+	        if (symbolDef==null) {
+	        	throw new JLIException("Symbol definition " + symbolFile + " has not been loaded");
+	        }
+
+        	CallPoint3D point3D = JLPointMaker.create3D(location);
+	        point3D = drawingToScreenPoint(drw, sheet, point3D);
+
+	    	CallDetailSymbolInstInstructions inst2 = CallDetailSymbolInstInstructions.create(symbolDef);    
+	    	CallFreeAttachment position = CallFreeAttachment.create(point3D);
+
+	    	CallDetailLeaders allAttachments = CallDetailLeaders.create();
+			allAttachments.setItemAttachment(position);
+	 
+			inst2.setInstAttachment(allAttachments);
+
+			if (replaceValues!=null && replaceValues.size()>0) {
+				CallDetailVariantTexts texts = CallDetailVariantTexts.create();
+				for (String key : replaceValues.keySet()) {
+					Object val = replaceValues.get(key);
+					if (val==null)
+						val="";
+					CallDetailVariantText text = CallDetailVariantText.create(key, val.toString());
+					texts.append(text);
+				}
+				inst2.setTextValues(texts);
+			}
+
+			CreateSymbolLooper looper = new CreateSymbolLooper();
+			looper.setDrawing(drw);
+			looper.setSheetno(sheet);
+			looper.inst = inst2;
+			
+			looper.loop();
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.create_symbol,"+symbolFile, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	@Override
+    public List<SymbolInstData> listSymbols(String filename, String symbolFile, int sheet, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return listSymbols(filename, symbolFile, sheet, sess);
+    }
+
+	@Override
+    public List<SymbolInstData> listSymbols(String filename, String symbolFile, int sheet, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.list_symbols: " + symbolFile, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        String symbolName = getSymbolNameFromFile(symbolFile);
+
+			ListSymbolLooper looper = new ListSymbolLooper();
+			looper.setDrawing(drw);
+			looper.setSheetno(sheet);
+			looper.symbolName = symbolName;
+			
+			looper.loop();
+
+	        return looper.outvals;
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.list_symbols,"+symbolFile, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
+
+	@Override
+    public void deleteSymbolInst(String filename, int symbolId, String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+		deleteSymbolInst(filename, symbolId, sess);
+	}
+
+	@Override
+    public void deleteSymbolInst(String filename, int symbolId, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.delete_symbol_inst: " + symbolId, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (symbolId<0)
+    		throw new JLIException("No symbol file parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        CallModelItem item0 = drw.getItemById(ModelItemType.ITEM_DTL_SYM_INSTANCE, symbolId);
+	        CallDetailSymbolInstItem item = (CallDetailSymbolInstItem)item0;
+	        if (item!=null)
+	        	item.delete();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.delete_symbol_inst: " + symbolId, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
     
     /**
      * Convert a Creo PlotPaperSize to a standard string representing the size
@@ -1817,7 +2360,7 @@ public class JLDrawing implements IJLDrawing {
      * @return The drawing point
      * @throws jxthrowable
      */
-    public static CallPoint3D screenToDrawingPoint(CallDrawing drw, int sheetno, CallPoint3D ptScreen) throws jxthrowable {
+    public static CallPoint3D screenToDrawingPoint(CallModel2D drw, int sheetno, CallPoint3D ptScreen) throws jxthrowable {
     	CallTransform3D sheetTransform = drw.getSheetTransform(sheetno);
     	CallPoint3D ptDrawing = sheetTransform.transformPoint(ptScreen);
     	return ptDrawing;
@@ -1832,10 +2375,25 @@ public class JLDrawing implements IJLDrawing {
      * @return The drawing vector
      * @throws jxthrowable
      */
-    public static CallVector3D screenToDrawingPoint(CallDrawing drw, int sheetno, CallVector3D vecScreen) throws jxthrowable {
+    public static CallVector3D screenToDrawingPoint(CallModel2D drw, int sheetno, CallVector3D vecScreen) throws jxthrowable {
     	CallTransform3D sheetTransform = drw.getSheetTransform(sheetno);
     	CallVector3D vecDrawing = sheetTransform.transformVector(vecScreen);
     	return vecDrawing;
+    }
+
+    /**
+     * Convert a screen distance to a drawing distance.   
+     * @param drw The drawing containing the distance
+     * @param sheetno The sheet number containing the distance
+     * @param dist The distance
+     * @return The drawing distance
+     * @throws jxthrowable
+     */
+    public static double screenToDrawingDistance(CallModel2D drw, int sheetno, double dist) throws jxthrowable {
+    	CallPoint3D pt = CallPoint3D.create();
+    	pt.set(0, dist);
+    	pt = screenToDrawingPoint(drw, sheetno, pt);
+    	return pt.get(0);
     }
 
     /** Convert a drawing coordinate to a screen coordinate
@@ -1845,7 +2403,7 @@ public class JLDrawing implements IJLDrawing {
      * @return The screen point
      * @throws jxthrowable
      */
-    public static CallPoint3D drawingToScreenPoint(CallDrawing drw, int sheetno, CallPoint3D ptDrawing) throws jxthrowable {
+    public static CallPoint3D drawingToScreenPoint(CallModel2D drw, int sheetno, CallPoint3D ptDrawing) throws jxthrowable {
     	CallTransform3D sheetTransform = drw.getSheetTransform(sheetno);
     	sheetTransform.invert();
     	CallPoint3D ptScreen = sheetTransform.transformPoint(ptDrawing);
@@ -1861,11 +2419,26 @@ public class JLDrawing implements IJLDrawing {
      * @return The screen vector
      * @throws jxthrowable
      */
-    public static CallVector3D drawingToScreenPoint(CallDrawing drw, int sheetno, CallVector3D vecDrawing) throws jxthrowable {
+    public static CallVector3D drawingToScreenPoint(CallModel2D drw, int sheetno, CallVector3D vecDrawing) throws jxthrowable {
     	CallTransform3D sheetTransform = drw.getSheetTransform(sheetno);
     	sheetTransform.invert();
     	CallVector3D vecScreen = sheetTransform.transformVector(vecDrawing);
     	return vecScreen;
+    }
+
+    /**
+     * Convert a drawing distance to a screen distance. 
+     * @param drw The drawing containing the distance
+     * @param sheetno The sheet number containing the distance
+     * @param dist The drawing distance
+     * @return The screen distance
+     * @throws jxthrowable
+     */
+    public static double drawingToScreenDistance(CallModel2D drw, int sheetno, double dist) throws jxthrowable {
+    	CallPoint3D pt = CallPoint3D.create();
+    	pt.set(0, dist);
+    	pt = drawingToScreenPoint(drw, sheetno, pt);
+    	return pt.get(0);
     }
 
     /**
@@ -1975,6 +2548,46 @@ public class JLDrawing implements IJLDrawing {
     }
 
     /**
+     * Find a symbol definition in Creo.
+     * @param drw The drawing containing the symbol
+     * @param symbolName The symbol name
+     * @return The Symbol Definition
+     * @throws jxthrowable
+     */
+    private CallDetailSymbolDefItem findSymbolDefItem(CallDrawing drw, String symbolName) throws jxthrowable {
+    	CallDetailItems items = drw.listDetailItems(DetailType.DETAIL_SYM_DEFINITION, null);
+    	if (items==null)
+    		return null;
+    	int len = items.getarraysize();
+    	for (int i=0; i<len; i++) {
+    		CallDetailSymbolDefItem item = (CallDetailSymbolDefItem)items.get(i);
+    		CallDetailSymbolDefInstructions instDef = item.getInstructions();
+    		if (symbolName.equals(instDef.getName()))
+    			return item;
+    	}
+    	return null;
+    }
+
+    /**
+     * Convert a symbol file name (for example, "C:\test\my_symbol.sym.3") to a Creo Symbol Name (for example, "MY_SYMBOL").
+     * @param symbolFile The name of the file
+     * @return The name of the Symbol
+     */
+    private String getSymbolNameFromFile(String symbolFile) {
+    	if (symbolFile==null)
+    		return null;
+		int extpos = NitroUtils.findFileExtension(symbolFile);
+		if (extpos>=0)
+			symbolFile = symbolFile.substring(0, extpos);
+		extpos = NitroUtils.findFileBase(symbolFile);
+		if (extpos>=0)
+			symbolFile = symbolFile.substring(extpos+1);
+		if (symbolFile.length()==0)
+			return null;
+		return symbolFile.toUpperCase();
+    }
+
+    /**
      * An implementation of ModelLooper which accumulates a list of model
      * names in a drawing.
      * 
@@ -2034,6 +2647,86 @@ public class JLDrawing implements IJLDrawing {
                 if (name!=null)
                 	out.add(name);
         	}
+        	return false;
+		}
+    }
+
+    /**
+     * An implementation of View2DLooper which accumulates a list of view
+     * info in a drawing.
+     * 
+     * @author Adam Andrews
+     *
+     */
+    private class ListViewDetailLooper extends View2DLooper {
+
+    	private double textHeight=0;
+
+        /**
+         * The output list of view names
+         */
+        List<ViewDetailData> out = new Vector<ViewDetailData>();
+        
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.util.View2DLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2D)
+		 */
+		@Override
+		public boolean loopAction(CallView2D view) throws JLIException, jxthrowable {
+			if (textHeight==0) {
+	        	textHeight = getDrawing().getTextHeight();
+			}
+
+        	if (view!=null) {
+        		ViewDetailData vd = new ViewDetailData();
+        		
+        		vd.setName(view.getName());
+        		try {
+        			vd.setSheetNo(view.getSheetNumber());
+        		}
+        		catch (XToolkitGeneralError e) {
+        			// this error was thrown for a view that was Suppressed
+        			return false;
+        		}
+
+                CallOutline3D outline = view.getOutline();
+                CallPoint3D pt0 = screenToDrawingPoint(getDrawing(), vd.getSheetNo(), outline.get(0));
+                CallPoint3D pt1 = screenToDrawingPoint(getDrawing(), vd.getSheetNo(), outline.get(1));
+
+                JLPoint pt = new JLPoint();
+                pt.setX((pt1.get(0)+pt0.get(0))/2);
+                pt.setY((pt1.get(1)+pt0.get(1))/2);
+                vd.setLocation(pt);
+
+//            	vd.setTextHeight(drawingToScreenDistance(getDrawing(), 0, textHeight));
+                vd.setTextHeight(textHeight); // this is already in drawing units
+
+                out.add(vd);
+        	}
+        	return false;
+		}
+    }
+
+    /**
+     * An implementation of View2DLooper which accumulates a list of view
+     * objects in a drawing.
+     * 
+     * @author Adam Andrews
+     *
+     */
+    private class ListViewObjectLooper extends View2DLooper {
+
+        /**
+         * The output list of view names
+         */
+        List<CallView2D> out = new Vector<CallView2D>();
+        
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.util.View2DLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2D)
+		 */
+		@Override
+		public boolean loopAction(CallView2D view) throws JLIException, jxthrowable {
+        	if (view!=null)
+        		out.add(view);
         	return false;
 		}
     }
@@ -2127,6 +2820,90 @@ public class JLDrawing implements IJLDrawing {
     }
 
     /**
+     * An implementation of SheetLooper which regenerates sheets
+     * in a drawing.
+     * 
+     * @author Adam Andrews
+     *
+     */
+    public class RegenerateSheetLooper extends SheetLooper {
+
+		@Override
+		public boolean loopAction(CallModel2D drawing, int sheetno) throws JLIException,jxthrowable {
+        	drawing.regenerateSheet(sheetno);
+
+        	return false;
+		}
+    }
+
+    /**
+     * An implementation of SheetLooper which adds symbols to 
+     * sheets in a drawing.
+     * 
+     * @author Adam Andrews
+     *
+     */
+    public class CreateSymbolLooper extends SheetLooper {
+
+    	public CallDetailSymbolInstInstructions inst;
+    	
+		@Override
+		public boolean loopAction(CallModel2D drawing, int sheetno) throws JLIException,jxthrowable {
+			CallDetailSymbolInstItem symInst = (CallDetailSymbolInstItem)drawing.createDetailItem(inst);
+			symInst.show(); 
+
+			return false;
+		}
+    }
+
+    /**
+     * An implementation of SheetLooper which lists symbols on 
+     * sheets in a drawing.
+     * 
+     * @author Adam Andrews
+     *
+     */
+    public class ListSymbolLooper extends SheetLooper {
+
+    	public List<SymbolInstData> outvals=null;
+    	
+    	public String symbolName = null;
+
+		@Override
+		public boolean loopAction(CallModel2D drawing, int sheetno) throws JLIException,jxthrowable {
+
+    		// this doesn't ACTUALLY delete the instance, it just removes it from the screen; 
+    		// you get an error if you try to run this twice
+	    	CallDetailItems items = drawing.listDetailItems(DetailType.DETAIL_SYM_INSTANCE, null);
+	    	if (items==null)
+	    		return false;
+	    	
+	    	int len = items.getarraysize();
+	    	SymbolInstData rec;
+	    	for (int i=0; i<len; i++) {
+	    		CallDetailSymbolInstItem item = (CallDetailSymbolInstItem)items.get(i);
+//	    		CallDetailSymbolInstInstructions instInst = item.getInstructions(true);
+	    		CallDetailSymbolInstInstructions instInst = item.getInstructions(true);
+	    		CallDetailSymbolDefInstructions instDef = instInst.getSymbolDef().getInstructions();
+	    		if (symbolName==null || instDef.getName().equals(symbolName)) {
+		    		rec = new SymbolInstData();
+
+		    		rec.setId(item.getId());
+		    		rec.setName(instDef.getName());
+		    		rec.setSheet(sheetno);
+		    		
+			    	if (outvals==null)
+			    		outvals = new ArrayList<SymbolInstData>();
+			    	outvals.add(rec);
+	    		}
+
+	    	}
+
+			return false;
+		}
+    }
+
+    /**
      * Implementation of Regenerator which will regenerate a Drawing.
      * 
      * @author Adam Andrews
@@ -2143,5 +2920,4 @@ public class JLDrawing implements IJLDrawing {
 			drw.regenerate();
 		}
     }
-    
 }

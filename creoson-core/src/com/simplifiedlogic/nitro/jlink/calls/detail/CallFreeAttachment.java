@@ -19,51 +19,43 @@
 package com.simplifiedlogic.nitro.jlink.calls.detail;
 
 import com.ptc.cipjava.jxthrowable;
-import com.ptc.pfc.pfcDetail.DetailItem;
-import com.ptc.pfc.pfcDetail.DetailNoteItem;
-import com.ptc.pfc.pfcDetail.DetailSymbolDefItem;
-import com.ptc.pfc.pfcDetail.DetailSymbolInstItem;
-import com.ptc.pfc.pfcModelItem.ModelItem;
-import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
+import com.ptc.pfc.pfcDetail.AttachmentType;
+import com.ptc.pfc.pfcDetail.FreeAttachment;
+import com.ptc.pfc.pfcDetail.pfcDetail;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailItem
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.FreeAttachment
  * 
  * @author Adam Andrews
  *
  */
-public class CallDetailItem extends CallModelItem {
+public class CallFreeAttachment implements CallAttachment {
 
-	public CallDetailItem(DetailItem detailItem) {
-		super((ModelItem)detailItem);
+	private FreeAttachment attachment;
+
+	public CallFreeAttachment(FreeAttachment attachment) {
+		this.attachment = attachment;
 	}
-	
-	public int getType() throws jxthrowable {
-        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailItem,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
-		return getDetailItem().GetType().getValue();
-	}
-	
-	public static CallDetailItem create(DetailItem item) {
-		if (item==null)
+
+	public static CallFreeAttachment create(CallPoint3D inAttachmentPoint) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("pfcDetail,FreeAttachment_Create", 0, NitroConstants.DEBUG_JLINK_KEY);
+		FreeAttachment attachment= pfcDetail.FreeAttachment_Create(inAttachmentPoint.getPoint());
+		if (attachment==null)
 			return null;
-		if (item instanceof DetailNoteItem) 
-			return new CallDetailNoteItem((DetailNoteItem)item);
-		else if (item instanceof DetailSymbolDefItem) 
-			return new CallDetailSymbolDefItem((DetailSymbolDefItem)item);
-		else if (item instanceof DetailSymbolInstItem) 
-			return new CallDetailSymbolInstItem((DetailSymbolInstItem)item);
-		else
-			return new CallDetailItem(item);
+		return new CallFreeAttachment(attachment);
 	}
-
-	public void delete() throws jxthrowable {
-        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailItem,Remove", 0, NitroConstants.DEBUG_JLINK_KEY);
-		getDetailItem().Delete();
+	
+	public AttachmentType getType() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("FreeAttachment,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
+		if (attachment==null)
+			return null;
+		return attachment.GetType();
 	}
-		
-	public DetailItem getDetailItem() {
-		return (DetailItem)item;
+	
+	public FreeAttachment getAttachment() {
+		return attachment;
 	}
 }

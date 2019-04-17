@@ -1,0 +1,21 @@
+{
+  "object_name" : "ViewDetailData",
+  "description" : "Information about a drawing view",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "View name"
+  }, {
+    "name" : "sheet",
+    "type" : "integer",
+    "description" : "Sheet Number"
+  }, {
+    "name" : "location",
+    "type" : "object:JLPoint",
+    "description" : "View Location in Drawing Units"
+  }, {
+    "name" : "text_height",
+    "type" : "double",
+    "description" : "Text Height in Drawing Units"
+  } ]
+}

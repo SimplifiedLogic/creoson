@@ -1,0 +1,42 @@
+{
+  "spec" : {
+    "function_description" : "Check whether a symbol definition file is loaded into Creo",
+    "command" : "drawing",
+    "function" : "is_symbol_def_loaded",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "symbol_file",
+      "type" : "string",
+      "description" : "Name of the symbol file",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "loaded",
+      "type" : "boolean",
+      "description" : "Whether the symbol definition is loaded into Creo"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "is_symbol_def_loaded",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_file" : "my_symbol.sym"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "loaded" : true
+      }
+    }
+  } ]
+}

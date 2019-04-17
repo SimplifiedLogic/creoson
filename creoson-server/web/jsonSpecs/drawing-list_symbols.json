@@ -1,0 +1,80 @@
+{
+  "spec" : {
+    "function_description" : "List symbols contained on a drawing",
+    "command" : "drawing",
+    "function" : "list_symbols",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "symbol_file",
+      "type" : "string",
+      "description" : "Symbol file name filter",
+      "default" : "no filter"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number (0 for all sheets)",
+      "default" : "The symbol will be added to all sheets"
+    } ],
+    "response" : [ {
+      "name" : "symbols",
+      "type" : "object_array:SymbolInstData",
+      "description" : "List of symbols in the drawing"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_symbols",
+      "data" : {
+        "drawing" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "symbols" : [ {
+          "id" : 1,
+          "symbol_name" : "MY_SYMBOL",
+          "sheet" : 1
+        }, {
+          "id" : 2,
+          "symbol_name" : "LAST_SYMBOL",
+          "sheet" : 1
+        }, {
+          "id" : 3,
+          "symbol_name" : "NOTE_SYMBOL",
+          "sheet" : 2
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_symbols",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_file" : "my_symbol.sym"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "symbols" : [ {
+          "id" : 1,
+          "symbol_name" : "MY_SYMBOL",
+          "sheet" : 1
+        } ]
+      }
+    }
+  } ]
+}

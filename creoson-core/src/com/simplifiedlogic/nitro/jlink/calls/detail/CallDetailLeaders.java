@@ -16,25 +16,42 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jlink.calls.drawing;
+package com.simplifiedlogic.nitro.jlink.calls.detail;
 
-import com.ptc.pfc.pfcDrawing.Drawing;
-import com.ptc.pfc.pfcModel2D.Model2D;
-import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcDetail.DetailLeaders;
+import com.ptc.pfc.pfcDetail.pfcDetail;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDrawing.Drawing
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailLeaders
  * 
  * @author Adam Andrews
  *
  */
-public class CallDrawing extends CallModel2D {
+public class CallDetailLeaders {
 
-	public CallDrawing(Drawing m) {
-		super((Model2D)m);
+	private DetailLeaders leaders;
+	
+	public CallDetailLeaders(DetailLeaders leaders) {
+		this.leaders = leaders;
 	}
 	
-	public Drawing getDrawing() {
-		return (Drawing)m;
+	public static CallDetailLeaders create() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailLeaders,create", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DetailLeaders leaders = pfcDetail.DetailLeaders_Create();
+		if (leaders==null)
+			return null;
+		return new CallDetailLeaders(leaders);
+	}
+
+	public void setItemAttachment(CallAttachment value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailLeaders,SetItemAttachment", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getLeaders().SetItemAttachment(value!=null ? value.getAttachment() : null);
+	}
+
+	public DetailLeaders getLeaders() {
+		return leaders;
 	}
 }

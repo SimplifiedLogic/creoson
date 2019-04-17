@@ -16,25 +16,37 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jlink.calls.drawing;
+package com.simplifiedlogic.nitro.jlink.calls.detail;
 
-import com.ptc.pfc.pfcDrawing.Drawing;
-import com.ptc.pfc.pfcModel2D.Model2D;
-import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcDetail.DetailVariantText;
+import com.ptc.pfc.pfcDetail.pfcDetail;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDrawing.Drawing
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailText
  * 
  * @author Adam Andrews
  *
  */
-public class CallDrawing extends CallModel2D {
+public class CallDetailVariantText {
 
-	public CallDrawing(Drawing m) {
-		super((Model2D)m);
+	protected DetailVariantText textData;
+	
+	public CallDetailVariantText(DetailVariantText textData) {
+		this.textData = textData;
 	}
 	
-	public Drawing getDrawing() {
-		return (Drawing)m;
+	public static CallDetailVariantText create(String inPrompt, String inValue) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("pfcDetail,DetailVariantText_Create", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DetailVariantText textData = pfcDetail.DetailVariantText_Create(inPrompt, inValue);
+		if (textData==null)
+			return null;
+		return new CallDetailVariantText(textData);
+	}
+
+	public DetailVariantText getTextData() {
+		return textData;
 	}
 }

@@ -20,6 +20,8 @@ package com.simplifiedlogic.nitro.jlink.calls.modelitem;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcDetail.DetailNoteItem;
+import com.ptc.pfc.pfcDetail.DetailSymbolDefItem;
+import com.ptc.pfc.pfcDetail.DetailSymbolInstItem;
 import com.ptc.pfc.pfcDimension.Dimension;
 import com.ptc.pfc.pfcDimension2D.Dimension2D;
 import com.ptc.pfc.pfcFeature.Feature;
@@ -28,8 +30,9 @@ import com.ptc.pfc.pfcGeometry.Surface;
 import com.ptc.pfc.pfcLayer.Layer;
 import com.ptc.pfc.pfcModelItem.ModelItem;
 import com.ptc.pfc.pfcNote.Note;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailNoteItem;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolDefItem;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolInstItem;
 import com.simplifiedlogic.nitro.jlink.calls.dimension.CallDimension;
 import com.simplifiedlogic.nitro.jlink.calls.dimension2d.CallDimension2D;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
@@ -38,6 +41,7 @@ import com.simplifiedlogic.nitro.jlink.calls.geometry.CallSurface;
 import com.simplifiedlogic.nitro.jlink.calls.layer.CallLayer;
 import com.simplifiedlogic.nitro.jlink.calls.note.CallNote;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcModelItem.ModelItem
@@ -49,7 +53,7 @@ public class CallModelItem {
 
 	protected ModelItem item;
 	
-	public CallModelItem(ModelItem item) {
+	protected CallModelItem(ModelItem item) {
 		this.item = item;
 	}
 	
@@ -85,6 +89,10 @@ public class CallModelItem {
 			return new CallNote((Note)item);
 		else if (item instanceof DetailNoteItem)
 			return new CallDetailNoteItem((DetailNoteItem)item);
+		else if (item instanceof DetailSymbolDefItem)
+			return new CallDetailSymbolDefItem((DetailSymbolDefItem)item);
+		else if (item instanceof DetailSymbolInstItem)
+			return new CallDetailSymbolInstItem((DetailSymbolInstItem)item);
 		else if (item instanceof Surface)
 			return new CallSurface((Surface)item);
 		else

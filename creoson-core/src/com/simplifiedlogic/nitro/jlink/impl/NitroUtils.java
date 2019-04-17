@@ -63,6 +63,21 @@ public class NitroUtils {
     }
 
     /**
+     * Get the character position of the final name in a path.
+     * @param filename The path/file name to search
+     * @return The position right after the last slash in the name, or -1 if there are no slashes
+     */
+    public static int findFileBase(String filename) {
+        for (int i=filename.length()-1; i>=0; i--) {
+            char c = filename.charAt(i); 
+            if (c=='/' || c=='\\') {
+                return i+1;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Strip the Creo revision number from a file name
      * @param filename The file name to update
      * @return The updated file name

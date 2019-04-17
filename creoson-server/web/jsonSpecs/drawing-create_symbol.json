@@ -1,0 +1,56 @@
+{
+  "spec" : {
+    "function_description" : "Add a symbol instance to a drawing",
+    "command" : "drawing",
+    "function" : "create_symbol",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "symbol_file",
+      "type" : "string",
+      "description" : "Name of the symbol file",
+      "required" : true
+    }, {
+      "name" : "point",
+      "type" : "object:JLPoint",
+      "description" : "Coordinates for the symbol in Drawing Units",
+      "required" : true
+    }, {
+      "name" : "replace_values",
+      "type" : "object",
+      "description" : "Object containing replacement values for any variable text in the symbol"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number (0 for all sheets)",
+      "default" : "The symbol will be added to all sheets"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "create_symbol",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_file" : "my_symbol.sym",
+        "point" : {
+          "x" : 13.0,
+          "y" : 4.0
+        },
+        "replace_values" : {
+          "TEXT_VALUE" : "A3"
+        }
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -16,25 +16,21 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jlink.calls.drawing;
+package com.simplifiedlogic.nitro.jlink.calls.detail;
 
-import com.ptc.pfc.pfcDrawing.Drawing;
-import com.ptc.pfc.pfcModel2D.Model2D;
-import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcDetail.Attachment;
+import com.ptc.pfc.pfcDetail.AttachmentType;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDrawing.Drawing
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.Attachment
  * 
  * @author Adam Andrews
  *
  */
-public class CallDrawing extends CallModel2D {
+public interface CallAttachment {
 
-	public CallDrawing(Drawing m) {
-		super((Model2D)m);
-	}
-	
-	public Drawing getDrawing() {
-		return (Drawing)m;
-	}
+	public AttachmentType getType() throws jxthrowable;
+
+	public Attachment getAttachment();
 }

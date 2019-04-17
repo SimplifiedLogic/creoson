@@ -16,25 +16,63 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jlink.calls.drawing;
-
-import com.ptc.pfc.pfcDrawing.Drawing;
-import com.ptc.pfc.pfcModel2D.Model2D;
-import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+package com.simplifiedlogic.nitro.jlink.data;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDrawing.Drawing
+ * Data about a drawing symbol instance
  * 
  * @author Adam Andrews
  *
  */
-public class CallDrawing extends CallModel2D {
+public class SymbolInstData {
 
-	public CallDrawing(Drawing m) {
-		super((Model2D)m);
+	private int id;
+	private String name;
+	private int sheet;
+	// not ready for position yet, would require diving down into the Leaders / Attachments to find a FreeAttachment object
+//	private JLPoint location;
+
+	/**
+	 * @return The symbol ID
+	 */
+	public int getId() {
+		return id;
 	}
-	
-	public Drawing getDrawing() {
-		return (Drawing)m;
+	/**
+	 * @param id The symbol ID
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
+	/**
+	 * @return The symbol name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name The symbol name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+//	public JLPoint getLocation() {
+//		return location;
+//	}
+//	public void setLocation(JLPoint location) {
+//		this.location = location;
+//	}
+	/**
+	 * @return The sheet number containing the symbol
+	 */
+	public int getSheet() {
+		return sheet;
+	}
+	/**
+	 * @param sheet The sheet number containing the symbol
+	 */
+	public void setSheet(int sheet) {
+		this.sheet = sheet;
+	}
+
 }

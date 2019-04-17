@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Delete a symbol definition and its instances from a drawing",
+    "command" : "drawing",
+    "function" : "delete_symbol_def",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "symbol_file",
+      "type" : "string",
+      "description" : "Name of the symbol file",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_symbol_def",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_file" : "my_symbol.sym"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

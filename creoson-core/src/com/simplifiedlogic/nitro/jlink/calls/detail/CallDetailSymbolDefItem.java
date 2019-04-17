@@ -16,25 +16,35 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jlink.calls.drawing;
+package com.simplifiedlogic.nitro.jlink.calls.detail;
 
-import com.ptc.pfc.pfcDrawing.Drawing;
-import com.ptc.pfc.pfcModel2D.Model2D;
-import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcDetail.DetailSymbolDefInstructions;
+import com.ptc.pfc.pfcDetail.DetailSymbolDefItem;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDrawing.Drawing
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailSymbolDefItem
  * 
  * @author Adam Andrews
  *
  */
-public class CallDrawing extends CallModel2D {
+public class CallDetailSymbolDefItem extends CallDetailItem {
 
-	public CallDrawing(Drawing m) {
-		super((Model2D)m);
+	public CallDetailSymbolDefItem(DetailSymbolDefItem detailSymbolDefItem) {
+		super((DetailSymbolDefItem)detailSymbolDefItem);
 	}
 	
-	public Drawing getDrawing() {
-		return (Drawing)m;
+	public CallDetailSymbolDefInstructions getInstructions() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailSymbolDefItem,GetInstructions", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DetailSymbolDefInstructions inst = getDetailItem().GetInstructions();
+		if (inst==null)
+			return null;
+		return new CallDetailSymbolDefInstructions(inst);
+	}
+
+	public DetailSymbolDefItem getDetailItem() {
+		return (DetailSymbolDefItem)item;
 	}
 }

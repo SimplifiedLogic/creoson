@@ -1,0 +1,95 @@
+{
+  "spec" : {
+    "function_description" : "List the views contained in a drawing, with more details",
+    "command" : "drawing",
+    "function" : "list_view_details",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "view",
+      "type" : "string",
+      "description" : "View name filter",
+      "default" : "no filter",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "views",
+      "type" : "object_array:ViewDetailData",
+      "description" : "List of views in the drawing"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_view_details",
+      "data" : {
+        "model" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "views" : [ {
+          "name" : "FRONT",
+          "sheet" : 1,
+          "location" : {
+            "x" : 2.5,
+            "y" : 4.0,
+            "z" : 0.0
+          },
+          "text_height" : 0.2
+        }, {
+          "name" : "RIGHT",
+          "sheet" : 1,
+          "location" : {
+            "x" : 6.0,
+            "y" : 4.0,
+            "z" : 0.0
+          },
+          "text_height" : 0.2
+        }, {
+          "name" : "TOP",
+          "sheet" : 1,
+          "location" : {
+            "x" : 2.5,
+            "y" : 7.2,
+            "z" : 0.0
+          },
+          "text_height" : 0.2
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "list_view_details",
+      "data" : {
+        "model" : "box.drw"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "views" : [ {
+          "name" : "RIGHT",
+          "sheet" : 1,
+          "location" : {
+            "x" : 6.0,
+            "y" : 4.0,
+            "z" : 0.0
+          },
+          "text_height" : 0.2
+        } ]
+      }
+    }
+  } ]
+}

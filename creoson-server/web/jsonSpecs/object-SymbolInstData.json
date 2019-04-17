@@ -1,0 +1,17 @@
+{
+  "object_name" : "SymbolInstData",
+  "description" : "Information about a drawing symbol",
+  "data" : [ {
+    "name" : "id",
+    "type" : "integer",
+    "description" : "Symbol ID"
+  }, {
+    "name" : "symbol_name",
+    "type" : "string",
+    "description" : "Symbol name"
+  }, {
+    "name" : "sheet",
+    "type" : "integer",
+    "description" : "Sheet Number"
+  } ]
+}

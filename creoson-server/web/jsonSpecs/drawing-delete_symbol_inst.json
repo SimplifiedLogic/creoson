@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Delete a specific symbol instance from a drawing",
+    "command" : "drawing",
+    "function" : "delete_symbol_inst",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "symbol_id",
+      "type" : "integer",
+      "description" : "ID of the symbol instance",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "delete_symbol_inst",
+      "data" : {
+        "drawing" : "box.drw",
+        "symbol_id" : 2
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

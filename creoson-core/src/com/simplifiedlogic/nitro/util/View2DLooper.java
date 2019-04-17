@@ -20,6 +20,7 @@ package com.simplifiedlogic.nitro.util;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
+import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
 import com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2D;
 import com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2Ds;
@@ -42,6 +43,11 @@ public abstract class View2DLooper extends LooperBase {
     private CallModel2D drawing = null;
     
     /**
+     * Sheet number filter
+     */
+    private int sheetno = -1;
+    
+    /**
      * Output flag indicating that only a single parameter was specified in the name filter
      */
     public boolean singleOp = false;
@@ -52,21 +58,21 @@ public abstract class View2DLooper extends LooperBase {
      * @throws jxthrowable
      */
     public void loop() throws JLIException,jxthrowable {
-        if (namePattern!=null && !isNamePattern) {
-            currentName = null;
-            singleOp = true;
-            processObjectByName(namePattern);
-            return;
-        }
+//        if (namePattern!=null && !isNamePattern) {
+//            currentName = null;
+//            singleOp = true;
+//            processObjectByName(namePattern);
+//            return;
+//        }
 
         singleOp = false;
-        if (nameList!=null && !isNamePattern) {
-            for (int i=0; i<nameList.length; i++) {
-                currentName = null;
-                processObjectByName(nameList[i]);
-            }
-            return;
-        }
+//        if (nameList!=null && !isNamePattern) {
+//            for (int i=0; i<nameList.length; i++) {
+//                currentName = null;
+//                processObjectByName(nameList[i]);
+//            }
+//            return;
+//        }
 
         long start;
         start = System.currentTimeMillis();
@@ -87,6 +93,19 @@ public abstract class View2DLooper extends LooperBase {
             
             if (view==null) continue;
             try {
+            	if (sheetno>0) { // sheet numbers start at 1
+            		int viewsheet = -1;
+            		try {
+            			viewsheet = view.getSheetNumber();
+            		}
+            		catch (XToolkitGeneralError e) {
+            			// this error was thrown for a view that was Suppressed
+            			continue;
+            		}
+            		if (viewsheet!=sheetno)
+            			continue;
+            	}
+
                 if (nameList!=null) {
                 	String name = null;
                     try {
@@ -134,12 +153,12 @@ public abstract class View2DLooper extends LooperBase {
      * @see com.simplifiedlogic.nitro.util.LooperBase#processObjectByName(java.lang.String)
      */
     protected void processObjectByName(String name) throws JLIException,jxthrowable {
-    	long start = System.currentTimeMillis();
-    	CallView2D view = drawing.getViewByName(name);
-        if (debugKey!=null)
-        	DebugLogging.sendTimerMessage("jshell.getViewByName", start, debugKey);
-        if (view!=null)
-            loopAction(view);
+//    	long start = System.currentTimeMillis();
+//    	CallView2D view = drawing.getViewByName(name);
+//        if (debugKey!=null)
+//        	DebugLogging.sendTimerMessage("jshell.getViewByName", start, debugKey);
+//        if (view!=null)
+//            loopAction(view);
     }
     
     /**
@@ -172,6 +191,20 @@ public abstract class View2DLooper extends LooperBase {
 	 */
 	public void setDrawing(CallModel2D drawing) {
 		this.drawing = drawing;
+	}
+
+	/**
+	 * @return The sheet number filter
+	 */
+	public int getSheetno() {
+		return sheetno;
+	}
+
+	/**
+	 * @param sheetno The sheet number filter
+	 */
+	public void setSheetno(int sheetno) {
+		this.sheetno = sheetno;
 	}
 
 }

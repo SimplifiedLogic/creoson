@@ -19,51 +19,41 @@
 package com.simplifiedlogic.nitro.jlink.calls.detail;
 
 import com.ptc.cipjava.jxthrowable;
-import com.ptc.pfc.pfcDetail.DetailItem;
-import com.ptc.pfc.pfcDetail.DetailNoteItem;
-import com.ptc.pfc.pfcDetail.DetailSymbolDefItem;
+import com.ptc.pfc.pfcDetail.DetailSymbolInstInstructions;
 import com.ptc.pfc.pfcDetail.DetailSymbolInstItem;
-import com.ptc.pfc.pfcModelItem.ModelItem;
-import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailItem
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailSymbolInstItem
  * 
  * @author Adam Andrews
  *
  */
-public class CallDetailItem extends CallModelItem {
+public class CallDetailSymbolInstItem extends CallDetailItem {
 
-	public CallDetailItem(DetailItem detailItem) {
-		super((ModelItem)detailItem);
+	public CallDetailSymbolInstItem(DetailSymbolInstItem detailSymbolInstItem) {
+		super((DetailSymbolInstItem)detailSymbolInstItem);
 	}
-	
-	public int getType() throws jxthrowable {
-        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailItem,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
-		return getDetailItem().GetType().getValue();
+
+	public void show() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailSymbolInstItem,Show", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getDetailItem().Show();
 	}
-	
-	public static CallDetailItem create(DetailItem item) {
-		if (item==null)
+
+	// Creo version of this function takes a boolean argument; WF4 version does not
+	public CallDetailSymbolInstInstructions getInstructions(boolean giveParametersAsNames) throws jxthrowable {
+//	public CallDetailSymbolInstInstructions getInstructions() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailSymbolInstItem,GetInstructions", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DetailSymbolInstInstructions instr = getDetailItem().GetInstructions(giveParametersAsNames);
+//        DetailSymbolInstInstructions instr = getDetailItem().GetInstructions();
+		if (instr==null)
 			return null;
-		if (item instanceof DetailNoteItem) 
-			return new CallDetailNoteItem((DetailNoteItem)item);
-		else if (item instanceof DetailSymbolDefItem) 
-			return new CallDetailSymbolDefItem((DetailSymbolDefItem)item);
-		else if (item instanceof DetailSymbolInstItem) 
-			return new CallDetailSymbolInstItem((DetailSymbolInstItem)item);
-		else
-			return new CallDetailItem(item);
+		return new CallDetailSymbolInstInstructions(instr);
 	}
-
-	public void delete() throws jxthrowable {
-        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailItem,Remove", 0, NitroConstants.DEBUG_JLINK_KEY);
-		getDetailItem().Delete();
-	}
-		
-	public DetailItem getDetailItem() {
-		return (DetailItem)item;
+	
+	
+	public DetailSymbolInstItem getDetailItem() {
+		return (DetailSymbolInstItem)item;
 	}
 }

@@ -47,6 +47,7 @@ public interface JLDrawingRequestParams {
     public static final String FUNC_GET_VIEW_SHEET	= "get_view_sheet";
     public static final String FUNC_LIST_MODELS		= "list_models";
     public static final String FUNC_LIST_VIEWS		= "list_views";
+    public static final String FUNC_LIST_VIEW_DETAILS	= "list_view_details";
     public static final String FUNC_REGENERATE		= "regenerate";
     public static final String FUNC_REGENERATE_SHEET	= "regenerate_sheet";
     public static final String FUNC_RENAME_VIEW		= "rename_view";
@@ -56,6 +57,12 @@ public interface JLDrawingRequestParams {
     public static final String FUNC_SET_VIEW_LOC	= "set_view_loc";
     public static final String FUNC_SCALE_VIEW		= "scale_view";
     public static final String FUNC_VIEW_BOUND_BOX	= "view_bound_box";
+    public static final String FUNC_LOAD_SYMBOL_DEF	= "load_symbol_def";
+    public static final String FUNC_IS_SYMBOL_DEF_LOADED	= "is_symbol_def_loaded";
+    public static final String FUNC_CREATE_SYMBOL	= "create_symbol";
+    public static final String FUNC_LIST_SYMBOLS	= "list_symbols";
+    public static final String FUNC_DELETE_SYMBOL_DEF	= "delete_symbol_def";
+    public static final String FUNC_DELETE_SYMBOL_INST	= "delete_symbol_inst";
 
     // request fields
     public static final String PARAM_MODEL		= "model";
@@ -76,6 +83,10 @@ public interface JLDrawingRequestParams {
     public static final String PARAM_PARENT_VIEW	= "parent_view";
     public static final String PARAM_EXPLODED	= "exploded";
     public static final String PARAM_POSITION	= "position";
+    public static final String PARAM_SYMBOL_DIR	= "symbol_dir";
+    public static final String PARAM_SYMBOL_FILE	= "symbol_file";
+    public static final String PARAM_SYMBOL_ID	= "symbol_id";
+    public static final String PARAM_REPLACE_VALUES	= "replace_values";
 
     // view display data params
     public static final String PARAM_DISPLAY_DATA				= "display_data";
@@ -85,5 +96,5 @@ public interface JLDrawingRequestParams {
     public static final String PARAM_SHOW_WELD_XSECTION			= "show_weld_xsection";
     public static final String PARAM_STYLE						= "style";
     public static final String PARAM_TANGENT_STYLE				= "tangent_style";
-    
+
 }
