@@ -1,8 +1,8 @@
 {
   "spec" : {
-    "function_description" : "Get a list of dimensions from a model",
+    "function_description" : "Get a list of dimension details from a model",
     "command" : "dimension",
-    "function" : "list",
+    "function" : "list_detail",
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -32,7 +32,7 @@
     } ],
     "response" : [ {
       "name" : "dimlist",
-      "type" : "object_array:DimData",
+      "type" : "object_array:DimDetailData",
       "description" : "List of dimension information"
     } ]
   },
@@ -40,7 +40,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "list",
+      "function" : "list_detail",
       "data" : {
         "file" : "box.prt",
         "name" : "d*1"
@@ -54,11 +54,32 @@
         "dimlist" : [ {
           "name" : "d1",
           "value" : 32.5,
-          "encoded" : false
+          "encoded" : false,
+          "sheet" : 1,
+          "view_name" : "main_view",
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 100.0,
+            "y" : 50.0,
+            "z" : 0.0
+          },
+          "tolerance_type" : "plus_minus",
+          "tol_plus" : 0.75,
+          "tol_minus" : 1.0
         }, {
           "name" : "d11",
           "value" : 5.0,
-          "encoded" : false
+          "encoded" : false,
+          "sheet" : 1,
+          "view_name" : "main_view",
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 5.0,
+            "y" : 7.5,
+            "z" : 0.0
+          }
         } ]
       }
     }
@@ -66,7 +87,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "list",
+      "function" : "list_detail",
       "data" : {
         "names" : [ "d1", "RADIUS", "ANGLE" ]
       }
@@ -79,15 +100,45 @@
         "dimlist" : [ {
           "name" : "ANGLE",
           "value" : "MzAgASQCCg==",
-          "encoded" : true
+          "encoded" : true,
+          "sheet" : 2,
+          "view_name" : "hole_view",
+          "dim_type" : "angular",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 16.0,
+            "y" : 3.0,
+            "z" : 0.0
+          }
         }, {
           "name" : "d1",
           "value" : 32.5,
-          "encoded" : false
+          "encoded" : false,
+          "sheet" : 1,
+          "view_name" : "main_view",
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 100.0,
+            "y" : 50.0,
+            "z" : 0.0
+          },
+          "tolerance_type" : "plus_minus",
+          "tol_plus" : 0.75,
+          "tol_minus" : 1.0
         }, {
           "name" : "RADIUS",
           "value" : 2.5,
-          "encoded" : false
+          "encoded" : false,
+          "sheet" : 2,
+          "view_name" : "hole_view",
+          "dim_type" : "radial",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 12.32,
+            "y" : 4.25,
+            "z" : 0.0
+          }
         } ]
       }
     }
@@ -95,7 +146,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "list",
+      "function" : "list_detail",
       "data" : {
         "file" : "box.prt",
         "name" : "d1",
@@ -110,7 +161,19 @@
         "dimlist" : [ {
           "name" : "d1",
           "value" : "MzIuNQ==",
-          "encoded" : true
+          "encoded" : true,
+          "sheet" : 1,
+          "view_name" : "main_view",
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 100.0,
+            "y" : 50.0,
+            "z" : 0.0
+          },
+          "tolerance_type" : "plus_minus",
+          "tol_plus" : 0.75,
+          "tol_minus" : 1.0
         } ]
       }
     }
@@ -118,7 +181,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "list",
+      "function" : "list_detail",
       "data" : {
         "file" : "box.prt",
         "dim_type" : "linear"
@@ -132,7 +195,19 @@
         "dimlist" : [ {
           "name" : "d1",
           "value" : 32.5,
-          "encoded" : false
+          "encoded" : false,
+          "sheet" : 1,
+          "view_name" : "main_view",
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ],
+          "location" : {
+            "x" : 100.0,
+            "y" : 50.0,
+            "z" : 0.0
+          },
+          "tolerance_type" : "plus_minus",
+          "tol_plus" : 0.75,
+          "tol_minus" : 1.0
         } ]
       }
     }

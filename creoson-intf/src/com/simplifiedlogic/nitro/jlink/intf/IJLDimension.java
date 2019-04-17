@@ -22,36 +22,44 @@ import java.util.List;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.DimData;
+import com.simplifiedlogic.nitro.jlink.data.DimDetailData;
 import com.simplifiedlogic.nitro.jlink.data.DimSelectData;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 
 public interface IJLDimension {
 
-	public abstract void set(String modelname, String dimname, Object value,
+	public void set(String modelname, String dimname, Object value,
 			boolean encoded, String sessionId) throws JLIException;
-	public abstract void set(String modelname, String dimname, Object value,
+	public void set(String modelname, String dimname, Object value,
 			boolean encoded, AbstractJLISession sess) throws JLIException;
 
-	public abstract void copy(String modelname, String dimname, String to_name,
+	public void copy(String modelname, String dimname, String to_name,
 			String to_model, String sessionId) throws JLIException;
-	public abstract void copy(String modelname, String dimname, String to_name,
+	public void copy(String modelname, String dimname, String to_name,
 			String to_model, AbstractJLISession sess) throws JLIException;
 
-	public abstract List<DimData> list(String modelname, 
-			String dimName, List<String> dimNames, 
+	public List<DimData> list(String modelname, 
+			String dimName, List<String> dimNames, String dimType, 
 			boolean encoded, String sessionId) throws JLIException;
-	public abstract List<DimData> list(String modelname, 
-			String dimName, List<String> dimNames, 
+	public List<DimData> list(String modelname, 
+			String dimName, List<String> dimNames, String dimType, 
 			boolean encoded, AbstractJLISession sess) throws JLIException;
 
-	public abstract void show(String modelname, String asmname, String dimname,
+	public List<DimDetailData> listDetail(String modelname, 
+			String dimName, List<String> dimNames, String dimType, 
+			boolean encoded, String sessionId) throws JLIException;
+	public List<DimDetailData> listDetail(String modelname, 
+			String dimName, List<String> dimNames, String dimType, 
+			boolean encoded, AbstractJLISession sess) throws JLIException;
+
+	public void show(String modelname, String asmname, String dimname,
 			int[] path, boolean show, String sessionId) throws JLIException;
-	public abstract void show(String modelname, String asmname, String dimname,
+	public void show(String modelname, String asmname, String dimname,
 			int[] path, boolean show, AbstractJLISession sess) throws JLIException;
 
-	public abstract List<DimSelectData> userSelect(String modelname, int max, 
+	public List<DimSelectData> userSelect(String modelname, int max, 
 			String sessionId) throws JLIException;
-	public abstract List<DimSelectData> userSelect(String modelname, int max, 
+	public List<DimSelectData> userSelect(String modelname, int max, 
 			AbstractJLISession sess) throws JLIException;
 
 }

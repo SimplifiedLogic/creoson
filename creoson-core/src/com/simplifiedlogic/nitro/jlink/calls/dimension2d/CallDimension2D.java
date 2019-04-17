@@ -18,9 +18,18 @@
  */
 package com.simplifiedlogic.nitro.jlink.calls.dimension2d;
 
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcBase.Point3D;
 import com.ptc.pfc.pfcDimension.BaseDimension;
+import com.ptc.pfc.pfcDimension.DimTolerance;
 import com.ptc.pfc.pfcDimension2D.Dimension2D;
+import com.ptc.pfc.pfcView2D.View2D;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.dimension.CallBaseDimension;
+import com.simplifiedlogic.nitro.jlink.calls.dimension.CallDimTolerance;
+import com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2D;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcDimension2D.Dimension2D
@@ -32,6 +41,30 @@ public class CallDimension2D extends CallBaseDimension {
 
 	public CallDimension2D(Dimension2D dim) {
 		super((BaseDimension)dim);
+	}
+	
+	public CallView2D getView() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Dimension2D,GetView", 0, NitroConstants.DEBUG_JLINK_KEY);
+        View2D view = getDim().GetView();
+        if (view==null)
+        	return null;
+        return new CallView2D(view);
+	}
+	
+	public CallPoint3D getLocation() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Dimension2D,GetLocation", 0, NitroConstants.DEBUG_JLINK_KEY);
+        Point3D pt = getDim().GetLocation();
+        if (pt==null)
+        	return null;
+        return new CallPoint3D(pt);
+	}
+	
+	public CallDimTolerance getTolerance() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Dimension2D,GetTolerance", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DimTolerance tol = getDim().GetTolerance();
+        if (tol==null)
+        	return null;
+        return CallDimTolerance.create(tol);
 	}
 	
 	public Dimension2D getDim() {

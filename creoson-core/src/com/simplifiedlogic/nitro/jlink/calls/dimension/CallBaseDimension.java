@@ -19,14 +19,16 @@
 package com.simplifiedlogic.nitro.jlink.calls.dimension;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.cipjava.stringseq;
 import com.ptc.pfc.pfcDimension.BaseDimension;
 import com.ptc.pfc.pfcModelItem.ModelItem;
 import com.ptc.pfc.pfcModelItem.ParamValue;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentDimensionShowInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParamValue;
+import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcDimension.BaseDimension
@@ -66,6 +68,19 @@ public class CallBaseDimension extends CallModelItem {
 		getDim().Erase();
 	}
 
+	public int getDimType() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("BaseDimension,GetDimType", 0, NitroConstants.DEBUG_JLINK_KEY);
+        return getDim().GetDimType().getValue();
+	}
+	
+	public CallStringSeq getTexts() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("BaseDimension,GetTexts", 0, NitroConstants.DEBUG_JLINK_KEY);
+		stringseq texts = getDim().GetTexts();
+		if (texts==null)
+			return null;
+		return new CallStringSeq(texts);
+	}
+	
 	public BaseDimension getDim() {
 		return (BaseDimension)item;
 	}

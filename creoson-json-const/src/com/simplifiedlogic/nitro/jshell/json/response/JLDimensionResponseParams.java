@@ -26,10 +26,28 @@ package com.simplifiedlogic.nitro.jshell.json.response;
 public interface JLDimensionResponseParams {
 
 	// response fields
-    public static final String OUTPUT_NAME       = "name";
-    public static final String OUTPUT_VALUE      = "value";
-    public static final String OUTPUT_TYPE       = "type";
-    public static final String OUTPUT_ENCODED    = "encoded";
-    public static final String OUTPUT_DIMLIST   = "dimlist";
-
+    public static final String OUTPUT_NAME		= "name";
+    public static final String OUTPUT_VALUE		= "value";
+    public static final String OUTPUT_TYPE		= "type";
+    public static final String OUTPUT_ENCODED	= "encoded";
+    public static final String OUTPUT_DIMLIST	= "dimlist";
+    
+    // dimension detail fields
+    public static final String OUTPUT_SHEET			= "sheet";
+    public static final String OUTPUT_VIEW_NAME		= "view_name";
+    public static final String OUTPUT_DIM_TYPE		= "dim_type";
+    public static final String OUTPUT_TEXT			= "text";
+    public static final String OUTPUT_LOCATION		= "location";
+    
+    // dimension tolerance fields
+    public static final String OUTPUT_TOLERANCE_TYPE		= "tolerance_type";	
+    public static final String OUTPUT_TOL_LOWER_LIMIT		= "tol_lower_limit";
+    public static final String OUTPUT_TOL_UPPER_LIMIT		= "tol_upper_limit";
+    public static final String OUTPUT_TOL_PLUS				= "tol_plus";
+    public static final String OUTPUT_TOL_MINUS				= "tol_minus";
+    public static final String OUTPUT_TOL_SYMMETRIC_VALUE	= "tol_symmetric_value";
+    public static final String OUTPUT_TOL_TABLE_NAME		= "tol_table_name";
+    public static final String OUTPUT_TOL_TABLE_COLUMN		= "tol_table_column";
+    public static final String OUTPUT_TOL_TABLE_TYPE		= "tol_table_type";
+    
 }

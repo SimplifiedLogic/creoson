@@ -1,0 +1,77 @@
+{
+  "object_name" : "DimDetailData",
+  "description" : "More detailed information about a Creo dimension",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Dimension name"
+  }, {
+    "name" : "value",
+    "type" : "depends on data type",
+    "description" : "Dimension value"
+  }, {
+    "name" : "encoded",
+    "type" : "boolean",
+    "description" : "Value is Base64-encoded",
+    "default" : "false"
+  }, {
+    "name" : "sheet",
+    "type" : "integer",
+    "description" : "Sheet number"
+  }, {
+    "name" : "view_name",
+    "type" : "string",
+    "description" : "View name"
+  }, {
+    "name" : "dim_type",
+    "type" : "string",
+    "description" : "Dimension type",
+    "valid_values" : "linear, radial, diameter, angular"
+  }, {
+    "name" : "text",
+    "type" : "array:string",
+    "description" : "Dimension raw text"
+  }, {
+    "name" : "location",
+    "type" : "object:JLPoint",
+    "description" : "Coordinates of the dimension in drawing units"
+  }, {
+    "name" : "tolerance_type",
+    "type" : "string",
+    "description" : "Tolerance type, if any",
+    "valid_values" : "limits, plus_minus, symmetric, sym_superscript, isodin"
+  }, {
+    "name" : "tol_lower_limit",
+    "type" : "double",
+    "description" : "Tolerance Lower Limit - only set if tolerance_type=limits"
+  }, {
+    "name" : "tol_upper_limit",
+    "type" : "double",
+    "description" : "Tolerance Upper Limit - only set if tolerance_type=limits"
+  }, {
+    "name" : "tol_plus",
+    "type" : "double",
+    "description" : "Tolerance Plus Value - only set if tolerance_type=plus_minus"
+  }, {
+    "name" : "tol_minus",
+    "type" : "double",
+    "description" : "Tolerance Minus Value - only set if tolerance_type=plus_minus"
+  }, {
+    "name" : "tol_symmetric_value",
+    "type" : "double",
+    "description" : "Tolerance Symmetric Value - only set if tolerance_type=symmetric or sym_superscript"
+  }, {
+    "name" : "tol_table_name",
+    "type" : "string",
+    "description" : "Tolerance Table Name - only set if tolerance_type=isodin"
+  }, {
+    "name" : "tol_table_column",
+    "type" : "integer",
+    "description" : "Tolerance Table Column - only set if tolerance_type=isodin"
+  }, {
+    "name" : "tol_table_type",
+    "type" : "string",
+    "description" : "Tolerance Table Type - only set if tolerance_type=isodin",
+    "valid_values" : "general, broken_edge, shafts, holes"
+  } ]
+}

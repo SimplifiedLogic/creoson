@@ -24,7 +24,9 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.simplifiedlogic.nitro.jlink.data.DimData;
+import com.simplifiedlogic.nitro.jlink.data.DimDetailData;
 import com.simplifiedlogic.nitro.jlink.data.DimSelectData;
+import com.simplifiedlogic.nitro.jlink.data.DimToleranceData;
 import com.simplifiedlogic.nitro.jlink.intf.IJLDimension;
 import com.simplifiedlogic.nitro.jshell.json.request.JLDimensionRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLDimensionResponseParams;
@@ -57,6 +59,7 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 		if (function.equals(FUNC_SET)) return actionSet(sessionId, input);
 		else if (function.equals(FUNC_COPY)) return actionCopy(sessionId, input);
 		else if (function.equals(FUNC_LIST)) return actionList(sessionId, input);
+		else if (function.equals(FUNC_LIST_DETAIL)) return actionListDetail(sessionId, input);
 		else if (function.equals(FUNC_SHOW)) return actionShow(sessionId, input);
 		else if (function.equals(FUNC_USER_SELECT)) return actionUserSelect(sessionId, input);
 		else {
@@ -94,9 +97,10 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
         if (namesObj!=null) {
         	dimNames = getStringListValue(namesObj);
         }
+        String dimType = checkStringParameter(input, PARAM_DIM_TYPE, false);
         boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
 
-        List<DimData> dims = dimHandler.list(modelname, namePattern, dimNames, encoded, sessionId);
+        List<DimData> dims = dimHandler.list(modelname, namePattern, dimNames, dimType, encoded, sessionId);
         
         if (dims!=null && dims.size()>0) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
@@ -110,6 +114,78 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 				if (dim.getValue()!=null)
 					outDim.put(PARAM_VALUE, dim.getValue());
 				outDim.put(PARAM_ENCODED, Boolean.valueOf(dim.isEncoded()));
+				
+				outDims.add(outDim);
+			}
+			
+			return out;
+        }
+        return null;
+	}
+
+	private Hashtable<String, Object> actionListDetail(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String namePattern = checkStringParameter(input, PARAM_NAME, false);
+        List<String> dimNames = null;
+        Object namesObj = checkParameter(input, PARAM_NAMES, false);
+        if (namesObj!=null) {
+        	dimNames = getStringListValue(namesObj);
+        }
+        String dimType = checkStringParameter(input, PARAM_DIM_TYPE, false);
+        boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
+
+        List<DimDetailData> dims = dimHandler.listDetail(modelname, namePattern, dimNames, dimType, encoded, sessionId);
+        
+        if (dims!=null && dims.size()>0) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
+			out.put(OUTPUT_DIMLIST, outDims);
+			Map<String, Object> outDim = null;
+			for (DimDetailData dim : dims) {
+				outDim = new Hashtable<String, Object>();
+				if (dim.getName()!=null)
+					outDim.put(OUTPUT_NAME, dim.getName());
+				if (dim.getValue()!=null)
+					outDim.put(OUTPUT_VALUE, dim.getValue());
+				outDim.put(OUTPUT_ENCODED, Boolean.valueOf(dim.isEncoded()));
+				
+				DimToleranceData tol = dim.getTolerance();
+				if (tol!=null) {
+					if (tol.getToleranceType()!=null)
+						outDim.put(OUTPUT_TOLERANCE_TYPE, tol.getToleranceType());
+					if (DimToleranceData.TYPE_LIMITS.equals(tol.getToleranceType())) {
+						outDim.put(OUTPUT_TOL_LOWER_LIMIT, tol.getLowerLimit());
+						outDim.put(OUTPUT_TOL_UPPER_LIMIT, tol.getUpperLimit());
+					}
+					else if (DimToleranceData.TYPE_PLUS_MINUS.equals(tol.getToleranceType())) {
+						outDim.put(OUTPUT_TOL_PLUS, tol.getPlus());
+						outDim.put(OUTPUT_TOL_MINUS, tol.getMinus());
+					}
+					else if (DimToleranceData.TYPE_SYMMETRIC.equals(tol.getToleranceType())) {
+						outDim.put(OUTPUT_TOL_SYMMETRIC_VALUE, tol.getSymmetricValue());
+					}
+					else if (DimToleranceData.TYPE_SYM_SUPERSCRIPT.equals(tol.getToleranceType())) {
+						outDim.put(OUTPUT_TOL_SYMMETRIC_VALUE, tol.getSymmetricValue());
+					}
+					else if (DimToleranceData.TYPE_ISODIN.equals(tol.getToleranceType())) {
+						if (tol.getTableName()!=null)
+							outDim.put(OUTPUT_TOL_TABLE_NAME, tol.getTableName());
+						outDim.put(OUTPUT_TOL_TABLE_COLUMN, tol.getTableColumn());
+						if (tol.getTableType()!=null)
+							outDim.put(OUTPUT_TOL_TABLE_TYPE, tol.getTableType());
+					}
+				}
+				outDim.put(OUTPUT_SHEET, dim.getSheetNo());
+				if (dim.getViewName()!=null)
+					outDim.put(OUTPUT_VIEW_NAME, dim.getViewName());
+				if (dim.getDimType()!=null)
+					outDim.put(OUTPUT_DIM_TYPE, dim.getDimType());
+				if (dim.getText()!=null && dim.getText().length>0)
+					outDim.put(OUTPUT_TEXT, dim.getText());
+
+				Map<String, Object> recPt = writePoint(dim.getLocation());
+				if (recPt!=null)
+					outDim.put(OUTPUT_LOCATION, recPt);
 				
 				outDims.add(outDim);
 			}
@@ -152,10 +228,11 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 			for (DimSelectData dim : dims) {
 				outDim = new Hashtable<String, Object>();
 				if (dim.getName()!=null)
-					outDim.put(PARAM_NAME, dim.getName());
+					outDim.put(OUTPUT_NAME, dim.getName());
 				if (dim.getValue()!=null)
-					outDim.put(PARAM_VALUE, dim.getValue());
-				outDim.put(PARAM_ENCODED, Boolean.valueOf(dim.isEncoded()));
+					outDim.put(OUTPUT_VALUE, dim.getValue());
+				outDim.put(OUTPUT_ENCODED, Boolean.valueOf(dim.isEncoded()));
+
 				if (dim.getModelname()!=null)
 					outDim.put(PARAM_MODEL, dim.getModelname());
 				if (dim.getRelationId()!=null)

@@ -32,6 +32,7 @@ public interface JLDimensionRequestParams {
     public static final String FUNC_SET			= "set";
     public static final String FUNC_COPY		= "copy";
     public static final String FUNC_LIST		= "list";
+    public static final String FUNC_LIST_DETAIL	= "list_detail";
     public static final String FUNC_SHOW		= "show";
     public static final String FUNC_USER_SELECT	= "user_select";
 
@@ -48,5 +49,6 @@ public interface JLDimensionRequestParams {
     public static final String PARAM_ASSEMBLY   = "assembly";
     public static final String PARAM_MAX		= "max";
     public static final String PARAM_RELATION_ID	= "relation_id";
+    public static final String PARAM_DIM_TYPE	= "dim_type";
     
 }
