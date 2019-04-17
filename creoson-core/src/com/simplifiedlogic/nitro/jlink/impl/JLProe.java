@@ -84,8 +84,10 @@ public class JLProe implements IJLProe {
 	        NitroUtils.validateDirFile(dirname, null, false);
 	        
 	        JlinkUtils.changeDirectory(session, dirname);
+
+	        String result = session.getCurrentDirectory();
 	
-	        return dirname.replace('\\', '/');
+	        return result.replace('\\', '/');
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
