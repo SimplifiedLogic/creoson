@@ -176,6 +176,8 @@ public class JLTransfer implements IJLTransfer {
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_STEP);
 
+	        JlinkUtils.validateFilename(filename);
+
 	        String olddir = session.getCurrentDirectory();
 	        if (dirname == null) {
 	            dirname = olddir;
@@ -291,6 +293,8 @@ public class JLTransfer implements IJLTransfer {
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_IGES);
 
+	        JlinkUtils.validateFilename(filename);
+
 	        String olddir = session.getCurrentDirectory();
 	        if (dirname == null) {
 	            dirname = olddir;
@@ -403,6 +407,8 @@ public class JLTransfer implements IJLTransfer {
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_VRML);
 
+	        JlinkUtils.validateFilename(filename);
+
 	        String olddir = session.getCurrentDirectory();
 	        if (dirname == null) {
 	            dirname = olddir;
@@ -489,6 +495,8 @@ public class JLTransfer implements IJLTransfer {
 	        	filename = generateFilenameForModel(m, TRAN_CATIA);
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_CATIA);
+
+	        JlinkUtils.validateFilename(filename);
 
 	        String olddir = session.GetCurrentDirectory();
 	        if (dirname == null) {
@@ -588,6 +596,8 @@ public class JLTransfer implements IJLTransfer {
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_PV);
 
+	        JlinkUtils.validateFilename(filename);
+
 	        String olddir = session.getCurrentDirectory();
 	        if (dirname == null) {
 	            dirname = olddir;
@@ -676,6 +686,8 @@ public class JLTransfer implements IJLTransfer {
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_DXF);
 
+	        JlinkUtils.validateFilename(filename);
+
 	        String olddir = session.getCurrentDirectory();
 	        if (dirname == null) {
 	            dirname = olddir;
@@ -685,12 +697,12 @@ public class JLTransfer implements IJLTransfer {
 	        NitroUtils.validateDirFile(dirname, filename, true);
 	        
 	        if (!advanced) {
-		        CallGeometryFlags geomFlags = CallGeometryFlags.create();
-		        //if (session.IsGeometryRepSupported(ExportType.EXPORT_DXF, ))
-		        resolveGeomFlags(session, geomFlags, geomType);
-	
+//		        CallGeometryFlags geomFlags = CallGeometryFlags.create();
+//		        //if (session.IsGeometryRepSupported(ExportType.EXPORT_DXF, ))
+//		        resolveGeomFlags(session, geomFlags, geomType);
+
 		        CallExportInstructions pxi = CallExportInstructions.createDXFExport();
-	
+
 		        if (dirname != null && !dirname.equals(olddir)) {
 		            JlinkUtils.changeDirectory(session, dirname);
 		            try {
@@ -1109,6 +1121,8 @@ public class JLTransfer implements IJLTransfer {
 	                filename = m.getFileName();
 	        }
 
+	        JlinkUtils.validateFilename(filename);
+
 	        CallWindow win;
 	        if (m==null) win = session.getCurrentWindow();
 	        else win = session.getModelWindow(m);
@@ -1231,6 +1245,8 @@ public class JLTransfer implements IJLTransfer {
 	        	filename = generateFilenameForModel(m, TRAN_PDF);
 	        else
 	        	filename = NitroUtils.setFileExtension(filename, EXT_PDF);
+
+	        JlinkUtils.validateFilename(filename);
 
 	        String olddir = session.getCurrentDirectory();
 	        if (dirname == null) {

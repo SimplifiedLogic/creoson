@@ -96,6 +96,8 @@ import com.simplifiedlogic.nitro.util.JLMatrixMaker;
  */
 public class JlinkUtils {
 
+    public static final int FILENAME_LIMIT 	= 31;
+
     /**
      * Get a model that is open in Creo
      * 
@@ -1664,5 +1666,51 @@ public class JlinkUtils {
     	 * @throws jxthrowable
     	 */
     	public void regenerate() throws jxthrowable;
+    }
+
+    /**
+     * Validates that a file name follows the rules for Creo file names.
+     * Throws an exception if validation fails.
+     * @param filename The name of the file to validate.
+     * @throws JLIException If a validation error occurs, this contains the text of the failure.
+     */
+    public static void validateFilename(String filename) throws JLIException {
+        // https://www.ptc.com/en/support/article?n=CS67337
+
+    	int extpos = NitroUtils.findFileExtension(filename);
+        String ext = "";
+        String prefix = filename;
+        if (extpos>=0) {
+        	prefix = filename.substring(0, extpos);
+            ext = filename.substring(extpos+1);
+        }
+
+    	// check for length
+    	if (prefix.length()>FILENAME_LIMIT)
+    		throw new JLIException("File name must be less than "+(FILENAME_LIMIT+1)+" characters before the extension");
+
+    	// check for not starting with -
+    	if (prefix.startsWith("-"))
+    		throw new JLIException("File name must not start with hyphen");
+
+    	// check for extra dots
+    	if (prefix.indexOf('.')>=0)
+    		throw new JLIException("File name may not contain more than one dot");
+
+    	// check for alphanumeric only (except for hyphen and underscore)
+    	// no unicode chars
+    	int len = prefix.length();
+    	for (int i=0; i<len; i++) {
+    		char c=prefix.charAt(i);
+    		if ((c>='0' && c<='9') ||
+    			(c>='A' && c<='Z') || 
+    			(c>='a' && c<='z') || 
+    			c=='-' || 
+    			c=='_')
+    			;
+    		else
+    			throw new JLIException("File name contains an invalid character: "+c);
+    	}
+
     }
 }
