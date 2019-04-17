@@ -88,6 +88,9 @@ import com.simplifiedlogic.nitro.util.View2DLooper;
 
 public class JLDrawing implements IJLDrawing {
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#create(java.lang.String, java.lang.String, java.lang.String, double, boolean, boolean, boolean, java.lang.String)
+	 */
 	@Override
 	public String create(
 			String model, 
@@ -103,6 +106,9 @@ public class JLDrawing implements IJLDrawing {
         return create(model, drawing, template, scale, display, activate, newwin, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#create(java.lang.String, java.lang.String, java.lang.String, double, boolean, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public String create(
 			String model, 
@@ -197,6 +203,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listModels(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public List<String> listModels(String drawingName, String modelName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -204,6 +213,9 @@ public class JLDrawing implements IJLDrawing {
         return listModels(drawingName, modelName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listModels(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public List<String> listModels(String drawingName, String modelName, AbstractJLISession sess)
 			throws JLIException {
@@ -249,6 +261,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#addModel(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void addModel(String drawingName, String modelName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -256,6 +271,9 @@ public class JLDrawing implements IJLDrawing {
         addModel(drawingName, modelName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#addModel(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void addModel(String drawingName, String modelName, AbstractJLISession sess)
 			throws JLIException {
@@ -306,6 +324,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteModels(java.lang.String, java.lang.String, boolean, java.lang.String)
+	 */
 	@Override
 	public void deleteModels(String drawingName, String modelName, boolean deleteViews, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -313,6 +334,9 @@ public class JLDrawing implements IJLDrawing {
         deleteModels(drawingName, modelName, deleteViews, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteModels(java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void deleteModels(String drawingName, String modelName, boolean deleteViews, AbstractJLISession sess)
 			throws JLIException {
@@ -357,6 +381,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getCurrentModel(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getCurrentModel(String filename, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -364,6 +391,9 @@ public class JLDrawing implements IJLDrawing {
         return getCurrentModel(filename, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getCurrentModel(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public String getCurrentModel(String filename, AbstractJLISession sess)
 			throws JLIException {
@@ -404,6 +434,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#setCurrentModel(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void setCurrentModel(String drawingName, String modelName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -411,6 +444,9 @@ public class JLDrawing implements IJLDrawing {
         setCurrentModel(drawingName, modelName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#setCurrentModel(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void setCurrentModel(String drawingName, String modelName, AbstractJLISession sess)
 			throws JLIException {
@@ -455,6 +491,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#regenerate(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void regenerate(String filename, String sessionId)
 			throws JLIException {
@@ -463,6 +502,9 @@ public class JLDrawing implements IJLDrawing {
         regenerate(filename, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#regenerate(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void regenerate(String filename, AbstractJLISession sess)
 			throws JLIException {
@@ -499,6 +541,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#regenerateSheet(java.lang.String, int, java.lang.String)
+	 */
 	@Override
 	public void regenerateSheet(String filename, int sheet, String sessionId)
 			throws JLIException {
@@ -507,6 +552,9 @@ public class JLDrawing implements IJLDrawing {
         regenerateSheet(filename, sheet, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#regenerateSheet(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void regenerateSheet(String filename, int sheet,
 			AbstractJLISession sess) throws JLIException {
@@ -570,6 +618,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#selectSheet(java.lang.String, int, java.lang.String)
+	 */
 	@Override
 	public void selectSheet(String filename, int sheet, String sessionId)
 			throws JLIException {
@@ -578,6 +629,9 @@ public class JLDrawing implements IJLDrawing {
         selectSheet(filename, sheet, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#selectSheet(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void selectSheet(String filename, int sheet,
 			AbstractJLISession sess) throws JLIException {
@@ -622,6 +676,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#addSheet(java.lang.String, int, java.lang.String)
+	 */
 	@Override
 	public void addSheet(String filename, int position, String sessionId)
 			throws JLIException {
@@ -630,6 +687,9 @@ public class JLDrawing implements IJLDrawing {
         addSheet(filename, position, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#addSheet(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void addSheet(String filename, int position, 
 			AbstractJLISession sess) throws JLIException {
@@ -678,6 +738,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteSheet(java.lang.String, int, java.lang.String)
+	 */
 	@Override
 	public void deleteSheet(String filename, int sheet, String sessionId)
 			throws JLIException {
@@ -686,6 +749,9 @@ public class JLDrawing implements IJLDrawing {
         deleteSheet(filename, sheet, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteSheet(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void deleteSheet(String filename, int sheet,
 			AbstractJLISession sess) throws JLIException {
@@ -733,6 +799,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getCurSheet(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public int getCurSheet(String filename, String sessionId)
 			throws JLIException {
@@ -741,6 +810,9 @@ public class JLDrawing implements IJLDrawing {
         return getCurSheet(filename, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getCurSheet(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public int getCurSheet(String filename, 
 			AbstractJLISession sess) throws JLIException {
@@ -778,6 +850,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getNumSheets(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public int getNumSheets(String filename, String sessionId)
 			throws JLIException {
@@ -786,6 +861,9 @@ public class JLDrawing implements IJLDrawing {
         return getNumSheets(filename, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getNumSheets(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public int getNumSheets(String filename, 
 			AbstractJLISession sess) throws JLIException {
@@ -823,6 +901,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#scaleSheet(java.lang.String, int, double, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void scaleSheet(String filename, int sheet, 
 			double scale, String scaleFilename, 
@@ -833,6 +914,9 @@ public class JLDrawing implements IJLDrawing {
         scaleSheet(filename, sheet, scale, scaleFilename, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#scaleSheet(java.lang.String, int, double, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void scaleSheet(String filename, int sheet, 
 			double scale, String scaleFilename, 
@@ -885,6 +969,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getSheetScale(java.lang.String, int, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public double getSheetScale(String filename, int sheet, 
 			String scaleFilename, String sessionId)
@@ -894,6 +981,9 @@ public class JLDrawing implements IJLDrawing {
         return getSheetScale(filename, sheet, scaleFilename, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getSheetScale(java.lang.String, int, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public double getSheetScale(String filename, int sheet, 
 			String scaleFilename, AbstractJLISession sess) throws JLIException {
@@ -945,6 +1035,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getSheetSize(java.lang.String, int, java.lang.String)
+	 */
 	@Override
 	public String getSheetSize(String filename, int sheet, 
 			String sessionId)
@@ -954,6 +1047,9 @@ public class JLDrawing implements IJLDrawing {
         return getSheetSize(filename, sheet, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getSheetSize(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public String getSheetSize(String filename, int sheet, 
 			AbstractJLISession sess) throws JLIException {
@@ -1005,6 +1101,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#createGeneralView(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, double, com.simplifiedlogic.nitro.jlink.data.ViewDisplayData, boolean, java.lang.String)
+	 */
 	@Override
 	public void createGeneralView(
 			String drawingName, 
@@ -1022,6 +1121,9 @@ public class JLDrawing implements IJLDrawing {
         createGeneralView(drawingName, newViewName, sheet, modelName, modelViewName, location, scale, displayData, exploded, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#createGeneralView(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, double, com.simplifiedlogic.nitro.jlink.data.ViewDisplayData, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void createGeneralView(
 			String drawingName, 
@@ -1133,6 +1235,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#createProjectionView(java.lang.String, java.lang.String, int, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, com.simplifiedlogic.nitro.jlink.data.ViewDisplayData, boolean, java.lang.String)
+	 */
 	@Override
 	public void createProjectionView(
 			String drawingName, 
@@ -1148,6 +1253,9 @@ public class JLDrawing implements IJLDrawing {
         createProjectionView(drawingName, newViewName, sheet, parentViewName, location, displayData, exploded, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#createProjectionView(java.lang.String, java.lang.String, int, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, com.simplifiedlogic.nitro.jlink.data.ViewDisplayData, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void createProjectionView(
 			String drawingName, 
@@ -1255,6 +1363,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listViews(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public List<String> listViews(String drawingName, String viewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1262,6 +1373,9 @@ public class JLDrawing implements IJLDrawing {
         return listViews(drawingName, viewName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listViews(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public List<String> listViews(String drawingName, String viewName, AbstractJLISession sess)
 			throws JLIException {
@@ -1306,6 +1420,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listViewDetails(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public List<ViewDetailData> listViewDetails(String drawingName, String viewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1313,6 +1430,9 @@ public class JLDrawing implements IJLDrawing {
         return listViewDetails(drawingName, viewName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listViewDetails(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public List<ViewDetailData> listViewDetails(String drawingName, String viewName, AbstractJLISession sess)
 			throws JLIException {
@@ -1357,6 +1477,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getViewLoc(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public JLPoint getViewLoc(String drawingName, String viewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1364,6 +1487,9 @@ public class JLDrawing implements IJLDrawing {
         return getViewLoc(drawingName, viewName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getViewLoc(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public JLPoint getViewLoc(String drawingName, String viewName, AbstractJLISession sess)
 			throws JLIException {
@@ -1436,6 +1562,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#setViewLoc(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, boolean, java.lang.String)
+	 */
 	@Override
 	public void setViewLoc(String drawingName, String viewName, JLPoint point, boolean relative, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1443,6 +1572,9 @@ public class JLDrawing implements IJLDrawing {
         setViewLoc(drawingName, viewName, point, relative, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#setViewLoc(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void setViewLoc(String drawingName, String viewName, JLPoint point, boolean relative, AbstractJLISession sess)
 			throws JLIException {
@@ -1534,6 +1666,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteView(java.lang.String, java.lang.String, int, boolean, java.lang.String)
+	 */
 	@Override
 	public void deleteView(String drawingName, String viewName, int sheetno, boolean deleteChildren, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1541,6 +1676,9 @@ public class JLDrawing implements IJLDrawing {
         deleteView(drawingName, viewName, sheetno, deleteChildren, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteView(java.lang.String, java.lang.String, int, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void deleteView(String drawingName, String viewName, int sheetno, boolean deleteChildren, AbstractJLISession sess)
 			throws JLIException {
@@ -1599,6 +1737,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#renameView(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void renameView(String drawingName, String viewName, String newViewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1606,6 +1747,9 @@ public class JLDrawing implements IJLDrawing {
         renameView(drawingName, viewName, newViewName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#renameView(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void renameView(String drawingName, String viewName, String newViewName, AbstractJLISession sess)
 			throws JLIException {
@@ -1675,6 +1819,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#scaleView(java.lang.String, java.lang.String, double, java.lang.String)
+	 */
 	@Override
 	public ViewScaleResults scaleView(String filename, String viewName, 
 			double scale, String sessionId) throws JLIException {
@@ -1683,6 +1830,9 @@ public class JLDrawing implements IJLDrawing {
         return scaleView(filename, viewName, scale, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#scaleView(java.lang.String, java.lang.String, double, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public ViewScaleResults scaleView(String filename, String viewName, 
 			double scale, AbstractJLISession sess) throws JLIException {
@@ -1734,6 +1884,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getViewScale(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public double getViewScale(String filename, String viewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1741,6 +1894,9 @@ public class JLDrawing implements IJLDrawing {
         return getViewScale(filename, viewName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getViewScale(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public double getViewScale(String filename, String viewName, AbstractJLISession sess) throws JLIException {
     	
@@ -1796,6 +1952,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getViewSheet(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public int getViewSheet(String filename, String viewName, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1803,6 +1962,9 @@ public class JLDrawing implements IJLDrawing {
         return getViewSheet(filename, viewName, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getViewSheet(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public int getViewSheet(String filename, String viewName, AbstractJLISession sess) throws JLIException {
     	
@@ -1853,6 +2015,9 @@ public class JLDrawing implements IJLDrawing {
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#viewBoundingBox(java.lang.String, java.lang.String, java.lang.String)
      */
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#viewBoundingBox(java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public JLBox viewBoundingBox(String filename, String viewName, String sessionId) throws JLIException {
     	
@@ -1861,6 +2026,9 @@ public class JLDrawing implements IJLDrawing {
         return viewBoundingBox(filename, viewName, sess);
     }
     
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#viewBoundingBox(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#viewBoundingBox(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
      */
@@ -1937,6 +2105,9 @@ public class JLDrawing implements IJLDrawing {
     	}
     }
     
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#loadSymbolDef(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -1944,6 +2115,9 @@ public class JLDrawing implements IJLDrawing {
         return loadSymbolDef(filename, symbolDir, symbolFile, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#loadSymbolDef(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, AbstractJLISession sess) throws JLIException {
     	
@@ -1997,6 +2171,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#isSymbolDefLoaded(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
     public boolean isSymbolDefLoaded(String filename, String symbolFile, String sessionId) throws JLIException {
 
@@ -2005,6 +2182,9 @@ public class JLDrawing implements IJLDrawing {
         return isSymbolDefLoaded(filename, symbolFile, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#isSymbolDefLoaded(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
     public boolean isSymbolDefLoaded(String filename, String symbolFile, AbstractJLISession sess) throws JLIException {
     	
@@ -2050,6 +2230,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
     
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteSymbolDef(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
     public void deleteSymbolDef(String filename, String symbolFile, String sessionId) throws JLIException {
 
@@ -2058,6 +2241,9 @@ public class JLDrawing implements IJLDrawing {
 		deleteSymbolDef(filename, symbolFile, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteSymbolDef(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
     public void deleteSymbolDef(String filename, String symbolFile, AbstractJLISession sess) throws JLIException {
     	
@@ -2114,6 +2300,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
     
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#createSymbol(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, java.util.Map, int, java.lang.String)
+	 */
 	@Override
 	public void createSymbol(String filename, String symbolFile, JLPoint location, Map<String, Object> replaceValues, int sheet, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -2121,6 +2310,9 @@ public class JLDrawing implements IJLDrawing {
         createSymbol(filename, symbolFile, location, replaceValues, sheet, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#createSymbol(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, java.util.Map, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
 	public void createSymbol(String filename, String symbolFile, JLPoint location, Map<String, Object> replaceValues, int sheet, AbstractJLISession sess)
 			throws JLIException {
@@ -2202,6 +2394,9 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listSymbols(java.lang.String, java.lang.String, int, java.lang.String)
+	 */
 	@Override
     public List<SymbolInstData> listSymbols(String filename, String symbolFile, int sheet, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
@@ -2209,6 +2404,9 @@ public class JLDrawing implements IJLDrawing {
         return listSymbols(filename, symbolFile, sheet, sess);
     }
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#listSymbols(java.lang.String, java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
     public List<SymbolInstData> listSymbols(String filename, String symbolFile, int sheet, AbstractJLISession sess) throws JLIException {
     	
@@ -2257,6 +2455,9 @@ public class JLDrawing implements IJLDrawing {
     	}
     }
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteSymbolInst(java.lang.String, int, java.lang.String)
+	 */
 	@Override
     public void deleteSymbolInst(String filename, int symbolId, String sessionId) throws JLIException {
 
@@ -2265,6 +2466,9 @@ public class JLDrawing implements IJLDrawing {
 		deleteSymbolInst(filename, symbolId, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#deleteSymbolInst(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	@Override
     public void deleteSymbolInst(String filename, int symbolId, AbstractJLISession sess) throws JLIException {
     	

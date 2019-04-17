@@ -263,8 +263,8 @@ public class JLDimension implements IJLDimension {
     }
 
     /* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.impl.IJLDimension#list(java.lang.String, java.lang.Object, boolean, java.lang.String)
-	 */
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLDimension#list(java.lang.String, java.lang.String, java.util.List, java.lang.String, boolean, java.lang.String)
+     */
     public List<DimData> list(
     		String modelname,
     		String dimName,
@@ -278,8 +278,8 @@ public class JLDimension implements IJLDimension {
     	return list(modelname, dimName, dimNames, dimType, encoded, sess);
     }
 
-    /* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.impl.IJLDimension#list(java.lang.String, java.lang.Object, boolean, com.simplifiedlogic.nitro.rpc.JLISession)
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDimension#list(java.lang.String, java.lang.String, java.util.List, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	public List<DimData> list(
     		String modelname,
@@ -364,6 +364,9 @@ public class JLDimension implements IJLDimension {
     	}
     }
     
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDimension#listDetail(java.lang.String, java.lang.String, java.util.List, java.lang.String, boolean, java.lang.String)
+	 */
 	public List<DimDetailData> listDetail(String modelname, 
 			String dimName, List<String> dimNames, 
     		String dimType, 
@@ -374,6 +377,9 @@ public class JLDimension implements IJLDimension {
 		return listDetail(modelname, dimName, dimNames, dimType, encoded, sess);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDimension#listDetail(java.lang.String, java.lang.String, java.util.List, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
 	public List<DimDetailData> listDetail(String modelname, 
 			String dimName, List<String> dimNames, 
     		String dimType, 

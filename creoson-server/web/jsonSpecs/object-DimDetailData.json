@@ -1,6 +1,7 @@
 {
   "object_name" : "DimDetailData",
   "description" : "More detailed information about a Creo dimension",
+  "notes" : [ "tol_lower_limit and tol_upper_limit are only set when tolerance_type=limits", "tol_plus and tol_minus are only set when tolerance_type=plus_minus", "tol_symmetric_value is only set when tolerance_type=symmetric or sym_superscript", "tol_table_name, tol_table_column and tol_table_type are only set when tolerance_type=isodin" ],
   "data" : [ {
     "name" : "name",
     "type" : "string",
@@ -43,35 +44,35 @@
   }, {
     "name" : "tol_lower_limit",
     "type" : "double",
-    "description" : "Tolerance Lower Limit - only set if tolerance_type=limits"
+    "description" : "Tolerance Lower Limit"
   }, {
     "name" : "tol_upper_limit",
     "type" : "double",
-    "description" : "Tolerance Upper Limit - only set if tolerance_type=limits"
+    "description" : "Tolerance Upper Limit"
   }, {
     "name" : "tol_plus",
     "type" : "double",
-    "description" : "Tolerance Plus Value - only set if tolerance_type=plus_minus"
+    "description" : "Tolerance Plus Value"
   }, {
     "name" : "tol_minus",
     "type" : "double",
-    "description" : "Tolerance Minus Value - only set if tolerance_type=plus_minus"
+    "description" : "Tolerance Minus Value"
   }, {
     "name" : "tol_symmetric_value",
     "type" : "double",
-    "description" : "Tolerance Symmetric Value - only set if tolerance_type=symmetric or sym_superscript"
+    "description" : "Tolerance Symmetric Value"
   }, {
     "name" : "tol_table_name",
     "type" : "string",
-    "description" : "Tolerance Table Name - only set if tolerance_type=isodin"
+    "description" : "Tolerance Table Name"
   }, {
     "name" : "tol_table_column",
     "type" : "integer",
-    "description" : "Tolerance Table Column - only set if tolerance_type=isodin"
+    "description" : "Tolerance Table Column"
   }, {
     "name" : "tol_table_type",
     "type" : "string",
-    "description" : "Tolerance Table Type - only set if tolerance_type=isodin",
+    "description" : "Tolerance Table Type",
     "valid_values" : "general, broken_edge, shafts, holes"
   } ]
 }

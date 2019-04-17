@@ -489,6 +489,10 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 		FunctionObject obj = helpDimData();
 		obj.setObjectName(OBJ_DIM_DETAIL_DATA);
     	obj.setDescription("More detailed information about a Creo dimension");
+    	obj.addFootnote(OUTPUT_TOL_LOWER_LIMIT + " and " + OUTPUT_TOL_UPPER_LIMIT + " are only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_LIMITS);
+    	obj.addFootnote(OUTPUT_TOL_PLUS + " and " + OUTPUT_TOL_MINUS + " are only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_PLUS_MINUS);
+    	obj.addFootnote(OUTPUT_TOL_SYMMETRIC_VALUE + " is only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_SYMMETRIC + " or " + DimToleranceData.TYPE_SYM_SUPERSCRIPT);
+    	obj.addFootnote(OUTPUT_TOL_TABLE_NAME + ", " + OUTPUT_TOL_TABLE_COLUMN + " and " + OUTPUT_TOL_TABLE_TYPE + " are only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_ISODIN);
 
     	FunctionArgument arg;
     	arg = new FunctionArgument(OUTPUT_SHEET, FunctionSpec.TYPE_INTEGER);
@@ -529,35 +533,35 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_LOWER_LIMIT, FunctionSpec.TYPE_DOUBLE);
-    	arg.setDescription("Tolerance Lower Limit - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_LIMITS);
+    	arg.setDescription("Tolerance Lower Limit");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_UPPER_LIMIT, FunctionSpec.TYPE_DOUBLE);
-    	arg.setDescription("Tolerance Upper Limit - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_LIMITS);
+    	arg.setDescription("Tolerance Upper Limit");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_PLUS, FunctionSpec.TYPE_DOUBLE);
-    	arg.setDescription("Tolerance Plus Value - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_PLUS_MINUS);
+    	arg.setDescription("Tolerance Plus Value");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_MINUS, FunctionSpec.TYPE_DOUBLE);
-    	arg.setDescription("Tolerance Minus Value - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_PLUS_MINUS);
+    	arg.setDescription("Tolerance Minus Value");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_SYMMETRIC_VALUE, FunctionSpec.TYPE_DOUBLE);
-    	arg.setDescription("Tolerance Symmetric Value - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_SYMMETRIC+" or "+DimToleranceData.TYPE_SYM_SUPERSCRIPT);
+    	arg.setDescription("Tolerance Symmetric Value");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_TABLE_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Tolerance Table Name - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_ISODIN);
+    	arg.setDescription("Tolerance Table Name");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_TABLE_COLUMN, FunctionSpec.TYPE_INTEGER);
-    	arg.setDescription("Tolerance Table Column - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_ISODIN);
+    	arg.setDescription("Tolerance Table Column");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_TOL_TABLE_TYPE, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Tolerance Table Type - only set if "+OUTPUT_TOLERANCE_TYPE+"="+DimToleranceData.TYPE_ISODIN);
+    	arg.setDescription("Tolerance Table Type");
     	arg.setValidValues(new String[] {
 			DimToleranceData.TABLE_GENERAL,
 			DimToleranceData.TABLE_BROKEN_EDGE,
