@@ -45,26 +45,26 @@ public interface IJLProe {
 	public static final int STD_COLOR_DATUM 				= 17;
 	public static final int STD_COLOR_QUILT 				= 18;
 
-	public abstract String cd(String dirname, String sessionId) throws JLIException;
-	public abstract String cd(String dirname, AbstractJLISession sess) throws JLIException;
+	public String cd(String dirname, String sessionId) throws JLIException;
+	public String cd(String dirname, AbstractJLISession sess) throws JLIException;
 
-	public abstract String mkdir(String dirname, String sessionId) throws JLIException;
-	public abstract String mkdir(String dirname, AbstractJLISession sess) throws JLIException;
+	public String mkdir(String dirname, String sessionId) throws JLIException;
+	public String mkdir(String dirname, AbstractJLISession sess) throws JLIException;
 	
-	public abstract String pwd(String sessionId) throws JLIException;
-	public abstract String pwd(AbstractJLISession sess) throws JLIException;
+	public String pwd(String sessionId) throws JLIException;
+	public String pwd(AbstractJLISession sess) throws JLIException;
 	
-	public abstract List<String> list_dirs(String filename, String sessionId) throws JLIException;
-	public abstract List<String> list_dirs(String filename, AbstractJLISession sess) throws JLIException;
+	public List<String> list_dirs(String filename, String sessionId) throws JLIException;
+	public List<String> list_dirs(String filename, AbstractJLISession sess) throws JLIException;
 
-	public abstract List<String> list_files(String filename, String sessionId) throws JLIException;
-	public abstract List<String> list_files(String filename, AbstractJLISession sess) throws JLIException;
+	public List<String> list_files(String filename, String sessionId) throws JLIException;
+	public List<String> list_files(String filename, AbstractJLISession sess) throws JLIException;
 
 	public List<String> deleteFiles(String dirname, String filename, List<String> filenames, String sessionId) throws JLIException;
 	public List<String> deleteFiles(String dirname, String filename, List<String> filenames, AbstractJLISession sess) throws JLIException;
 	
-	public abstract void rmdir(String dirname, String sessionId) throws JLIException;
-	public abstract void rmdir(String dirname, AbstractJLISession sess) throws JLIException;
+	public void rmdir(String dirname, String sessionId) throws JLIException;
+	public void rmdir(String dirname, AbstractJLISession sess) throws JLIException;
 
 	public void setConfig(String name, String value, boolean ignoreErrors, String sessionId) throws JLIException;
 	public void setConfig(String name, String value, boolean ignoreErrors, AbstractJLISession sess) throws JLIException;

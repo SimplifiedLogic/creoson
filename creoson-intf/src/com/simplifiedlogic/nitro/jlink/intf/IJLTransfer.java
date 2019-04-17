@@ -69,78 +69,78 @@ public interface IJLTransfer {
 	public static final Boolean USE_DRAWING_SETTINGS_YES = Boolean.TRUE;
 	public static final Boolean USE_DRAWING_SETTINGS_NO = Boolean.FALSE;
 
-	public abstract ExportResults exportProgram(String model, String sessionId) throws JLIException;
-	public abstract ExportResults exportProgram(String model, AbstractJLISession sess) throws JLIException;
+	public ExportResults exportProgram(String model, String sessionId) throws JLIException;
+	public ExportResults exportProgram(String model, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportBMP(String model, 
+	public ExportResults exportBMP(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, String sessionId) throws JLIException;
-	public abstract ExportResults exportBMP(String model, 
+	public ExportResults exportBMP(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportEPS(String model, 
+	public ExportResults exportEPS(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, String sessionId) throws JLIException;
-	public abstract ExportResults exportEPS(String model, 
+	public ExportResults exportEPS(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportJPEG(String model, 
+	public ExportResults exportJPEG(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, String sessionId) throws JLIException;
-	public abstract ExportResults exportJPEG(String model, 
+	public ExportResults exportJPEG(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportTIFF(String model, 
+	public ExportResults exportTIFF(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, String sessionId) throws JLIException;
-	public abstract ExportResults exportTIFF(String model, 
+	public ExportResults exportTIFF(String model, 
 			String filename, Double height, Double width, Integer dpi, Integer depth, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportSTEP(String model, 
+	public ExportResults exportSTEP(String model, 
 			String filename, String dirname, String geomType, 
 			boolean advanced, String sessionId) throws JLIException;
-	public abstract ExportResults exportSTEP(String model, 
+	public ExportResults exportSTEP(String model, 
 			String filename, String dirname, String geomType, 
 			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportIGES(String model, 
+	public ExportResults exportIGES(String model, 
 			String filename, String dirname, String geomType, 
 			boolean advanced, String sessionId) throws JLIException;
-	public abstract ExportResults exportIGES(String model, 
+	public ExportResults exportIGES(String model, 
 			String filename, String dirname, String geomType, 
 			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportVRML(String model, 
+	public ExportResults exportVRML(String model, 
 			String filename, String dirname, String sessionId) throws JLIException;
-	public abstract ExportResults exportVRML(String model, 
+	public ExportResults exportVRML(String model, 
 			String filename, String dirname, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportCATIA(String model, 
+	public ExportResults exportCATIA(String model, 
 			String filename, String dirname, String sessionId) throws JLIException;
-	public abstract ExportResults exportCATIA(String model, 
+	public ExportResults exportCATIA(String model, 
 			String filename, String dirname, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportPV(String model, 
+	public ExportResults exportPV(String model, 
 			String filename, String dirname, String sessionId) throws JLIException;
-	public abstract ExportResults exportPV(String model, 
+	public ExportResults exportPV(String model, 
 			String filename, String dirname, AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults exportDXF(String model, 
+	public ExportResults exportDXF(String model, 
 			String filename, String dirname, String geomType, 
 			boolean advanced, String sessionId) throws JLIException;
-	public abstract ExportResults exportDXF(String model, 
+	public ExportResults exportDXF(String model, 
 			String filename, String dirname, String geomType, 
 			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
-	public abstract String importProgram(String dirname, String filename, String model, 
+	public String importProgram(String dirname, String filename, String model, 
 			String sessionId) throws JLIException;
-	public abstract String importProgram(String dirname, String filename, String model, 
+	public String importProgram(String dirname, String filename, String model, 
 			AbstractJLISession sess) throws JLIException;
 	
-	public abstract ExportResults plot(String model, String dirname, String driver, 
+	public ExportResults plot(String model, String dirname, String driver, 
 			String sessionId) throws JLIException;
-	public abstract ExportResults plot(String model, String dirname, String driver, 
+	public ExportResults plot(String model, String dirname, String driver, 
 			AbstractJLISession sess) throws JLIException;
 	
-	public abstract void mapkey(String script, 
+	public void mapkey(String script, 
 			String sessionId) throws JLIException;
-	public abstract void mapkey(String script, 
+	public void mapkey(String script, 
 			AbstractJLISession sess) throws JLIException;
 	
 	public ExportResults exportPDF(

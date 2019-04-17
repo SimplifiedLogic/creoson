@@ -26,43 +26,43 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
 
 public interface IJLNote {
 
-	public abstract void set(String filename, String noteName,
+	public void set(String filename, String noteName,
 			Object value, boolean encoded, String sessionId) 
 			throws JLIException;
-	public abstract void set(String filename, String noteName,
+	public void set(String filename, String noteName,
 			Object value, boolean encoded, AbstractJLISession sess) 
 			throws JLIException;
 
-	public abstract NoteData get(String filename, String noteName,
+	public NoteData get(String filename, String noteName,
 			String sessionId) throws JLIException;
-	public abstract NoteData get(String filename, String noteName,
+	public NoteData get(String filename, String noteName,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract void delete(String filename, String noteName,
+	public void delete(String filename, String noteName,
 			String sessionId) throws JLIException;
-	public abstract void delete(String filename, String noteName,
+	public void delete(String filename, String noteName,
 			AbstractJLISession sess) throws JLIException;
 
-    public abstract List<NoteData> list(String filename, 
+    public List<NoteData> list(String filename, 
     		String noteName, List<String> noteNames, 
 			String valuePattern, boolean getExpandedValues, 
 			String sessionId) throws JLIException;
-	public abstract List<NoteData> list(String filename, 
+	public List<NoteData> list(String filename, 
     		String noteName, List<String> noteNames, 
 			String valuePattern, boolean getExpandedValues, 
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract void copy(String filename, String noteName,
+	public void copy(String filename, String noteName,
 			String toModel, String toName,
 			String sessionId) throws JLIException;
-	public abstract void copy(String filename, String noteName,
+	public void copy(String filename, String noteName,
 			String toModel, String toName, 
 			AbstractJLISession sess) throws JLIException;
 
-    public abstract boolean exists(String filename, 
+    public boolean exists(String filename, 
     		String noteName, List<String> noteNames, 
 			String sessionId) throws JLIException;
-    public abstract boolean exists(String filename, 
+    public boolean exists(String filename, 
     		String noteName, List<String> noteNames, 
 			AbstractJLISession sess) throws JLIException;
 

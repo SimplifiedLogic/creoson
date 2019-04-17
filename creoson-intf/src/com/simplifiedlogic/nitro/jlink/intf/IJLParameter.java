@@ -41,43 +41,43 @@ public interface IJLParameter {
     public static final boolean NOCREATE_YES	= true;
     public static final boolean NOCREATE_NO		= false;
 
-	public abstract void set(String filename, String paramName,
+	public void set(String filename, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, String sessionId) throws JLIException;
 
-	public abstract void set(String filename, String paramName,
+	public void set(String filename, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
 	
-    public abstract void delete(String filename, String paramName,
+    public void delete(String filename, String paramName,
 			String sessionId) throws JLIException;
 
-	public abstract void delete(String filename, String paramName,
+	public void delete(String filename, String paramName,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract void copy(String filename, String paramName,
+	public void copy(String filename, String paramName,
 			String toModel, String toName, int designate,
 			String sessionId) throws JLIException;
 
-	public abstract void copy(String filename, String paramName,
+	public void copy(String filename, String paramName,
 			String toModel, String toName, int designate,
 			AbstractJLISession sess) throws JLIException;
 
-    public abstract List<ParameterData> list(String filename, String paramName,
+    public List<ParameterData> list(String filename, String paramName,
 			List<String> paramNames, String valuePattern, 
 			boolean encoded, String sessionId)
 			throws JLIException;
 
-	public abstract List<ParameterData> list(String filename, String paramName,
+	public List<ParameterData> list(String filename, String paramName,
 			List<String> paramNames, String valuePattern, 
 			boolean encoded, AbstractJLISession sess)
 			throws JLIException;
 
-    public abstract boolean exists(String filename, String paramName,
+    public boolean exists(String filename, String paramName,
 			List<String> paramNames, String sessionId)
 			throws JLIException;
 
-    public abstract boolean exists(String filename, String paramName,
+    public boolean exists(String filename, String paramName,
 			List<String> paramNames, AbstractJLISession sess)
 			throws JLIException;
 

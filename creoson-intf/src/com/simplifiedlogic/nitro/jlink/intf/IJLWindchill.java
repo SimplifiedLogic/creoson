@@ -25,38 +25,38 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
 
 public interface IJLWindchill {
 
-	public abstract void authorize(String user, String password, String sessionId) throws JLIException;
-	public abstract void authorize(String user, String password, AbstractJLISession sess) throws JLIException;
+	public void authorize(String user, String password, String sessionId) throws JLIException;
+	public void authorize(String user, String password, AbstractJLISession sess) throws JLIException;
 
-	public abstract void setServer(String serverUrl, String sessionId) throws JLIException;
-	public abstract void setServer(String serverUrl, AbstractJLISession sess) throws JLIException;
+	public void setServer(String serverUrl, String sessionId) throws JLIException;
+	public void setServer(String serverUrl, AbstractJLISession sess) throws JLIException;
 
-	public abstract boolean serverExists(String serverUrl, String sessionId) throws JLIException;
-	public abstract boolean serverExists(String serverUrl, AbstractJLISession sess) throws JLIException;
+	public boolean serverExists(String serverUrl, String sessionId) throws JLIException;
+	public boolean serverExists(String serverUrl, AbstractJLISession sess) throws JLIException;
 
-	public abstract List<String> listWorkspaces(String sessionId) throws JLIException;
-	public abstract List<String> listWorkspaces(AbstractJLISession sess) throws JLIException;
+	public List<String> listWorkspaces(String sessionId) throws JLIException;
+	public List<String> listWorkspaces(AbstractJLISession sess) throws JLIException;
 
-	public abstract void setWorkspace(String workspace, String sessionId) throws JLIException;
-	public abstract void setWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
+	public void setWorkspace(String workspace, String sessionId) throws JLIException;
+	public void setWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
 
-	public abstract String getWorkspace(String sessionId) throws JLIException;
-	public abstract String getWorkspace(AbstractJLISession sess) throws JLIException;
+	public String getWorkspace(String sessionId) throws JLIException;
+	public String getWorkspace(AbstractJLISession sess) throws JLIException;
 
-	public abstract boolean workspaceExists(String workspace, String sessionId) throws JLIException;
-	public abstract boolean workspaceExists(String workspace, AbstractJLISession sess) throws JLIException;
+	public boolean workspaceExists(String workspace, String sessionId) throws JLIException;
+	public boolean workspaceExists(String workspace, AbstractJLISession sess) throws JLIException;
 
-	public abstract void createWorkspace(String workspace, String context, String sessionId) throws JLIException;
-	public abstract void createWorkspace(String workspace, String context, AbstractJLISession sess) throws JLIException;
+	public void createWorkspace(String workspace, String context, String sessionId) throws JLIException;
+	public void createWorkspace(String workspace, String context, AbstractJLISession sess) throws JLIException;
 
-	public abstract void clearWorkspace(String workspace, String sessionId) throws JLIException;
-	public abstract void clearWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
+	public void clearWorkspace(String workspace, String sessionId) throws JLIException;
+	public void clearWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
 
-	public abstract void deleteWorkspace(String workspace, String sessionId) throws JLIException;
-	public abstract void deleteWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
+	public void deleteWorkspace(String workspace, String sessionId) throws JLIException;
+	public void deleteWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
 
-	public abstract boolean fileCheckedOut(String workspace, String fileName, String sessionId) throws JLIException;
-	public abstract boolean fileCheckedOut(String workspace, String fileName, AbstractJLISession sess) throws JLIException;
+	public boolean fileCheckedOut(String workspace, String fileName, String sessionId) throws JLIException;
+	public boolean fileCheckedOut(String workspace, String fileName, AbstractJLISession sess) throws JLIException;
 
 	public List<String> listWorkspaceFiles(String filename, String workspace, String sessionId) throws JLIException;
 	public List<String> listWorkspaceFiles(String filename, String workspace, AbstractJLISession sess) throws JLIException;

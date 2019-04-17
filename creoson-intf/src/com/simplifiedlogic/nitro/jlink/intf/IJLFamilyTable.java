@@ -28,84 +28,84 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
 
 public interface IJLFamilyTable {
 
-	public abstract Boolean exists(String modelname, String instname,
+	public Boolean exists(String modelname, String instname,
 			String sessionId) throws JLIException;
 
-	public abstract Boolean exists(String modelname, String instname,
+	public Boolean exists(String modelname, String instname,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract void delete(String modelname, String sessionId)
+	public void delete(String modelname, String sessionId)
 			throws JLIException;
 
-	public abstract void delete(String modelname, AbstractJLISession sess)
+	public void delete(String modelname, AbstractJLISession sess)
 			throws JLIException;
 
-	public abstract void deleteInst(String modelname, String instname,
+	public void deleteInst(String modelname, String instname,
 			String sessionId) throws JLIException;
 
-	public abstract void deleteInst(String modelname, String instname,
+	public void deleteInst(String modelname, String instname,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract FamilyTableGetRowReturn getRow(String modelname, String instname,
+	public FamilyTableGetRowReturn getRow(String modelname, String instname,
 			String sessionId) throws JLIException;
 
-	public abstract FamilyTableGetRowReturn getRow(String modelname, String instname,
+	public FamilyTableGetRowReturn getRow(String modelname, String instname,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract FamilyTableRowColumns getCell(String modelname, String instname,
+	public FamilyTableRowColumns getCell(String modelname, String instname,
 			String colid, String sessionId) throws JLIException;
 
-	public abstract FamilyTableRowColumns getCell(String modelname, String instname,
+	public FamilyTableRowColumns getCell(String modelname, String instname,
 			String colid, AbstractJLISession sess) throws JLIException;
 
-	public abstract void setCell(String modelname, String instname,
+	public void setCell(String modelname, String instname,
 			String colid, Object value, String sessionId) throws JLIException;
 
-	public abstract void setCell(String modelname, String instname,
+	public void setCell(String modelname, String instname,
 			String colid, Object value, AbstractJLISession sess) throws JLIException;
 
-	public abstract List<FamilyTableRowColumns> getHeader(String modelname,
+	public List<FamilyTableRowColumns> getHeader(String modelname,
 			String sessionId) throws JLIException;
 
-	public abstract List<FamilyTableRowColumns> getHeader(String modelname, AbstractJLISession sess)
+	public List<FamilyTableRowColumns> getHeader(String modelname, AbstractJLISession sess)
 			throws JLIException;
 
-	public abstract void addInst(String modelname, String newname,
+	public void addInst(String modelname, String newname,
 			String sessionId) throws JLIException;
 
-	public abstract void addInst(String modelname, String newname,
+	public void addInst(String modelname, String newname,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract void replace(String modelname, String oldname,
+	public void replace(String modelname, String oldname,
 			String oldinst,
 			String newinst, List<Integer> path, String sessionId)
 			throws JLIException;
 
-	public abstract void replace(String modelname, String oldname,
+	public void replace(String modelname, String oldname,
 			String oldinst,
 			String newinst, List<Integer> path, AbstractJLISession sess)
 			throws JLIException;
 
-	public abstract List<String> list(String modelname, String namePattern, String sessionId)
+	public List<String> list(String modelname, String namePattern, String sessionId)
 			throws JLIException;
 
-	public abstract List<String> list(String modelname, String namePattern, AbstractJLISession sess)
+	public List<String> list(String modelname, String namePattern, AbstractJLISession sess)
 			throws JLIException;
 
-	public abstract FamTableInstance listTree(String modelname, boolean erase, String sessionId)
+	public FamTableInstance listTree(String modelname, boolean erase, String sessionId)
 		throws JLIException;
 	
-	public abstract FamTableInstance listTree(String modelname, boolean erase, AbstractJLISession sess)
+	public FamTableInstance listTree(String modelname, boolean erase, AbstractJLISession sess)
 		throws JLIException;
 
     public List<String> getParents(String modelname, String sessionId) throws JLIException;
 
     public List<String> getParents(String modelname, AbstractJLISession sess) throws JLIException;
     
-    public abstract String createInstance(String modelname, String instname,
+    public String createInstance(String modelname, String instname,
     		String sessionId) throws JLIException;
 
-    public abstract String createInstance(String modelname, String instname,
+    public String createInstance(String modelname, String instname,
     		AbstractJLISession sess) throws JLIException;
 
 }

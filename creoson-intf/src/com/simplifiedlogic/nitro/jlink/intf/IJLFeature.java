@@ -49,7 +49,7 @@ public interface IJLFeature {
 	
 	public static final String NONAME_FEATURE = "no_name";
 
-	public abstract void delete(
+	public void delete(
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
@@ -57,7 +57,7 @@ public interface IJLFeature {
 			String featureType, 
 			boolean clip, 
 			String sessionId) throws JLIException;
-	public abstract void delete(
+	public void delete(
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
@@ -66,7 +66,7 @@ public interface IJLFeature {
 			boolean clip, 
 			AbstractJLISession sess) throws JLIException;
 	
-	public abstract void resume(
+	public void resume(
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
@@ -74,7 +74,7 @@ public interface IJLFeature {
 			String featureType, 
 			boolean withChildren, 
 			String sessionId) throws JLIException;
-	public abstract void resume(
+	public void resume(
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
@@ -83,7 +83,7 @@ public interface IJLFeature {
 			boolean withChildren, 
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract void suppress(
+	public void suppress(
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
@@ -92,7 +92,7 @@ public interface IJLFeature {
 			boolean clip,
 			boolean withChildren,
 			String sessionId) throws JLIException;
-	public abstract void suppress(
+	public void suppress(
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
@@ -102,7 +102,7 @@ public interface IJLFeature {
 			boolean withChildren,
 			AbstractJLISession sess) throws JLIException;
 
-	public abstract List<FeatureData> list(
+	public List<FeatureData> list(
 	        String filename,
 	        String featureName, 
 	        String featureStatus,
@@ -112,7 +112,7 @@ public interface IJLFeature {
 	        boolean includeUnnamed, 
 	        boolean noComponentFeatures, 
 			String sessionId) throws JLIException;
-	public abstract List<FeatureData> list(
+	public List<FeatureData> list(
 	        String filename,
 	        String featureName, 
 	        String featureStatus,
@@ -123,13 +123,13 @@ public interface IJLFeature {
 	        boolean noComponentFeatures, 
 	        AbstractJLISession sess) throws JLIException;
 	
-	public abstract void rename(
+	public void rename(
 	        String filename,
 	        String featureName, 
 	        int featureId,
 	        String newName,
 	        String sessionId) throws JLIException;
-	public abstract void rename(
+	public void rename(
 	        String filename,
 	        String featureName, 
 	        int featureId,
@@ -137,9 +137,9 @@ public interface IJLFeature {
 	        AbstractJLISession sess) throws JLIException;
 
 
-	public abstract List<FeatSelectData> userSelectCsys(String modelname, int max, 
+	public List<FeatSelectData> userSelectCsys(String modelname, int max, 
 			String sessionId) throws JLIException;
-	public abstract List<FeatSelectData> userSelectCsys(String modelname, int max, 
+	public List<FeatSelectData> userSelectCsys(String modelname, int max, 
 			AbstractJLISession sess) throws JLIException;
 
 	public void deleteParam(
@@ -166,7 +166,7 @@ public interface IJLFeature {
 			List<String> paramNames, 
 			AbstractJLISession sess) throws JLIException;
 
-    public abstract List<ParameterData> listParams(String filename, 
+    public List<ParameterData> listParams(String filename, 
     		String featName, String paramName,
 			List<String> paramNames, String typePattern, String valuePattern, 
 			boolean encoded, 
@@ -175,7 +175,7 @@ public interface IJLFeature {
 	        boolean noComponentFeatures, 
 			String sessionId)
 			throws JLIException;
-	public abstract List<ParameterData> listParams(String filename, 
+	public List<ParameterData> listParams(String filename, 
 			String featName, String paramName,
 			List<String> paramNames, String typePattern, String valuePattern, 
 			boolean encoded, 
@@ -185,10 +185,10 @@ public interface IJLFeature {
 			AbstractJLISession sess)
 			throws JLIException;
 
-	public abstract void setParam(String filename, String featName, String paramName,
+	public void setParam(String filename, String featName, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, String sessionId) throws JLIException;
-	public abstract void setParam(String filename, String featName, String paramName,
+	public void setParam(String filename, String featName, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
 	

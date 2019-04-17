@@ -45,11 +45,11 @@ public interface IJLFile {
 
 	public static final char LINE_CONTINUE_CHAR = '\\';
 
-	public abstract FileOpenResults open(String dirname, String filename,
+	public FileOpenResults open(String dirname, String filename,
 			List<String> filenames, String genericname, boolean display,
 			boolean activate, boolean newwin, boolean forceRegen,
 			String sessionId) throws JLIException;
-	public abstract FileOpenResults open(String dirname, String filename,
+	public FileOpenResults open(String dirname, String filename,
 			List<String> filenames, String genericname, boolean display,
 			boolean activate, boolean newwin, boolean forceRegen,
 			AbstractJLISession sess) throws JLIException;
@@ -57,14 +57,14 @@ public interface IJLFile {
     public boolean openErrors(String filename, String sessionId) throws JLIException;
     public boolean openErrors(String filename, AbstractJLISession sess) throws JLIException;
 
-	public abstract void save(String filename, List<String> filenames, 
+	public void save(String filename, List<String> filenames, 
 			String sessionId) throws JLIException;
-	public abstract void save(String filename, List<String> filenames, 
+	public void save(String filename, List<String> filenames, 
 			AbstractJLISession sess) throws JLIException;
 
-    public abstract void backup(String filename, String targetdir,
+    public void backup(String filename, String targetdir,
             String sessionId) throws JLIException;
-    public abstract void backup(String filename, String targetdir,
+    public void backup(String filename, String targetdir,
     		AbstractJLISession sess) throws JLIException;
     
     public void erase(String filename, List<String> filenames,
@@ -110,39 +110,39 @@ public interface IJLFile {
     		boolean suppress,
             AbstractJLISession sess) throws JLIException;
     
-	public abstract void regenerate(String filename, List<String> filenames, 
+	public void regenerate(String filename, List<String> filenames, 
 			boolean display, String sessionId) throws JLIException;
-	public abstract void regenerate(String filename, List<String> filenames, 
+	public void regenerate(String filename, List<String> filenames, 
 			boolean display, AbstractJLISession sess) throws JLIException;
 
-	public abstract void refresh(String filename, String sessionId) throws JLIException;
-	public abstract void refresh(String filename, AbstractJLISession sess) throws JLIException;
+	public void refresh(String filename, String sessionId) throws JLIException;
+	public void refresh(String filename, AbstractJLISession sess) throws JLIException;
 
-	public abstract void repaint(String filename, String sessionId) throws JLIException;
-	public abstract void repaint(String filename, AbstractJLISession sess) throws JLIException;
+	public void repaint(String filename, String sessionId) throws JLIException;
+	public void repaint(String filename, AbstractJLISession sess) throws JLIException;
 
-	public abstract FileOpenResults getActive(String sessionId)
+	public FileOpenResults getActive(String sessionId)
 			throws JLIException;
-	public abstract FileOpenResults getActive(AbstractJLISession sess)
+	public FileOpenResults getActive(AbstractJLISession sess)
 			throws JLIException;
 
-    public abstract String rename(String filename, String newname,
+    public String rename(String filename, String newname,
 	        boolean onlyInSession, String sessionId)
 			throws JLIException;
-    public abstract String rename(String filename, String newname,
+    public String rename(String filename, String newname,
 	        boolean onlyInSession, AbstractJLISession sess)
 			throws JLIException;
 
-	public abstract List<String> list(String filename, List<String> filenames, String sessionId)
+	public List<String> list(String filename, List<String> filenames, String sessionId)
 		throws JLIException;
-	public abstract List<String> list(String filename, List<String> filenames, AbstractJLISession sess)
+	public List<String> list(String filename, List<String> filenames, AbstractJLISession sess)
 		throws JLIException;
 
-	public abstract boolean exists(String filename, String sessionId) throws JLIException;
-	public abstract boolean exists(String filename, AbstractJLISession sess) throws JLIException;
+	public boolean exists(String filename, String sessionId) throws JLIException;
+	public boolean exists(String filename, AbstractJLISession sess) throws JLIException;
 
-	public abstract FileInfoResults getFileinfo(String filename, String sessionId) throws JLIException;
-	public abstract FileInfoResults getFileinfo(String filename, AbstractJLISession sess) throws JLIException;
+	public FileInfoResults getFileinfo(String filename, String sessionId) throws JLIException;
+	public FileInfoResults getFileinfo(String filename, AbstractJLISession sess) throws JLIException;
 
     public boolean hasInstances(String filename, String sessionId) throws JLIException;
     public boolean hasInstances(String filename, AbstractJLISession sess) throws JLIException;
@@ -180,14 +180,14 @@ public interface IJLFile {
     public JLTransform getTransform(String assembly, List<Integer> path, String csys, String sessionId) throws JLIException;
     public JLTransform getTransform(String assembly, List<Integer> path, String csys, AbstractJLISession sess) throws JLIException;
 
-    public abstract boolean isActive(String filename, String sessionId) throws JLIException;
-    public abstract boolean isActive(String filename, AbstractJLISession sess) throws JLIException;
+    public boolean isActive(String filename, String sessionId) throws JLIException;
+    public boolean isActive(String filename, AbstractJLISession sess) throws JLIException;
     
     public void display(String filename, boolean activate, String sessionId) throws JLIException;
     public void display(String filename, boolean activate, AbstractJLISession sess) throws JLIException;
 
-    public abstract void closeWindow(String filename, String sessionId) throws JLIException;
-    public abstract void closeWindow(String filename, AbstractJLISession sess) throws JLIException;
+    public void closeWindow(String filename, String sessionId) throws JLIException;
+    public void closeWindow(String filename, AbstractJLISession sess) throws JLIException;
 
     public List<String> listSimpReps(String filename, String name, String sessionId) throws JLIException;
     public List<String> listSimpReps(String filename, String name, AbstractJLISession sess) throws JLIException;
