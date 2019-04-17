@@ -30,7 +30,6 @@ import com.simplifiedlogic.nitro.jlink.calls.layer.CallLayer;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
-import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.LayerData;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
@@ -321,14 +320,11 @@ public class JLLayer implements IJLLayer {
 		 */
 		@Override
 		public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
-			if (!(m instanceof CallSolid))
-				return false;
-			CallSolid solid = (CallSolid)m;
 			// call a sub-looper to delete layers on the model
 	        DeleteLooper2 looper = new DeleteLooper2();
 	        looper.setNamePattern(layerName);
 
-	        looper.loop(solid);
+	        looper.loop(m);
 	        
 			return false;
 		}
@@ -419,15 +415,12 @@ public class JLLayer implements IJLLayer {
 		 */
 		@Override
 		public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
-			if (!(m instanceof CallSolid))
-				return false;
-			CallSolid solid = (CallSolid)m;
 			// call a sub-looper to show/hide layers in a model
 	        ShowLooper2 looper = new ShowLooper2();
 	        looper.setNamePattern(layerName);
 	        looper.show = show;
 	        
-	        looper.loop(solid);
+	        looper.loop(m);
 	        
 			return false;
 		}
