@@ -121,7 +121,7 @@ public class ProcessUtils {
 //                String line = in.readLine();
 //                // if any lines are found, then kill
 //                if (line!=null && line.length()>0) {
-//        			if (debug) System.out.println("Killing Pro/E processes");
+//        			if (debug) System.out.println("Killing Creo processes");
 //		            Runtime.getRuntime().exec(cmd2); 
 //                }
                 in.close();

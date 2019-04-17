@@ -95,7 +95,7 @@ public class JLConnection implements IJLConnection {
         }
         String sessionId = sess.getSessionId();
         if (sessionId==null) {
-            throw new JLIException("Error connecting to Pro/E");
+            throw new JLIException("Error connecting to Creo");
         }
 
         if (APP_PROE.equalsIgnoreCase(system))

@@ -518,7 +518,7 @@ public class JLFile implements IJLFile {
 	        	return m.getFileName();
 	        }
 	        catch (jxthrowable e) {
-	        	throw new JLIException("Error renamng model; check to see there isn't another model in memory with the same name.");
+	        	throw new JLIException("Error renaming model; check to see there isn't another model in memory with the same name.");
 	        }
 	        finally {
 	            if (changedir)
@@ -2063,7 +2063,7 @@ public class JLFile implements IJLFile {
 		        		assembly.assembleSkeleton((CallSolid)m);
 		        	}
 		        	catch (jxthrowable e) {
-		        		throw new JLIException("Pro/E does not allow you to assemble more than one skeleton into an assembly");
+		        		throw new JLIException("Creo does not allow you to assemble more than one skeleton into an assembly");
 		        	}
 	
 		        	CallSolid skel = assembly.getSkeleton();

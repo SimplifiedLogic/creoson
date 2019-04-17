@@ -94,7 +94,7 @@ public class JLConnectionUtil implements NitroConstants {
             return connId.getExternalRep(); // FIXME: may not be unique
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw JlinkUtils.createBareException(ex, "Could not get Pro/E connection ID");
+            throw JlinkUtils.createBareException(ex, "Could not get Creo connection ID");
         }
     }
     
@@ -135,7 +135,7 @@ public class JLConnectionUtil implements NitroConstants {
             return sess;
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw JlinkUtils.createBareException(ex, "Could not get Pro/E Session ID");
+            throw JlinkUtils.createBareException(ex, "Could not get Creo Session ID");
         }
     }
 
@@ -159,11 +159,11 @@ public class JLConnectionUtil implements NitroConstants {
             return connId;
         }
         catch (XToolkitAmbiguous ex) {
-            throw new JlinkConnectException("Unable to connect to Pro/E; more than one instance of Pro/E is running");
+            throw new JlinkConnectException("Unable to connect to Creo; more than one instance of Creo is running");
         }
         catch(Exception ex){
             ex.printStackTrace();
-            throw new JlinkConnectException("Unable to connect to Pro/E through J-Link");
+            throw new JlinkConnectException("Unable to connect to Creo through J-Link");
         }
     }
     
@@ -244,7 +244,7 @@ public class JLConnectionUtil implements NitroConstants {
      */
     public static String startProe(String connId, String path, String cmd, int retries) throws JLIException,jxthrowable,Exception {
         if (SINGLE_CONNECT && isRunning())
-            throw new JLIException("Pro/E is already running");
+            throw new JLIException("Creo is already running");
         
         if (path!=null) {
             if (!path.endsWith("/") && !path.endsWith("\\"))
@@ -286,7 +286,7 @@ public class JLConnectionUtil implements NitroConstants {
 	                Thread.sleep(RETRY_WAIT);
 	            }
 	            if (newConnId==null)
-	                throw new JlinkConnectException("Started pro/e, but failed to connect after " + RETRY_LIMIT + " attempts.");
+	                throw new JlinkConnectException("Started Creo, but failed to connect after " + RETRY_LIMIT + " attempts.");
             }
             
             connId = newConnId;
