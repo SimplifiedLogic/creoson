@@ -4,7 +4,7 @@
 	<property name="source_dir" value="${basedir}/src" />
 	<property name="class_dir" value="${basedir}/classes" />
 	<property name="build.compiler" value="javac1.5" />
-	<property name="jar_ver" value="2.5.0" />
+	<property name="jar_ver" value="2.6.0" />
 
 	<target name="clean">
 		<delete dir="${class_dir}"/>
