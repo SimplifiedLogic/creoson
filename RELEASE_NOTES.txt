@@ -1,6 +1,32 @@
 R E L E A S E   N O T E S
 =========================
 
+2.3.0
+	- Added new functions:
+		dimension
+			list_detail
+		drawing
+			create_symbol
+			delete_symbol_def
+			delete_symbol_inst
+			is_symbol_def_loaded
+			list_symbols
+			list_view_details
+			load_symbol_def
+	- Modified functions:
+		dimension
+			list - add "dim_type" filter parameter
+			     - for Drawings, this now includes dimensions that were added to the Drawing, rather than being brought over from the Model
+		drawing
+			- add the ability to loop over sheets in a drawing
+			- fix bug in functions when there are multiple views with the same name
+			- fix bug in functions when a view is hidden
+		interface
+			- export functions now validate export file name for Creo valid name format
+			export_file - remove the geom_flags parameter for DXF export type
+		proe
+			cd - return actual working directory rather than computed working directory
+
 2.2.0
 	- Added new functions:
 		layer
