@@ -2121,7 +2121,7 @@ public class JLDrawing implements IJLDrawing {
 	@Override
 	public SymbolDefData loadSymbolDef(String filename, String symbolDir, String symbolFile, AbstractJLISession sess) throws JLIException {
     	
-		DebugLogging.sendDebugMessage("drawing.load_symbol: " + symbolFile, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("drawing.load_symbol_def: " + symbolFile, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -2166,7 +2166,7 @@ public class JLDrawing implements IJLDrawing {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("drawing.load_symbol,"+symbolFile, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("drawing.load_symbol_def,"+symbolFile, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
