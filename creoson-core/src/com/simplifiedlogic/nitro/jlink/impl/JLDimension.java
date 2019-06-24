@@ -590,8 +590,11 @@ public class JLDimension implements IJLDimension {
 
 	        boolean complete = false;
 	        boolean nosel = true;
+//	        CallModelItems items = null;
+//	        ShowLooper looper = null;
 	        while (!complete) {
-            	CallSelectionOptions selopts = CallSelectionOptions.create("feature,dimension,ref_dim,membfeat");
+//            	CallSelectionOptions selopts = CallSelectionOptions.create("feature,dimension,ref_dim,membfeat");
+            	CallSelectionOptions selopts = CallSelectionOptions.create("dimension,ref_dim");
 //	            SelectionOptions selopts = pfcSelect.SelectionOptions_Create(null);
 	            selopts.setMaxNumSels(new Integer(max));
 	            CallSelections sels = null;
@@ -624,6 +627,7 @@ public class JLDimension implements IJLDimension {
 	                    	}
 	                    	output.add(d);
 	                    }
+/*
 	                    else if (modelItem instanceof CallFeature) {
 	                    	CallComponentPath path = sel.getPath();
 	    	                CallComponentDimensionShowInstructions inst = null;
@@ -631,7 +635,28 @@ public class JLDimension implements IJLDimension {
 	    	                    inst = CallComponentDimensionShowInstructions.create(path);
 	    	                }                
 	                    	
-	                    	CallModelItems items = ((CallFeature)modelItem).listSubItems(ModelItemType.ITEM_DIMENSION);
+	    	                if (items!=null) {
+		                    	int dlen = items.getarraysize();
+		                    	if (dlen>0) {
+		    	            		// repaint to clear last dims
+		    	                    CallWindow win = session.getCurrentWindow();
+		    	                    if (win!=null)
+		    	                    	win.repaint();
+		    	                    
+			                    	CallBaseDimension dim;
+			                    	for (int k=0; k<dlen; k++) {
+			                    	    dim = (CallBaseDimension)items.get(k);
+			                    	    try {
+			                    	    	//System.out.println("item hiding dim "+dim.getId());
+			                    	    	dim.erase();
+			                    	    }
+			                    	    catch (jxthrowable e) {
+			                    	    	// ignore No Change error
+			                    	    }
+			                    	}
+		                    	}
+	    	                }
+	                    	items = ((CallFeature)modelItem).listSubItems(ModelItemType.ITEM_DIMENSION);
 	                    	if (items!=null) {
 		                    	int dlen = items.getarraysize();
 		                    	if (dlen>0) {
@@ -643,28 +668,69 @@ public class JLDimension implements IJLDimension {
 			                    	CallBaseDimension dim;
 			                    	for (int k=0; k<dlen; k++) {
 			                    	    dim = (CallBaseDimension)items.get(k);
-			                    	    dim.show(inst);
+			                    	    try {
+			                    	    	//System.out.println("item showing dim "+dim.getId());
+			                    	    	dim.show(inst);
+			                    	    }
+			                    	    catch (jxthrowable e) {
+			                    	    	// ignore No Change error
+			                    	    }
 			                    	}
 		                    	}
 	                    	}
 	                    	
 	            	        complete=false;
 	                    }
+*/
 	                    else {
 	                    	nosel=true;
 	            	        complete=false;
 	                    }
 	            	}
+/*
 	            	if (nosel) {
+//	            		if (looper!=null) {
+//	            			looper.show=false;
+//	        	        	looper.loop(m);
+//	            		}
                     	// show assembly dimensions
-            	        ShowLooper looper = new ShowLooper();
+            	        looper = new ShowLooper();
         	        	looper.loop(m);
 	            	}
+*/
 	            }
 	            else
 	            	break;
 	        }
 	        
+//    		if (looper!=null) {
+//    			looper.show=false;
+//	        	looper.loop(m);
+//    		}
+//        	else { // else because the if should have hidden everything 
+//                if (items!=null) {
+//                	int dlen = items.getarraysize();
+//                	if (dlen>0) {
+//	            		// repaint to clear last dims
+//	                    CallWindow win = session.getCurrentWindow();
+//	                    if (win!=null)
+//	                    	win.repaint();
+//	                    
+//                    	CallBaseDimension dim;
+//                    	for (int k=0; k<dlen; k++) {
+//                    	    dim = (CallBaseDimension)items.get(k);
+//                    	    try {
+//                    	    	//System.out.println("item hiding dim "+dim.getId());
+//                    	    	dim.erase();
+//                    	    }
+//                    	    catch (jxthrowable e) {
+//                    	    	// ignore No Change error
+//                    	    }
+//                    	}
+//                	}
+//                }
+//    		}
+
 	        if (output.size()==0)
 	        	return null;
 	        else
@@ -984,6 +1050,9 @@ public class JLDimension implements IJLDimension {
      *
      */
     private class ShowLooper extends ModelItemLooper {
+
+    	boolean show = true;
+
         /**
          * Default constructor which sets the search type.
          */
@@ -998,7 +1067,19 @@ public class JLDimension implements IJLDimension {
             if (currentName==null)
                 currentName = item.getName();
             CallBaseDimension dim = (CallBaseDimension)item;
-            dim.show(null);
+    	    try {
+    	    	if (show) {
+        	    	//System.out.println("looper showing dim "+dim.getId());
+    	    		dim.show(null);
+    	    	}
+    	    	else {
+        	    	//System.out.println("looper hiding dim "+dim.getId());
+    	    		dim.erase();
+    	    	}
+    	    }
+    	    catch (jxthrowable e) {
+    	    	// ignore No Change error
+    	    }
         	return false;
         }
     }
