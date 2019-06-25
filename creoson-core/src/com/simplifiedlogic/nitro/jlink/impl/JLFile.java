@@ -50,6 +50,7 @@ import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatures;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallSuppressOperation;
 import com.simplifiedlogic.nitro.jlink.calls.geometry.CallCoordSystem;
+import com.simplifiedlogic.nitro.jlink.calls.mfg.CallMFG;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
@@ -960,17 +961,28 @@ public class JLFile implements IJLFile {
 	        String dirname = "";
 	        String filename = "";
 	        
+	        String mfgName=null;
 	        if (m==null) {
 	            //throw new JLIException("No current model");
 	            dirname = session.getCurrentDirectory();
 	        }
 	        else {
 	            filename = m.getFileName();
+                int mtype = m.getType();
+                if (mtype==ModelType._MDL_MFG) {
+                    CallModel m2 = JlinkUtils.getMfgModel(session, (CallMFG)m);
+                    mfgName = m2.getFileName();
+//                    filename = m2.getFileName();
+                }
+
 	            dirname = JlinkUtils.getPath(m);
 	        }
 	        
 	        out.setDirname(dirname.replace('\\', '/'));
-	        out.setFilenames(new String[] {filename});
+	        if (mfgName==null)
+	        	out.setFilenames(new String[] {filename});
+	        else
+	        	out.setFilenames(new String[] {filename, mfgName});
 	
 	        return out;
     	}
