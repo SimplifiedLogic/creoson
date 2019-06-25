@@ -85,7 +85,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportProgram(String model, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.export_program: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.export_program: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -127,7 +127,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.export_program,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.export_program,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -151,7 +151,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportSTEP(String model, String filename, String dirname, String geomType, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.exportSTEP: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.exportSTEP: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -244,7 +244,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.exportSTEP,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.exportSTEP,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -268,7 +268,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportIGES(String model, String filename, String dirname, String geomType, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.exportIGES: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.exportIGES: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -361,7 +361,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.exportIGES,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.exportIGES,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -385,7 +385,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportVRML(String model, String filename, String dirname, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.exportVRML: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.exportVRML: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -443,7 +443,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.exportVRML,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.exportVRML,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -469,7 +469,7 @@ public class JLTransfer implements IJLTransfer {
 		// this was disabled due to the syntax for CATIA export changing between WF4 and Creo.
 		
 /*
-		DebugLogging.sendDebugMessage("transfer.exportCATIA: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.exportCATIA: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -548,7 +548,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.exportCATIA,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.exportCATIA,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 */
@@ -574,7 +574,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportPV(String model, String filename, String dirname, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.exportPV: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.exportPV: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -632,7 +632,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.exportPV,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.exportPV,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -656,7 +656,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportDXF(String model, String filename, String dirname, boolean advanced, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.exportDXF: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.exportDXF: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -735,7 +735,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.exportDXF,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.exportDXF,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -759,7 +759,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults plot(String model, String dirname, String driver, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.plot: " + model, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.plot: " + model, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -838,7 +838,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.plot,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.plot,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -863,7 +863,7 @@ public class JLTransfer implements IJLTransfer {
 
         // TODO: support filename/dirname parameters as well
 
-		DebugLogging.sendDebugMessage("transfer.mapkey", NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.mapkey", NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -897,7 +897,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.mapkey", start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.mapkey", start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -921,7 +921,7 @@ public class JLTransfer implements IJLTransfer {
 	public String importProgram(String dirname, String filename, String model, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.import_program: " + filename, NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.import_program: " + filename, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -1003,7 +1003,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.import_program,"+filename, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.import_program,"+filename, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -1098,7 +1098,7 @@ public class JLTransfer implements IJLTransfer {
 	
 	private ExportResults exportImage(String model, String filename, Double height, Double width, Integer dpi, Integer depth, int type, AbstractJLISession sess) throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.export_image: " + model + " (" + type + ")", NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.export_image: " + model + " (" + type + ")", NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -1204,7 +1204,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.export_image,"+model+","+type, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.export_image,"+model+","+type, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -1227,7 +1227,7 @@ public class JLTransfer implements IJLTransfer {
 	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("transfer.export_pdf: " + model + (export3D?" (3D)":""), NitroConstants.DEBUG_KEY);
+		DebugLogging.sendDebugMessage("interface.export_pdf: " + model + (export3D?" (3D)":""), NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
 
@@ -1317,7 +1317,7 @@ public class JLTransfer implements IJLTransfer {
     	}
     	finally {
         	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("transfer.export_pdf,"+model, start, NitroConstants.DEBUG_KEY);
+        		DebugLogging.sendTimerMessage("interface.export_pdf,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
