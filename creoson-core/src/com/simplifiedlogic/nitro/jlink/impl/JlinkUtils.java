@@ -35,6 +35,7 @@ import com.ptc.pfc.pfcExceptions.XToolkitError;
 import com.ptc.pfc.pfcExceptions.XToolkitInvalidName;
 import com.ptc.pfc.pfcExceptions.XToolkitNotExist;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
+import com.ptc.pfc.pfcExceptions.XUnimplemented;
 import com.ptc.pfc.pfcExceptions.XUnknownModelExtension;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcLayer.DisplayStatus;
@@ -194,11 +195,15 @@ public class JlinkUtils {
             for (int i=0; i<len; i++) {
                 dep = deps.get(i);
                 desc = dep.getDepModel();
-                //System.out.println(desc.GetFullName() + ": " + desc.GetType().getCipTypeName());
+                //System.out.println("    dependency "+(i+1)+": "+desc.getFullName()+"."+desc.getExtension() + ": " + desc.getType());
                 if (desc.getType()==ModelType._MDL_ASSEMBLY || desc.getType()==ModelType._MDL_PART) {
-                    if (result!=null)
-                        throw new JLIException("Manufacturing Model has more than one assembly dependency.");
-                    else 
+                	// the idea here is that we take either the dep which matches the mfg name, 
+                	// or we take the first dep found.
+                	if (mfg.getFullName().equals(desc.getFullName())) {
+                		result = session.getModelFromDescr(desc);
+                		break;
+                	}
+                	else if (result==null)
                         result = session.getModelFromDescr(desc);
                 }
             }
@@ -366,6 +371,8 @@ public class JlinkUtils {
             msg = "Error: Invalid File Name";
 //        else if (e instanceof XInAMethod)
 //            msg = "Error occurred inside a PTC method";  // best just go with the default error
+        else if (e instanceof XUnimplemented)
+            msg = "Error: Unimplemented function";
 
         if (msg==null)
             msg = "An error occurred which PTC does not explain; please review your latest actions for problems";
@@ -852,12 +859,12 @@ public class JlinkUtils {
 	        switch (type) {
 	            case ParamValueType._PARAM_STRING:
 	                pval.setStringValue(value==null?"":DataUtils.getStringValue(value, encoded));
-	            	if (value==null)
-	            		pval.setStringValue("");
-	            	else {
-	            		String val = DataUtils.getStringValue(value, encoded);
-		                pval.setStringValue(val);
-	            	}
+//	            	if (value==null)
+//	            		pval.setStringValue("");
+//	            	else {
+//	            		String val = DataUtils.getStringValue(value, encoded);
+//		                pval.setStringValue(val);
+//	            	}
 	                break;
 	            case ParamValueType._PARAM_DOUBLE:
 	                pval.setDoubleValue(value==null?0.0:DataUtils.getDoubleValue(value, encoded));
