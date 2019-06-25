@@ -67,6 +67,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 		else if (function.equals(FUNC_DELETE_PARAM)) return actionDeleteParam(sessionId, input);
 		else if (function.equals(FUNC_PARAM_EXISTS)) return actionParamExists(sessionId, input);
 		else if (function.equals(FUNC_LIST_PARAMS)) return actionListParams(sessionId, input);
+		else if (function.equals(FUNC_LIST_PATTERN_FEATURES)) return actionListPatternFeatures(sessionId, input);
+		else if (function.equals(FUNC_LIST_GROUP_FEATURES)) return actionListGroupFeatures(sessionId, input);
 		else if (function.equals(FUNC_USER_SELECT_CSYS)) return actionUserSelectCsys(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
@@ -104,6 +106,74 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         
         List<FeatureData> features = featHandler.list(modelname, featureName, statusPattern, typePattern, paths, 
         		noDatumFeatures, includeUnnamed, noComponentFeatures, sessionId);
+
+        if (features!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
+			out.put(OUTPUT_FEATLIST, outFeats);
+			Map<String, Object> outFeat = null;
+			for (FeatureData feat : features) {
+				outFeat = new Hashtable<String, Object>();
+				if (feat.getName()!=null)
+					outFeat.put(PARAM_NAME, feat.getName());
+				if (feat.getStatus()!=null)
+					outFeat.put(PARAM_STATUS, feat.getStatus());
+				if (feat.getFeatureType()!=null)
+					outFeat.put(PARAM_TYPE, feat.getFeatureType());
+				if (feat.getFeatureId()>0)
+					outFeat.put(OUTPUT_ID, Integer.valueOf(feat.getFeatureId()));
+				if (feat.getFeatureNumber()>0)
+					outFeat.put(OUTPUT_FEATNO, Integer.valueOf(feat.getFeatureNumber()));
+				
+				outFeats.add(outFeat);
+			}
+			
+			return out;
+        }
+        return null;
+	}
+
+	private Hashtable<String, Object> actionListPatternFeatures(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String featureName = checkStringParameter(input, PARAM_PATTERN_NAME, true);
+        String typePattern = checkStringParameter(input, PARAM_TYPE, false);
+        
+        List<FeatureData> features = featHandler.listPatternFeatures(modelname, featureName, typePattern, sessionId);
+
+        if (features!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
+			out.put(OUTPUT_FEATLIST, outFeats);
+			Map<String, Object> outFeat = null;
+			for (FeatureData feat : features) {
+				outFeat = new Hashtable<String, Object>();
+				if (feat.getName()!=null)
+					outFeat.put(PARAM_NAME, feat.getName());
+				if (feat.getStatus()!=null)
+					outFeat.put(PARAM_STATUS, feat.getStatus());
+				if (feat.getFeatureType()!=null)
+					outFeat.put(PARAM_TYPE, feat.getFeatureType());
+				if (feat.getFeatureId()>0)
+					outFeat.put(OUTPUT_ID, Integer.valueOf(feat.getFeatureId()));
+				if (feat.getFeatureNumber()>0)
+					outFeat.put(OUTPUT_FEATNO, Integer.valueOf(feat.getFeatureNumber()));
+				
+				outFeats.add(outFeat);
+			}
+			
+			return out;
+        }
+        return null;
+	}
+
+	private Hashtable<String, Object> actionListGroupFeatures(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String featureName = checkStringParameter(input, PARAM_GROUP_NAME, true);
+        String typePattern = checkStringParameter(input, PARAM_TYPE, false);
+        
+        List<FeatureData> features = featHandler.listGroupFeatures(modelname, featureName, typePattern, sessionId);
 
         if (features!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

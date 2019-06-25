@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.intf;
 
 import java.util.List;
+import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.FeatSelectData;
@@ -122,7 +123,29 @@ public interface IJLFeature {
 	        boolean includeUnnamed, 
 	        boolean noComponentFeatures, 
 	        AbstractJLISession sess) throws JLIException;
-	
+
+	public List<FeatureData> listPatternFeatures(
+			String filename, 
+			String patternName, 
+			String featureType, 
+			String sessionId) throws JLIException;
+	public List<FeatureData> listPatternFeatures(
+			String filename, 
+			String patternName, 
+			String featureType, 
+	        AbstractJLISession sess) throws JLIException;
+
+	public List<FeatureData> listGroupFeatures(
+			String filename, 
+			String groupName, 
+			String featureType, 
+			String sessionId) throws JLIException;
+	public List<FeatureData> listGroupFeatures(
+			String filename, 
+			String groupName, 
+			String featureType, 
+	        AbstractJLISession sess) throws JLIException;
+
 	public void rename(
 	        String filename,
 	        String featureName, 
@@ -191,5 +214,4 @@ public interface IJLFeature {
 	public void setParam(String filename, String featName, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
-	
 }

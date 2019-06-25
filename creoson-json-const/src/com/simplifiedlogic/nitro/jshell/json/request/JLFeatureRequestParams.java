@@ -38,12 +38,16 @@ public interface JLFeatureRequestParams {
     public static final String FUNC_DELETE_PARAM	= "delete_param";
     public static final String FUNC_PARAM_EXISTS	= "param_exists";
     public static final String FUNC_LIST_PARAMS		= "list_params";
-    public static final String FUNC_USER_SELECT_CSYS	= "user_select_csys";
+    public static final String FUNC_LIST_PATTERN_FEATURES	= "list_pattern_features";
+    public static final String FUNC_LIST_GROUP_FEATURES		= "list_group_features";
+    public static final String FUNC_USER_SELECT_CSYS		= "user_select_csys";
 
     // request fields
     public static final String PARAM_MODEL      = "file";
     public static final String PARAM_NAME       = "name";
     public static final String PARAM_NAMES      = "names";
+    public static final String PARAM_PATTERN_NAME	= "pattern_name";
+    public static final String PARAM_GROUP_NAME	= "group_name";
     public static final String PARAM_TYPE       = "type";
     public static final String PARAM_STATUS     = "status";
     public static final String PARAM_CLIP       = "clip";

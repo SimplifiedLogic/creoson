@@ -1,0 +1,79 @@
+{
+  "spec" : {
+    "function_description" : "List features in a Creo Group",
+    "command" : "feature",
+    "function" : "list_group_features",
+    "notes" : [ "Will only list visible features." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "group_name",
+      "type" : "string",
+      "description" : "Group name",
+      "required" : true
+    }, {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Feature type pattern",
+      "default" : "All feature types",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "featlist",
+      "type" : "object_array:FeatureData",
+      "description" : "List of feature information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list_group_features",
+      "data" : {
+        "file" : "box.prt",
+        "group_name" : "HOLE_GRP"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "HOLE_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 21,
+          "feat_number" : 12
+        }, {
+          "name" : "HOLE_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 22,
+          "feat_number" : 13
+        }, {
+          "name" : "HOLE_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 23,
+          "feat_number" : 14
+        }, {
+          "name" : "HOLE_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 24,
+          "feat_number" : 15
+        }, {
+          "name" : "HOLE_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 25,
+          "feat_number" : 16
+        } ]
+      }
+    }
+  } ]
+}

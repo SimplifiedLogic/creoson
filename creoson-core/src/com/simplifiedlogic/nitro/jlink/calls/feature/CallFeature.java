@@ -22,8 +22,10 @@ import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcComponentFeat.ComponentFeat;
 import com.ptc.pfc.pfcFeature.DeleteOperation;
 import com.ptc.pfc.pfcFeature.Feature;
+import com.ptc.pfc.pfcFeature.FeatureGroup;
 import com.ptc.pfc.pfcFeature.FeaturePattern;
 import com.ptc.pfc.pfcFeature.Features;
+import com.ptc.pfc.pfcFeature.GroupPattern;
 import com.ptc.pfc.pfcFeature.ResumeOperation;
 import com.ptc.pfc.pfcFeature.SuppressOperation;
 import com.ptc.pfc.pfcModelItem.ModelItem;
@@ -54,9 +56,8 @@ public class CallFeature extends CallModelItem implements CallParameterOwner {
 	}
 
 	public int getStatus() throws jxthrowable {
-		Feature feat = getFeature();
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Feature,GetStatus", 0, NitroConstants.DEBUG_JLINK_KEY);
-		return feat.GetStatus().getValue();
+		return getFeature().GetStatus().getValue();
 	}
 	
 	public CallModelItems listSubItems(ModelItemType type) throws jxthrowable {
@@ -158,6 +159,27 @@ public class CallFeature extends CallModelItem implements CallParameterOwner {
 		return new CallFeaturePattern(pat);
 	}
 
+	public CallGroupPattern getGroupPattern() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Feature,GetGroupPattern", 0, NitroConstants.DEBUG_JLINK_KEY);
+        GroupPattern pat = getFeature().GetGroupPattern();
+		if (pat==null)
+			return null;
+		return new CallGroupPattern(pat);
+	}
+
+	public CallFeatureGroup getGroup() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Feature,GetGroup", 0, NitroConstants.DEBUG_JLINK_KEY);
+        FeatureGroup group = getFeature().GetGroup();
+		if (group==null)
+			return null;
+		return new CallFeatureGroup(group);
+	}
+
+	public boolean getIsGroupMember() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Feature,GetIsGroupMember", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return getFeature().GetIsGroupMember();
+	}
+	
 	public Feature getFeature() {
 		return (Feature)item;
 	}

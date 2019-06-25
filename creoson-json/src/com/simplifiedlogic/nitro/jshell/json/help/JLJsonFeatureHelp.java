@@ -113,6 +113,8 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
 		list.add(helpDeleteParam());
 		list.add(helpList());
 		list.add(helpListParams());
+		list.add(helpListGroupFeatures());
+		list.add(helpListPatternFeatures());
 		list.add(helpParamExists());
 		list.add(helpRename());
 		list.add(helpResume());
@@ -400,6 +402,106 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	obj.add(arg);
 
         return obj;
+    }
+    
+	private FunctionTemplate helpListPatternFeatures() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_PATTERN_FEATURES);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List features in a Creo Pattern");
+    	spec.addFootnote("Will only list visible features.");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_PATTERN_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Pattern name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_TYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Feature type pattern");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All feature types");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_FEATLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_FEATURE_DATA);
+    	ret.setDescription("List of feature information");
+    	spec.addReturn(ret);
+    	
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_PATTERN_NAME, "PIN_PAT");
+    	List<Map<String, Object>> feats = new ArrayList<Map<String, Object>>();
+    	Map<String, Object> rec;
+    	for (int i=0; i<5; i++) {
+        	rec = new OrderedMap<String, Object>();
+        	rec.put(PARAM_NAME, "PIN_CSYS");
+        	rec.put(PARAM_TYPE, "COORDINATE SYSTEM");
+    		rec.put(PARAM_STATUS, "ACTIVE");
+    		rec.put(OUTPUT_ID, 57+i);
+    		rec.put(OUTPUT_FEATNO, 5+i);
+    		feats.add(rec);
+    	}
+		ex.addOutput(OUTPUT_FEATLIST, feats);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpListGroupFeatures() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_GROUP_FEATURES);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List features in a Creo Group");
+    	spec.addFootnote("Will only list visible features.");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_GROUP_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Group name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_TYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Feature type pattern");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All feature types");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_FEATLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_FEATURE_DATA);
+    	ret.setDescription("List of feature information");
+    	spec.addReturn(ret);
+    	
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_GROUP_NAME, "HOLE_GRP");
+    	List<Map<String, Object>> feats = new ArrayList<Map<String, Object>>();
+    	Map<String, Object> rec;
+    	for (int i=0; i<5; i++) {
+        	rec = new OrderedMap<String, Object>();
+        	rec.put(PARAM_NAME, "HOLE_CSYS");
+        	rec.put(PARAM_TYPE, "COORDINATE SYSTEM");
+    		rec.put(PARAM_STATUS, "ACTIVE");
+    		rec.put(OUTPUT_ID, 21+i);
+    		rec.put(OUTPUT_FEATNO, 12+i);
+    		feats.add(rec);
+    	}
+		ex.addOutput(OUTPUT_FEATLIST, feats);
+    	template.addExample(ex);
+
+        return template;
     }
     
 	private FunctionTemplate helpRename() {

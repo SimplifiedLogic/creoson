@@ -19,6 +19,8 @@
 package com.simplifiedlogic.nitro.jlink.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.ptc.cipjava.jxthrowable;
@@ -27,10 +29,14 @@ import com.ptc.pfc.pfcExceptions.XToolkitNotExist;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
+import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallDeleteOperation;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureGroup;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeaturePattern;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatures;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallGroupPattern;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallResumeOperation;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallSuppressOperation;
 import com.simplifiedlogic.nitro.jlink.calls.geometry.CallCoordSystem;
@@ -42,12 +48,19 @@ import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFCustomCreateInstructions;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReference;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReferences;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantDimension;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantValues;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.FeatSelectData;
 import com.simplifiedlogic.nitro.jlink.data.FeatureData;
 import com.simplifiedlogic.nitro.jlink.data.ParameterData;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLFeature;
+import com.simplifiedlogic.nitro.jlink.intf.IJLParameter;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
 import com.simplifiedlogic.nitro.util.FeatureLooper;
@@ -201,6 +214,202 @@ public class JLFeature implements IJLFeature {
         		DebugLogging.sendTimerMessage("feature.list,"+featureName, start, NitroConstants.DEBUG_KEY);
         	}
     	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listPatternFeatures(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<FeatureData> listPatternFeatures(String filename, String patternName, String featureType, String sessionId) throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return listPatternFeatures(filename, patternName, featureType, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listPatternFeatures(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public List<FeatureData> listPatternFeatures(String filename, String patternName, String featureType, AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("feature.list_pattern_features: " + patternName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        if (patternName==null) 
+	        	throw new JLIException("Must specify a pattern name");
+	        
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	
+	        CallSolid solid = JlinkUtils.getModelSolid(session, filename);
+
+        	CallFeature feat = solid.getFeatureByName(patternName);
+        	if (feat==null)
+        		throw new JLIException("Feature '"+patternName+"' not found");
+
+            List<FeatureData> output = new Vector<FeatureData>();
+
+    		CallGroupPattern groupPattern = feat.getGroupPattern();
+    		if (groupPattern!=null) {
+    			CallFeatures feats = groupPattern.listFeatMembers(); 
+        		if (feats!=null) {
+        			int len = feats.getarraysize();
+        			if (len>0) {
+        				String lastGroup=null;
+    	    			for (int i=0; i<len; i++) {
+    	    				feat = feats.get(i);
+    	    				if (featureType==null) {
+    		    				if (feat.getIsGroupMember() && feat.getFeatType()==FeatureType._FEATTYPE_GROUP_HEAD) {
+    	    	    				addFeatureData(feat, output);
+    		    				}
+    	    				}
+    	    				else {
+    		    				if (feat.getFeatType()!=FeatureType._FEATTYPE_GROUP_HEAD) {
+    		    					String currentType = feat.getFeatTypeName();
+    		    					if (currentType.equalsIgnoreCase(featureType)) {
+    		    						CallFeatureGroup group = feat.getGroup();
+    		    						if (group!=null) {
+    		    							String groupName = group.getGroupName();
+    		    							if (!groupName.equals(lastGroup)) {
+    		    								addFeatureData(feat, output);
+    		    								lastGroup = groupName;
+    		    							}
+    		    						}
+    		    					}
+    		    				}
+    	    				}
+    	    			}
+        			}
+        		}
+    		}
+        	else {
+	            CallFeaturePattern pattern = feat.getPattern();
+	        	if (pattern!=null) {
+	    			CallFeatures feats = pattern.listMembers(); 
+	        		if (feats!=null) {
+	        			int len = feats.getarraysize();
+	        			if (len>0) {
+	    	    			for (int i=0; i<len; i++) {
+	    	    				feat = feats.get(i);
+	    	    				addFeatureData(feat, output);
+	    	    			}
+	        			}
+	        		}
+	
+	        	}
+        		else
+        			throw new JLIException("Feature '"+patternName+"' is not a pattern or pattern member");
+        	}
+
+	        return output;
+	        
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("feature.list_pattern_features,"+patternName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listGroupFeatures(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<FeatureData> listGroupFeatures(String filename, String groupName, String featureType, String sessionId) throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return listGroupFeatures(filename, groupName, featureType, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listGroupFeatures(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public List<FeatureData> listGroupFeatures(String filename, String groupName, String featureType, AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("feature.list_group_features: " + groupName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	
+	        CallSolid solid = JlinkUtils.getModelSolid(session, filename);
+
+        	CallFeature feat = solid.getFeatureByName(groupName);
+        	if (feat==null)
+        		throw new JLIException("Feature '"+groupName+"' not found");
+        	if (feat.getFeatType()!=FeatureType._FEATTYPE_GROUP_HEAD)
+        		throw new JLIException("Feature '"+groupName+"' is not a group");
+
+            List<FeatureData> output = new Vector<FeatureData>();
+
+			CallFeatureGroup group = feat.getGroup();
+        	if (group==null)
+        		throw new JLIException("Feature '"+groupName+"' is not a group");
+
+			CallFeatures feats = group.listMembers(); 
+    		if (feats!=null) {
+    			int len = feats.getarraysize();
+    			for (int i=0; i<len; i++) {
+    				feat = feats.get(i);
+    				if (featureType==null) {
+	    				if (feat.getFeatType()!=FeatureType._FEATTYPE_GROUP_HEAD) {
+    	    				addFeatureData(feat, output);
+	    				}
+    				}
+    				else {
+	    				if (feat.getFeatType()!=FeatureType._FEATTYPE_GROUP_HEAD) {
+	    					String currentType = feat.getFeatTypeName();
+	    					if (currentType.equalsIgnoreCase(featureType)) {
+								addFeatureData(feat, output);
+	    					}
+	    				}
+    				}
+    			}
+			}
+
+	        return output;
+	        
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("feature.list_group_features,"+groupName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+	
+	private void addFeatureData(CallFeature feat, List<FeatureData> output) throws jxthrowable {
+		FeatureData item = new FeatureData();
+		item.setName(feat.getName());
+		item.setFeatureId(feat.getId());
+		item.setFeatureNumber(feat.getNumber());
+		item.setFeatureType(feat.getFeatTypeName());
+		item.setStatus(JlinkUtils.translateFeatureStatus(feat.getStatus()));
+		output.add(item);
 	}
 
 	/* (non-Javadoc)
@@ -903,7 +1112,7 @@ public class JLFeature implements IJLFeature {
         	}
     	}
 	}		
-    
+
     /**
      * Check whether a feature name is valid.  Checks for length and invalid characters.  Returns a reformatted feature name.
      * @param feat The feature name

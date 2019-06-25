@@ -1,0 +1,79 @@
+{
+  "spec" : {
+    "function_description" : "List features in a Creo Pattern",
+    "command" : "feature",
+    "function" : "list_pattern_features",
+    "notes" : [ "Will only list visible features." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "pattern_name",
+      "type" : "string",
+      "description" : "Pattern name",
+      "required" : true
+    }, {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Feature type pattern",
+      "default" : "All feature types",
+      "wildcards_allowed" : true
+    } ],
+    "response" : [ {
+      "name" : "featlist",
+      "type" : "object_array:FeatureData",
+      "description" : "List of feature information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list_pattern_features",
+      "data" : {
+        "file" : "box.prt",
+        "pattern_name" : "PIN_PAT"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "PIN_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 57,
+          "feat_number" : 5
+        }, {
+          "name" : "PIN_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 58,
+          "feat_number" : 6
+        }, {
+          "name" : "PIN_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 59,
+          "feat_number" : 7
+        }, {
+          "name" : "PIN_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 60,
+          "feat_number" : 8
+        }, {
+          "name" : "PIN_CSYS",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "feat_id" : 61,
+          "feat_number" : 9
+        } ]
+      }
+    }
+  } ]
+}
