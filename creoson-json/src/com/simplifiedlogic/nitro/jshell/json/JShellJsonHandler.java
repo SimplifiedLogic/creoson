@@ -166,10 +166,20 @@ public class JShellJsonHandler {
 			return resp;
 		}
 		
+		if (req.getCommand()==null) {
+			createError(resp, "Request is missing the 'command' property");
+			return resp;
+		}
+		
 		JLJsonCommandHandler handler = commands.get(req.getCommand());
 		// check for invalid command
 		if (handler==null) {
 			createError(resp, "Invalid command: " + req.getCommand());
+			return resp;
+		}
+		
+		if (req.getFunction()==null) {
+			createError(resp, "Request is missing the 'function' property");
 			return resp;
 		}
 		
