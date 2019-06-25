@@ -170,6 +170,24 @@ public class DataUtils {
             return false;
     }
     
+    public static boolean validBoolean(String val) {
+        if (val.equals("1") || 
+        	val.equals("1.0") ||
+            val.equalsIgnoreCase("y") || 
+            val.equalsIgnoreCase("yes") || 
+            val.equalsIgnoreCase("true") || 
+            val.equalsIgnoreCase("on"))
+            return true;
+        if (val.equals("2") || 
+        	val.equals("2.0") ||
+            val.equalsIgnoreCase("n") || 
+            val.equalsIgnoreCase("no") || 
+            val.equalsIgnoreCase("false") || 
+            val.equalsIgnoreCase("off"))
+            return true;
+        return false;
+    }
+
     /**
      * Convert a generic object into a String value.  The reason not to 
      * just use toString() on the object is that this function also
