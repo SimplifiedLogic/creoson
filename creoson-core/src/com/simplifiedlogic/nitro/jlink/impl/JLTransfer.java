@@ -879,6 +879,16 @@ public class JLTransfer implements IJLTransfer {
 	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
 	        if (session == null)
 	            return;
+
+	        // strip out newlines (can't do a replace, because creo doesn't like a space where the newline is)
+	        StringBuffer buf = new StringBuffer();
+	        int len = script.length();
+	        for (int i=0; i<len; i++) {
+	        	char c = script.charAt(i);
+	        	if (c!='\n')
+	        		buf.append(c);
+	        }
+	        script = buf.toString();
 	        
 	        session.runMacro(script);
     	}
