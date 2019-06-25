@@ -23,6 +23,7 @@ import com.ptc.cipjava.stringseq;
 import com.ptc.pfc.pfcAssembly.Assembly;
 import com.ptc.pfc.pfcDrawing.Drawing;
 import com.ptc.pfc.pfcLayer.Layer;
+import com.ptc.pfc.pfcMFG.MFG;
 import com.ptc.pfc.pfcModel.Dependencies;
 import com.ptc.pfc.pfcModel.Model;
 import com.ptc.pfc.pfcModel.ModelDescriptor;
@@ -39,6 +40,7 @@ import com.ptc.pfc.pfcView.Views;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.layer.CallLayer;
+import com.simplifiedlogic.nitro.jlink.calls.mfg.CallMFG;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItems;
@@ -312,6 +314,8 @@ public class CallModel implements CallParameterOwner {
 			return new CallDrawing((Drawing)m);
 		else if (m instanceof Model2D)
 			return new CallModel2D((Model2D)m);
+		else if (m instanceof MFG)
+			return new CallMFG((MFG)m);
 		else
 			return new CallModel(m);
 	}
