@@ -34,6 +34,7 @@ public interface JLParameterRequestParams {
     public static final String FUNC_DELETE     	= "delete";
     public static final String FUNC_COPY     	= "copy";
     public static final String FUNC_EXISTS     	= "exists";
+    public static final String FUNC_SET_DESIGNATED	= "set_designated";
 
     // request fields
     public static final String PARAM_MODEL      = "file";

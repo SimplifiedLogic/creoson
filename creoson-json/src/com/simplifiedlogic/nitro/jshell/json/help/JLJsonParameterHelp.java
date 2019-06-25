@@ -52,6 +52,7 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
 		list.add(helpExists());
 		list.add(helpList());
 		list.add(helpSet());
+		list.add(helpSetDesignated());
 		return list;
 	}
 	
@@ -139,6 +140,40 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	ex.addInput(PARAM_TYPE, IJLParameter.TYPE_STRING);
     	ex.addInput(PARAM_VALUE, "ZnJpZW5kbHk=");
     	ex.addInput(PARAM_ENCODED, true);
+    	ex.addInput(PARAM_DESIGNATE, true);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpSetDesignated() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_DESIGNATED);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set the designated state of a parameter");
+    	FunctionArgument arg;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Parameter name");
+    	arg.setWildcards(true);
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_DESIGNATE, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Set parameter to be designated/not designated");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "TEST");
     	ex.addInput(PARAM_DESIGNATE, true);
     	template.addExample(ex);
 

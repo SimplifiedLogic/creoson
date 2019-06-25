@@ -1,0 +1,43 @@
+{
+  "spec" : {
+    "function_description" : "Set the designated state of a parameter",
+    "command" : "parameter",
+    "function" : "set_designated",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Parameter name",
+      "required" : true,
+      "wildcards_allowed" : true
+    }, {
+      "name" : "designate",
+      "type" : "boolean",
+      "description" : "Set parameter to be designated/not designated",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "set_designated",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "TEST",
+        "designate" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

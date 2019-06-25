@@ -132,6 +132,67 @@ public class JLParameter implements IJLParameter {
     	}
 	}		
     
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#setDesignated(java.lang.String, java.lang.String, boolean, java.lang.String)
+     */
+    @Override
+	public void setDesignated(
+			String filename,
+			String paramName,
+			boolean designate,
+			String sessionId) throws JLIException {
+		
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        setDesignated(filename, paramName, designate, sess);
+	}
+    
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#setDesignated(java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    @Override
+	public void setDesignated(
+			String filename,
+			String paramName,
+			boolean designate,
+			AbstractJLISession sess) throws JLIException {
+		
+		DebugLogging.sendDebugMessage("parameter.set_designated: " + paramName + "=" + designate, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (paramName==null || paramName.trim().length()==0)
+    		throw new JLIException("No parameter name parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+	
+	        SetDesignateLooper looper = new SetDesignateLooper();
+            looper.setNamePattern(filename);
+	        looper.setDefaultToActive(true);
+	        looper.setSession(session);
+	        looper.setDebugKey(NitroConstants.DEBUG_SET_PARAM_KEY);
+	        looper.paramName = paramName;
+	        looper.designate = designate;
+	        looper.loop();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("parameter.set_designated," + paramName + "," + designate, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}		
+    
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#delete(java.lang.String, java.lang.String, java.lang.String)
 	 */
@@ -684,6 +745,77 @@ public class JLParameter implements IJLParameter {
 			return false;
 		}
     	
+    }
+
+    /**
+     * An implementation of ModelLooper which sets a parameter's designated state 
+     * on a list of models
+     * @author Adam Andrews
+     *
+     */
+    public class SetDesignateLooper extends ModelLooper {
+		/**
+		 * Parameter name to set
+		 */
+		String paramName;
+		/**
+		 * Whether the parameter should be designated/not designated.
+		 */
+		boolean designate;
+
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
+		 */
+		@Override
+		public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
+			SetDesignateLooper2 looper = new SetDesignateLooper2();
+	        if (paramName==null)
+	        	looper.setNamePattern(null);
+	        else
+	        	looper.setNamePattern(paramName);
+	        looper.model = m;
+	        looper.designate = designate;
+	        looper.loop(m);
+			return false;
+		}
+    	
+    }
+
+    /**
+     * An implementation of ParamLooper which sets designate state of 
+     * matching parameters on a model
+     * @author Adam Andrews
+     *
+     */
+    public class SetDesignateLooper2 extends ParamLooper {
+    	/**
+    	 * The model containing the parameters to delete
+    	 */
+    	CallModel model;
+		/**
+		 * Whether the parameter should be designated/not designated.
+		 */
+		boolean designate;
+
+        /* (non-Javadoc)
+         * @see com.simplifiedlogic.nitro.util.ParamLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter)
+         */
+        public boolean loopAction(CallParameter p) throws JLIException, jxthrowable {
+        	//System.err.println("Setting model "+model.getFileName()+" param "+p.getName()+" designate: "+designate);
+	        if (designate) {
+	        	// make parameter designated
+	            if (!p.getIsDesignated()) {
+	            	p.setIsDesignated(true);
+	            }
+	        }
+	        else {
+	        	// make parameter not designated
+	            if (p.getIsDesignated()) {
+	            	p.setIsDesignated(false);
+	            }
+	        }
+            return false;
+        }
     }
 
     /**

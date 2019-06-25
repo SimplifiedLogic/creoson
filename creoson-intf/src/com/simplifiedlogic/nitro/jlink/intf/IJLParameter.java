@@ -44,21 +44,23 @@ public interface IJLParameter {
 	public void set(String filename, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, String sessionId) throws JLIException;
-
 	public void set(String filename, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
 	
+	public void setDesignated(String filename, String paramName,
+			boolean designate, String sessionId) throws JLIException;
+	public void setDesignated(String filename, String paramName,
+			boolean designate, AbstractJLISession sess) throws JLIException;
+	
     public void delete(String filename, String paramName,
 			String sessionId) throws JLIException;
-
 	public void delete(String filename, String paramName,
 			AbstractJLISession sess) throws JLIException;
 
 	public void copy(String filename, String paramName,
 			String toModel, String toName, int designate,
 			String sessionId) throws JLIException;
-
 	public void copy(String filename, String paramName,
 			String toModel, String toName, int designate,
 			AbstractJLISession sess) throws JLIException;
@@ -67,7 +69,6 @@ public interface IJLParameter {
 			List<String> paramNames, String valuePattern, 
 			boolean encoded, String sessionId)
 			throws JLIException;
-
 	public List<ParameterData> list(String filename, String paramName,
 			List<String> paramNames, String valuePattern, 
 			boolean encoded, AbstractJLISession sess)
@@ -76,7 +77,6 @@ public interface IJLParameter {
     public boolean exists(String filename, String paramName,
 			List<String> paramNames, String sessionId)
 			throws JLIException;
-
     public boolean exists(String filename, String paramName,
 			List<String> paramNames, AbstractJLISession sess)
 			throws JLIException;

@@ -63,6 +63,8 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
 			return actionCopy(sessionId, input);
 		else if (function.equals(FUNC_EXISTS))
 			return actionExists(sessionId, input);
+		else if (function.equals(FUNC_SET_DESIGNATED))
+			return actionSetDesignated(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -86,6 +88,17 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
         boolean noCreate = checkFlagParameter(input, PARAM_NO_CREATE, false, false);
         
         paramHandler.set(filename, paramName, value, type, designate, encoded, noCreate, sessionId);
+        
+        return null;
+	}
+
+	private Hashtable<String, Object> actionSetDesignated(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String paramName = checkStringParameter(input, PARAM_NAME, true);
+        boolean designate = checkFlagParameter(input, PARAM_DESIGNATE, true, false);
+        
+        paramHandler.setDesignated(filename, paramName, designate, sessionId);
         
         return null;
 	}
