@@ -243,7 +243,7 @@ public class JLFeature implements IJLFeature {
     	try {
 	        if (patternName==null) 
 	        	throw new JLIException("Must specify a pattern name");
-	        
+
 	        JLGlobal.loadLibrary();
 	    	
 	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
@@ -348,6 +348,9 @@ public class JLFeature implements IJLFeature {
     	if (NitroConstants.TIME_TASKS)
     		start = System.currentTimeMillis();
     	try {
+	        if (groupName==null) 
+	        	throw new JLIException("Must specify a group name");
+
 	        JLGlobal.loadLibrary();
 	    	
 	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
