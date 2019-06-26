@@ -37,7 +37,7 @@
 		<delete>
 			<fileset dir="${out_dir}" includes="CreosonServer-*win32.zip"/>
 		</delete>
-		<zip destfile="${out_dir}/CreosonServer-${jar_ver}-win32.zip">
+		<zip destfile="${out_dir}/CreosonServerWithSetup-${jar_ver}-win32.zip">
 			<zipfileset dir="${out_dir}" includes="*.jar"/>
 			<zipfileset dir="${jackson_dir}" includes="jackson*.jar"/>
 			<zipfileset dir="${apache_commons_codec_dir}" includes="*commons-codec*.jar"/>
@@ -46,17 +46,33 @@
 			<zipfileset dir="${extract_dir}/extract_32"/>
 			<zipfileset dir="${basedir}" includes="RELEASE_NOTES.txt,README.md,LICENSE"/>
 		</zip>
+		<zip destfile="${out_dir}/CreosonServer-${jar_ver}-win32.zip">
+			<zipfileset dir="${out_dir}" includes="*.jar"/>
+			<zipfileset dir="${jackson_dir}" includes="jackson*.jar"/>
+			<zipfileset dir="${apache_commons_codec_dir}" includes="*commons-codec*.jar"/>
+			<zipfileset dir="${server_dir}" includes="web/**" excludes="web/.svn/**"/>
+			<zipfileset dir="${batfile_dir}" includes="creoson_run.bat"/>
+			<zipfileset dir="${basedir}" includes="RELEASE_NOTES.txt,README.md,LICENSE"/>
+		</zip>
 
 		<delete>
 			<fileset dir="${out_dir}" includes="CreosonServer-*win64.zip"/>
 		</delete>
-		<zip destfile="${out_dir}/CreosonServer-${jar_ver}-win64.zip">
+		<zip destfile="${out_dir}/CreosonServerWithSetup-${jar_ver}-win64.zip">
 			<zipfileset dir="${out_dir}" includes="*.jar"/>
 			<zipfileset dir="${jackson_dir}" includes="jackson*.jar"/>
 			<zipfileset dir="${apache_commons_codec_dir}" includes="*commons-codec*.jar"/>
 			<zipfileset dir="${server_dir}" includes="web/**,*.txt" excludes="web/.svn/**"/>
 			<zipfileset dir="${batfile_dir}" includes="creoson_run.bat"/>
 			<zipfileset dir="${extract_dir}/extract_64"/>
+			<zipfileset dir="${basedir}" includes="RELEASE_NOTES.txt,README.md,LICENSE"/>
+		</zip>
+		<zip destfile="${out_dir}/CreosonServer-${jar_ver}-win64.zip">
+			<zipfileset dir="${out_dir}" includes="*.jar"/>
+			<zipfileset dir="${jackson_dir}" includes="jackson*.jar"/>
+			<zipfileset dir="${apache_commons_codec_dir}" includes="*commons-codec*.jar"/>
+			<zipfileset dir="${server_dir}" includes="web/**,*.txt" excludes="web/.svn/**"/>
+			<zipfileset dir="${batfile_dir}" includes="creoson_run.bat"/>
 			<zipfileset dir="${basedir}" includes="RELEASE_NOTES.txt,README.md,LICENSE"/>
 		</zip>
 	</target>
