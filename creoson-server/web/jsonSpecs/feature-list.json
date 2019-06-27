@@ -1,9 +1,9 @@
 {
   "spec" : {
-    "function_description" : "List feature parameters that match criteria",
+    "function_description" : "List features that match criteria",
     "command" : "feature",
     "function" : "list",
-    "notes" : [ "Will only list parameters on visible features." ],
+    "notes" : [ "Will only list visible features." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -16,11 +16,23 @@
       "default" : "All features are listed",
       "wildcards_allowed" : true
     }, {
+      "name" : "status",
+      "type" : "string",
+      "description" : "Feature status pattern",
+      "default" : "All feature statuses",
+      "wildcards_allowed" : true,
+      "valid_values" : "ACTIVE, INACTIVE, FAMILY_TABLE_SUPPRESSED, SIMP_REP_SUPPRESSED, PROGRAM_SUPPRESSED, SUPPRESSED, UNREGENERATED"
+    }, {
       "name" : "type",
       "type" : "string",
       "description" : "Feature type pattern",
       "default" : "All feature types",
       "wildcards_allowed" : true
+    }, {
+      "name" : "paths",
+      "type" : "boolean",
+      "description" : "Whether feature ID and feature number are returned with the data",
+      "default" : "false"
     }, {
       "name" : "no_datum",
       "type" : "boolean",
@@ -36,32 +48,11 @@
       "type" : "boolean",
       "description" : "Whether to include component-type features in the list",
       "default" : "false"
-    }, {
-      "name" : "param",
-      "type" : "string",
-      "description" : "Parameter name; only used if params is not given",
-      "wildcards_allowed" : true
-    }, {
-      "name" : "params",
-      "type" : "array:string",
-      "description" : "List of parameter names",
-      "default" : "The param parameter is used; if both are empty, then all parameters are listed"
-    }, {
-      "name" : "value",
-      "type" : "string",
-      "description" : "Parameter value filter",
-      "default" : "no filter",
-      "wildcards_allowed" : true
-    }, {
-      "name" : "encoded",
-      "type" : "boolean",
-      "description" : "Whether to return the values Base64-encoded",
-      "default" : "false"
     } ],
     "response" : [ {
-      "name" : "paramlist",
-      "type" : "object_array:ParameterData",
-      "description" : "List of parameter information"
+      "name" : "featlist",
+      "type" : "object_array:FeatureData",
+      "description" : "List of feature information"
     } ]
   },
   "examples" : [ {
@@ -71,8 +62,7 @@
       "function" : "list",
       "data" : {
         "file" : "box.prt",
-        "name" : "TEST*",
-        "param" : "PTC*"
+        "name" : "CS3"
       }
     },
     "response" : {
@@ -80,42 +70,10 @@
         "error" : false
       },
       "data" : {
-        "paramlist" : [ {
-          "name" : "PTC_BRAND",
-          "type" : "STRING",
-          "value" : "ALPHA",
-          "designate" : false,
-          "encoded" : false,
-          "owner_name" : "TEST_1",
-          "owner_type" : "CURVE",
-          "owner_id" : 121
-        }, {
-          "name" : "PTC_LIFETIME",
-          "type" : "INTEGER",
-          "value" : 95,
-          "designate" : true,
-          "encoded" : false,
-          "owner_name" : "TEST_1",
-          "owner_type" : "CURVE",
-          "owner_id" : 121
-        }, {
-          "name" : "PTC_BRAND",
-          "type" : "STRING",
-          "value" : "BETA",
-          "designate" : false,
-          "encoded" : false,
-          "owner_name" : "TEST_2",
-          "owner_type" : "CURVE",
-          "owner_id" : 125
-        }, {
-          "name" : "PTC_LIFETIME",
-          "type" : "INTEGER",
-          "value" : 70,
-          "designate" : true,
-          "encoded" : false,
-          "owner_name" : "TEST_2",
-          "owner_type" : "CURVE",
-          "owner_id" : 125
+        "featlist" : [ {
+          "name" : "CS3",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE"
         } ]
       }
     }
@@ -126,9 +84,8 @@
       "function" : "list",
       "data" : {
         "file" : "box.prt",
-        "name" : "TEST_10",
-        "param" : "MFG_ID",
-        "encoded" : true
+        "name" : "PLN_*",
+        "paths" : true
       }
     },
     "response" : {
@@ -136,15 +93,209 @@
         "error" : false
       },
       "data" : {
-        "paramlist" : [ {
-          "name" : "MFG_ID",
-          "type" : "STRING",
-          "value" : "ZnJpZW5kbHk=",
-          "designate" : false,
-          "encoded" : true,
-          "owner_name" : "TEST_10",
-          "owner_type" : "COORDINATE SYSTEM",
-          "owner_id" : 17
+        "featlist" : [ {
+          "name" : "PLN_34",
+          "type" : "DATUM_PLANE",
+          "status" : "SUPPRESSED",
+          "feat_id" : 735,
+          "feat_number" : 5
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "names" : [ "PLN_34", "CS3", "FLAT_3" ]
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "PLN_34",
+          "type" : "DATUM_PLANE",
+          "status" : "SUPPRESSED"
+        }, {
+          "name" : "CS3",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE"
+        }, {
+          "name" : "FLAT_3",
+          "type" : "FLAT",
+          "status" : "ACTIVE"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "status" : "*SUPPRESSED*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "PLN_34",
+          "type" : "DATUM_PLANE",
+          "status" : "SUPPRESSED"
+        }, {
+          "name" : "CURVE_7",
+          "type" : "CURVE",
+          "status" : "SUPPRESSED"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLN_*",
+        "status" : "*SUPPRESSED*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "PLN_34",
+          "type" : "DATUM_PLANE",
+          "status" : "SUPPRESSED"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "type" : "DATUM_*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "PLN_34",
+          "type" : "DATUM_PLANE",
+          "status" : "SUPPRESSED"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "type" : "CURVE",
+        "paths" : true,
+        "inc_unnamed" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "CURVE_7",
+          "type" : "CURVE",
+          "status" : "SUPPRESSED",
+          "feat_id" : 601,
+          "feat_number" : 23
+        }, {
+          "type" : "CURVE",
+          "status" : "ACTIVE",
+          "feat_id" : 620,
+          "feat_number" : 25
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "status" : "ACTIVE"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "CS3",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE"
+        }, {
+          "name" : "CS0",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE"
+        }, {
+          "name" : "FLAT_3",
+          "type" : "FLAT",
+          "status" : "ACTIVE"
+        }, {
+          "name" : "wheel.prt",
+          "type" : "COMPONENT",
+          "status" : "ACTIVE"
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list",
+      "data" : {
+        "file" : "box.prt",
+        "status" : "ACTIVE",
+        "no_comp" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "featlist" : [ {
+          "name" : "CS3",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE"
+        }, {
+          "name" : "CS0",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE"
+        }, {
+          "name" : "FLAT_3",
+          "type" : "FLAT",
+          "status" : "ACTIVE"
         } ]
       }
     }

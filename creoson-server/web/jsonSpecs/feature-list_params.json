@@ -1,0 +1,157 @@
+{
+  "spec" : {
+    "function_description" : "List feature parameters that match criteria",
+    "command" : "feature",
+    "function" : "list_params",
+    "notes" : [ "Will only list parameters on visible features." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "The currently active model"
+    }, {
+      "name" : "feat_id",
+      "type" : "integer",
+      "description" : "Feature ID",
+      "default" : "The name parameter is used"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Feature name; only used if feat_id is not given",
+      "default" : "All features are listed",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Feature type pattern",
+      "default" : "All feature types",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "no_datum",
+      "type" : "boolean",
+      "description" : "Whether to exclude datum-type features from the list; these are COORD_SYS, CURVE, DATUM_AXIS, DATUM_PLANE, DATUM_POINT, DATUM_QUILT, and DATUM_SURFACE features.",
+      "default" : "false"
+    }, {
+      "name" : "inc_unnamed",
+      "type" : "boolean",
+      "description" : "Whether to include unnamed features in the list",
+      "default" : "false"
+    }, {
+      "name" : "no_comp",
+      "type" : "boolean",
+      "description" : "Whether to include component-type features in the list",
+      "default" : "false"
+    }, {
+      "name" : "param",
+      "type" : "string",
+      "description" : "Parameter name; only used if params is not given",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "params",
+      "type" : "array:string",
+      "description" : "List of parameter names",
+      "default" : "The param parameter is used; if both are empty, then all parameters are listed"
+    }, {
+      "name" : "value",
+      "type" : "string",
+      "description" : "Parameter value filter",
+      "default" : "no filter",
+      "wildcards_allowed" : true
+    }, {
+      "name" : "encoded",
+      "type" : "boolean",
+      "description" : "Whether to return the values Base64-encoded",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "paramlist",
+      "type" : "object_array:ParameterData",
+      "description" : "List of parameter information"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list_params",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "TEST*",
+        "param" : "PTC*"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "paramlist" : [ {
+          "name" : "PTC_BRAND",
+          "type" : "STRING",
+          "value" : "ALPHA",
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "TEST_1",
+          "owner_type" : "CURVE",
+          "owner_id" : 121
+        }, {
+          "name" : "PTC_LIFETIME",
+          "type" : "INTEGER",
+          "value" : 95,
+          "designate" : true,
+          "encoded" : false,
+          "owner_name" : "TEST_1",
+          "owner_type" : "CURVE",
+          "owner_id" : 121
+        }, {
+          "name" : "PTC_BRAND",
+          "type" : "STRING",
+          "value" : "BETA",
+          "designate" : false,
+          "encoded" : false,
+          "owner_name" : "TEST_2",
+          "owner_type" : "CURVE",
+          "owner_id" : 125
+        }, {
+          "name" : "PTC_LIFETIME",
+          "type" : "INTEGER",
+          "value" : 70,
+          "designate" : true,
+          "encoded" : false,
+          "owner_name" : "TEST_2",
+          "owner_type" : "CURVE",
+          "owner_id" : 125
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "list_params",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "TEST_10",
+        "param" : "MFG_ID",
+        "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "paramlist" : [ {
+          "name" : "MFG_ID",
+          "type" : "STRING",
+          "value" : "ZnJpZW5kbHk=",
+          "designate" : false,
+          "encoded" : true,
+          "owner_name" : "TEST_10",
+          "owner_type" : "COORDINATE SYSTEM",
+          "owner_id" : 17
+        } ]
+      }
+    }
+  } ]
+}
