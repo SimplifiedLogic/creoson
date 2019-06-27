@@ -48,11 +48,6 @@ import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
-import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFCustomCreateInstructions;
-import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReference;
-import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReferences;
-import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantDimension;
-import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantValues;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.FeatSelectData;
@@ -955,11 +950,12 @@ public class JLFeature implements IJLFeature {
 	}
 
     /* (non-Javadoc)
-     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listParams(java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, boolean, boolean, boolean, java.lang.String)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listParams(java.lang.String, java.lang.String, int, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, boolean, boolean, boolean, java.lang.String)
      */
     public List<ParameterData> listParams(
 	        String filename,
 	        String featName, 
+	        int featId, 
 	        String paramName, 
 	        List<String> paramNames, 
 	        String typePattern, 
@@ -972,15 +968,16 @@ public class JLFeature implements IJLFeature {
 
         JLISession sess = JLISession.getSession(sessionId);
         
-        return listParams(filename, featName, paramName, paramNames, typePattern, valuePattern, encoded, noDatumFeatures, includeUnnamed, noComponentFeatures, sess);
+        return listParams(filename, featName, featId, paramName, paramNames, typePattern, valuePattern, encoded, noDatumFeatures, includeUnnamed, noComponentFeatures, sess);
     }
     	
     /* (non-Javadoc)
-     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listParams(java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, boolean, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#listParams(java.lang.String, java.lang.String, int, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, boolean, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
      */
     public List<ParameterData> listParams(
 	        String filename,
 	        String featName, 
+	        int featId, 
 	        String paramName, 
 	        List<String> paramNames, 
 	        String typePattern, 
@@ -1007,24 +1004,91 @@ public class JLFeature implements IJLFeature {
 	
 	        CallSolid solid = JlinkUtils.getModelSolid(session, filename);
 	        
-	        ListParamLooper looper = new ListParamLooper();
-	        looper.model = solid;
-	        looper.setNamePattern(featName);
-	        looper.paramName = paramName;
-	        looper.paramNames = paramNames;
-	        looper.encoded = encoded;
-	        looper.setTypePattern(typePattern);
-	        looper.valuePattern = valuePattern;
-	        looper.noDatumFeatures = noDatumFeatures;
-	        looper.noComponentFeatures = noComponentFeatures;
-	        looper.setIncludeUnnamed(includeUnnamed);
+	        if (featId>0) {
+	        	CallFeature feat = null;
+	        	try {
+	        		feat = solid.getFeatureById(featId);
+	        	}
+                catch (XToolkitBadInputs e) {}  // ignore this exception because it's thrown when the ID is not found
+                catch (XToolkitNotExist e) {}  // ignore this exception because it's thrown when the ID is not found
+		        if (feat==null)
+		        	throw new JLIException("No feature found for ID: " + featId);
+		        
+	        	int type = feat.getFeatType();
+	            if (noDatumFeatures) {
+	            	if (type==FeatureType._FEATTYPE_COORD_SYS || 
+	            		type==FeatureType._FEATTYPE_CURVE || 
+	            		type==FeatureType._FEATTYPE_DATUM_AXIS || 
+	            		type==FeatureType._FEATTYPE_DATUM_PLANE || 
+	            		type==FeatureType._FEATTYPE_DATUM_POINT || 
+	            		type==FeatureType._FEATTYPE_DATUM_QUILT || 
+	            		type==FeatureType._FEATTYPE_DATUM_SURFACE)
+	            		return new Vector<ParameterData>();
+	            }
+	            if (noComponentFeatures) {
+	            	if (type==FeatureType._FEATTYPE_COMPONENT)
+	            		return new Vector<ParameterData>();
+	            }
 
-	        looper.loop(solid);
+				// call a sub-looper to find feature parameters
+		        ParamListLooper looper = new ParamListLooper();
+		        looper.model = solid;
+		        looper.owner = feat;
+		        if (paramNames!=null)
+		        	looper.setNameList(paramNames);
+		        else if (paramName==null)
+		        	looper.setNamePattern(null);
+		        else
+		        	looper.setNamePattern(paramName);
+		        looper.encoded = encoded;
+		        looper.setValuePattern(valuePattern);
 
-	        if (looper.output==null)
-	            return new Vector<ParameterData>();
-	        else
-	        	return looper.output;
+		        looper.loop(feat);
+		        
+		        Vector<ParameterData> output = null;
+		        if (looper.output!=null) {
+		        	if (output==null) {
+		        		output = new Vector<ParameterData>();
+		        	}
+		        	// get these values once to save on jni calls
+		        	String ownerName = feat.getName();
+		        	String ownerType = feat.getFeatTypeName();
+		        	int featid = feat.getId();
+		        	for (ParameterData param : looper.output) {
+			        	if (ownerName!=null)
+			        		param.setOwnerName(ownerName);
+			        	if (ownerType!=null)
+			        		param.setOwnerType(ownerType);
+			        	param.setOwnerId(featid);
+		        		output.add(param);
+		        	}
+		        }
+		        
+		        if (output==null)
+		            return new Vector<ParameterData>();
+		        else
+		        	return output;
+	        }
+	        else {
+		        ListParamLooper looper = new ListParamLooper();
+		        looper.model = solid;
+		        looper.setNamePattern(featName);
+		        looper.paramName = paramName;
+		        looper.paramNames = paramNames;
+		        looper.encoded = encoded;
+		        looper.setTypePattern(typePattern);
+		        looper.valuePattern = valuePattern;
+		        looper.noDatumFeatures = noDatumFeatures;
+		        looper.noComponentFeatures = noComponentFeatures;
+		        looper.setIncludeUnnamed(includeUnnamed);
+	
+		        looper.loop(solid);
+	
+		        if (looper.output==null)
+		            return new Vector<ParameterData>();
+		        else
+		        	return looper.output;
+	        }
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);

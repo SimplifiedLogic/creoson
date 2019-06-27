@@ -824,7 +824,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     }
     
 	private FunctionTemplate helpListParams() {
-    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_PARAMS);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("List feature parameters that match criteria");
     	spec.addFootnote("Will only list parameters on visible features.");
@@ -836,8 +836,13 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	arg.setDefaultValue("The currently active model");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_ID, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Feature ID");
+    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used");
+    	spec.addArgument(arg);
+
     	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Feature name");
+    	arg.setDescription("Feature name; only used if " + PARAM_ID + " is not given");
     	arg.setWildcards(true);
     	arg.setDefaultValue("All features are listed");
     	spec.addArgument(arg);

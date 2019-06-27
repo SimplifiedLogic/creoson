@@ -190,7 +190,7 @@ public interface IJLFeature {
 			AbstractJLISession sess) throws JLIException;
 
     public List<ParameterData> listParams(String filename, 
-    		String featName, String paramName,
+    		String featName, int featId, String paramName,
 			List<String> paramNames, String typePattern, String valuePattern, 
 			boolean encoded, 
 	        boolean noDatumFeatures, 
@@ -199,7 +199,7 @@ public interface IJLFeature {
 			String sessionId)
 			throws JLIException;
 	public List<ParameterData> listParams(String filename, 
-			String featName, String paramName,
+			String featName, int featId, String paramName,
 			List<String> paramNames, String typePattern, String valuePattern, 
 			boolean encoded, 
 	        boolean noDatumFeatures, 

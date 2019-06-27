@@ -286,6 +286,7 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 		
         String modelname = checkStringParameter(input, PARAM_MODEL, false);
         String featureName = checkStringParameter(input, PARAM_NAME, false);
+        int featureId = checkIntParameter(input, PARAM_ID, false, 0);
         String typePattern = checkStringParameter(input, PARAM_TYPE, false);
         boolean noDatumFeatures = checkFlagParameter(input, PARAM_NO_DATUM, false, false);
         boolean includeUnnamed = checkFlagParameter(input, PARAM_INC_UNNAMED, false, false);
@@ -300,7 +301,7 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         String valuePattern = checkStringParameter(input, JLParameterRequestParams.PARAM_VALUE, false);
         boolean encoded = checkFlagParameter(input, JLParameterRequestParams.PARAM_ENCODED, false, false);
         
-        List<ParameterData> params = featHandler.listParams(modelname, featureName, namePattern, paramNames, 
+        List<ParameterData> params = featHandler.listParams(modelname, featureName, featureId, namePattern, paramNames, 
         		typePattern, valuePattern, encoded, noDatumFeatures, includeUnnamed, noComponentFeatures, sessionId);
 
         if (params!=null && params.size()>0) {
