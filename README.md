@@ -32,7 +32,7 @@ CREOSON Requires the following to work:
 
 There is nothing to "install", the Pre-Packaged Distribution contains everything you need, but here are some basic steps to follow:
 
-1. Download your Pre-Packaged Distribution
+1. Download your Pre-Packaged Distribution  (Distribution w/ GUI Utility is Recommended -> CreosonServerWithSetup-*.zip)
 2. Move the ZIP file to a directory where you want CREOSON to run from
 3. UNZIP the Pre-Packaged Distribution
 4. Run the CreosonSetup.exe
@@ -47,7 +47,7 @@ There is nothing to "install", the Pre-Packaged Distribution contains everything
 # Need Automation Help?
 ----
 
-Visit the --> [PTC Community](https://community.ptc.com/t5/Creo/ct-p/Creo) <-- to learn more ...
+Visit the --> [PTC Creo Parametric Community](https://community.ptc.com/t5/Creo-Parametric/ct-p/creoparametric) <-- to learn more ...
 
 If you need professional help with your automation, send us an email with your goals and requirements to --> creoson@simplifiedlogic.com <--
 
