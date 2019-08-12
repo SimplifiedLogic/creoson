@@ -19,7 +19,6 @@
 package com.simplifiedlogic.nitro.jlink.calls.feature;
 
 import com.ptc.cipjava.jxthrowable;
-import com.ptc.pfc.pfcFeature.FeaturePattern;
 import com.ptc.pfc.pfcFeature.Features;
 import com.ptc.pfc.pfcFeature.GroupPattern;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;

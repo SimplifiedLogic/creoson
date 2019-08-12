@@ -170,6 +170,16 @@ public class DataUtils {
             return false;
     }
     
+    /**
+     * Validate whether a string contains a valid boolean value
+     * 
+     * <p>This function will interpret the string values "1", "y", "yes", 
+     * "true", and "on" as a boolean true value.
+     * <p>This function will interpret the string values "2", "n", "no", 
+     * "false", and "off" as a boolean false value.
+     *  
+     * @param val The string to validate
+     */
     public static boolean validBoolean(String val) {
         if (val.equals("1") || 
         	val.equals("1.0") ||
