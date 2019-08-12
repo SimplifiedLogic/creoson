@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.calls.detail;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcDetail.Attachment;
 import com.ptc.pfc.pfcDetail.DetailLeaders;
 import com.ptc.pfc.pfcDetail.pfcDetail;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
@@ -49,6 +50,14 @@ public class CallDetailLeaders {
 	public void setItemAttachment(CallAttachment value) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailLeaders,SetItemAttachment", 0, NitroConstants.DEBUG_JLINK_KEY);
 		getLeaders().SetItemAttachment(value!=null ? value.getAttachment() : null);
+	}
+
+	public CallAttachment getItemAttachment() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailLeaders,GetItemAttachment", 0, NitroConstants.DEBUG_JLINK_KEY);
+        Attachment attach = getLeaders().GetItemAttachment();
+        if (attach==null)
+        	return null;
+        return CallAttachment.create(attach);
 	}
 
 	public DetailLeaders getLeaders() {

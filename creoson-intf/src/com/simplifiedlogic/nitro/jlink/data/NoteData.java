@@ -35,6 +35,7 @@ public class NoteData implements Serializable {
 	private Object valueExpanded;
 	private boolean encoded;
 	private String url;
+	private JLPoint location;
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -148,5 +149,13 @@ public class NoteData implements Serializable {
 	 */
 	public void setValueExpanded(Object valueExpanded) {
 		this.valueExpanded = valueExpanded;
+	}
+
+	public JLPoint getLocation() {
+		return location;
+	}
+
+	public void setLocation(JLPoint location) {
+		this.location = location;
 	}
 }

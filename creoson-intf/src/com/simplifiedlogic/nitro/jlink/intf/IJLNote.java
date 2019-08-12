@@ -21,16 +21,26 @@ package com.simplifiedlogic.nitro.jlink.intf;
 import java.util.List;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.NoteData;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 
 public interface IJLNote {
 
 	public void set(String filename, String noteName,
-			Object value, boolean encoded, String sessionId) 
+			Object value, boolean encoded, JLPoint location, 
+			String sessionId) 
 			throws JLIException;
 	public void set(String filename, String noteName,
-			Object value, boolean encoded, AbstractJLISession sess) 
+			Object value, boolean encoded, JLPoint location, 
+			AbstractJLISession sess) 
+			throws JLIException;
+
+	public void setLoc(String filename, String noteName,
+			JLPoint location, String sessionId) 
+			throws JLIException;
+	public void setLoc(String filename, String noteName,
+			JLPoint location, AbstractJLISession sess) 
 			throws JLIException;
 
 	public NoteData get(String filename, String noteName,

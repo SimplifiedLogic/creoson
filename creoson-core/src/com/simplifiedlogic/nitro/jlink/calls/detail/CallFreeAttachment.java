@@ -19,6 +19,8 @@
 package com.simplifiedlogic.nitro.jlink.calls.detail;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcBase.Point3D;
+import com.ptc.pfc.pfcDetail.Attachment;
 import com.ptc.pfc.pfcDetail.AttachmentType;
 import com.ptc.pfc.pfcDetail.FreeAttachment;
 import com.ptc.pfc.pfcDetail.pfcDetail;
@@ -32,12 +34,10 @@ import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
  * @author Adam Andrews
  *
  */
-public class CallFreeAttachment implements CallAttachment {
-
-	private FreeAttachment attachment;
+public class CallFreeAttachment extends CallAttachment {
 
 	public CallFreeAttachment(FreeAttachment attachment) {
-		this.attachment = attachment;
+		super((Attachment)attachment);
 	}
 
 	public static CallFreeAttachment create(CallPoint3D inAttachmentPoint) throws jxthrowable {
@@ -47,15 +47,29 @@ public class CallFreeAttachment implements CallAttachment {
 			return null;
 		return new CallFreeAttachment(attachment);
 	}
-	
+
+	public static CallFreeAttachment createAttachment(FreeAttachment attachment) {
+		if (attachment==null)
+			return null;
+		return new CallFreeAttachment(attachment);
+	}
+
+	public CallPoint3D getAttachmentPoint() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("FreeAttachment,GetAttachmentPoint", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Point3D pt = getFreeAttachment().GetAttachmentPoint();
+		if (pt==null)
+			return null;
+		return new CallPoint3D(pt);
+	}
+
 	public AttachmentType getType() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("FreeAttachment,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
 		if (attachment==null)
 			return null;
 		return attachment.GetType();
 	}
-	
-	public FreeAttachment getAttachment() {
-		return attachment;
+
+	public FreeAttachment getFreeAttachment() {
+		return (FreeAttachment)getAttachment();
 	}
 }

@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.jlink.calls.detail;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcDetail.Attachment;
 import com.ptc.pfc.pfcDetail.AttachmentType;
+import com.ptc.pfc.pfcDetail.FreeAttachment;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcDetail.Attachment
@@ -28,9 +29,28 @@ import com.ptc.pfc.pfcDetail.AttachmentType;
  * @author Adam Andrews
  *
  */
-public interface CallAttachment {
+public class CallAttachment {
 
-	public AttachmentType getType() throws jxthrowable;
+	protected Attachment attachment;
 
-	public Attachment getAttachment();
+	protected CallAttachment(Attachment attachment) {
+		this.attachment = attachment;
+	}
+	
+	public AttachmentType getType() throws jxthrowable {
+		return null;
+	}
+
+	public static CallAttachment create(Attachment attachment) {
+		if (attachment==null)
+			return null;
+		if (attachment instanceof FreeAttachment) 
+			return CallFreeAttachment.createAttachment((FreeAttachment)attachment);
+		else
+			return new CallAttachment(attachment);
+	}
+
+	public Attachment getAttachment() {
+		return attachment;
+	}
 }

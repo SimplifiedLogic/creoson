@@ -55,6 +55,11 @@ public class CallDetailNoteItem extends CallDetailItem {
 		getDetailItem().Remove();
 	}
 
+	public void show() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailNoteItem,Show", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getDetailItem().Show();
+	}
+
 	public DetailNoteItem getDetailItem() {
 		return (DetailNoteItem)item;
 	}

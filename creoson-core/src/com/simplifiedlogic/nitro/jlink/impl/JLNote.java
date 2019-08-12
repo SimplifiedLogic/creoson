@@ -27,12 +27,16 @@ import java.util.regex.Pattern;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallAttachment;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailLeaders;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailNoteInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailNoteItem;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailText;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailTextLine;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailTextLines;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailTexts;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallFreeAttachment;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
@@ -41,12 +45,14 @@ import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.NoteData;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLNote;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
 import com.simplifiedlogic.nitro.util.JLConnectionUtil;
+import com.simplifiedlogic.nitro.util.JLPointMaker;
 import com.simplifiedlogic.nitro.util.ModelItemLooper;
 import com.simplifiedlogic.nitro.util.ModelLooper;
 
@@ -74,7 +80,7 @@ public class JLNote implements IJLNote {
     private static final int DETAILTEXT_LIMIT = 80;
     
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLNote#set(java.lang.String, java.lang.String, java.lang.Object, boolean, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLNote#set(java.lang.String, java.lang.String, java.lang.Object, boolean, com.simplifiedlogic.nitro.jlink.data.JLPoint, java.lang.String)
 	 */
 	@Override
 	public void set(
@@ -82,15 +88,16 @@ public class JLNote implements IJLNote {
 			String noteName, 
 			Object valueObj,
 			boolean encoded, 
+			JLPoint location, 
 			String sessionId) throws JLIException {
 
         JLISession sess = JLISession.getSession(sessionId);
 
-        set(filename, noteName, valueObj, encoded, sess);
+        set(filename, noteName, valueObj, encoded, location, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLNote#set(java.lang.String, java.lang.String, java.lang.Object, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLNote#set(java.lang.String, java.lang.String, java.lang.Object, boolean, com.simplifiedlogic.nitro.jlink.data.JLPoint, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
 	public void set(
@@ -98,6 +105,7 @@ public class JLNote implements IJLNote {
 			String noteName, 
 			Object valueObj,
 			boolean encoded, 
+			JLPoint location, 
 			AbstractJLISession sess) throws JLIException {
 
 		DebugLogging.sendDebugMessage("note.set: " + noteName + "=" + valueObj, NitroConstants.DEBUG_KEY);
@@ -140,7 +148,7 @@ public class JLNote implements IJLNote {
 	        }
 	        else
 	            textseq.set(0, " ");
-	        
+
 	        SetLooper looper = new SetLooper();
             looper.setNamePattern(filename);
 	        looper.setDefaultToActive(true);
@@ -148,6 +156,7 @@ public class JLNote implements IJLNote {
 	        looper.noteName = noteName;
 	        looper.textseq = textseq;
 	        looper.textArray = text;
+	        looper.location = location;
 	        looper.loop();
 	        
     	}
@@ -157,6 +166,94 @@ public class JLNote implements IJLNote {
     	finally {
         	if (NitroConstants.TIME_TASKS) {
         		DebugLogging.sendTimerMessage("note.set,"+noteName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLNote#setLoc(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, java.lang.String)
+	 */
+	@Override
+	public void setLoc(
+			String filename, 
+			String noteName, 
+			JLPoint location, 
+			String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+        setLoc(filename, noteName, location, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLNote#setLoc(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.JLPoint, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public void setLoc(
+			String filename, 
+			String noteName, 
+			JLPoint location, 
+			AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("note.set_loc: " + noteName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (noteName==null || noteName.trim().length()==0)
+    		throw new JLIException("No note name parameter given");
+    	if (location==null)
+    		throw new JLIException("No location parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            NitroUtils.validateNameChars(noteName);
+            if (noteName.trim().length()<MIN_NOTE_NAME)
+            	throw new JLIException("Note names must be at least " + MIN_NOTE_NAME + " characters");
+	        
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+	
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing)) {
+	        	if (filename==null)
+	        		throw new JLIException("Active model is not a drawing");
+	        	else
+	        		throw new JLIException("Model is not a drawing: " + filename);
+	        }
+        	CallDrawing dwg = (CallDrawing)m;
+	        
+			CallModelItem item = JlinkUtils.getNote(m, noteName, ModelItemType.ITEM_DTL_NOTE, false);
+
+	        if (item==null)
+	        	throw new JLIException("Note "+noteName+" not found on model");
+
+        	// update an existing drawing note
+        	CallDetailNoteItem note = (CallDetailNoteItem)item;
+        	CallDetailNoteInstructions inst = note.getInstructions(true);
+        	CallPoint3D loc = JLPointMaker.create3D(location);
+        	int sheet = dwg.getCurrentSheetNumber();
+	        loc = JLDrawing.drawingToScreenPoint(dwg, sheet, loc);
+    		CallFreeAttachment position = CallFreeAttachment.create(loc);
+
+    		CallDetailLeaders leaders = CallDetailLeaders.create();
+    		leaders.setItemAttachment(position);
+
+        	inst.setLeader(leaders);
+        	
+    		note.modify(inst);
+            
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("note.set_loc,"+noteName, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}
@@ -211,7 +308,7 @@ public class JLNote implements IJLNote {
 	        boolean encoded = false;
 	        CallModelItem item = JlinkUtils.getNote(m, noteName, false);
 	        if (item!=null) {
-	        	getNoteInfo(item, out, encoded, false);
+	        	getNoteInfo(m, item, out, encoded, false);
 	        }
 	        else {
 	            out.setValue("");
@@ -816,13 +913,15 @@ public class JLNote implements IJLNote {
      * @param getExpandedValues Whether to expand parameter values
      * @return Whether the method was successful
      * @throws jxthrowable
+     * @throws JLIException 
      */
-    public static boolean getNoteInfo(CallModelItem item, NoteData outvals, boolean encoded, boolean getExpandedValues) throws jxthrowable {
-    	return getNoteInfo(item, outvals, encoded, null, getExpandedValues);
+    public static boolean getNoteInfo(CallModel model, CallModelItem item, NoteData outvals, boolean encoded, boolean getExpandedValues) throws jxthrowable, JLIException {
+    	return getNoteInfo(model, item, outvals, encoded, null, getExpandedValues);
     }
 
     /**
      * Get data about a model or drawing note
+     * @param model The model or drawing containing the note (used for drawing notes only)
      * @param item The model or drawing note object
      * @param outvals The output object
      * @param encoded Whether to return the text as a byte array
@@ -830,8 +929,9 @@ public class JLNote implements IJLNote {
      * @param getExpandedValues Whether to expand parameter values
      * @return Whether the function was successful
      * @throws jxthrowable
+     * @throws JLIException 
      */
-    public static boolean getNoteInfo(CallModelItem item, NoteData outvals, boolean encoded, Pattern valuePtn, boolean getExpandedValues) throws jxthrowable {
+    public static boolean getNoteInfo(CallModel model, CallModelItem item, NoteData outvals, boolean encoded, Pattern valuePtn, boolean getExpandedValues) throws jxthrowable, JLIException {
         if (item instanceof CallNote) {
         	// handle a model note
         	CallNote note = (CallNote)item;
@@ -885,7 +985,23 @@ public class JLNote implements IJLNote {
             	outvals.setValue(text);
             	outvals.setValueExpanded(textExpanded);
             }
-            
+
+            if (model!=null) {
+	        	CallDetailNoteInstructions inst = note.getInstructions(true);
+	        	CallDetailLeaders leaders = inst.getLeader();
+	        	if (leaders!=null) {
+		        	CallAttachment attach = leaders.getItemAttachment();
+		        	if (attach instanceof CallFreeAttachment) {
+		        		CallPoint3D loc = ((CallFreeAttachment)attach).getAttachmentPoint();
+		            	CallDrawing dwg = (CallDrawing)model;
+		            	int sheet = dwg.getCurrentSheetNumber();
+		        		loc = JLDrawing.screenToDrawingPoint(dwg, sheet, loc);
+		        		JLPoint location = JLPointMaker.create(loc);
+		        		outvals.setLocation(location);
+		        	}
+	        	}
+	        }
+
             outvals.setEncoded(encoded);
             return true;
         }
@@ -1034,6 +1150,10 @@ public class JLNote implements IJLNote {
 		 * Whether to expand parameter values in the notes
 		 */
 		boolean getExpandedValues;
+		/**
+		 * The model containing the notes
+		 */
+		CallModel m;
 		
         /**
          * Constructor which determines the note type based on the model type
@@ -1042,6 +1162,7 @@ public class JLNote implements IJLNote {
         public ListLooper(CallModel m) {
         	ModelItemType type = JlinkUtils.getNoteType(m);
             setSearchType(type);
+            this.m=m;
         }
         
         /**
@@ -1067,7 +1188,7 @@ public class JLNote implements IJLNote {
             boolean encoded = false;
             NoteData outvals = new NoteData();
             outvals.setName(currentName==null?badPrefix+item.getId():currentName);
-            if (!getNoteInfo(item, outvals, encoded, valuePtn, getExpandedValues))
+            if (!getNoteInfo(m, item, outvals, encoded, valuePtn, getExpandedValues))
             	return false;
             output.add(outvals);
         	return false;
@@ -1106,7 +1227,7 @@ public class JLNote implements IJLNote {
 	}
 
     /**
-     * An implementation of ModelLooper which sets a note on a list of models
+     * An implementation of ModelLooper which creates or updates a note on a list of models
      * @author Adam Andrews
      *
      */
@@ -1123,6 +1244,10 @@ public class JLNote implements IJLNote {
     	 * The lines of text for the note as a Java string array
     	 */
     	String[] textArray;
+    	/**
+    	 * The location for the note (drawing notes only)
+    	 */
+    	JLPoint location;
     	
 		/* (non-Javadoc)
 		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
@@ -1164,6 +1289,18 @@ public class JLNote implements IJLNote {
 		        	CallDetailText oldFirstBlock = getFirstBlock(lines);
 		    		lines.clear();
 		        	createLines(lines, textArray, oldFirstBlock);
+	            	if (location!=null) {
+		            	CallDrawing dwg = (CallDrawing)m;
+	                	CallPoint3D loc = JLPointMaker.create3D(location);
+	                	int sheet = dwg.getCurrentSheetNumber();
+	        	        loc = JLDrawing.drawingToScreenPoint(dwg, sheet, loc);
+	            		CallFreeAttachment position = CallFreeAttachment.create(loc);
+
+	            		CallDetailLeaders leaders = CallDetailLeaders.create();
+	            		leaders.setItemAttachment(position);
+
+	                	inst.setLeader(leaders);
+	            	}
 		        	
 		    		note.modify(inst);
 		        }
@@ -1178,10 +1315,26 @@ public class JLNote implements IJLNote {
 	            	CallDetailTextLines lines = CallDetailTextLines.create();
 	            	createLines(lines, textArray, null);
 	            	CallDetailNoteInstructions inst = CallDetailNoteInstructions.create(lines);
+	            	if (location!=null) {
+	                	CallPoint3D loc = JLPointMaker.create3D(location);
+	                	int sheet = dwg.getCurrentSheetNumber();
+	        	        loc = JLDrawing.drawingToScreenPoint(dwg, sheet, loc);
+	            		CallFreeAttachment position = CallFreeAttachment.create(loc);
+
+	            		CallDetailLeaders leaders = CallDetailLeaders.create();
+	            		leaders.setItemAttachment(position);
+
+	                	inst.setLeader(leaders);
+	            	}
+	            	inst.setIsDisplayed(Boolean.TRUE);
 	            	item = dwg.createDetailItem(inst);
 
 		            // note: the following command crashes if the name is of the pattern "Note_#"
 		            item.setName(noteName);
+		            
+		            if (item instanceof CallDetailNoteItem) {
+		            	((CallDetailNoteItem)item).show();
+		            }
 		        }
 			}
 			return false;

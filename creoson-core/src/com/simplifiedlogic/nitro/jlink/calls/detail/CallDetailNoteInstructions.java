@@ -21,14 +21,15 @@ package com.simplifiedlogic.nitro.jlink.calls.detail;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.ColorRGB;
 import com.ptc.pfc.pfcDetail.DetailCreateInstructions;
+import com.ptc.pfc.pfcDetail.DetailLeaders;
 import com.ptc.pfc.pfcDetail.DetailNoteInstructions;
 import com.ptc.pfc.pfcDetail.DetailTextLines;
 import com.ptc.pfc.pfcDetail.HorizontalJustification;
 import com.ptc.pfc.pfcDetail.VerticalJustification;
 import com.ptc.pfc.pfcDetail.pfcDetail;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallColorRGB;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcDetail.DetailNoteInstructions
@@ -137,6 +138,22 @@ public class CallDetailNoteInstructions extends CallDetailCreateInstructions {
 		getInst().SetTextAngle(value);
 	}
 	
+	public void setLeader(CallDetailLeaders value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailNoteInstructions,SetLeader", 0, NitroConstants.DEBUG_JLINK_KEY);
+		if (value==null)
+			getInst().SetLeader(null);
+		else
+			getInst().SetLeader(value.getLeaders());
+	}
+
+	public CallDetailLeaders getLeader() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailNoteInstructions,GetLeader", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DetailLeaders leaders = getInst().GetLeader();
+        if (leaders==null)
+        	return null;
+        return new CallDetailLeaders(leaders);
+	}
+
 	public void copySettings(CallDetailNoteInstructions targetInst) throws jxthrowable {
 		targetInst.setColor(getColor());
 		targetInst.setHorizontal(getHorizontal());
