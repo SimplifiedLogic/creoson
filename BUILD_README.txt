@@ -72,6 +72,9 @@ CreosonServer-win64.zip by including
 	- all the jars in the "out" directory
 	- all the commons-codec and jackson jars
 	- the website files
+It will also create CreosonServerWithSetup-win32.zip and 
+CreosonServerWithSetup-win64.zip which includes the above but
+also contains
 	- The CreosonSetup application, which includes an embedded JRE.
 
 build-all.xml

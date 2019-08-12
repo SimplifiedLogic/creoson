@@ -1,6 +1,32 @@
 R E L E A S E   N O T E S
 =========================
 
+2.4.0
+	- Added new functions:
+		feature
+			list_group_features
+			list_pattern_features
+		parameter
+			set_designated
+	- Modified functions:
+		dimension
+			userSelect - don't force-show dimensions when prompting user to select them
+			     - restrict selections to just dimensions
+		feature
+			list    - fix mistake in doc where feature.list and feature.list_params pages were confused
+			list_params - add optional feat_id argument.  If feat_id is 0 or null, then the name field is used instead
+				- fix mistake in doc where feature.list and feature.list_params pages were confused
+		file
+			get_active - when the active model is a MFG model, the function will return two file names; the second
+				file name will be the dependent model
+			(general) - when getting a MFG model's dependent model; if there are multiple dependent models
+				then take the one with the same name
+		interface
+			mapkey - before executing a mapkey, strip newlines out of it
+	- on input of any function, added a check for missing command or function arguments in JSON requests
+	- revamp the build so that it no longer produces a CreosonSetup file; instead there are two pairs of CreosonServer
+		files, one with CreosonSetup built in and one without
+
 2.3.0
 	- Added new functions:
 		dimension
