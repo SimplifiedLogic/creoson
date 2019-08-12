@@ -53,6 +53,7 @@
         <div class="container">
             <div id="doc-header" class="doc-header text-center">
                 <h1 class="doc-title"><span aria-hidden="true" class="icon icon_cogs"></span> Playground</h1>
+                
             </div><!--//doc-header-->
             <div id="showcase" class="doc-body">
                 <div class="doc-content">
@@ -136,7 +137,7 @@
                                 </div>
                             </div><!--//section-block-->
                         </section><!--//doc-section-->
-
+                        
 
                     </div><!--//content-inner-->
                 </div><!--//doc-content-->
@@ -293,6 +294,8 @@
 
     // used for image export
     var creosonImgDir = '';
+    // used for image source
+    var creoWorkingDir = '';
 
 
     var creosonServerSettingsObj = {
@@ -392,7 +395,9 @@
     function creosonConnect() {
 
         $('#creoson_loadingConnectTx').removeClass('hidden');
-
+        $('#creoActiveModelImg').attr('src', '');
+        $('#paramsTable').empty();
+        
         // JSON request
         var reqObj =  {
             "command": "connection",
@@ -460,6 +465,7 @@
         // Clear out the last parameter results table
         $('#paramsTable').empty();
         $('#creoson_loadingOpenModel').removeClass('hidden');
+        $('#creoActiveModelImg').attr('src', '');
 
         // JSON request
         var reqObj =  {
@@ -511,7 +517,41 @@
     }
 
 
-    function creosonGetDir() {
+
+    function creoGetDir() {
+        return new Promise (function (resolve, reject) {
+
+            // change url endpoint - CREOSON Server info/action calls are different than CREO calls.
+            creosonServerSettingsObj.url = '/creoson';
+
+            // JSON request
+            var reqObj =  {
+                "sessionId":  creosonSessionId,
+                "command": "creo",
+                "function": "pwd"
+            };
+
+            // perform the request
+            creosonRequest(reqObj)
+                .then(function(respObj) {
+
+                    console.log('got this back: ' + JSON.stringify(respObj));
+
+                    // set the image directory on the creoson server
+                    creoWorkingDir = respObj.data.dirname;
+
+                    resolve();
+
+                }).catch(function (err) {
+
+                    reject(err);
+
+                });
+
+        })
+    }
+
+    function creosonGetImgDir() {
 
         return new Promise (function (resolve, reject) {
 
@@ -542,7 +582,7 @@
                 }).catch(function (err) {
 
                     // reset the server endpoint
-                    creosonServerSettingsObj.url = '/creoson';
+                    creosonServerSettingsObj.url = '/creoson';                     
 
                     reject(err);
 
@@ -551,6 +591,74 @@
         })
 
     }
+
+    function changeCreoToCreosonImgDir () {
+        return new Promise (function (resolve, reject) {
+
+            // change url endpoint - CREOSON Server info/action calls are different than CREO calls.
+            creosonServerSettingsObj.url = '/creoson';
+
+            // JSON request
+            var reqObj =  {
+                "sessionId":  creosonSessionId,
+                "command": "creo",
+                "function": "cd",
+                "data": {
+                    "dirname" : creosonImgDir
+                }
+
+            };
+
+            // perform the request
+            creosonRequest(reqObj)
+                .then(function(respObj) {
+
+                    resolve();
+
+                }).catch(function (err) {
+
+                    reject(err);
+
+                });
+
+        })
+
+
+    }
+
+
+    function changeBackToCreoWorkingDir() {
+        return new Promise (function (resolve, reject) {
+
+            // change url endpoint - CREOSON Server info/action calls are different than CREO calls.
+            creosonServerSettingsObj.url = '/creoson';
+
+            // JSON request
+            var reqObj =  {
+                "sessionId":  creosonSessionId,
+                "command": "creo",
+                "function": "cd",
+                "data": {
+                    "dirname" : creoWorkingDir
+                }
+
+            };
+
+            // perform the request
+            creosonRequest(reqObj)
+                .then(function(respObj) {
+
+                    resolve();
+
+                }).catch(function (err) {
+
+                reject(err);
+
+            });
+
+        })
+    }
+
 
     function creosonExportImg() {
 
@@ -562,22 +670,23 @@
                 "command": "interface",
                 "function": "export_image",
                 "data": {
-                    "filename" : creosonImgDir+"activeModel.jpg",
+                    "filename" : "activeModel.jpg",
                     "type": "JPEG",
                     "height": 2,
                     "width": 2
                 }
             };
 
-            creosonRequest(reqObj).then(function(respObj) {
+            creosonRequest(reqObj)
+                .then(function() {
 
-                resolve();
+                    resolve();
 
-            }).catch(function (err) {
+                }).catch(function (err) {
 
-                reject(err);
+                    reject(err);
 
-            });
+                });
 
         })
 
@@ -591,29 +700,30 @@
         $('#creoson_openModel').addClass('hidden');
         $('#creoson_loadingOpenModel').removeClass('hidden');
 
-        creosonGetDir().then(function() {
+        creoGetDir()
+            .then(creosonGetImgDir)
+            .then(changeCreoToCreosonImgDir)
+            .then(creosonExportImg)
+            .then(changeBackToCreoWorkingDir)
+            .then(function () {
 
-            return creosonExportImg();
+                console.log('trying to set the image!!!!!!');
+                // update the image on the webpage ;)
+                var d = new Date(); // to avoid browser caching image
+                $('#creoActiveModelImg').attr('src', 'img/activeModel.jpg?' + d.getTime());
 
-        }).then(function () {
+                return true;
 
-            console.log('trying to set the image!!!!!!');
-            // update the image on the webpage ;)
-            var d = new Date(); // to avoid browser caching image
-            $('#creoActiveModelImg').attr('src', 'img/activeModel.jpg?' + d.getTime());
+            }).then(function() {
 
-            return true;
+                // show the open model button - hide the spinner
+                $('#creoson_openModel').removeClass('hidden');
+                $('#creoson_loadingOpenModel').addClass('hidden');
 
-        }).then(function() {
-
-            // show the open model button - hide the spinner
-            $('#creoson_openModel').removeClass('hidden');
-            $('#creoson_loadingOpenModel').addClass('hidden');
-
-        }).catch(function (err) {
-            console.log("--- GOT INTO AN ERROR ---");
-            console.log(err)
-        })
+            }).catch(function (err) {
+                console.log("--- GOT INTO AN ERROR ---");
+                console.log(err)
+            })
 
     }
 
