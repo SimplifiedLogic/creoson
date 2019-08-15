@@ -1027,7 +1027,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	ex.addInput(PARAM_VIEW, "FRONT");
     	ex.addOutput(JLFileResponseParams.OUTPUT_X, 2.5);
     	ex.addOutput(JLFileResponseParams.OUTPUT_Y, 4.0);
-    	ex.addOutput(JLFileResponseParams.OUTPUT_Z, 0.5);
+    	ex.addOutput(JLFileResponseParams.OUTPUT_Z, 0.0);
     	template.addExample(ex);
     	
         return template;

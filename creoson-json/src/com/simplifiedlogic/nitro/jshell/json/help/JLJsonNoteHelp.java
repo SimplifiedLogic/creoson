@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLNoteRequestParams;
+import com.simplifiedlogic.nitro.jshell.json.response.JLFileResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLNoteResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionArgument;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionExample;
@@ -68,6 +70,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Set the text of a model or drawing note");
+    	spec.addFootnote("The location parameter can used to position a new note, or to change the position of an existing note");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -91,6 +94,11 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_LOCATION, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	arg.setDescription("Coordinates for the note placement in Drawing Units");
+    	arg.setDefaultValue("If missing and this is a new note, note will be placed at 0, 0");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
@@ -100,10 +108,21 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	template.addExample(ex);
 
     	ex = new FunctionExample();
-    	ex.addInput(PARAM_NAME, "box.prt");
+    	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_NAME, "Note_17");
     	ex.addInput(PARAM_VALUE, "ZnJpZW5kbHk=");
     	ex.addInput(PARAM_ENCODED, true);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "newnote");
+    	ex.addInput(PARAM_VALUE, "This is a test note\nWith two lines");
+    	Map<String, Object> rec;
+    	rec = new OrderedMap<String, Object>();
+    	rec.put(JLFileRequestParams.PARAM_X, 10.0);
+    	rec.put(JLFileRequestParams.PARAM_Y, 3.25);
+    	ex.addInput(PARAM_LOCATION, rec);
     	template.addExample(ex);
 
     	return template;
@@ -147,6 +166,10 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	ret.setDescription("Note URL, if there is one");
     	spec.addReturn(ret);
 
+    	ret = new FunctionReturn(OUTPUT_LOCATION, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	ret.setDescription("Note location in Drawing Units (drawing notes only)");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
@@ -163,6 +186,19 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	ex.addOutput(OUTPUT_NAME, "Note_17");
     	ex.addOutput(OUTPUT_VALUE, "ZnJpZW5kbHk=");
     	ex.addOutput(OUTPUT_ENCODED, true);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "box.drw");
+    	ex.addInput(PARAM_NAME, "Note_2");
+    	ex.addOutput(OUTPUT_NAME, "Note_2");
+    	ex.addOutput(OUTPUT_VALUE, "Another test note");
+    	ex.addOutput(OUTPUT_ENCODED, false);
+    	Map<String, Object> rec = new OrderedMap<String, Object>();
+    	rec.put(JLFileResponseParams.OUTPUT_X, 2.5);
+    	rec.put(JLFileResponseParams.OUTPUT_Y, 4.0);
+    	rec.put(JLFileResponseParams.OUTPUT_Z, 0.0);
+    	ex.addOutput(OUTPUT_LOCATION, rec);
     	template.addExample(ex);
 
     	return template;
@@ -288,6 +324,23 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
 		ex.addOutput(OUTPUT_ITEMLIST, notes);
     	template.addExample(ex);
 
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	ex.addInput(PARAM_NAME, "Note_2");
+    	notes = new ArrayList<Map<String, Object>>();
+    	rec = new OrderedMap<String, Object>();
+    	notes.add(rec);
+    	rec.put(OUTPUT_NAME, "Note_2");
+    	rec.put(OUTPUT_VALUE, "Another test note");
+    	rec.put(OUTPUT_ENCODED, false);
+    	Map<String, Object> rec2 = new OrderedMap<String, Object>();
+    	rec2.put(JLFileResponseParams.OUTPUT_X, 2.5);
+    	rec2.put(JLFileResponseParams.OUTPUT_Y, 4.0);
+    	rec2.put(JLFileResponseParams.OUTPUT_Z, 0.0);
+    	rec.put(OUTPUT_LOCATION, rec2);
+		ex.addOutput(OUTPUT_ITEMLIST, notes);
+    	template.addExample(ex);
+
     	return template;
 	}
 
@@ -314,6 +367,10 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
 
     	arg = new FunctionArgument(OUTPUT_URL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Note URL, if there is one");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_LOCATION, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	arg.setDescription("Note location in Drawing Units (drawing notes only)");
     	obj.add(arg);
 
         return obj;

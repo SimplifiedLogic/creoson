@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.NoteData;
 import com.simplifiedlogic.nitro.jlink.intf.IJLNote;
 import com.simplifiedlogic.nitro.jshell.json.request.JLNoteRequestParams;
@@ -76,8 +77,10 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
         String notename = checkStringParameter(input, PARAM_NAME, true);
         Object valueObj = checkParameter(input, PARAM_VALUE, false);
         boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
-        
-        noteHandler.set(modelname, notename, valueObj, encoded, sessionId);
+		Map<String, Object> pointObj = checkMapParameter(input, PARAM_LOCATION, false);
+		JLPoint pt = readPoint(pointObj);
+
+        noteHandler.set(modelname, notename, valueObj, encoded, pt, sessionId);
         
         return null;
 	}
@@ -100,6 +103,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
         	out.put(OUTPUT_ENCODED, note.isEncoded());
         	if (note.getUrl()!=null)
         		out.put(OUTPUT_URL, note.getUrl());
+        	if (note.getLocation()!=null)
+				out.put(OUTPUT_LOCATION, writePoint(note.getLocation()));
         	return out;
         }
         return null;
@@ -144,6 +149,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
 	        	outNote.put(OUTPUT_ENCODED, note.isEncoded());
 	        	if (note.getUrl()!=null)
 	        		outNote.put(OUTPUT_URL, note.getUrl());
+	        	if (note.getLocation()!=null)
+					outNote.put(OUTPUT_LOCATION, writePoint(note.getLocation()));
 				
 				outNotes.add(outNote);
 			}

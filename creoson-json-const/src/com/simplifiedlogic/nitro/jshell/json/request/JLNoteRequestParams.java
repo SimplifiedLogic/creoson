@@ -46,5 +46,6 @@ public interface JLNoteRequestParams {
     public static final String PARAM_GET_EXPANDED	= "get_expanded";
     public static final String PARAM_TOMODEL    = "to_file";
     public static final String PARAM_TONAME     = "to_name";
+    public static final String PARAM_LOCATION	= "location";
 
 }

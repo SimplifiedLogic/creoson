@@ -3,6 +3,7 @@
     "function_description" : "Set the text of a model or drawing note",
     "command" : "note",
     "function" : "set",
+    "notes" : [ "The location parameter can used to position a new note, or to change the position of an existing note" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -24,6 +25,11 @@
       "type" : "boolean",
       "description" : "Value is Base64-encoded",
       "default" : "false"
+    }, {
+      "name" : "location",
+      "type" : "object:JLPoint",
+      "description" : "Coordinates for the note placement in Drawing Units",
+      "default" : "If missing and this is a new note, note will be placed at 0, 0"
     } ],
     "response" : [ ]
   },
@@ -49,9 +55,30 @@
       "command" : "note",
       "function" : "set",
       "data" : {
+        "file" : "box.prt",
         "name" : "Note_17",
         "value" : "ZnJpZW5kbHk=",
         "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "set",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "newnote",
+        "value" : "This is a test note\nWith two lines",
+        "location" : {
+          "x" : 10.0,
+          "y" : 3.25
+        }
       }
     },
     "response" : {

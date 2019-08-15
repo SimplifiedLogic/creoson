@@ -33,5 +33,6 @@ public interface JLNoteResponseParams {
     public static final String OUTPUT_ENCODED	= "encoded";
     public static final String OUTPUT_URL		= "url";
     public static final String OUTPUT_EXISTS	= "exists";
+    public static final String OUTPUT_LOCATION	= "location";
     
 }

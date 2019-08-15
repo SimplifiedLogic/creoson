@@ -31,6 +31,10 @@
       "name" : "url",
       "type" : "string",
       "description" : "Note URL, if there is one"
+    }, {
+      "name" : "location",
+      "type" : "object:JLPoint",
+      "description" : "Note location in Drawing Units (drawing notes only)"
     } ]
   },
   "examples" : [ {
@@ -70,6 +74,30 @@
         "name" : "Note_17",
         "value" : "ZnJpZW5kbHk=",
         "encoded" : true
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "get",
+      "data" : {
+        "name" : "Note_2"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "name" : "Note_2",
+        "value" : "Another test note",
+        "encoded" : false,
+        "location" : {
+          "x" : 2.5,
+          "y" : 4.0,
+          "z" : 0.0
+        }
       }
     }
   } ]

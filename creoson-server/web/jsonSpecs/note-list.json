@@ -111,5 +111,32 @@
         } ]
       }
     }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "list",
+      "data" : {
+        "file" : "box.drw",
+        "name" : "Note_2"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "itemlist" : [ {
+          "name" : "Note_2",
+          "value" : "Another test note",
+          "encoded" : false,
+          "location" : {
+            "x" : 2.5,
+            "y" : 4.0,
+            "z" : 0.0
+          }
+        } ]
+      }
+    }
   } ]
 }

@@ -21,5 +21,9 @@
     "name" : "url",
     "type" : "string",
     "description" : "Note URL, if there is one"
+  }, {
+    "name" : "location",
+    "type" : "object:JLPoint",
+    "description" : "Note location in Drawing Units (drawing notes only)"
   } ]
 }
