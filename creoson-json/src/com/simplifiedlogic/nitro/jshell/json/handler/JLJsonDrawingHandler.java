@@ -507,7 +507,7 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 	
 	private Hashtable<String, Object> actionListSymbols(String sessionId, Hashtable<String, Object> input) throws JLIException {
 		String drawing = checkStringParameter(input, PARAM_DRAWING, false);
-		String symbolFile = checkStringParameter(input, PARAM_SYMBOL_FILE, true);
+		String symbolFile = checkStringParameter(input, PARAM_SYMBOL_FILE, false);
 		int sheet = checkIntParameter(input, PARAM_SHEET, false, 0);
 		
 		List<SymbolInstData> symbols = drawHandler.listSymbols(drawing, symbolFile, sheet, sessionId);
