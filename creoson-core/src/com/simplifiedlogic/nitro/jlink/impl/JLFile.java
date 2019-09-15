@@ -31,6 +31,7 @@ import com.ptc.pfc.pfcBase.UnitType;
 import com.ptc.pfc.pfcComponentFeat.ComponentConstraintType;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
 import com.ptc.pfc.pfcExceptions.XToolkitInUse;
+import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
@@ -56,6 +57,8 @@ import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItems;
+import com.simplifiedlogic.nitro.jlink.calls.part.CallMaterial;
+import com.simplifiedlogic.nitro.jlink.calls.part.CallPart;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
@@ -86,6 +89,7 @@ import com.simplifiedlogic.nitro.rpc.JLISession;
 import com.simplifiedlogic.nitro.util.FileListFilter;
 import com.simplifiedlogic.nitro.util.JLConnectionUtil;
 import com.simplifiedlogic.nitro.util.JLMatrixMaker;
+import com.simplifiedlogic.nitro.util.MaterialLooper;
 import com.simplifiedlogic.nitro.util.ModelItemLooper;
 import com.simplifiedlogic.nitro.util.ModelLooper;
 
@@ -911,7 +915,7 @@ public class JLFile implements IJLFile {
 	        }
     	}
     	catch (jxthrowable e) {
-    		System.err.println("Error regenerating: " + e.getMessage());
+    		System.err.println("Error regenerating: " + e.getClass().getName() + " : "+ e.getMessage());
     		throw JlinkUtils.createException(e);
     	}
     	finally {
@@ -2842,6 +2846,315 @@ public class JLFile implements IJLFile {
     	}
     }
 
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getCurrentMaterial(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getCurrentMaterial(String filename, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return getCurrentMaterial(filename, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getCurrentMaterial(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public String getCurrentMaterial(String filename, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("file.get_cur_material: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            if (NitroUtils.isPattern(filename))
+                throw new JLIException("Name patterns are not supported for this command");
+            
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        if (!(m instanceof CallPart))
+	        	throw new JLIException("File is not a Part");
+	        CallPart p = (CallPart)m;
+	        
+	        CallMaterial matl = p.getCurrentMaterial();
+	        if (matl==null)
+	        	return null;
+	        else
+	        	return matl.getName();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.get_cur_material,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#listMaterials(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<String> listMaterials(String filename, String materialName, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+
+        return listMaterials(filename, materialName, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#listMaterials(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public List<String> listMaterials(String filename, String materialName, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("file.list_materials: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            if (NitroUtils.isPattern(filename))
+                throw new JLIException("Model Name patterns are not supported for this command");
+
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        if (!(m instanceof CallPart))
+	        	throw new JLIException("File is not a Part");
+	        CallPart p = (CallPart)m;
+
+	        ListMaterialLooper looper = new ListMaterialLooper();
+	        looper.setNamePattern(materialName);
+	        looper.loop(p);
+	        
+	        return looper.output;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.list_materials,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#loadMaterialFile(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public void loadMaterialFile(String filename, String dirname, String materialName, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+
+        loadMaterialFile(filename, dirname, materialName, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#loadMaterialFile(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public void loadMaterialFile(String filename, String dirname, String materialFile, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("file.load_material_file: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (materialFile==null || materialFile.trim().length()==0)
+    		throw new JLIException("No Material File parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            if (NitroUtils.isPattern(filename))
+                throw new JLIException("Name patterns are not supported for this command");
+            
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        if (!(m instanceof CallPart))
+	        	throw new JLIException("File is not a Part");
+	        CallPart p = (CallPart)m;
+
+	        materialFile = NitroUtils.removeNumericExtension(materialFile);
+	        int pos = NitroUtils.findFileExtension(materialFile);
+	        if (pos>=0)
+	        	materialFile = materialFile.substring(0, pos);
+
+	        CallMaterial matl = null;
+    		try {
+		        if (dirname!=null) {
+			        dirname = JlinkUtils.resolveRelativePath(session, dirname);
+	
+			        String savedir = session.getCurrentDirectory();
+		            if (!dirname.equals(savedir)) {
+		                JlinkUtils.changeDirectory(session, dirname);
+		            }
+		    		try {
+		    			matl = p.retrieveMaterial(materialFile);
+		            }
+		            finally {
+		                if (dirname != null && !dirname.equals(savedir)) {
+		                    JlinkUtils.changeDirectory(session, savedir);
+		                }
+		            }
+		        }
+		        else {
+	    			matl = p.retrieveMaterial(materialFile);
+		        }
+            }
+    		catch (XToolkitNotFound e) {
+    			throw new JLIException("Material file not found: "+materialFile);
+    		}
+
+	        // return material name?
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.load_material_file,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#setCurrentMaterial(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void setCurrentMaterial(String filename, String materialName, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        setCurrentMaterial(filename, materialName, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#setCurrentMaterial(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public void setCurrentMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("file.set_cur_material: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            if (NitroUtils.isPattern(filename))
+                throw new JLIException("File Name patterns are not supported for this command");
+            if (NitroUtils.isPattern(materialName))
+                throw new JLIException("Material Name patterns are not supported for this command");
+            
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        if (!(m instanceof CallPart))
+	        	throw new JLIException("File is not a Part");
+	        CallPart p = (CallPart)m;
+	        
+	        int pos = NitroUtils.findFileExtension(materialName);
+	        if (pos>=0)
+	        	materialName = materialName.substring(0, pos);
+
+	        CallMaterial matl = p.getMaterial(materialName);
+	        if (matl==null)
+	        	throw new JLIException("Material has not been loaded: "+materialName);
+	        
+	        p.setCurrentMaterial(matl);
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.set_cur_material,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#deleteMaterial(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void deleteMaterial(String filename, String materialName, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+		
+		deleteMaterial(filename, materialName, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#deleteMaterial(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public void deleteMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("file.delete_material: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (materialName==null || materialName.trim().length()==0)
+    		throw new JLIException("No Material Name parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+            if (NitroUtils.isPattern(filename))
+                throw new JLIException("File Name patterns are not supported for this command");
+            if (NitroUtils.isPattern(materialName))
+                throw new JLIException("Material Name patterns are not supported for this command");
+            
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        if (!(m instanceof CallPart))
+	        	throw new JLIException("File is not a Part");
+	        CallPart p = (CallPart)m;
+	        
+	        int pos = NitroUtils.findFileExtension(materialName);
+	        if (pos>=0)
+	        	materialName = materialName.substring(0, pos);
+
+	        CallMaterial matl = p.getMaterial(materialName);
+	        if (matl==null)
+	        	throw new JLIException("Material has not been loaded: "+materialName);
+	        
+	        matl.delete();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.delete_material,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
     /**
      * Walk the hierarchy of an assembly to find a list of sub-components to assemble a new component to
      * 
@@ -3107,18 +3420,20 @@ public class JLFile implements IJLFile {
             
             // loop until the list is empty or we've gone through the list without erasing anything
             if (m!=null) {
+                if (currentName==null)
+                    currentName = m.getFileName();
                 try {
                     if (eraseChildren)
                         m.eraseWithDependencies();
                     else
                         m.erase();
                     erasedSomething = true;
+                    //System.err.println("Erased "+currentName);
                     return true; // as soon as we erase anything, break out of the loop so we can get a new list
                 } 
                 catch (XToolkitInUse e) { // caused when erasing a model that's a dependency of another
+                    //System.err.println("Failed to erase "+currentName+": "+e.getClass().getName());
                 	if (getNamePattern()!=null || getNameList()!=null) {
-	                    if (currentName==null)
-	                        currentName = m.getFileName();
 	                    throw new JLIException("File '" + currentName + "' could not be erased because it was still in use");
                 	}
                 }
@@ -3296,6 +3611,30 @@ public class JLFile implements IJLFile {
             solid.executeFeatureOps(featOps, inst);
 		}
     	
+    }
+
+    /**
+     * An implementation of MaterialLooper which collects a list of material data
+     * @author Adam Andrews
+     *
+     */
+    private static class ListMaterialLooper extends MaterialLooper {
+        /**
+         * The output list of feature data
+         */
+        public Vector<String> output = null;
+        
+        /* (non-Javadoc)
+         * @see com.simplifiedlogic.nitro.util.MaterialLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.part.CallMaterial)
+         */
+        public void loopAction(CallMaterial matl) throws JLIException, jxthrowable {
+            if (currentName==null)
+            	currentName = matl.getName();
+            
+            if (output==null)
+                output = new Vector<String>();
+            output.add(currentName);
+        }
     }
 
 }

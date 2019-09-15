@@ -44,6 +44,8 @@ public interface JLFileResponseParams {
     public static final String OUTPUT_REVISION	= "revision";
     public static final String OUTPUT_ACTIVE	= "active";
     public static final String OUTPUT_UNITS		= "units";
+    public static final String OUTPUT_MATERIAL	= "material";
+    public static final String OUTPUT_MATERIALS	= "materials";
 
     // point/matrix/transform params
 	public static final String OUTPUT_X			= "x";

@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Delete a material from a part",
+    "command" : "file",
+    "function" : "delete_material",
+    "notes" : [ "If 'material' has a file extension, it will be removed before the material is deleted" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Part name",
+      "default" : "Current active model"
+    }, {
+      "name" : "material",
+      "type" : "string",
+      "description" : "Material name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "delete_material",
+      "data" : {
+        "file" : "box.prt",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

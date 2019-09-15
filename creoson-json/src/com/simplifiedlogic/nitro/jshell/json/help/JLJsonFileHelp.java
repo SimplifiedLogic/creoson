@@ -54,11 +54,13 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpAssemble());
 		list.add(helpBackup());
 		list.add(helpCloseWindow());
+		list.add(helpDeleteMaterial());
 		list.add(helpDisplay());
 		list.add(helpErase());
 		list.add(helpEraseNotDisplayed());
 		list.add(helpExists());
 		list.add(helpGetActive());
+		list.add(helpGetCurrentMaterial());
 		list.add(helpGetFileinfo());
 		list.add(helpGetLengthUnits());
 		list.add(helpGetMassUnits());
@@ -67,7 +69,9 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpIsActive());
 		list.add(helpList());
 		list.add(helpListInstances());
+		list.add(helpListMaterials());
 		list.add(helpListSimpReps());
+		list.add(helpLoadMaterialFile());
 		list.add(helpMassprops());
 		list.add(helpOpen());
 		list.add(helpOpenErrors());
@@ -80,6 +84,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpRename());
 		list.add(helpRepaint());
 		list.add(helpSave());
+		list.add(helpSetCurrentMaterial());
 		list.add(helpSetLengthUnits());
 		list.add(helpSetMassUnits());
 		return list;
@@ -1247,6 +1252,176 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_REP, "*CUT*");
     	ex.addOutput(OUTPUT_REPS, new String[] {"LASER_CUT","HAND_CUT"});
+    	template.addExample(ex);
+    	
+        return template;
+    }
+
+	private FunctionTemplate helpGetCurrentMaterial() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_CUR_MATL);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Get the current material for a part");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MATERIAL, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Current material for the part, may be null if there is no current material");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addOutput(OUTPUT_MATERIAL, "brass");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "wingnut.prt");
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpSetCurrentMaterial() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_CUR_MATL);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set the current material for a part");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is set");
+    	FunctionArgument arg;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Material name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpLoadMaterialFile() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LOAD_MATL_FILE);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Load a new material file into a part");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is loaded");
+    	FunctionArgument arg;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Directory name containing the material file");
+    	arg.setDefaultValue("Creo's 'pro_material_dir' config setting, or search path, or current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Material name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_DIRNAME, "C:/mydir/materials");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpListMaterials() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_MATERIALS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List materials on a part");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Material name pattern");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All materials");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MATERIALS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of materials in the part");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addOutput(OUTPUT_MATERIALS, new String[] {"brass", "bronze", "steel"});
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "br*");
+    	ex.addOutput(OUTPUT_MATERIALS, new String[] {"brass", "bronze"});
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MATERIALS, new String[] {"brass"});
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpDeleteMaterial() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_MATERIAL);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Delete a material from a part");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is deleted");
+    	FunctionArgument arg;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Current active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Material name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
     	template.addExample(ex);
     	
         return template;

@@ -192,4 +192,18 @@ public interface IJLFile {
     public List<String> listSimpReps(String filename, String name, String sessionId) throws JLIException;
     public List<String> listSimpReps(String filename, String name, AbstractJLISession sess) throws JLIException;
 
+    public String getCurrentMaterial(String filename, String sessionId) throws JLIException;
+	public String getCurrentMaterial(String filename, AbstractJLISession sess) throws JLIException;
+
+	public List<String> listMaterials(String filename, String materialName, String sessionId) throws JLIException;
+	public List<String> listMaterials(String filename, String materialName, AbstractJLISession sess) throws JLIException;
+
+	public void loadMaterialFile(String filename, String dirname, String materialFile, String sessionId) throws JLIException;
+	public void loadMaterialFile(String filename, String dirname, String materialFile, AbstractJLISession sess) throws JLIException;
+
+	public void setCurrentMaterial(String filename, String materialName, String sessionId) throws JLIException;
+	public void setCurrentMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
+
+	public void deleteMaterial(String filename, String materialName, String sessionId) throws JLIException;
+	public void deleteMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
 }

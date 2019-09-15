@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Set the current material for a part",
+    "command" : "file",
+    "function" : "set_cur_material",
+    "notes" : [ "If 'material' has a file extension, it will be removed before the material is set" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Part name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "material",
+      "type" : "string",
+      "description" : "Material name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "set_cur_material",
+      "data" : {
+        "file" : "box.prt",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

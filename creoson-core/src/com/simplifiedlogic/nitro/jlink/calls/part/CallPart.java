@@ -18,9 +18,14 @@
  */
 package com.simplifiedlogic.nitro.jlink.calls.part;
 
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcPart.Material;
+import com.ptc.pfc.pfcPart.Materials;
 import com.ptc.pfc.pfcPart.Part;
 import com.ptc.pfc.pfcSolid.Solid;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcPart.Part
@@ -32,6 +37,44 @@ public class CallPart extends CallSolid {
 
 	public CallPart(Part m) {
 		super((Solid)m);
+	}
+	
+	public CallMaterial getCurrentMaterial() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Part,GetCurrentMaterial", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Material matl = getPart().GetCurrentMaterial();
+		if (matl==null)
+			return null;
+		return new CallMaterial(matl);
+	}
+	
+	public CallMaterial getMaterial(String name) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Part,GetMaterial", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Material matl = getPart().GetMaterial(name);
+		if (matl==null)
+			return null;
+		return new CallMaterial(matl);
+	}
+	
+	public CallMaterials listMaterials() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Part,ListMaterials", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Part part = getPart();
+		Materials materials = part.ListMaterials();
+		if (materials==null)
+			return null;
+		return new CallMaterials(materials);
+	}
+	
+	public CallMaterial retrieveMaterial(String fileName) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Part,RetrieveMaterial", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Material matl = getPart().RetrieveMaterial(fileName);
+		if (matl==null)
+			return null;
+		return new CallMaterial(matl);
+	}
+	
+	public void setCurrentMaterial(CallMaterial matl) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Part,SetCurrentMaterial", 0, NitroConstants.DEBUG_JLINK_KEY);
+        getPart().SetCurrentMaterial(matl.getMaterial());
 	}
 	
 	public Part getPart() {

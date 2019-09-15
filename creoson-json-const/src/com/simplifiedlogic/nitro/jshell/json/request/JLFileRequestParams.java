@@ -60,6 +60,11 @@ public interface JLFileRequestParams {
 	public static final String FUNC_ASSEMBLE		= "assemble";
 	public static final String FUNC_GET_TRANSFORM	= "get_transform";
 	public static final String FUNC_LIST_SIMP_REPS	= "list_simp_reps";
+	public static final String FUNC_GET_CUR_MATL	= "get_cur_material";
+	public static final String FUNC_SET_CUR_MATL	= "set_cur_material";
+	public static final String FUNC_LIST_MATERIALS	= "list_materials";
+	public static final String FUNC_LOAD_MATL_FILE	= "load_material_file";
+	public static final String FUNC_DELETE_MATERIAL	= "delete_material";
 	
 	// request fields
     public static final String PARAM_MODEL       = "file";
@@ -100,6 +105,7 @@ public interface JLFileRequestParams {
     public static final String PARAM_WALK_CHILDREN		= "walk_children";
     public static final String PARAM_ASSEMBLE_TO_ROOT	= "assemble_to_root";
     public static final String PARAM_SUPPRESS	= "suppress";
+    public static final String PARAM_MATERIAL	= "material";
 
     // point/matrix/transform params
 	public static final String PARAM_X			= "x";

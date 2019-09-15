@@ -91,6 +91,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 		else if (function.equals(FUNC_ASSEMBLE)) return actionAssemble(sessionId, input);
 		else if (function.equals(FUNC_GET_TRANSFORM)) return actionGetTransform(sessionId, input);
 		else if (function.equals(FUNC_LIST_SIMP_REPS)) return actionListSimpReps(sessionId, input);
+		else if (function.equals(FUNC_GET_CUR_MATL)) return actionGetCurrentMaterial(sessionId, input);
+		else if (function.equals(FUNC_SET_CUR_MATL)) return actionSetCurrentMaterial(sessionId, input);
+		else if (function.equals(FUNC_LIST_MATERIALS)) return actionListMaterials(sessionId, input);
+		else if (function.equals(FUNC_LOAD_MATL_FILE)) return actionLoadMaterialFile(sessionId, input);
+		else if (function.equals(FUNC_DELETE_MATERIAL)) return actionDeleteMaterial(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -545,6 +550,63 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
        		out.put(OUTPUT_REPS, reps);
         	return out;
         }
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionGetCurrentMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        
+        String matl = fileHandler.getCurrentMaterial(filename, sessionId);
+
+        if (matl!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+       		out.put(OUTPUT_MATERIAL, matl);
+        	return out;
+        }
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionSetCurrentMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String materialName = checkStringParameter(input, PARAM_MATERIAL, true);
+        
+        fileHandler.setCurrentMaterial(filename, materialName, sessionId);
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionListMaterials(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String materialName = checkStringParameter(input, PARAM_MATERIAL, false);
+        
+        List<String> matls = fileHandler.listMaterials(filename, materialName, sessionId);
+
+        if (matls!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+       		out.put(OUTPUT_MATERIALS, matls);
+        	return out;
+        }
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionLoadMaterialFile(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+        String materialName = checkStringParameter(input, PARAM_MATERIAL, true);
+        
+        fileHandler.loadMaterialFile(filename, dirname, materialName, sessionId);
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionDeleteMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String materialName = checkStringParameter(input, PARAM_MATERIAL, true);
+        
+        fileHandler.deleteMaterial(filename, materialName, sessionId);
 
         return null;
 	}

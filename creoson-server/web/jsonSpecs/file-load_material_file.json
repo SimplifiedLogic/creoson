@@ -1,0 +1,71 @@
+{
+  "spec" : {
+    "function_description" : "Load a new material file into a part",
+    "command" : "file",
+    "function" : "load_material_file",
+    "notes" : [ "If 'material' has a file extension, it will be removed before the material is loaded" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Part name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name containing the material file",
+      "default" : "Creo's 'pro_material_dir' config setting, or search path, or current working directory"
+    }, {
+      "name" : "material",
+      "type" : "string",
+      "description" : "Material name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "load_material_file",
+      "data" : {
+        "file" : "box.prt",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "load_material_file",
+      "data" : {
+        "file" : "box.prt",
+        "dirname" : "C:/mydir/materials",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "load_material_file",
+      "data" : {
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

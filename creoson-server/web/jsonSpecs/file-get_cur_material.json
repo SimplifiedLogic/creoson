@@ -1,0 +1,50 @@
+{
+  "spec" : {
+    "function_description" : "Get the current material for a part",
+    "command" : "file",
+    "function" : "get_cur_material",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Part name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "material",
+      "type" : "string",
+      "description" : "Current material for the part, may be null if there is no current material"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_cur_material",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "material" : "brass"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_cur_material",
+      "data" : {
+        "file" : "wingnut.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}
