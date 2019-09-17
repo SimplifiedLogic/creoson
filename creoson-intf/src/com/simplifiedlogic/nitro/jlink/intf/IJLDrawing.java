@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.DrawingFormatData;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.SymbolDefData;
@@ -202,4 +203,9 @@ public interface IJLDrawing {
     public void deleteSymbolInst(String filename, int symbolId, String sessionId) throws JLIException;
     public void deleteSymbolInst(String filename, int symbolId, AbstractJLISession sess) throws JLIException;
 
+    public DrawingFormatData getSheetFormat(String filename, int sheet, String sessionId) throws JLIException;
+    public DrawingFormatData getSheetFormat(String filename, int sheet, AbstractJLISession sess) throws JLIException;
+    
+    public void setSheetFormat(String filename, int sheet, String dirname, String formatFilename, String sessionId) throws JLIException;
+    public void setSheetFormat(String filename, int sheet, String dirname, String formatFilename, AbstractJLISession sess) throws JLIException;
 }

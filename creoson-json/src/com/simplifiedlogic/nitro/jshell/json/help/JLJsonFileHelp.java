@@ -1291,7 +1291,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_CUR_MATL);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Set the current material for a part");
-    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is set");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is set.");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -1318,7 +1318,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LOAD_MATL_FILE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Load a new material file into a part");
-    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is loaded");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is loaded.");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -1404,7 +1404,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_MATERIAL);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Delete a material from a part");
-    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is deleted");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is deleted.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);

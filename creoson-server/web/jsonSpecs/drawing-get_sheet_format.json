@@ -1,0 +1,66 @@
+{
+  "spec" : {
+    "function_description" : "Get the drawing format file of a drawing sheet",
+    "command" : "drawing",
+    "function" : "get_sheet_format",
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "required" : true
+    } ],
+    "response" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Format file name, may be null if there is no current format"
+    }, {
+      "name" : "full_name",
+      "type" : "string",
+      "description" : "Format full name"
+    }, {
+      "name" : "common_name",
+      "type" : "string",
+      "description" : "Format common name"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_sheet_format",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "engr_fmt.frm",
+        "full_name" : "ENGR_FMT"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "get_sheet_format",
+      "data" : {
+        "drawing" : "box2.drw",
+        "sheet" : 1
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

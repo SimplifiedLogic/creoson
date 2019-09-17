@@ -52,6 +52,7 @@ import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailVariantTexts;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallFreeAttachment;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawingCreateOptions;
+import com.simplifiedlogic.nitro.jlink.calls.drawingformat.CallDrawingFormat;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
@@ -67,6 +68,7 @@ import com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2Ds;
 import com.simplifiedlogic.nitro.jlink.calls.view2d.CallViewDisplay;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.DrawingFormatData;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.SymbolDefData;
@@ -2513,6 +2515,164 @@ public class JLDrawing implements IJLDrawing {
     	}
 	}
     
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getSheetFormat(java.lang.String, int, java.lang.String)
+	 */
+	@Override
+	public DrawingFormatData getSheetFormat(String filename, int sheet, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return getSheetFormat(filename, sheet, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#getSheetFormat(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public DrawingFormatData getSheetFormat(String filename, int sheet, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.get_sheet_format: " + filename + " sheet:" + sheet, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing))
+	        	throw new JLIException("Model is not a drawing");
+	        
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        int numSheets = drw.getNumberOfSheets();
+	        
+	        if (sheet<-1 || sheet==0 || sheet>numSheets)
+	        	throw new JLIException("Invalid sheet number, must be 1" + (numSheets>1?"-"+numSheets:"")); // + " or -1 for last sheet");
+
+	        CallDrawingFormat fmt = drw.getSheetFormat(sheet);
+	        if (fmt==null)
+	        	return null;
+	        
+	        DrawingFormatData out = new DrawingFormatData();
+	        String name;
+	        name = fmt.getCommonName();
+	        if (name!=null && name.trim().length()>0)
+	        	out.setCommonName(name);
+	        name = fmt.getFullName();
+	        if (name!=null && name.trim().length()>0)
+	        	out.setFullName(name);
+	        name = fmt.getFileName();
+	        if (name!=null && name.trim().length()>0)
+	        	out.setFileName(name);
+	        
+	        return out;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.get_sheet_format,"+filename+","+sheet, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#setSheetFormat(java.lang.String, int, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void setSheetFormat(String filename, int sheet, String dirname, String formatFilename, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        setSheetFormat(filename, sheet, dirname, formatFilename, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLDrawing#setSheetFormat(java.lang.String, int, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+    public void setSheetFormat(String filename, int sheet, String dirname, String formatFilename, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("drawing.set_sheet_format: " + filename + " sheet:" + sheet, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (formatFilename==null)
+    		throw new JLIException("No format filename parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, false);
+	        if (!(m instanceof CallDrawing))
+	        	throw new JLIException("Model is not a drawing");
+	        
+	        CallDrawing drw = (CallDrawing)m;
+	        
+	        int numSheets = drw.getNumberOfSheets();
+	        if (sheet<-1 || sheet==0 || sheet>numSheets)
+	        	throw new JLIException("Invalid sheet number, must be 1" + (numSheets>1?"-"+numSheets:"")); // + " or -1 for last sheet");
+
+	        formatFilename = NitroUtils.removeExtension(formatFilename);
+	        formatFilename = formatFilename + ".frm";
+
+	        boolean changedir=false;
+	        String curdir = session.getCurrentDirectory();
+            if (dirname!=null && !dirname.equals(curdir)) {
+                JlinkUtils.changeDirectory(session, dirname);
+	            changedir=true;
+            }
+
+            try {
+	            CallModelDescriptor descr = CallModelDescriptor.createFromFileName(formatFilename);
+	            // note that SetPath is ignored by RetrieveModel call...
+	            // but it _is_ used by RetrieveModelWithOpts
+	            descr.setPath(session.getCurrentDirectory());
+	            CallDrawingFormat mFmt=null;
+	            try {
+	                mFmt = (CallDrawingFormat)session.retrieveModel(descr);
+	            }
+	            catch (jxthrowable jxe) {
+	                throw new JLIException("Could not open file '" + formatFilename + "' in directory " + session.getCurrentDirectory(), jxe);
+	            }
+		        
+	            if (mFmt==null)
+	                throw new JLIException("Could not open file '" + formatFilename + "' in directory " + session.getCurrentDirectory());
+	            
+	            drw.setSheetFormat(sheet, mFmt, null, null);
+	            drw.updateTables();
+	            drw.regenerateSheet(sheet);
+	        }
+	        finally {
+	            if (changedir && dirname!=null && !dirname.equals(curdir)) {
+	                JlinkUtils.changeDirectory(session, curdir);
+	            }
+	        }
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("drawing.set_sheet_format,"+filename+","+sheet, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
     /**
      * Convert a Creo PlotPaperSize to a standard string representing the size
      * @param paperSize The Creo paper size

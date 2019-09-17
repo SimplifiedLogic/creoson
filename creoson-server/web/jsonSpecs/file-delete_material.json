@@ -3,7 +3,7 @@
     "function_description" : "Delete a material from a part",
     "command" : "file",
     "function" : "delete_material",
-    "notes" : [ "If 'material' has a file extension, it will be removed before the material is deleted" ],
+    "notes" : [ "If 'material' has a file extension, it will be removed before the material is deleted." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

@@ -29,6 +29,8 @@ public interface JLDrawingResponseParams {
 	public static final String OUTPUT_DRAWING	= "drawing";
 	public static final String OUTPUT_MODEL		= "file";
 	public static final String OUTPUT_MODELS	= "files";
+	public static final String OUTPUT_FULLNAME	= "full_name";
+	public static final String OUTPUT_COMMONNAME	= "common_name";
     public static final String OUTPUT_SHEET		= "sheet";
     public static final String OUTPUT_NUM_SHEETS	= "num_sheets";
     public static final String OUTPUT_SCALE		= "scale";

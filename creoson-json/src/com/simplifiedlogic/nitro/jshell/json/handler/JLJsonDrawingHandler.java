@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.simplifiedlogic.nitro.jlink.data.DrawingFormatData;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.SymbolDefData;
@@ -93,6 +94,8 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		else if (function.equals(FUNC_LIST_SYMBOLS)) return actionListSymbols(sessionId, input);
 		else if (function.equals(FUNC_DELETE_SYMBOL_DEF)) return actionDeleteSymbolDef(sessionId, input);
 		else if (function.equals(FUNC_DELETE_SYMBOL_INST)) return actionDeleteSymbolInst(sessionId, input);
+		else if (function.equals(FUNC_GET_SHEET_FORMAT)) return actionGetSheetFormat(sessionId, input);
+		else if (function.equals(FUNC_SET_SHEET_FORMAT)) return actionSetSheetFormat(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -549,6 +552,36 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
    		return null;
 	}
 	
+	private Hashtable<String, Object> actionGetSheetFormat(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		String drawing = checkStringParameter(input, PARAM_DRAWING, false);
+		int sheet = checkIntParameter(input, PARAM_SHEET, true, 1);
+		
+		DrawingFormatData result = drawHandler.getSheetFormat(drawing, sheet, sessionId);
+		
+		if (result!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			if (result.getFileName()!=null)
+				out.put(OUTPUT_MODEL, result.getFileName());
+			if (result.getFullName()!=null)
+				out.put(OUTPUT_FULLNAME, result.getFullName());
+			if (result.getCommonName()!=null)
+				out.put(OUTPUT_COMMONNAME, result.getCommonName());
+    		return out;
+		}
+		return null;
+	}
+
+	private Hashtable<String, Object> actionSetSheetFormat(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		String drawing = checkStringParameter(input, PARAM_DRAWING, false);
+		int sheet = checkIntParameter(input, PARAM_SHEET, true, 1);
+		String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+		String formatFilename = checkStringParameter(input, PARAM_FILE, true);
+		
+		drawHandler.setSheetFormat(drawing, sheet, dirname, formatFilename, sessionId);
+		
+		return null;
+	}
+
 	
 	private ViewDisplayData makeDisplayData(Map<String, Object> displayData) throws JLIException {
 		if (displayData==null)

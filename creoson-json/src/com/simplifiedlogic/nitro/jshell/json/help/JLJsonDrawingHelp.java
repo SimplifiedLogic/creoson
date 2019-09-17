@@ -65,6 +65,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		list.add(helpGetCurModel());
 		list.add(helpGetCurSheet());
 		list.add(helpGetNumSheets());
+		list.add(helpGetSheetFormat());
 		list.add(helpGetSheetScale());
 		list.add(helpGetSheetSize());
 		list.add(helpGetViewLoc());
@@ -83,6 +84,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		list.add(helpScaleView());
 		list.add(helpSelectSheet());
 		list.add(helpSetCurModel());
+		list.add(helpSetSheetFormat());
 		list.add(helpSetViewLoc());
 		list.add(helpViewBoundingBox());
 		return list;
@@ -1686,6 +1688,99 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	ex.addInput(PARAM_SYMBOL_ID, 2);
     	template.addExample(ex);
 
+        return template;
+    }
+    
+	private FunctionTemplate helpGetSheetFormat() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_SHEET_FORMAT);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Get the drawing format file of a drawing sheet");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet number");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Format file name, may be null if there is no current format");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_FULLNAME, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Format full name");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_COMMONNAME, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Format common name");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SHEET, 1);
+    	ex.addOutput(OUTPUT_MODEL, "engr_fmt.frm");
+    	ex.addOutput(OUTPUT_FULLNAME, "ENGR_FMT");
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box2.drw");
+    	ex.addInput(PARAM_SHEET, 1);
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    
+	private FunctionTemplate helpSetSheetFormat() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_SHEET_FORMAT);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set the drawing format file of a drawing sheet");
+    	spec.addFootnote("The format will use the current drawing model to resolve parameters in the formst.");
+    	spec.addFootnote("If '"+PARAM_FILE+"' does not have a file extension, a .frm extension will be added.");
+    	spec.addFootnote("This function will regenerate the drawing sheet.");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Drawing name");
+    	arg.setDefaultValue("Current active drawing");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet number");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Directory name containing the format file");
+    	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_FILE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Format file name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DRAWING, "box.drw");
+    	ex.addInput(PARAM_SHEET, 1);
+    	ex.addInput(PARAM_DIRNAME, "C:/myfiles/formats");
+    	ex.addInput(PARAM_FILE, "engr_fmt");
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_SHEET, 1);
+    	ex.addInput(PARAM_FILE, "engr_fmt2");
+    	template.addExample(ex);
+    	
         return template;
     }
     

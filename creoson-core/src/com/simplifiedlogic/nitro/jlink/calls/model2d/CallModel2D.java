@@ -25,6 +25,7 @@ import com.ptc.pfc.pfcDetail.DetailItems;
 import com.ptc.pfc.pfcDetail.DetailSymbolDefItem;
 import com.ptc.pfc.pfcDetail.DetailType;
 import com.ptc.pfc.pfcDimension2D.Dimension2Ds;
+import com.ptc.pfc.pfcDrawingFormat.DrawingFormat;
 import com.ptc.pfc.pfcModel.Model;
 import com.ptc.pfc.pfcModel.Models;
 import com.ptc.pfc.pfcModel2D.Model2D;
@@ -38,6 +39,7 @@ import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailItem;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailItems;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolDefItem;
 import com.simplifiedlogic.nitro.jlink.calls.dimension2d.CallDimension2Ds;
+import com.simplifiedlogic.nitro.jlink.calls.drawingformat.CallDrawingFormat;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModels;
 import com.simplifiedlogic.nitro.jlink.calls.sheet.CallSheetData;
@@ -217,6 +219,32 @@ public class CallModel2D extends CallModel {
 	public void reorderSheet(int fromSheetNumber, int to) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model2D,ReorderSheet", 0, NitroConstants.DEBUG_JLINK_KEY);
         getModel2D().ReorderSheet(fromSheetNumber, to);
+	}
+
+	public CallDrawingFormat getSheetFormat(int sheetNumber) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model2D,GetSheetFormat", 0, NitroConstants.DEBUG_JLINK_KEY);
+		DrawingFormat fmt = getModel2D().GetSheetFormat(sheetNumber);
+		if (fmt==null)
+			return null;
+		return new CallDrawingFormat(fmt);
+	}
+
+	public void setSheetFormat(int sheetNumber, CallDrawingFormat format, Integer formatSheetNumber, CallModel drawingModel) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model2D,SetSheetFormat", 0, NitroConstants.DEBUG_JLINK_KEY);
+        DrawingFormat f = null;
+        if (format!=null)
+        	f = format.getFormat();
+
+        Model m = null;
+        if (drawingModel!=null)
+        	m = drawingModel.getModel();
+
+		getModel2D().SetSheetFormat(sheetNumber, f, formatSheetNumber, m);
+	}
+
+	public void updateTables() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Model2D,UpdateTables", 0, NitroConstants.DEBUG_JLINK_KEY);
+        getModel2D().UpdateTables();
 	}
 
 	public Model2D getModel2D() {

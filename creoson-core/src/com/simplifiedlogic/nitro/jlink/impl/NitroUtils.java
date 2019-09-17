@@ -77,6 +77,13 @@ public class NitroUtils {
         return -1;
     }
 
+    public static String removeExtension(String filename) {
+        int pos = NitroUtils.findFileExtension(filename);
+        if (pos>=0)
+        	filename = filename.substring(0, pos);
+        return filename;
+    }
+
     /**
      * Strip the Creo revision number from a file name
      * @param filename The file name to update
@@ -207,8 +214,8 @@ public class NitroUtils {
                 case '?': buf.append('.'); break;
                 case '.': buf.append("\\x2e"); break;
                 case '*': buf.append(".*"); break;
+                case ',': buf.append("|"); break;
                 default: buf.append(pattern.charAt(i)); break;
-                
             }
         }
         return buf.toString();

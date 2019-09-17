@@ -1,0 +1,63 @@
+{
+  "spec" : {
+    "function_description" : "Set the drawing format file of a drawing sheet",
+    "command" : "drawing",
+    "function" : "set_sheet_format",
+    "notes" : [ "The format will use the current drawing model to resolve parameters in the formst.", "If 'file' does not have a file extension, a .frm extension will be added.", "This function will regenerate the drawing sheet." ],
+    "request" : [ {
+      "name" : "drawing",
+      "type" : "string",
+      "description" : "Drawing name",
+      "default" : "Current active drawing"
+    }, {
+      "name" : "sheet",
+      "type" : "integer",
+      "description" : "Sheet number",
+      "required" : true
+    }, {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory name containing the format file",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Format file name",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "set_sheet_format",
+      "data" : {
+        "drawing" : "box.drw",
+        "sheet" : 1,
+        "dirname" : "C:/myfiles/formats",
+        "file" : "engr_fmt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "drawing",
+      "function" : "set_sheet_format",
+      "data" : {
+        "sheet" : 1,
+        "file" : "engr_fmt2"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

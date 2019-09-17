@@ -63,9 +63,14 @@ public interface JLDrawingRequestParams {
     public static final String FUNC_LIST_SYMBOLS	= "list_symbols";
     public static final String FUNC_DELETE_SYMBOL_DEF	= "delete_symbol_def";
     public static final String FUNC_DELETE_SYMBOL_INST	= "delete_symbol_inst";
+    public static final String FUNC_GET_SHEET_FORMAT	= "get_sheet_format";
+    public static final String FUNC_SET_SHEET_FORMAT	= "set_sheet_format";
 
     // request fields
     public static final String PARAM_MODEL		= "model";
+    public static final String PARAM_DIRNAME	= "dirname";
+    public static final String PARAM_FILE		= "file";
+//    public static final String PARAM_FORMAT_FILE	= "format_file";
     public static final String PARAM_DRAWING	= "drawing";
     public static final String PARAM_SHEET		= "sheet";
     public static final String PARAM_VIEW		= "view";

@@ -2991,10 +2991,7 @@ public class JLFile implements IJLFile {
 	        	throw new JLIException("File is not a Part");
 	        CallPart p = (CallPart)m;
 
-	        materialFile = NitroUtils.removeNumericExtension(materialFile);
-	        int pos = NitroUtils.findFileExtension(materialFile);
-	        if (pos>=0)
-	        	materialFile = materialFile.substring(0, pos);
+	        materialFile = NitroUtils.removeExtension(materialFile);
 
 	        CallMaterial matl = null;
     		try {
@@ -3073,9 +3070,7 @@ public class JLFile implements IJLFile {
 	        	throw new JLIException("File is not a Part");
 	        CallPart p = (CallPart)m;
 	        
-	        int pos = NitroUtils.findFileExtension(materialName);
-	        if (pos>=0)
-	        	materialName = materialName.substring(0, pos);
+	        materialName = NitroUtils.removeExtension(materialName);
 
 	        CallMaterial matl = p.getMaterial(materialName);
 	        if (matl==null)
@@ -3135,9 +3130,7 @@ public class JLFile implements IJLFile {
 	        	throw new JLIException("File is not a Part");
 	        CallPart p = (CallPart)m;
 	        
-	        int pos = NitroUtils.findFileExtension(materialName);
-	        if (pos>=0)
-	        	materialName = materialName.substring(0, pos);
+	        materialName = NitroUtils.removeExtension(materialName);
 
 	        CallMaterial matl = p.getMaterial(materialName);
 	        if (matl==null)
