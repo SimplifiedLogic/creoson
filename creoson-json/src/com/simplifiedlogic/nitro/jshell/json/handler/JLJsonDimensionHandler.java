@@ -62,6 +62,7 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 		else if (function.equals(FUNC_LIST_DETAIL)) return actionListDetail(sessionId, input);
 		else if (function.equals(FUNC_SHOW)) return actionShow(sessionId, input);
 		else if (function.equals(FUNC_USER_SELECT)) return actionUserSelect(sessionId, input);
+		else if (function.equals(FUNC_SET_TEXT)) return actionSetText(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -243,6 +244,21 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 			
 			return out;
         }
+        return null;
+	}
+
+	private Hashtable<String, Object> actionSetText(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String dimname = checkStringParameter(input, PARAM_NAME, true);
+        Object valueObj = checkParameter(input, PARAM_TEXT, false);
+//        Object prefixObj = checkParameter(input, PARAM_PREFIX, false);
+//        Object suffixObj = checkParameter(input, PARAM_SUFFIX, false);
+        boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
+
+//        dimHandler.setText(modelname, dimname, valueObj, prefixObj, suffixObj, encoded, sessionId);
+        dimHandler.setText(modelname, dimname, valueObj, encoded, sessionId);
+        
         return null;
 	}
 

@@ -3,7 +3,7 @@
     "function_description" : "Get the text of a model or drawing note",
     "command" : "note",
     "function" : "get",
-    "notes" : [ "Values will automatically be returned Base64-encoded if they are strings which contain non-ASCII data" ],
+    "notes" : [ "Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

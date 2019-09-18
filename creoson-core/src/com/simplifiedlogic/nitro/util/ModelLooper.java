@@ -125,7 +125,7 @@ public abstract class ModelLooper extends LooperBase {
                     break;
             }
             catch (jxthrowable jxe) {
-                throw new JLIException(JlinkUtils.ptcError(jxe, "A PTC error has occurred when retrieving file " + m.getFileName()), jxe);
+                throw new JLIException(JlinkUtils.ptcError(jxe, "A PTC error has occurred when retrieving file " + currentName), jxe);
             }
         }
     }

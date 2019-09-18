@@ -33,6 +33,15 @@ public interface IJLDimension {
 	public void set(String modelname, String dimname, Object value,
 			boolean encoded, AbstractJLISession sess) throws JLIException;
 
+	public void setText(String modelname, String dimname,
+			Object value, //Object prefix, Object suffix, 
+			boolean encoded, String sessionId) 
+			throws JLIException;
+	public void setText(String modelname, String dimname,
+			Object value, //Object prefix, Object suffix, 
+			boolean encoded, AbstractJLISession sess) 
+			throws JLIException;
+
 	public void copy(String modelname, String dimname, String to_name,
 			String to_model, String sessionId) throws JLIException;
 	public void copy(String modelname, String dimname, String to_name,

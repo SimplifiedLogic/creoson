@@ -1,7 +1,7 @@
 {
   "object_name" : "DimDetailData",
   "description" : "More detailed information about a Creo dimension",
-  "notes" : [ "tol_lower_limit and tol_upper_limit are only set when tolerance_type=limits", "tol_plus and tol_minus are only set when tolerance_type=plus_minus", "tol_symmetric_value is only set when tolerance_type=symmetric or sym_superscript", "tol_table_name, tol_table_column and tol_table_type are only set when tolerance_type=isodin" ],
+  "notes" : [ "If dimension is not a drawing dimension, then only name, value, encoded, dim_type, and text will be returned.", "tol_lower_limit and tol_upper_limit are only set when tolerance_type=limits", "tol_plus and tol_minus are only set when tolerance_type=plus_minus", "tol_symmetric_value is only set when tolerance_type=symmetric or sym_superscript", "tol_table_name, tol_table_column and tol_table_type are only set when tolerance_type=isodin" ],
   "data" : [ {
     "name" : "name",
     "type" : "string",
@@ -16,14 +16,6 @@
     "description" : "Value is Base64-encoded",
     "default" : "false"
   }, {
-    "name" : "sheet",
-    "type" : "integer",
-    "description" : "Sheet number"
-  }, {
-    "name" : "view_name",
-    "type" : "string",
-    "description" : "View name"
-  }, {
     "name" : "dim_type",
     "type" : "string",
     "description" : "Dimension type",
@@ -32,6 +24,14 @@
     "name" : "text",
     "type" : "array:string",
     "description" : "Dimension raw text"
+  }, {
+    "name" : "sheet",
+    "type" : "integer",
+    "description" : "Sheet number"
+  }, {
+    "name" : "view_name",
+    "type" : "string",
+    "description" : "View name"
   }, {
     "name" : "location",
     "type" : "object:JLPoint",

@@ -35,6 +35,7 @@ public interface JLDimensionRequestParams {
     public static final String FUNC_LIST_DETAIL	= "list_detail";
     public static final String FUNC_SHOW		= "show";
     public static final String FUNC_USER_SELECT	= "user_select";
+    public static final String FUNC_SET_TEXT	= "set_text";
 
     // request fields
     public static final String PARAM_MODEL      = "file";
@@ -50,5 +51,8 @@ public interface JLDimensionRequestParams {
     public static final String PARAM_MAX		= "max";
     public static final String PARAM_RELATION_ID	= "relation_id";
     public static final String PARAM_DIM_TYPE	= "dim_type";
+//    public static final String PARAM_PREFIX		= "prefix";
+//    public static final String PARAM_SUFFIX		= "suffix";
+    public static final String PARAM_TEXT		= "text";
     
 }

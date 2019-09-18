@@ -1,9 +1,9 @@
 {
   "spec" : {
-    "function_description" : "Set a dimension value",
+    "function_description" : "Set dimension text",
     "command" : "dimension",
-    "function" : "set",
-    "notes" : [ "One reason to encode values is if the value contains special characters, such as Creo symbols.", "You may be able to avoid Base64-encoding symbols by using Unicode for the binary characters, for example including \\u0001#\\u0002 in the value to insert a plus/minus symbol." ],
+    "function" : "set_text",
+    "notes" : [ "If the text contains Creo Symbols or other non-ASCII text, you must Base64-encode the text and set encoded to true.", "You may be able to avoid Base64-encoding symbols by using Unicode for the binary characters, for example including \\u0001#\\u0002 in the text to insert a plus/minus symbol.", "Embed newlines in the text for line breaks", "Since J-Link does not support setting the Prefix or Suffix, you will need to include those in the text value if you need them." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -15,14 +15,14 @@
       "description" : "Dimension name",
       "required" : true
     }, {
-      "name" : "value",
+      "name" : "text",
       "type" : "depends on data type",
-      "description" : "Dimension value",
-      "default" : "Clears the dimension value if missing"
+      "description" : "Dimension text",
+      "default" : "Sets the dimension's text to @D if missing"
     }, {
       "name" : "encoded",
       "type" : "boolean",
-      "description" : "Whether the value is Base64-encoded",
+      "description" : "Whether the text value is Base64-encoded",
       "default" : "false"
     } ],
     "response" : [ ]
@@ -31,11 +31,11 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "set",
+      "function" : "set_text",
       "data" : {
         "file" : "box.prt",
         "name" : "d3",
-        "value" : 32.0,
+        "text" : "@D rad",
         "encoded" : false
       }
     },
@@ -48,10 +48,10 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "set",
+      "function" : "set_text",
       "data" : {
         "name" : "RADIUS",
-        "value" : 2.5,
+        "text" : "(@D)\nAS SHOWN",
         "encoded" : false
       }
     },
@@ -64,11 +64,27 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "dimension",
-      "function" : "set",
+      "function" : "set_text",
       "data" : {
         "name" : "ANGLE",
-        "value" : "MzAgASQCCg==",
+        "text" : "QEQgASQC",
         "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "set_text",
+      "data" : {
+        "name" : "ANGLE",
+        "text" : "@D \u0001$\u0002",
+        "encoded" : false
       }
     },
     "response" : {

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLNoteRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLFileResponseParams;
@@ -70,7 +71,10 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Set the text of a model or drawing note");
-    	spec.addFootnote("The location parameter can used to position a new note, or to change the position of an existing note");
+    	spec.addFootnote("The location parameter can used to position a new note, or to change the position of an existing note.");
+    	spec.addFootnote("If the text contains Creo Symbols or other non-ASCII text, you must Base64-encode the "+PARAM_VALUE+" and set "+PARAM_ENCODED+" to true.");
+    	spec.addFootnote("You may be able to avoid Base64-encoding symbols by using Unicode for the binary characters, for example including \\u0001#\\u0002 in the "+PARAM_VALUE+" to insert a plus/minus symbol."); 
+    	spec.addFootnote("Embed newlines in the "+PARAM_VALUE+" for line breaks");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -86,7 +90,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
 
     	arg = new FunctionArgument(PARAM_VALUE, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Note text with parameters not expanded");
-    	arg.setDefaultValue("Clears the note if missing; embed newlines for line breaks");
+    	arg.setDefaultValue("Clears the note if missing");
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_ENCODED, FunctionSpec.TYPE_BOOL);
@@ -110,8 +114,17 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_NAME, "Note_17");
-    	ex.addInput(PARAM_VALUE, "ZnJpZW5kbHk=");
+    	byte[] enc = DataUtils.encodeBase64("friendly \001#\0023.5");
+//    	ex.addInput(PARAM_VALUE, "ZnJpZW5kbHk=");
+    	ex.addInput(PARAM_VALUE, new String(enc));
     	ex.addInput(PARAM_ENCODED, true);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "Note_17");
+    	ex.addInput(PARAM_VALUE, "test \u0001#\u00023.5");
+    	ex.addInput(PARAM_ENCODED, false);
     	template.addExample(ex);
 
     	ex = new FunctionExample();
@@ -132,7 +145,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get the text of a model or drawing note");
-    	spec.addFootnote("Values will automatically be returned Base64-encoded if they are strings which contain non-ASCII data");
+    	spec.addFootnote("Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -241,7 +254,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get a list of parameters from one or more models");
-    	spec.addFootnote("Values will automatically be returned Base64-encoded if they are strings which contain non-ASCII data");
+    	spec.addFootnote("Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	

@@ -30,6 +30,7 @@ import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
+import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentDimensionShowInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
@@ -43,12 +44,10 @@ import com.simplifiedlogic.nitro.jlink.calls.dimension.CallDimTolSymmetric;
 import com.simplifiedlogic.nitro.jlink.calls.dimension.CallDimTolerance;
 import com.simplifiedlogic.nitro.jlink.calls.dimension2d.CallDimension2D;
 import com.simplifiedlogic.nitro.jlink.calls.dimension2d.CallDimension2Ds;
-import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModels;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
-import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItems;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParamValue;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
@@ -58,7 +57,6 @@ import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.view2d.CallView2D;
-import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.DimData;
 import com.simplifiedlogic.nitro.jlink.data.DimDetailData;
@@ -157,6 +155,116 @@ public class JLDimension implements IJLDimension {
         	}
     	}
     }
+
+    public void setText(
+			String modelname, 
+			String dimname, 
+			Object valueObj,
+//			Object prefixObj,
+//			Object suffixObj,
+			boolean encoded, 
+    		String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+        setText(modelname, dimname, valueObj, encoded, sess);
+    }
+
+    @Override
+	public void setText(
+			String modelname, 
+			String dimname, 
+			Object valueObj,
+//			Object prefixObj,
+//			Object suffixObj,
+			boolean encoded, 
+			AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("dimension.set_text: " + dimname + "=" + valueObj, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (dimname==null || dimname.trim().length()==0)
+    		throw new JLIException("No dimension name parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+	
+	        CallModel m;
+	        m = JlinkUtils.getFile(session, modelname, true);
+	        
+	        CallBaseDimension dim = null;
+	        dim = JlinkUtils.getDimension(m, dimname, false);
+	        if (dim==null) {
+	            throw new JLIException("No such dimension " + dimname);
+	        }
+
+	        String value=null;
+//	        String prefix=null;
+//	        String suffix=null;
+	        if (valueObj!=null) {
+	        	try {
+	        		value = DataUtils.getStringValue(valueObj, encoded); 
+	        	}
+	        	catch (Exception e) {
+	        		throw new JLIException("Unable to read text value for note: " + e.getMessage());
+	        	}
+	        }
+//	        if (prefixObj!=null) {
+//	        	try {
+//	        		prefix = DataUtils.getStringValue(prefixObj, encoded); 
+//	        	}
+//	        	catch (Exception e) {
+//	        		throw new JLIException("Unable to read prefix value for note: " + e.getMessage());
+//	        	}
+//	        }
+//	        if (suffixObj!=null) {
+//	        	try {
+//	        		suffix = DataUtils.getStringValue(suffixObj, encoded); 
+//	        	}
+//	        	catch (Exception e) {
+//	        		throw new JLIException("Unable to read suffix value for note: " + e.getMessage());
+//	        	}
+//	        }
+	        
+	        if (value==null)
+	        	value="@D";
+//	        if (prefix!=null || suffix!=null) {
+//	        	StringBuffer buf = new StringBuffer(value);
+//	        	int pos = buf.indexOf("@D");
+//	        	if (pos>=0) {
+//	        		if (prefix!=null)
+//	        			buf.insert(pos, prefix);
+//	        		if (suffix!=null)
+//	        			buf.insert(pos+2, suffix);
+//	        	}
+//	        	value = buf.toString();
+//	        }
+	        String[] text = value.split("\n");
+
+	        CallStringSeq textseq = CallStringSeq.create();
+            for (int i=0; i<text.length; i++) {
+                textseq.set(i, text[i]);
+            }
+
+	        dim.setTexts(textseq);
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("dimension.set_text,"+dimname, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
 
     /* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.impl.IJLDimension#copy(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -817,101 +925,107 @@ public class JLDimension implements IJLDimension {
         
     }
     
-    protected void getDetailDimInfo(CallModel2D drawing, CallDimension2D dim, DimDetailData out) throws JLIException,jxthrowable {
+    protected void getDetailDimInfo(CallModel model, CallBaseDimension dim, DimDetailData out) throws JLIException,jxthrowable {
         if (dim==null || out==null)
             return;
         
-        CallView2D view = dim.getView();
-        if (view!=null) {
-        	out.setViewName(view.getName());
-        	try {
-        		out.setSheetNo(view.getSheetNumber());
-        	}
-    		catch (XToolkitGeneralError e) {
-    			// this error was thrown for a view that was Suppressed
-    			out.setViewName(null); // skip Erased views
-    		}
-        }
-
-        int type = dim.getDimType();
-        switch (type) {
-	        case DimensionType._DIM_LINEAR:
-	        	out.setDimType(DimDetailData.TYPE_LINEAR);
-	        	break;
-	        case DimensionType._DIM_RADIAL:
-	        	out.setDimType(DimDetailData.TYPE_RADIAL);
-	        	break;
-	        case DimensionType._DIM_DIAMETER:
-	        	out.setDimType(DimDetailData.TYPE_DIAMETER);
-	        	break;
-	        case DimensionType._DIM_ANGULAR:
-	        	out.setDimType(DimDetailData.TYPE_ANGULAR);
-	        	break;
+        Integer type = dim.getDimType();
+        if (type!=null) {
+	        switch (type.intValue()) {
+		        case DimensionType._DIM_LINEAR:
+		        	out.setDimType(DimDetailData.TYPE_LINEAR);
+		        	break;
+		        case DimensionType._DIM_RADIAL:
+		        	out.setDimType(DimDetailData.TYPE_RADIAL);
+		        	break;
+		        case DimensionType._DIM_DIAMETER:
+		        	out.setDimType(DimDetailData.TYPE_DIAMETER);
+		        	break;
+		        case DimensionType._DIM_ANGULAR:
+		        	out.setDimType(DimDetailData.TYPE_ANGULAR);
+		        	break;
+	        }
         }
 
         CallStringSeq txt = dim.getTexts();
         if (txt!=null) {
         	out.setText(txt.toArray());
         }
-        
-        CallPoint3D pt = dim.getLocation();
-        if (pt!=null) {
-            CallPoint3D pt0 = JLDrawing.screenToDrawingPoint(drawing, out.getSheetNo(), pt);
-            out.setLocation(new JLPoint(pt0.get(0), pt0.get(1), pt0.get(2)));
-        }
-        
-        CallDimTolerance tol = dim.getTolerance();
-        if (tol!=null) {
-        	DimToleranceData tolout = new DimToleranceData();
-        	out.setTolerance(tolout);
 
-        	type=tol.getType();
-        	switch (type) {
-        		case DimToleranceType._DIMTOL_LIMITS:
-	        		tolout.setToleranceType(DimToleranceData.TYPE_LIMITS);
-	        		CallDimTolLimits tolLim = (CallDimTolLimits)tol;
-	        		tolout.setLowerLimit(tolLim.getLowerLimit());
-	        		tolout.setUpperLimit(tolLim.getUpperLimit());
-	        		break;
-        		case DimToleranceType._DIMTOL_PLUS_MINUS:
-	        		tolout.setToleranceType(DimToleranceData.TYPE_PLUS_MINUS);
-	        		CallDimTolPlusMinus tolPM = (CallDimTolPlusMinus)tol;
-	        		tolout.setPlus(tolPM.getPlus());
-	        		tolout.setMinus(tolPM.getMinus());
-	        		break;
-        		case DimToleranceType._DIMTOL_SYMMETRIC:
-	        		tolout.setToleranceType(DimToleranceData.TYPE_SYMMETRIC);
-	        		CallDimTolSymmetric tolSym = (CallDimTolSymmetric)tol;
-	        		tolout.setSymmetricValue(tolSym.getValue());
-	        		break;
-        		case DimToleranceType._DIMTOL_SYMMETRIC_SUPERSCRIPT:
-	        		tolout.setToleranceType(DimToleranceData.TYPE_SYM_SUPERSCRIPT);
-	        		CallDimTolSymSuperscript tolSym2 = (CallDimTolSymSuperscript)tol;
-	        		tolout.setSymmetricValue(tolSym2.getValue());
-	        		break;
-        		case DimToleranceType._DIMTOL_ISODIN:
-	        		tolout.setToleranceType(DimToleranceData.TYPE_ISODIN);
-	        		CallDimTolISODIN tolISO = (CallDimTolISODIN)tol;
-	        		tolout.setTableName(tolISO.getTableName());
-	        		tolout.setTableColumn(tolISO.getTableColumn());
-        			switch (tolISO.getTolTableType()) {
-	        			case ToleranceTableType._TOLTABLE_GENERAL:
-	        				tolout.setTableType(DimToleranceData.TABLE_GENERAL);
-	        				break;
-	        			case ToleranceTableType._TOLTABLE_BROKEN_EDGE:
-	        				tolout.setTableType(DimToleranceData.TABLE_BROKEN_EDGE);
-	        				break;
-	        			case ToleranceTableType._TOLTABLE_SHAFTS:
-	        				tolout.setTableType(DimToleranceData.TABLE_SHAFTS);
-	        				break;
-	        			case ToleranceTableType._TOLTABLE_HOLES:
-	        				tolout.setTableType(DimToleranceData.TABLE_HOLES);
-	        				break;
-        			}
-	        		break;
-        	}
-        }
+        if (model instanceof CallModel2D && dim instanceof CallDimension2D) {
+        	CallModel2D drawing = (CallModel2D)model;
+        	CallDimension2D dim2D = (CallDimension2D)dim;
 
+	        CallView2D view = dim2D.getView();
+	        if (view!=null) {
+	        	out.setViewName(view.getName());
+	        	try {
+	        		out.setSheetNo(view.getSheetNumber());
+	        	}
+	    		catch (XToolkitGeneralError e) {
+	    			// this error was thrown for a view that was Suppressed
+	    			out.setViewName(null); // skip Erased views
+	    		}
+	        }
+	
+	        CallPoint3D pt = dim2D.getLocation();
+	        if (pt!=null) {
+	            CallPoint3D pt0 = JLDrawing.screenToDrawingPoint(drawing, out.getSheetNo(), pt);
+	            out.setLocation(new JLPoint(pt0.get(0), pt0.get(1), pt0.get(2)));
+	        }
+	        
+	        CallDimTolerance tol = dim2D.getTolerance();
+	        if (tol!=null) {
+	        	DimToleranceData tolout = new DimToleranceData();
+	        	out.setTolerance(tolout);
+	
+	        	type=tol.getType();
+	        	switch (type) {
+	        		case DimToleranceType._DIMTOL_LIMITS:
+		        		tolout.setToleranceType(DimToleranceData.TYPE_LIMITS);
+		        		CallDimTolLimits tolLim = (CallDimTolLimits)tol;
+		        		tolout.setLowerLimit(tolLim.getLowerLimit());
+		        		tolout.setUpperLimit(tolLim.getUpperLimit());
+		        		break;
+	        		case DimToleranceType._DIMTOL_PLUS_MINUS:
+		        		tolout.setToleranceType(DimToleranceData.TYPE_PLUS_MINUS);
+		        		CallDimTolPlusMinus tolPM = (CallDimTolPlusMinus)tol;
+		        		tolout.setPlus(tolPM.getPlus());
+		        		tolout.setMinus(tolPM.getMinus());
+		        		break;
+	        		case DimToleranceType._DIMTOL_SYMMETRIC:
+		        		tolout.setToleranceType(DimToleranceData.TYPE_SYMMETRIC);
+		        		CallDimTolSymmetric tolSym = (CallDimTolSymmetric)tol;
+		        		tolout.setSymmetricValue(tolSym.getValue());
+		        		break;
+	        		case DimToleranceType._DIMTOL_SYMMETRIC_SUPERSCRIPT:
+		        		tolout.setToleranceType(DimToleranceData.TYPE_SYM_SUPERSCRIPT);
+		        		CallDimTolSymSuperscript tolSym2 = (CallDimTolSymSuperscript)tol;
+		        		tolout.setSymmetricValue(tolSym2.getValue());
+		        		break;
+	        		case DimToleranceType._DIMTOL_ISODIN:
+		        		tolout.setToleranceType(DimToleranceData.TYPE_ISODIN);
+		        		CallDimTolISODIN tolISO = (CallDimTolISODIN)tol;
+		        		tolout.setTableName(tolISO.getTableName());
+		        		tolout.setTableColumn(tolISO.getTableColumn());
+	        			switch (tolISO.getTolTableType()) {
+		        			case ToleranceTableType._TOLTABLE_GENERAL:
+		        				tolout.setTableType(DimToleranceData.TABLE_GENERAL);
+		        				break;
+		        			case ToleranceTableType._TOLTABLE_BROKEN_EDGE:
+		        				tolout.setTableType(DimToleranceData.TABLE_BROKEN_EDGE);
+		        				break;
+		        			case ToleranceTableType._TOLTABLE_SHAFTS:
+		        				tolout.setTableType(DimToleranceData.TABLE_SHAFTS);
+		        				break;
+		        			case ToleranceTableType._TOLTABLE_HOLES:
+		        				tolout.setTableType(DimToleranceData.TABLE_HOLES);
+		        				break;
+	        			}
+		        		break;
+	        	}
+	        }
+        }
     }
     
     /**
@@ -951,7 +1065,7 @@ public class JLDimension implements IJLDimension {
         		if (dimType>=0) {
     	            if (item instanceof CallBaseDimension) {
     		            CallBaseDimension dim = (CallBaseDimension)item;
-    		            if (dim.getDimType()!=dimType)
+    		            if (dim.getDimType()==null || dim.getDimType().intValue()!=dimType)
     		            	return false;
     	            }
         		}
@@ -1014,7 +1128,7 @@ public class JLDimension implements IJLDimension {
         		if (dimType>=0) {
     	            if (item instanceof CallBaseDimension) {
     		            CallBaseDimension dim = (CallBaseDimension)item;
-    		            if (dim.getDimType()!=dimType)
+    		            if (dim.getDimType()==null || dim.getDimType().intValue()!=dimType)
     		            	return false;
     	            }
         		}
@@ -1028,9 +1142,7 @@ public class JLDimension implements IJLDimension {
 	            if (item instanceof CallBaseDimension) {
 		            CallBaseDimension dim = (CallBaseDimension)item;
 		         	getDimInfo(model, dim, outvals, encoded);
-		         	if (item instanceof CallDimension2D) {
-		         		getDetailDimInfo((CallModel2D)model, (CallDimension2D)dim, outvals);
-		         	}
+	         		getDetailDimInfo(model, dim, outvals);
 	            }
 
 	         	output.add(outvals);

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.data.DimDetailData;
 import com.simplifiedlogic.nitro.jlink.data.DimToleranceData;
 import com.simplifiedlogic.nitro.jshell.json.request.JLDimensionRequestParams;
@@ -54,6 +55,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 		list.add(helpList());
 		list.add(helpListDetail());
 		list.add(helpSet());
+		list.add(helpSetText());
 		list.add(helpShow());
 		list.add(helpUserSelect());
 		return list;
@@ -74,7 +76,8 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Set a dimension value");
-    	spec.addFootnote("One reason to encode values is if the value contains special characters, such as Creo symbols");
+    	spec.addFootnote("One reason to encode values is if the value contains special characters, such as Creo symbols.");
+    	spec.addFootnote("You may be able to avoid Base64-encoding symbols by using Unicode for the binary characters, for example including \\u0001#\\u0002 in the "+PARAM_VALUE+" to insert a plus/minus symbol."); 
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -116,6 +119,68 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	ex.addInput(PARAM_NAME, "ANGLE");
     	ex.addInput(PARAM_VALUE, "MzAgASQCCg==");
     	ex.addInput(PARAM_ENCODED, true);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpSetText() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_TEXT);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set dimension text");
+    	spec.addFootnote("If the text contains Creo Symbols or other non-ASCII text, you must Base64-encode the "+PARAM_TEXT+" and set "+PARAM_ENCODED+" to true.");
+    	spec.addFootnote("You may be able to avoid Base64-encoding symbols by using Unicode for the binary characters, for example including \\u0001#\\u0002 in the "+PARAM_TEXT+" to insert a plus/minus symbol."); 
+    	spec.addFootnote("Embed newlines in the "+PARAM_TEXT+" for line breaks");
+    	spec.addFootnote("Since J-Link does not support setting the Prefix or Suffix, you will need to include those in the "+PARAM_TEXT+" value if you need them.");
+    	
+    	FunctionArgument arg;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Dimension name");
+    	arg.setRequired(true);
+       	spec.addArgument(arg);
+       	
+    	arg = new FunctionArgument(PARAM_TEXT, FunctionSpec.TYPE_DEPEND);
+    	arg.setDescription("Dimension text");
+    	arg.setDefaultValue("Sets the dimension's text to @D if missing");
+       	spec.addArgument(arg);
+       	
+    	arg = new FunctionArgument(PARAM_ENCODED, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether the text value is Base64-encoded");
+    	arg.setDefaultValue("false");
+       	spec.addArgument(arg);
+       	
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "d3");
+    	ex.addInput(PARAM_TEXT, "@D rad");
+    	ex.addInput(PARAM_ENCODED, false);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "RADIUS");
+    	ex.addInput(PARAM_TEXT, "(@D)\nAS SHOWN");
+    	ex.addInput(PARAM_ENCODED, false);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "ANGLE");
+    	byte[] enc = DataUtils.encodeBase64("@D \001$\002");
+    	ex.addInput(PARAM_TEXT, new String(enc));
+    	ex.addInput(PARAM_ENCODED, true);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "ANGLE");
+    	ex.addInput(PARAM_TEXT, "@D \u0001$\u0002");
+    	ex.addInput(PARAM_ENCODED, false);
     	template.addExample(ex);
 
         return template;
@@ -489,19 +554,13 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 		FunctionObject obj = helpDimData();
 		obj.setObjectName(OBJ_DIM_DETAIL_DATA);
     	obj.setDescription("More detailed information about a Creo dimension");
+    	obj.addFootnote("If dimension is not a drawing dimension, then only "+OUTPUT_NAME+", "+OUTPUT_VALUE+", "+OUTPUT_ENCODED+", "+OUTPUT_DIM_TYPE+", and "+OUTPUT_TEXT+" will be returned.");
     	obj.addFootnote(OUTPUT_TOL_LOWER_LIMIT + " and " + OUTPUT_TOL_UPPER_LIMIT + " are only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_LIMITS);
     	obj.addFootnote(OUTPUT_TOL_PLUS + " and " + OUTPUT_TOL_MINUS + " are only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_PLUS_MINUS);
     	obj.addFootnote(OUTPUT_TOL_SYMMETRIC_VALUE + " is only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_SYMMETRIC + " or " + DimToleranceData.TYPE_SYM_SUPERSCRIPT);
     	obj.addFootnote(OUTPUT_TOL_TABLE_NAME + ", " + OUTPUT_TOL_TABLE_COLUMN + " and " + OUTPUT_TOL_TABLE_TYPE + " are only set when " + OUTPUT_TOLERANCE_TYPE + "=" + DimToleranceData.TYPE_ISODIN);
 
     	FunctionArgument arg;
-    	arg = new FunctionArgument(OUTPUT_SHEET, FunctionSpec.TYPE_INTEGER);
-    	arg.setDescription("Sheet number");
-    	obj.add(arg);
-        
-    	arg = new FunctionArgument(OUTPUT_VIEW_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("View name");
-    	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_DIM_TYPE, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Dimension type");
@@ -517,6 +576,14 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	arg.setDescription("Dimension raw text");
     	obj.add(arg);
     	
+    	arg = new FunctionArgument(OUTPUT_SHEET, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Sheet number");
+    	obj.add(arg);
+        
+    	arg = new FunctionArgument(OUTPUT_VIEW_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View name");
+    	obj.add(arg);
+
     	arg = new FunctionArgument(OUTPUT_LOCATION, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
     	arg.setDescription("Coordinates of the dimension in drawing units");
     	obj.add(arg);

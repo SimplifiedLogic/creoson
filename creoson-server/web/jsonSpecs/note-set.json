@@ -3,7 +3,7 @@
     "function_description" : "Set the text of a model or drawing note",
     "command" : "note",
     "function" : "set",
-    "notes" : [ "The location parameter can used to position a new note, or to change the position of an existing note" ],
+    "notes" : [ "The location parameter can used to position a new note, or to change the position of an existing note.", "If the text contains Creo Symbols or other non-ASCII text, you must Base64-encode the value and set encoded to true.", "You may be able to avoid Base64-encoding symbols by using Unicode for the binary characters, for example including \\u0001#\\u0002 in the value to insert a plus/minus symbol.", "Embed newlines in the value for line breaks" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -19,7 +19,7 @@
       "name" : "value",
       "type" : "string",
       "description" : "Note text with parameters not expanded",
-      "default" : "Clears the note if missing; embed newlines for line breaks"
+      "default" : "Clears the note if missing"
     }, {
       "name" : "encoded",
       "type" : "boolean",
@@ -57,8 +57,25 @@
       "data" : {
         "file" : "box.prt",
         "name" : "Note_17",
-        "value" : "ZnJpZW5kbHk=",
+        "value" : "ZnJpZW5kbHkgASMCMy41",
         "encoded" : true
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "note",
+      "function" : "set",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "Note_17",
+        "value" : "test \u0001#\u00023.5",
+        "encoded" : false
       }
     },
     "response" : {
