@@ -8,6 +8,11 @@
       "type" : "string",
       "description" : "Workspace name",
       "required" : true
+    }, {
+      "name" : "filenames",
+      "type" : "array:string",
+      "description" : "List of files to delete from the workspace",
+      "default" : "All files are deleted."
     } ],
     "response" : [ ]
   },
@@ -18,6 +23,21 @@
       "function" : "clear_workspace",
       "data" : {
         "workspace" : "test_workspace"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "windchill",
+      "function" : "clear_workspace",
+      "data" : {
+        "workspace" : "test_workspace",
+        "filenames" : [ "able.prt", "baker.prt", "charlie.prt" ]
       }
     },
     "response" : {

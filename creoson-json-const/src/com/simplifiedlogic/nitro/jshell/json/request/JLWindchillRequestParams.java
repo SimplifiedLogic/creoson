@@ -49,5 +49,6 @@ public interface JLWindchillRequestParams {
     public static final String PARAM_WORKSPACE	= "workspace";
     public static final String PARAM_CONTEXT	= "context";
     public static final String PARAM_FILENAME	= "filename";
+    public static final String PARAM_FILENAMES	= "filenames";
 
 }

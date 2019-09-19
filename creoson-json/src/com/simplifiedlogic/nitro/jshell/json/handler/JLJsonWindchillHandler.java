@@ -18,6 +18,7 @@
  */
 package com.simplifiedlogic.nitro.jshell.json.handler;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -142,8 +143,21 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 
 	private Hashtable<String, Object> actionClearWorkspace(String sessionId, Hashtable<String, Object> input) throws JLIException {
 		String workspace = checkStringParameter(input, PARAM_WORKSPACE, true);
+        Object namesObj = checkParameter(input, PARAM_FILENAMES, false);
+        List<String> filenames = null;
+        if (namesObj!=null) {
+        	filenames = getStringListValue(namesObj);
+        }
+        else {
+        	// allow for someone leaving the "s" off
+        	String filename = checkStringParameter(input, PARAM_FILENAME, false);
+        	if (filename!=null) {
+        		filenames = new ArrayList<String>();
+        		filenames.add(filename);
+        	}
+        }
 		
-		windHandler.clearWorkspace(workspace, sessionId);
+		windHandler.clearWorkspace(workspace, filenames, sessionId);
 		
 		return null;
 	}

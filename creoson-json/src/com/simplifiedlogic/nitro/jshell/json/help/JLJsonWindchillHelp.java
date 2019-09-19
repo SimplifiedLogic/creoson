@@ -277,13 +277,27 @@ public class JLJsonWindchillHelp extends JLJsonCommandHelp implements JLWindchil
     	arg.setRequired(true);
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_FILENAMES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("List of files to delete from the workspace");
+    	arg.setDefaultValue("All files are deleted.");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_WORKSPACE, "test_workspace");
     	template.addExample(ex);
     	
-        return template;
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_WORKSPACE, "test_workspace");
+    	List<String> files = new ArrayList<String>();
+    	files.add("able.prt");
+    	files.add("baker.prt");
+    	files.add("charlie.prt");
+    	ex.addInput(PARAM_FILENAMES, files);
+    	template.addExample(ex);
+
+    	return template;
     }
     	
 	private FunctionTemplate helpDeleteWorkspace() {

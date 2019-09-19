@@ -49,8 +49,8 @@ public interface IJLWindchill {
 	public void createWorkspace(String workspace, String context, String sessionId) throws JLIException;
 	public void createWorkspace(String workspace, String context, AbstractJLISession sess) throws JLIException;
 
-	public void clearWorkspace(String workspace, String sessionId) throws JLIException;
-	public void clearWorkspace(String workspace, AbstractJLISession sess) throws JLIException;
+	public void clearWorkspace(String workspace, List<String> filenames, String sessionId) throws JLIException;
+	public void clearWorkspace(String workspace, List<String> filenames, AbstractJLISession sess) throws JLIException;
 
 	public void deleteWorkspace(String workspace, String sessionId) throws JLIException;
 	public void deleteWorkspace(String workspace, AbstractJLISession sess) throws JLIException;

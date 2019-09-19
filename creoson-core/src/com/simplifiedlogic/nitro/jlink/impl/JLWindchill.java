@@ -25,6 +25,7 @@ import java.util.Vector;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitBadContext;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
+import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallWorkspaceDefinition;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallWorkspaceDefinitions;
@@ -509,21 +510,21 @@ public class JLWindchill implements IJLWindchill {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#clearWorkspace(java.lang.String, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#clearWorkspace(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public void clearWorkspace(String workspace, String sessionId) throws JLIException {
+	public void clearWorkspace(String workspace, List<String> filenames, String sessionId) throws JLIException {
 		
         JLISession sess = JLISession.getSession(sessionId);
         
-        clearWorkspace(workspace, sess);
+        clearWorkspace(workspace, filenames, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#clearWorkspace(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLWindchill#clearWorkspace(java.lang.String, java.util.List, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public void clearWorkspace(String workspace, AbstractJLISession sess) throws JLIException {
+	public void clearWorkspace(String workspace, List<String> filenames, AbstractJLISession sess) throws JLIException {
 		
 		DebugLogging.sendDebugMessage("windchill.clear_workspace: " + workspace, NitroConstants.DEBUG_KEY);
 		if (sess==null)
@@ -548,8 +549,29 @@ public class JLWindchill implements IJLWindchill {
 
 			if (!workspaceExists(server, workspace))
 				throw new JLIException("Workspace '" + workspace + "' does not exist");
+			
+			CallStringSeq seq = null;
+			if (filenames!=null && filenames.size()>0) {
+				seq = CallStringSeq.create();
+				for (String name : filenames) {
+					seq.append(name);
+				}
+			}
 
-	        server.removeObjects(null);
+    		String activeWorkspace = server.getActiveWorkspace();
+	    	if (activeWorkspace==null || !activeWorkspace.equals(workspace))
+	    		server.setActiveWorkspace(workspace);
+
+	    	try {
+	    		server.removeObjects(seq);
+	    	}
+	    	catch (XToolkitNotFound e) {
+	    		// ignore "not found" error
+	    	}
+	    	finally {
+		    	if (activeWorkspace!=null && activeWorkspace.equals(workspace))
+		    		server.setActiveWorkspace(activeWorkspace);
+	    	}
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
