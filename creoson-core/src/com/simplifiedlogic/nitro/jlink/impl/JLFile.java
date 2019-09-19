@@ -3050,6 +3050,9 @@ public class JLFile implements IJLFile {
 		if (sess==null)
 			throw new JLIException("No session found");
 
+    	if (materialName==null || materialName.trim().length()==0)
+    		throw new JLIException("No Material Name parameter given");
+
     	long start = 0;
     	if (NitroConstants.TIME_TASKS)
     		start = System.currentTimeMillis();
@@ -3070,12 +3073,17 @@ public class JLFile implements IJLFile {
 	        	throw new JLIException("File is not a Part");
 	        CallPart p = (CallPart)m;
 	        
-	        materialName = NitroUtils.removeExtension(materialName);
+	        CallMaterial matl = null;
+	        if (materialName!=null) {
+		        materialName = NitroUtils.removeExtension(materialName);
+	
+		        matl = p.getMaterial(materialName);
+		        if (matl==null)
+		        	throw new JLIException("Material has not been loaded: "+materialName);
+	        }
 
-	        CallMaterial matl = p.getMaterial(materialName);
-	        if (matl==null)
-	        	throw new JLIException("Material has not been loaded: "+materialName);
-	        
+	        // NOTE: matl=null does NOT appear to actually work.  No error, but the material
+	        // does not get unset.
 	        p.setCurrentMaterial(matl);
     	}
     	catch (jxthrowable e) {

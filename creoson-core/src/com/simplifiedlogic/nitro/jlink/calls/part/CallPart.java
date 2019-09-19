@@ -72,9 +72,12 @@ public class CallPart extends CallSolid {
 		return new CallMaterial(matl);
 	}
 	
-	public void setCurrentMaterial(CallMaterial matl) throws jxthrowable {
+	public void setCurrentMaterial(CallMaterial value) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Part,SetCurrentMaterial", 0, NitroConstants.DEBUG_JLINK_KEY);
-        getPart().SetCurrentMaterial(matl.getMaterial());
+        Material matl=null;
+        if (value!=null)
+        	matl = value.getMaterial();
+        getPart().SetCurrentMaterial(matl);
 	}
 	
 	public Part getPart() {

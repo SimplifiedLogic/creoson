@@ -1301,6 +1301,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Material name");
+//    	arg.setDefaultValue("If missing, will unset the current material");
     	arg.setRequired(true);
     	spec.addArgument(arg);
 
