@@ -45,6 +45,7 @@ public interface JLDimensionRequestParams {
     public static final String PARAM_VALUE      = "value";
     public static final String PARAM_TOMODEL    = "to_file";
     public static final String PARAM_ENCODED    = "encoded";
+    public static final String PARAM_SELECT		= "select";
     public static final String PARAM_SHOW       = "show";
     public static final String PARAM_PATH       = "path";
     public static final String PARAM_ASSEMBLY   = "assembly";

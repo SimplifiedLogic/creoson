@@ -51,6 +51,7 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParamValue;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionBuffer;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
@@ -379,11 +380,12 @@ public class JLDimension implements IJLDimension {
     		List<String> dimNames,
     		String dimType, 
     		boolean encoded, 
+    		boolean select, 
     		String sessionId) throws JLIException {
 
         JLISession sess = JLISession.getSession(sessionId);
         
-    	return list(modelname, dimName, dimNames, dimType, encoded, sess);
+    	return list(modelname, dimName, dimNames, dimType, encoded, select, sess);
     }
 
 	/* (non-Javadoc)
@@ -395,6 +397,7 @@ public class JLDimension implements IJLDimension {
     		List<String> dimNames,
     		String dimType, 
     		boolean encoded, 
+    		boolean select, 
     		AbstractJLISession sess) throws JLIException {
 
 		DebugLogging.sendDebugMessage("dimension.list: " + modelname, NitroConstants.DEBUG_KEY);
@@ -426,7 +429,7 @@ public class JLDimension implements IJLDimension {
 	        		dimTypeValue=DimensionType._DIM_ANGULAR;
 	        }
 	
-	        ListLooper looper = new ListLooper();
+	        ListLooper looper = new ListLooper(session, select);
 	        looper.model = m;
 	        if (dimNames!=null)
 	        	looper.setNameList(dimNames);
@@ -442,6 +445,7 @@ public class JLDimension implements IJLDimension {
 	        if (m instanceof CallModel2D) {
 	        	CallModel2D drw = (CallModel2D)m;
 	        	CallModels drawingModels = drw.listModels();
+        		CallDimension2D dim;
 	        	if (drawingModels!=null && drawingModels.getarraysize()>0) {
 	        		int len = drawingModels.getarraysize();
 	        		for (int i=0; i<len; i++) {
@@ -449,7 +453,11 @@ public class JLDimension implements IJLDimension {
 	        			if (dimsShown!=null && dimsShown.getarraysize()>0) {
 	    	        		int len2 = dimsShown.getarraysize();
 	    	        		for (int k=0; k<len2; k++) {
-	    	        			looper.loopAction(dimsShown.get(k));
+	    	        			dim = dimsShown.get(k);
+	    	                    if (!looper.checkName(dim))
+	    	                        continue;
+
+	    	        			looper.loopAction(dim);
 	    	        		}
 	        			}
 	        		}
@@ -478,11 +486,13 @@ public class JLDimension implements IJLDimension {
 	public List<DimDetailData> listDetail(String modelname, 
 			String dimName, List<String> dimNames, 
     		String dimType, 
-			boolean encoded, String sessionId) throws JLIException {
+			boolean encoded, 
+			boolean select, 
+			String sessionId) throws JLIException {
 
         JLISession sess = JLISession.getSession(sessionId);
 
-		return listDetail(modelname, dimName, dimNames, dimType, encoded, sess);
+		return listDetail(modelname, dimName, dimNames, dimType, encoded, select, sess);
 	}
 
 	/* (non-Javadoc)
@@ -491,7 +501,9 @@ public class JLDimension implements IJLDimension {
 	public List<DimDetailData> listDetail(String modelname, 
 			String dimName, List<String> dimNames, 
     		String dimType, 
-			boolean encoded, AbstractJLISession sess) throws JLIException {
+			boolean encoded, 
+			boolean select, 
+			AbstractJLISession sess) throws JLIException {
 		
 		DebugLogging.sendDebugMessage("dimension.list_detail: " + modelname, NitroConstants.DEBUG_KEY);
 		if (sess==null)
@@ -522,7 +534,7 @@ public class JLDimension implements IJLDimension {
 	        		dimTypeValue=DimensionType._DIM_ANGULAR;
 	        }
 
-	        ListDetailLooper looper = new ListDetailLooper();
+	        ListDetailLooper looper = new ListDetailLooper(session, select);
 	        looper.model = m;
 	        if (dimNames!=null)
 	        	looper.setNameList(dimNames);
@@ -538,6 +550,7 @@ public class JLDimension implements IJLDimension {
 	        if (m instanceof CallModel2D) {
 	        	CallModel2D drw = (CallModel2D)m;
 	        	CallModels drawingModels = drw.listModels();
+        		CallDimension2D dim;
 	        	if (drawingModels!=null && drawingModels.getarraysize()>0) {
 	        		int len = drawingModels.getarraysize();
 	        		for (int i=0; i<len; i++) {
@@ -545,7 +558,11 @@ public class JLDimension implements IJLDimension {
 	        			if (dimsShown!=null && dimsShown.getarraysize()>0) {
 	    	        		int len2 = dimsShown.getarraysize();
 	    	        		for (int k=0; k<len2; k++) {
-	    	        			looper.loopAction(dimsShown.get(k));
+	    	        			dim = dimsShown.get(k);
+	    	                    if (!looper.checkName(dim))
+	    	                        continue;
+
+	    	        			looper.loopAction(dim);
 	    	        		}
 	        			}
 	        		}
@@ -1044,17 +1061,33 @@ public class JLDimension implements IJLDimension {
          */
         public boolean encoded = false;
         /**
+         * Whether to select the items that are found.
+         */
+        private boolean select = false;
+        /**
          * The model that contains the dimensions
          */
         public CallModel model;
-        
+        /**
+         * Optional filter on Creo dimension type.
+         */
         public int dimType = -1;
+        
+        private CallSelectionBuffer buf = null;
 
         /**
-         * Default constructor which sets the search type.
+         * Default constructor which sets the search type and select flag.
          */
-        public ListLooper() {
+        public ListLooper(CallSession session, boolean select) throws jxthrowable {
             setSearchType(ModelItemType.ITEM_DIMENSION);
+        	this.select=select;
+        	if (select) {
+				buf = session.getCurrentSelectionBuffer();
+				CallSelections sels = buf.getContents();
+				if (sels!=null) {
+					buf.clear();
+				}
+        	}
         }
         
         /* (non-Javadoc)
@@ -1081,6 +1114,10 @@ public class JLDimension implements IJLDimension {
 		         	getDimInfo(model, dim, outvals, encoded);
 	            }
 
+	            if (select) {
+                	CallSelection sel = CallSelection.createModelItemSelection(item, null);
+                	buf.addSelection(sel);
+	            }
 	         	output.add(outvals);
         	}
         	catch (jxthrowable e) {
@@ -1107,17 +1144,33 @@ public class JLDimension implements IJLDimension {
          */
         public boolean encoded = false;
         /**
+         * Whether to select the items that are found.
+         */
+        private boolean select = false;
+        /**
          * The model that contains the dimensions
          */
         public CallModel model;
-        
+        /**
+         * Optional filter on Creo dimension type.
+         */
         public int dimType = -1;
 
+        private CallSelectionBuffer buf = null;
+
         /**
-         * Default constructor which sets the search type.
+         * Default constructor which sets the search type and select flag.
          */
-        public ListDetailLooper() {
+        public ListDetailLooper(CallSession session, boolean select) throws jxthrowable {
             setSearchType(ModelItemType.ITEM_DIMENSION);
+        	this.select=select;
+        	if (select) {
+				buf = session.getCurrentSelectionBuffer();
+				CallSelections sels = buf.getContents();
+				if (sels!=null) {
+					buf.clear();
+				}
+        	}
         }
         
         /* (non-Javadoc)
@@ -1145,6 +1198,10 @@ public class JLDimension implements IJLDimension {
 	         		getDetailDimInfo(model, dim, outvals);
 	            }
 
+	            if (select) {
+                	CallSelection sel = CallSelection.createModelItemSelection(item, null);
+                	buf.addSelection(sel);
+	            }
 	         	output.add(outvals);
         	}
         	catch (jxthrowable e) {

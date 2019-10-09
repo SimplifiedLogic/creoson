@@ -42,7 +42,6 @@ import com.ptc.pfc.pfcLayer.DisplayStatus;
 import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
-import com.ptc.pfc.pfcServer.Server;
 import com.ptc.pfc.pfcSimpRep.SimpRepActionType;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
@@ -67,6 +66,7 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameterOwner;
 import com.simplifiedlogic.nitro.jlink.calls.note.CallNote;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
+import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepCompItemPath;
@@ -1624,8 +1624,8 @@ public class JlinkUtils {
 	 * @return The URL for the workspace
 	 * @throws jxthrowable
 	 */
-	public static String makeWindchillUrl(Server server, String workspace) throws jxthrowable {
-		return makeWindchillUrl(server.GetAlias(), workspace);
+	public static String makeWindchillUrl(CallServer server, String workspace) throws jxthrowable {
+		return makeWindchillUrl(server.getAlias(), workspace);
 	}
 	
 	/**

@@ -192,7 +192,7 @@ public abstract class ModelItemLooper {
      * @return Whether the item matches the name filter
      * @throws jxthrowable
      */
-    private boolean checkName(CallModelItem item) throws jxthrowable {
+    public boolean checkName(CallModelItem item) throws jxthrowable {
         if (namePattern!=null) {
             currentName = item.getName();
             if (isNamePattern && !currentName.toLowerCase().matches(namePattern))

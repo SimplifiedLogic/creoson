@@ -56,11 +56,11 @@ public interface IJLNote {
     public List<NoteData> list(String filename, 
     		String noteName, List<String> noteNames, 
 			String valuePattern, boolean getExpandedValues, 
-			String sessionId) throws JLIException;
+			boolean select, String sessionId) throws JLIException;
 	public List<NoteData> list(String filename, 
     		String noteName, List<String> noteNames, 
 			String valuePattern, boolean getExpandedValues, 
-			AbstractJLISession sess) throws JLIException;
+			boolean select, AbstractJLISession sess) throws JLIException;
 
 	public void copy(String filename, String noteName,
 			String toModel, String toName,

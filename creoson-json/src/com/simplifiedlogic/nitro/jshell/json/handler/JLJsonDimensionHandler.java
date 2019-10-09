@@ -100,8 +100,9 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
         }
         String dimType = checkStringParameter(input, PARAM_DIM_TYPE, false);
         boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
+        boolean select = checkFlagParameter(input, PARAM_SELECT, false, false);
 
-        List<DimData> dims = dimHandler.list(modelname, namePattern, dimNames, dimType, encoded, sessionId);
+        List<DimData> dims = dimHandler.list(modelname, namePattern, dimNames, dimType, encoded, select, sessionId);
         
         if (dims!=null && dims.size()>0) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
@@ -134,8 +135,9 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
         }
         String dimType = checkStringParameter(input, PARAM_DIM_TYPE, false);
         boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
+        boolean select = checkFlagParameter(input, PARAM_SELECT, false, false);
 
-        List<DimDetailData> dims = dimHandler.listDetail(modelname, namePattern, dimNames, dimType, encoded, sessionId);
+        List<DimDetailData> dims = dimHandler.listDetail(modelname, namePattern, dimNames, dimType, encoded, select, sessionId);
         
         if (dims!=null && dims.size()>0) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

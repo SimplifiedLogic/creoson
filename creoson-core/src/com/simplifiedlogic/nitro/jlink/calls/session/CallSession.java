@@ -28,6 +28,7 @@ import com.ptc.pfc.pfcModel.ExportType;
 import com.ptc.pfc.pfcModel.Model;
 import com.ptc.pfc.pfcModel.Models;
 import com.ptc.pfc.pfcProToolkit.Dll;
+import com.ptc.pfc.pfcSelect.SelectionBuffer;
 import com.ptc.pfc.pfcSelect.Selections;
 import com.ptc.pfc.pfcServer.Server;
 import com.ptc.pfc.pfcSession.FileListOpt;
@@ -40,6 +41,7 @@ import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModels;
 import com.simplifiedlogic.nitro.jlink.calls.protoolkit.CallDll;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionBuffer;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
@@ -264,6 +266,14 @@ public class CallSession {
 		return new CallDrawing(drw);
 	}
 	
+	public CallSelectionBuffer getCurrentSelectionBuffer() throws jxthrowable {
+		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Session,GetCurrentSelectionBuffer", 0, NitroConstants.DEBUG_JLINK_KEY);
+		SelectionBuffer buffer = session.GetCurrentSelectionBuffer();
+		if (buffer==null)
+			return null;
+		return new CallSelectionBuffer(buffer);
+	}
+
 	public Session getSession() {
 		return session;
 	}

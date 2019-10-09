@@ -255,6 +255,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get a list of parameters from one or more models");
     	spec.addFootnote("Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data");
+    	spec.addFootnote("If "+PARAM_SELECT+" is true, then the current selection in Creo will be cleared even if no items are found.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -283,6 +284,11 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
 
     	arg = new FunctionArgument(PARAM_GET_EXPANDED, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("Whether to return text with parameter values replaced");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SELECT, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("If true, the notes that are found will be selected in Creo");
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 

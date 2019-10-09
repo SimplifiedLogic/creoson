@@ -41,6 +41,9 @@ import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.note.CallNote;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionBuffer;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
@@ -394,11 +397,12 @@ public class JLNote implements IJLNote {
     		List<String> noteNames,
     		String valuePattern, 
     		boolean getExpandedValues, 
+    		boolean select, 
 	        String sessionId) throws JLIException {
 
         JLISession sess = JLISession.getSession(sessionId);
         
-        return list(filename, noteName, noteNames, valuePattern, getExpandedValues, sess);
+        return list(filename, noteName, noteNames, valuePattern, getExpandedValues, select, sess);
     }
     	
 	/* (non-Javadoc)
@@ -409,7 +413,8 @@ public class JLNote implements IJLNote {
     		String noteName,
     		List<String> noteNames,
     		String valuePattern,
-    		boolean getExpandedValues, 
+    		boolean getExpandedValues,
+    		boolean select, 
 	        AbstractJLISession sess) throws JLIException {
     	
 		DebugLogging.sendDebugMessage("note.list: " + filename, NitroConstants.DEBUG_KEY);
@@ -429,7 +434,7 @@ public class JLNote implements IJLNote {
 	        CallModel m;
 	        m = JlinkUtils.getFile(session, filename, true);
 	
-	        ListLooper looper = new ListLooper(m);
+	        ListLooper looper = new ListLooper(m, session, select);
 	        if (noteNames!=null)
 	        	looper.setNameList(noteNames);
 	        else if (noteName==null)
@@ -1140,29 +1145,44 @@ public class JLNote implements IJLNote {
 		/**
 		 * The output list of note data
 		 */
-		List<NoteData> output;
+		protected List<NoteData> output;
 		/**
 		 * Note text filter
 		 */
-		String valuePattern;
+		protected String valuePattern;
 		private Pattern valuePtn;
 		/**
 		 * Whether to expand parameter values in the notes
 		 */
-		boolean getExpandedValues;
+		protected boolean getExpandedValues;
+        /**
+         * Whether to select the items that are found.
+         */
+        private boolean select = false;
 		/**
 		 * The model containing the notes
 		 */
-		CallModel m;
+		private CallModel m;
 		
+        private CallSelectionBuffer buf = null;
+
         /**
          * Constructor which determines the note type based on the model type
          * @param model The model containing the notes
          */
-        public ListLooper(CallModel m) {
+        public ListLooper(CallModel m, CallSession session, boolean select) throws jxthrowable {
         	ModelItemType type = JlinkUtils.getNoteType(m);
             setSearchType(type);
             this.m=m;
+        	this.select=select;
+        	if (select) {
+				buf = session.getCurrentSelectionBuffer();
+				CallSelections sels = buf.getContents();
+				if (sels!=null) {
+					int len = sels.getarraysize();
+					buf.clear();
+				}
+        	}
         }
         
         /**
@@ -1190,6 +1210,11 @@ public class JLNote implements IJLNote {
             outvals.setName(currentName==null?badPrefix+item.getId():currentName);
             if (!getNoteInfo(m, item, outvals, encoded, valuePtn, getExpandedValues))
             	return false;
+
+            if (select) {
+            	CallSelection sel = CallSelection.createModelItemSelection(item, null);
+            	buf.addSelection(sel);
+            }
             output.add(outvals);
         	return false;
         }
@@ -1333,7 +1358,11 @@ public class JLNote implements IJLNote {
 		            item.setName(noteName);
 		            
 		            if (item instanceof CallDetailNoteItem) {
-		            	((CallDetailNoteItem)item).show();
+		            	// if you try to Show a note on a drawing that isn't being displayed,
+		            	// you get a General Error from Creo.
+		            	if (getSession().getModelWindow(m)!=null) {
+		            		((CallDetailNoteItem)item).show();
+		            	}
 		            }
 		        }
 			}

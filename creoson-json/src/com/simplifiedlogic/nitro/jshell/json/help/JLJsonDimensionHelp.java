@@ -238,6 +238,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get a list of dimensions from a model");
+    	spec.addFootnote("If "+PARAM_SELECT+" is true, then the current selection in Creo will be cleared even if no items are found.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -270,6 +271,11 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 
     	arg = new FunctionArgument(PARAM_ENCODED, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("Whether to return the values Base64-encoded");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SELECT, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("If true, the dimensions that are found will be selected in Creo");
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
@@ -350,6 +356,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_DETAIL);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get a list of dimension details from a model");
+    	spec.addFootnote("If "+PARAM_SELECT+" is true, then the current selection in Creo will be cleared even if no items are found.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -382,6 +389,11 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 
     	arg = new FunctionArgument(PARAM_ENCODED, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("Whether to return the values Base64-encoded");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_SELECT, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("If true, the dimensions that are found will be selected in Creo");
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 

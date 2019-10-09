@@ -49,17 +49,17 @@ public interface IJLDimension {
 
 	public List<DimData> list(String modelname, 
 			String dimName, List<String> dimNames, String dimType, 
-			boolean encoded, String sessionId) throws JLIException;
+			boolean encoded, boolean select, String sessionId) throws JLIException;
 	public List<DimData> list(String modelname, 
 			String dimName, List<String> dimNames, String dimType, 
-			boolean encoded, AbstractJLISession sess) throws JLIException;
+			boolean encoded, boolean select, AbstractJLISession sess) throws JLIException;
 
 	public List<DimDetailData> listDetail(String modelname, 
 			String dimName, List<String> dimNames, String dimType, 
-			boolean encoded, String sessionId) throws JLIException;
+			boolean encoded, boolean select, String sessionId) throws JLIException;
 	public List<DimDetailData> listDetail(String modelname, 
 			String dimName, List<String> dimNames, String dimType, 
-			boolean encoded, AbstractJLISession sess) throws JLIException;
+			boolean encoded, boolean select, AbstractJLISession sess) throws JLIException;
 
 	public void show(String modelname, String asmname, String dimname,
 			int[] path, boolean show, String sessionId) throws JLIException;

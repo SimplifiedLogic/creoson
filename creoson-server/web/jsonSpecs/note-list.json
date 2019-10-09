@@ -3,7 +3,7 @@
     "function_description" : "Get a list of parameters from one or more models",
     "command" : "note",
     "function" : "list",
-    "notes" : [ "Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data" ],
+    "notes" : [ "Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data", "If select is true, then the current selection in Creo will be cleared even if no items are found." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -30,6 +30,11 @@
       "name" : "get_expanded",
       "type" : "boolean",
       "description" : "Whether to return text with parameter values replaced",
+      "default" : "false"
+    }, {
+      "name" : "select",
+      "type" : "boolean",
+      "description" : "If true, the notes that are found will be selected in Creo",
       "default" : "false"
     } ],
     "response" : [ {
