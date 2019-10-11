@@ -112,10 +112,11 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 			for (DimData dim : dims) {
 				outDim = new Hashtable<String, Object>();
 				if (dim.getName()!=null)
-					outDim.put(PARAM_NAME, dim.getName());
+					outDim.put(OUTPUT_NAME, dim.getName());
 				if (dim.getValue()!=null)
-					outDim.put(PARAM_VALUE, dim.getValue());
-				outDim.put(PARAM_ENCODED, Boolean.valueOf(dim.isEncoded()));
+					outDim.put(OUTPUT_VALUE, dim.getValue());
+				outDim.put(OUTPUT_ENCODED, Boolean.valueOf(dim.isEncoded()));
+				outDim.put(OUTPUT_DWG_DIM, Boolean.valueOf(dim.isDrawingDimension()));
 				
 				outDims.add(outDim);
 			}
@@ -151,6 +152,7 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 				if (dim.getValue()!=null)
 					outDim.put(OUTPUT_VALUE, dim.getValue());
 				outDim.put(OUTPUT_ENCODED, Boolean.valueOf(dim.isEncoded()));
+				outDim.put(OUTPUT_DWG_DIM, Boolean.valueOf(dim.isDrawingDimension()));
 				
 				DimToleranceData tol = dim.getTolerance();
 				if (tol!=null) {

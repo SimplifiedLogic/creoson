@@ -60,11 +60,13 @@
         "dimlist" : [ {
           "name" : "d1",
           "value" : 32.5,
-          "encoded" : false
+          "encoded" : false,
+          "dwg_dim" : false
         }, {
           "name" : "d11",
           "value" : 5.0,
-          "encoded" : false
+          "encoded" : false,
+          "dwg_dim" : false
         } ]
       }
     }
@@ -85,15 +87,18 @@
         "dimlist" : [ {
           "name" : "ANGLE",
           "value" : "MzAgASQCCg==",
-          "encoded" : true
+          "encoded" : true,
+          "dwg_dim" : false
         }, {
           "name" : "d1",
           "value" : 32.5,
-          "encoded" : false
+          "encoded" : false,
+          "dwg_dim" : false
         }, {
           "name" : "RADIUS",
           "value" : 2.5,
-          "encoded" : false
+          "encoded" : false,
+          "dwg_dim" : false
         } ]
       }
     }
@@ -116,7 +121,8 @@
         "dimlist" : [ {
           "name" : "d1",
           "value" : "MzIuNQ==",
-          "encoded" : true
+          "encoded" : true,
+          "dwg_dim" : false
         } ]
       }
     }
@@ -138,7 +144,41 @@
         "dimlist" : [ {
           "name" : "d1",
           "value" : 32.5,
-          "encoded" : false
+          "encoded" : false,
+          "dwg_dim" : false
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "list",
+      "data" : {
+        "file" : "box.drw",
+        "name" : "d*1"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "d1",
+          "value" : 32.5,
+          "encoded" : false,
+          "dwg_dim" : false
+        }, {
+          "name" : "d11",
+          "value" : 5.0,
+          "encoded" : false,
+          "dwg_dim" : false
+        }, {
+          "name" : "ad11",
+          "value" : 32.0,
+          "encoded" : false,
+          "dwg_dim" : true
         } ]
       }
     }

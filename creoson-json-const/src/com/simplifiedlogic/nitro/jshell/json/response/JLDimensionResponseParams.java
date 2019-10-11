@@ -31,6 +31,7 @@ public interface JLDimensionResponseParams {
     public static final String OUTPUT_TYPE		= "type";
     public static final String OUTPUT_ENCODED	= "encoded";
     public static final String OUTPUT_DIMLIST	= "dimlist";
+    public static final String OUTPUT_DWG_DIM	= "dwg_dim";
     
     // dimension detail fields
     public static final String OUTPUT_SHEET			= "sheet";

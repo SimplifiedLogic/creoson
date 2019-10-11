@@ -295,11 +295,13 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, 32.5);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_NAME, "d11");
 		rec.put(OUTPUT_VALUE, 5.0);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		ex.addOutput(OUTPUT_DIMLIST, params);
     	template.addExample(ex);
 
@@ -311,29 +313,33 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "ANGLE");
     	rec.put(OUTPUT_VALUE, "MzAgASQCCg==");
     	rec.put(OUTPUT_ENCODED, true);
+		rec.put(OUTPUT_DWG_DIM, false);
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, 32.5);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_NAME, "RADIUS");
     	rec.put(OUTPUT_VALUE, 2.5);
     	rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		ex.addOutput(OUTPUT_DIMLIST, params);
     	template.addExample(ex);
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_NAME, "d1");
-    	ex.addInput(OUTPUT_ENCODED, true);
+    	ex.addInput(PARAM_ENCODED, true);
     	params = new ArrayList<Map<String, Object>>();
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, "MzIuNQ==");
 		rec.put(OUTPUT_ENCODED, true);
+		rec.put(OUTPUT_DWG_DIM, false);
 		ex.addOutput(OUTPUT_DIMLIST, params);
     	template.addExample(ex);
 
@@ -346,6 +352,32 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, 32.5);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
+		ex.addOutput(OUTPUT_DIMLIST, params);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	ex.addInput(PARAM_NAME, "d*1");
+    	params = new ArrayList<Map<String, Object>>();
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "d1");
+		rec.put(OUTPUT_VALUE, 32.5);
+		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "d11");
+		rec.put(OUTPUT_VALUE, 5.0);
+		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "ad11");
+		rec.put(OUTPUT_VALUE, 32.0);
+		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, true);
 		ex.addOutput(OUTPUT_DIMLIST, params);
     	template.addExample(ex);
 
@@ -414,6 +446,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, 32.5);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 1);
 		rec.put(OUTPUT_VIEW_NAME, "main_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
@@ -428,6 +461,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d11");
 		rec.put(OUTPUT_VALUE, 5.0);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 1);
 		rec.put(OUTPUT_VIEW_NAME, "main_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
@@ -445,6 +479,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "ANGLE");
     	rec.put(OUTPUT_VALUE, "MzAgASQCCg==");
     	rec.put(OUTPUT_ENCODED, true);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 2);
 		rec.put(OUTPUT_VIEW_NAME, "hole_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_ANGULAR);
@@ -456,6 +491,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, 32.5);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 1);
 		rec.put(OUTPUT_VIEW_NAME, "main_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
@@ -470,6 +506,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "RADIUS");
     	rec.put(OUTPUT_VALUE, 2.5);
     	rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 2);
 		rec.put(OUTPUT_VIEW_NAME, "hole_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_RADIAL);
@@ -489,6 +526,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, "MzIuNQ==");
 		rec.put(OUTPUT_ENCODED, true);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 1);
 		rec.put(OUTPUT_VIEW_NAME, "main_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
@@ -510,6 +548,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	rec.put(OUTPUT_NAME, "d1");
 		rec.put(OUTPUT_VALUE, 32.5);
 		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
 		rec.put(OUTPUT_SHEET, 1);
 		rec.put(OUTPUT_VIEW_NAME, "main_view");
 		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
@@ -539,6 +578,11 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 
     	arg = new FunctionArgument(OUTPUT_ENCODED, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("Value is Base64-encoded");
+    	arg.setDefaultValue("false");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_DWG_DIM, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether dimension is a drawing dimension rather than a model dimension");
     	arg.setDefaultValue("false");
     	obj.add(arg);
 

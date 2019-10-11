@@ -14,5 +14,10 @@
     "type" : "boolean",
     "description" : "Value is Base64-encoded",
     "default" : "false"
+  }, {
+    "name" : "dwg_dim",
+    "type" : "boolean",
+    "description" : "Whether dimension is a drawing dimension rather than a model dimension",
+    "default" : "false"
   } ]
 }

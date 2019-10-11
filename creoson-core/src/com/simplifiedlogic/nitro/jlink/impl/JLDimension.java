@@ -443,6 +443,11 @@ public class JLDimension implements IJLDimension {
 	        looper.loop(m);
 
 	        if (m instanceof CallModel2D) {
+	        	if (looper.output!=null) {
+	        		for (DimData dd : looper.output)
+	        			dd.setDrawingDimension(true);
+	        	}
+
 	        	CallModel2D drw = (CallModel2D)m;
 	        	CallModels drawingModels = drw.listModels();
         		CallDimension2D dim;
@@ -548,6 +553,11 @@ public class JLDimension implements IJLDimension {
 	        looper.loop(m);
 	        
 	        if (m instanceof CallModel2D) {
+	        	if (looper.output!=null) {
+	        		for (DimData dd : looper.output)
+	        			dd.setDrawingDimension(true);
+	        	}
+
 	        	CallModel2D drw = (CallModel2D)m;
 	        	CallModels drawingModels = drw.listModels();
         		CallDimension2D dim;

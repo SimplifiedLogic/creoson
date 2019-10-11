@@ -34,6 +34,7 @@ public class DimData implements Serializable {
 	private String name;
 	private Object value;
 	private boolean encoded;
+	private boolean drawingDimension;
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -121,5 +122,13 @@ public class DimData implements Serializable {
 	 */
 	public void setEncoded(boolean encoded) {
 		this.encoded = encoded;
+	}
+
+	public boolean isDrawingDimension() {
+		return drawingDimension;
+	}
+
+	public void setDrawingDimension(boolean drawingDimension) {
+		this.drawingDimension = drawingDimension;
 	}
 }
