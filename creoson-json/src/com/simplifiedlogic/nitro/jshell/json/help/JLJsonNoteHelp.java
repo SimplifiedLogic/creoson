@@ -253,7 +253,7 @@ public class JLJsonNoteHelp extends JLJsonCommandHelp implements JLNoteRequestPa
 	private FunctionTemplate helpList() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Get a list of parameters from one or more models");
+    	spec.setFunctionDescription("Get a list of notes from one or more models");
     	spec.addFootnote("Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data");
     	spec.addFootnote("If "+PARAM_SELECT+" is true, then the current selection in Creo will be cleared even if no items are found.");
     	FunctionArgument arg;

@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Get a list of parameters from one or more models",
+    "function_description" : "Get a list of notes from one or more models",
     "command" : "note",
     "function" : "list",
     "notes" : [ "Values will automatically be returned Base64-encoded if they are strings which contain Creo Symbols or other non-ASCII data", "If select is true, then the current selection in Creo will be cleared even if no items are found." ],

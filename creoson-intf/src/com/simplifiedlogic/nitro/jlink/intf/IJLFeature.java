@@ -70,7 +70,8 @@ public interface IJLFeature {
 	public void resume(
 			String filename, 
 			String featureName, 
-			List<String> featureNames, 
+			List<String> featureNames,
+			int featureId, 
 			String featureStatus, 
 			String featureType, 
 			boolean withChildren, 
@@ -78,7 +79,8 @@ public interface IJLFeature {
 	public void resume(
 			String filename, 
 			String featureName, 
-			List<String> featureNames, 
+			List<String> featureNames,
+			int featureId, 
 			String featureStatus, 
 			String featureType, 
 			boolean withChildren, 
@@ -87,7 +89,8 @@ public interface IJLFeature {
 	public void suppress(
 			String filename, 
 			String featureName, 
-			List<String> featureNames, 
+			List<String> featureNames,
+			int featureId, 
 			String featureStatus, 
 			String featureType, 
 			boolean clip,
@@ -97,6 +100,7 @@ public interface IJLFeature {
 			String filename, 
 			String featureName, 
 			List<String> featureNames, 
+			int featureId, 
 			String featureStatus, 
 			String featureType, 
 			boolean clip,
@@ -214,4 +218,5 @@ public interface IJLFeature {
 	public void setParam(String filename, String featName, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
+	
 }

@@ -552,6 +552,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Resume one or more features that match criteria");
     	spec.addFootnote("Will only resume visible features.");
+    	spec.addFootnote("There are 3 ways of specifying features; "+PARAM_ID+", "+PARAM_NAMES+", and "+PARAM_NAME+" in that order.  If none of these are given, then all features may be resumed.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -560,15 +561,19 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	arg.setDefaultValue("The currently active model");
     	spec.addArgument(arg);
 
-    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Feature name; only used if " + PARAM_NAMES + " is not given");
-    	arg.setWildcards(true);
-//    	arg.setDefaultValue("The " + PARAM_NAMES + " parameter is used; if both are empty, then all features may be resumed");
+    	arg = new FunctionArgument(PARAM_ID, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Feature ID");
+    	arg.setDefaultValue("The " + PARAM_NAME + " or " + PARAM_NAMES + " parameters are used");
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_NAMES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("List of feature names");
-    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used; if both are empty, then all features may be resumed");
+    	arg.setDescription("List of feature names; only used if "+PARAM_ID+" is not given");
+    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used; if both are empty and "+PARAM_ID+" is not given, then all features may be resumed");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Feature name; only used if " + PARAM_NAMES + " and "+PARAM_ID+" are not given");
+    	arg.setWildcards(true);
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_STATUS, FunctionSpec.TYPE_STRING);
@@ -636,6 +641,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Suppress one or more features that match criteria");
     	spec.addFootnote("Will only suppress visible features.");
+    	spec.addFootnote("There are 3 ways of specifying features; "+PARAM_ID+", "+PARAM_NAMES+", and "+PARAM_NAME+" in that order.  If none of these are given, then all features may be suppressed.");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -644,15 +650,19 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	arg.setDefaultValue("The currently active model");
     	spec.addArgument(arg);
 
-    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Feature name; only used if " + PARAM_NAMES + " is not given");
-    	arg.setWildcards(true);
-//    	arg.setDefaultValue("The " + PARAM_NAMES + " parameter is used; if both are empty, then all features may be suppressed");
+    	arg = new FunctionArgument(PARAM_ID, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Feature ID");
+    	arg.setDefaultValue("The " + PARAM_NAME + " or " + PARAM_NAMES + " parameters are used");
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_NAMES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("List of feature names");
-    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used; if both are empty, then all features may be suppressed");
+    	arg.setDescription("List of feature names; only used if "+PARAM_ID+" is not given");
+    	arg.setDefaultValue("The " + PARAM_NAME + " parameter is used; if both are empty and "+PARAM_ID+" is not given, then all features may be suppressed");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Feature name; only used if " + PARAM_NAMES + " and "+PARAM_ID+" are not given");
+    	arg.setWildcards(true);
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_STATUS, FunctionSpec.TYPE_STRING);

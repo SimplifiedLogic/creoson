@@ -505,12 +505,12 @@ public class JLFeature implements IJLFeature {
 	 */
 	@Override
 	public void resume(String filename, String featureName, List<String> featureNames, 
-			String featureStatus, String featureType, boolean withChildren,
+			int featureId, String featureStatus, String featureType, boolean withChildren,
 			String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        resume(filename, featureName, featureNames, featureStatus, featureType, withChildren, sess);
+        resume(filename, featureName, featureNames, featureId, featureStatus, featureType, withChildren, sess);
 	}
 
 	/* (non-Javadoc)
@@ -518,7 +518,7 @@ public class JLFeature implements IJLFeature {
 	 */
 	@Override
 	public void resume(String filename, String featureName, List<String> featureNames, 
-			String featureStatus, String featureType, boolean withChildren,
+			int featureId, String featureStatus, String featureType, boolean withChildren,
 			AbstractJLISession sess) throws JLIException {
 
 		DebugLogging.sendDebugMessage("feature.resume: " + featureName, NitroConstants.DEBUG_KEY);
@@ -552,7 +552,8 @@ public class JLFeature implements IJLFeature {
 		    	looper.featureStatus = featureStatus;
 		    	looper.featureType = featureType;
 		    	looper.withChildren = withChildren;
-		        
+		    	looper.featureId = featureId;
+
 		        looper.loop();
 		        
 	        }
@@ -613,12 +614,12 @@ public class JLFeature implements IJLFeature {
 	 */
 	@Override
 	public void suppress(String filename, String featureName, List<String> featureNames, 
-			String featureStatus, String featureType, boolean clip,
+			int featureId, String featureStatus, String featureType, boolean clip,
 			boolean withChildren, String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        suppress(filename, featureName, featureNames, featureStatus, featureType, clip, withChildren, sess);
+        suppress(filename, featureName, featureNames, featureId, featureStatus, featureType, clip, withChildren, sess);
 	}
 
 	/* (non-Javadoc)
@@ -626,7 +627,7 @@ public class JLFeature implements IJLFeature {
 	 */
 	@Override
 	public void suppress(String filename, String featureName, List<String> featureNames, 
-			String featureStatus, String featureType, boolean clip,
+			int featureId, String featureStatus, String featureType, boolean clip,
 			boolean withChildren, AbstractJLISession sess) throws JLIException {
 
 		DebugLogging.sendDebugMessage("feature.suppress: " + featureName, NitroConstants.DEBUG_KEY);
@@ -661,7 +662,8 @@ public class JLFeature implements IJLFeature {
 		    	looper.featureType = featureType;
 		    	looper.withChildren = withChildren;
 		    	looper.clip = clip;
-		        
+		    	looper.featureId = featureId;
+
 		        looper.loop();
 		        
 	        }
@@ -1371,9 +1373,13 @@ public class JLFeature implements IJLFeature {
      */
     private class ResumeLooper extends ModelLooper {
     	/**
-    	 * Name or pattern of the feature to resume
+    	 * Name or pattern of the feature to resume.  Ignored if featureId>0.
     	 */
     	String featureName;
+    	/**
+    	 * ID of the feature to resume
+    	 */
+    	int featureId;
     	/**
     	 * List of feature names to resume
     	 */
@@ -1399,20 +1405,28 @@ public class JLFeature implements IJLFeature {
 			if (!(m instanceof CallSolid))
 				return false;
 			CallSolid solid = (CallSolid)m;
-			// call a sub-looper to accumulate resume operations
 	        ResumeLooper2 looper = new ResumeLooper2();
-	        if (featureNameList!=null)
-	    		looper.setNameList(featureNameList);
-	    	else if (featureName==null)
-	    		looper.setNamePattern(null);
-	    	else 
-	    		looper.setNamePattern(featureName);
-	        looper.setStatusPattern(featureStatus);
-	        looper.setTypePattern(featureType);
-	        if (featureName==null)
-	        	looper.setIncludeUnnamed(true);
-
-	        looper.loop(solid);
+			if (featureId>0) {
+				CallFeature feat = solid.getFeatureById(featureId);
+				if (feat!=null) {
+					looper.loopAction(feat);
+				}
+			}
+			else {
+				// call a sub-looper to accumulate resume operations
+		        if (featureNameList!=null)
+		    		looper.setNameList(featureNameList);
+		    	else if (featureName==null)
+		    		looper.setNamePattern(null);
+		    	else 
+		    		looper.setNamePattern(featureName);
+		        looper.setStatusPattern(featureStatus);
+		        looper.setTypePattern(featureType);
+		        if (featureName==null)
+		        	looper.setIncludeUnnamed(true);
+	
+		        looper.loop(solid);
+			}
 	        
 	        // remove this code if going with separate featOps
 	        if (withChildren) {
@@ -1486,9 +1500,13 @@ public class JLFeature implements IJLFeature {
      */
     private class SuppressLooper extends ModelLooper {
     	/**
-    	 * Name or pattern of the feature to suppress
+    	 * Name or pattern of the feature to suppress.  Ignored if featureId>0.
     	 */
     	String featureName;
+    	/**
+    	 * ID of the feature to suppress
+    	 */
+    	int featureId;
     	/**
     	 * List of feature names to suppress
     	 */
@@ -1518,22 +1536,30 @@ public class JLFeature implements IJLFeature {
 			if (!(m instanceof CallSolid))
 				return false;
 			CallSolid solid = (CallSolid)m;
-			// call a sub-looper to accumulate suppress operations
 	        SuppressLooper2 looper = new SuppressLooper2();
-	        if (featureNameList!=null)
-	    		looper.setNameList(featureNameList);
-	    	else if (featureName==null)
-	    		looper.setNamePattern(null);
-	    	else 
-	    		looper.setNamePattern(featureName);
-	        looper.setStatusPattern(featureStatus);
-	        looper.setTypePattern(featureType);
-	        if (featureName==null)
-	        	looper.setIncludeUnnamed(true);
-	        looper.clip = clip;
+			if (featureId>0) {
+				CallFeature feat = solid.getFeatureById(featureId);
+				if (feat!=null) {
+					looper.loopAction(feat);
+				}
+			}
+			else {
+				// call a sub-looper to accumulate suppress operations
+		        if (featureNameList!=null)
+		    		looper.setNameList(featureNameList);
+		    	else if (featureName==null)
+		    		looper.setNamePattern(null);
+		    	else 
+		    		looper.setNamePattern(featureName);
+		        looper.setStatusPattern(featureStatus);
+		        looper.setTypePattern(featureType);
+		        if (featureName==null)
+		        	looper.setIncludeUnnamed(true);
+		        looper.clip = clip;
+	
+		        looper.loop(solid);
+			}
 
-	        looper.loop(solid);
-	        
 	        // remove this code if going with separate featOps
 	        if (withChildren) {
 	            if (looper.featuresSuppressed!=null) {

@@ -3,7 +3,7 @@
     "function_description" : "Resume one or more features that match criteria",
     "command" : "feature",
     "function" : "resume",
-    "notes" : [ "Will only resume visible features." ],
+    "notes" : [ "Will only resume visible features.", "There are 3 ways of specifying features; feat_id, names, and name in that order.  If none of these are given, then all features may be resumed." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -11,15 +11,20 @@
       "default" : "The currently active model",
       "wildcards_allowed" : true
     }, {
-      "name" : "name",
-      "type" : "string",
-      "description" : "Feature name; only used if names is not given",
-      "wildcards_allowed" : true
+      "name" : "feat_id",
+      "type" : "integer",
+      "description" : "Feature ID",
+      "default" : "The name or names parameters are used"
     }, {
       "name" : "names",
       "type" : "array:string",
-      "description" : "List of feature names",
-      "default" : "The name parameter is used; if both are empty, then all features may be resumed"
+      "description" : "List of feature names; only used if feat_id is not given",
+      "default" : "The name parameter is used; if both are empty and feat_id is not given, then all features may be resumed"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Feature name; only used if names and feat_id are not given",
+      "wildcards_allowed" : true
     }, {
       "name" : "status",
       "type" : "string",

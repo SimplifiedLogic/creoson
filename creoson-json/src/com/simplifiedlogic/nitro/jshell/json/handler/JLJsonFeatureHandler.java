@@ -228,8 +228,9 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         String statusPattern = checkStringParameter(input, PARAM_STATUS, false);
         String typePattern = checkStringParameter(input, PARAM_TYPE, false);
         boolean withChildren = checkFlagParameter(input, PARAM_WCHILDREN, false, true);
+        int featureId = checkIntParameter(input, PARAM_ID, false, 0);
 
-        featHandler.resume(modelname, featureName, featureNames, statusPattern, typePattern, withChildren, sessionId);
+        featHandler.resume(modelname, featureName, featureNames, featureId, statusPattern, typePattern, withChildren, sessionId);
 
         return null;
 	}
@@ -247,8 +248,9 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         String typePattern = checkStringParameter(input, PARAM_TYPE, false);
         boolean clip = checkFlagParameter(input, PARAM_CLIP, false, false);
         boolean withChildren = checkFlagParameter(input, PARAM_WCHILDREN, false, true);
+        int featureId = checkIntParameter(input, PARAM_ID, false, 0);
 
-        featHandler.suppress(modelname, featureName, featureNames, statusPattern, typePattern, clip, withChildren, sessionId);
+        featHandler.suppress(modelname, featureName, featureNames, featureId, statusPattern, typePattern, clip, withChildren, sessionId);
 
         return null;
 	}
