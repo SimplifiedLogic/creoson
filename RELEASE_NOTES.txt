@@ -1,6 +1,36 @@
 R E L E A S E   N O T E S
 =========================
 
+2.5.0
+	- Added new functions:
+		dimension
+			set_text (Issue #15)
+		drawing
+			get_sheet_format (Issue #12)
+			set_sheet_format (Issue #12)
+		file
+			delete_material (Issue #8)
+			get_cur_material (Issue #8)
+			list_materials (Issue #8)
+			load_material_file (Issue #8)
+			set_cur_material (Issue #8)
+	- Modified functions:
+		dimension
+			list	- add select argument to select the specified notes in Creo (Issue #25)
+			list_detail	- add select argument to select the specified notes in Creo (Issue #25)
+		drawing
+			list_symbols	- allow symbol_file to be optional (Issue #16)
+		feature
+			resume		- add feat_id argument to resume a feature by ID (Issue #26)
+			suppress	- add feat_id argument to suppress a feature by ID (Issue #26)
+		note
+			get	- add location property to output, giving the location of the note in drawing units
+			list	- add location property to output, giving the location of the note in drawing units
+				- add select argument to select the specified notes in Creo (Issue #25)
+			set	- add location argument, to set the note's location in drawing units
+		windchill
+			clear_workspace	- add filenames argument to clear only the named files from the workspace (Issue #19)
+
 2.4.0
 	- Added new functions:
 		feature
