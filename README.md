@@ -20,7 +20,7 @@ You can literally download, unzip and run CREOSON Micro-Server immediately!
 
 CREOSON Requires the following to work:
 
-* CREO Parametric - Version 2.0 or Later... 3.0/4.0 have most coverage/stability.
+* CREO Parametric - Version 2.0 or Later... 3.0/4.0/5.0/6.0 have most coverage/stability.
 * JLINK - This is a FREE Interface with CREO Parametric, but must be installed!
 * Permissions on your machine - don't forget to check your firewall!
 
