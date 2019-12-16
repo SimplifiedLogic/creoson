@@ -16,22 +16,43 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jshell.json.response;
+package com.simplifiedlogic.nitro.jlink.calls.simprep;
+
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcSimpRep.SimpRepAction;
+import com.ptc.pfc.pfcSimpRep.SimpRepSubstitute;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Constants defining the JSON response parameters for the bom command
+ * Wrapper for JLink's com.ptc.pfc.pfcSimpRep.SimpRepAction
  * 
  * @author Adam Andrews
+ *
  */
-public interface JLBomResponseParams {
+public class CallSimpRepAction {
 
-	// response fields
-    public static final String OUTPUT_GENERIC  = "generic";
-    public static final String OUTPUT_ID       = "id";
-    public static final String OUTPUT_PATH     = "path";
-    public static final String OUTPUT_SEQ_PATH = "seq_path";
-    public static final String OUTPUT_CHILDREN = "children";
-    public static final String OUTPUT_TRANSFORM = "transform";
-    public static final String OUTPUT_HAS_SIMPREP	= "has_simprep";
+	protected SimpRepAction action;
+	
+	protected CallSimpRepAction(SimpRepAction action) {
+		this.action = action;
+	}
+	
+	public int getType() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("SimpRepAction,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return action.GetType().getValue();
+	}
+	
+	public static CallSimpRepAction create(SimpRepAction action) {
+		if (action==null)
+			return null;
+		if (action instanceof SimpRepSubstitute)
+			return new CallSimpRepSubstitute((SimpRepSubstitute)action);
+		else
+			return new CallSimpRepAction(action);
+	}
 
+	public SimpRepAction getAction() {
+		return action;
+	}
 }

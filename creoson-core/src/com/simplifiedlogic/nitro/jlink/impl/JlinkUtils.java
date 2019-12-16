@@ -43,6 +43,7 @@ import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
 import com.ptc.pfc.pfcSimpRep.SimpRepActionType;
+import com.ptc.pfc.pfcSimpRep.SubstType;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
@@ -69,11 +70,16 @@ import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepAction;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepCompItemPath;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepItem;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepItemPath;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepItems;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepSubstitute;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSubstAsmRep;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSubstPrtRep;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSubstitution;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
@@ -1337,6 +1343,17 @@ public class JlinkUtils {
 		if (rep==null)
 			return null;
 		
+		return getSimpRepInfo(rep);
+	}
+
+	/**
+	 * Get detailed information about a model's Simplified Representation
+	 * @param rep The simplified rep obtained from Creo
+	 * @return The output data
+	 * @throws JLIException
+	 * @throws jxthrowable
+	 */
+	public static SimpRepData getSimpRepInfo(CallSimpRep rep) throws JLIException,jxthrowable {
 		SimpRepData data = new SimpRepData();
 		data.setName(rep.getName());
 		
@@ -1353,9 +1370,13 @@ public class JlinkUtils {
 				CallSimpRepCompItemPath cpath;
 				for (int i=0; i<len; i++) {
 					item = items.get(i);
-					int actionType = item.getAction();
+					CallSimpRepAction action = item.getAction();
+					if (action==null)
+						continue;
+					int actionType = action.getType();
 
 					boolean skip=false;
+					SimpRepData subdata=null;
 					switch (actionType) {
 						// ignore "empty" action types
 						case -1: 
@@ -1379,6 +1400,29 @@ public class JlinkUtils {
 								skip=true;
 							break;
 							
+						case SimpRepActionType._SIMPREP_SUBSTITUTE:
+							skip=true;
+							if (action instanceof CallSimpRepSubstitute) {
+								CallSimpRepSubstitute subact = (CallSimpRepSubstitute)action;
+								CallSubstitution sub = subact.getSubstituteData();
+								if (sub!=null) {
+									CallSimpRep newrep = null;
+									int subtype = sub.getSubstType();
+									if (subtype==SubstType._SUBST_ASM_REP) {
+										if (sub instanceof CallSubstAsmRep)
+											newrep = ((CallSubstAsmRep)sub).getAsmRep();
+									}
+									else if (subtype==SubstType._SUBST_PRT_REP) {
+										if (sub instanceof CallSubstPrtRep)
+											newrep = ((CallSubstPrtRep)sub).getPartRep();
+									}
+									if (newrep!=null) {
+										subdata = getSimpRepInfo(newrep);
+									}
+								}
+							}
+							break;
+
 						// by default ignore all other action types unless the default type is Exclude
 						default:
 							if (!data.isDefaultExclude())
@@ -1386,7 +1430,7 @@ public class JlinkUtils {
 							break;
 					}
 					
-					if (skip) {
+					if (skip && subdata==null) {
 						//System.out.println("skipping action type: " + actionType);
 						continue;
 					}
@@ -1397,9 +1441,13 @@ public class JlinkUtils {
 						seq = cpath.getItemPath();
 						if (seq!=null) {
 							//System.out.println("Simp Rep: " + item.getAction() + "  " + intSeqToList(seq));
-							data.addItem(intSeqToList(seq));
+							if (subdata==null)
+								data.addItem(intSeqToList(seq));
+							else
+								data.addSubItem(intSeqToList(seq), subdata);
 						}
 					}
+					
 				}
 			}
 		}

@@ -33,6 +33,7 @@ public class GetPathsOutput implements Serializable {
 	String modelname;
 	String generic;
 	BomChild root;
+	boolean hasSimpRep;
 	
 	/**
 	 * @return The tope-level model name
@@ -69,5 +70,17 @@ public class GetPathsOutput implements Serializable {
 	 */
 	public void setRoot(BomChild root) {
 		this.root = root;
+	}
+	/**
+	 * @return Whether the assembly has an active Simplified Rep
+	 */
+	public boolean isHasSimpRep() {
+		return hasSimpRep;
+	}
+	/**
+	 * @param hasSimpRep Whether the assembly has an active Simplified Rep
+	 */
+	public void setHasSimpRep(boolean hasSimpRep) {
+		this.hasSimpRep = hasSimpRep;
 	}
 }

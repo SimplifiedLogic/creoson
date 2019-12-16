@@ -77,6 +77,7 @@ public class JLJsonBomHandler extends JLJsonCommandHandler implements JLBomReque
 				out.put(PARAM_MODEL, result.getModelname());
 			if (result.getGeneric()!=null)
 				out.put(OUTPUT_GENERIC, result.getGeneric());
+			out.put(OUTPUT_HAS_SIMPREP, result.isHasSimpRep());
 
 			if (result.getRoot()!=null) {
 				Map<String, Object> child = getBomChild(result.getRoot());

@@ -24,8 +24,8 @@ import com.ptc.pfc.pfcSimpRep.SimpRepCompItemPath;
 import com.ptc.pfc.pfcSimpRep.SimpRepFeatItemPath;
 import com.ptc.pfc.pfcSimpRep.SimpRepItem;
 import com.ptc.pfc.pfcSimpRep.SimpRepItemPath;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcSimpRep.SimpRepItem
@@ -41,13 +41,12 @@ public class CallSimpRepItem {
 		this.item = item;
 	}
 	
-	public int getAction() throws jxthrowable {
+	public CallSimpRepAction getAction() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("SimpRepItem,GetAction", 0, NitroConstants.DEBUG_JLINK_KEY);
 		SimpRepAction action = item.GetAction();
 		if (action==null)
-			return -1;
-        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("SimpRepAction,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
-		return action.GetType().getValue();
+			return null;
+		return CallSimpRepAction.create(action);
 	}
 	
 	public CallSimpRepItemPath getItemPath() throws jxthrowable {

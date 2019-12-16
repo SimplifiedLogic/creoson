@@ -47,6 +47,10 @@
       "name" : "children",
       "type" : "object:BomChild",
       "description" : "The hierarchy of component data, starting with the top-level assembly"
+    }, {
+      "name" : "has_simprep",
+      "type" : "boolean",
+      "description" : "Whether the assembly has a Simplified Rep"
     } ]
   },
   "examples" : [ {
@@ -68,6 +72,7 @@
         "children" : {
           "file" : "plate_assy.asm",
           "seq_path" : "root",
+          "has_simprep" : true,
           "children" : [ {
             "file" : "bracket.prt",
             "seq_path" : "root.1"

@@ -65,6 +65,30 @@ public class BomChild implements Serializable {
 	}
 
 	/**
+	 * Remove a child entry from the current component in the hierarchy
+	 * @param child The child to remove
+	 */
+	public void remove(BomChild child) {
+		if (children!=null) {
+			int index = childIndex(child);
+			if (index>=0) {
+				children.remove(index);
+				child.setParent(null);
+			}
+		}
+	}
+
+	/**
+	 * @return The number of children of this component in the structure
+	 */
+	public int numChildren() {
+		if (children!=null)
+			return children.size();
+		else
+			return 0;
+	}
+
+	/**
 	 * @return Dot-separated list of sequence numbers showing the order of component within the assembly
 	 */
 	public String getSequencePath() {

@@ -107,8 +107,10 @@ public class JLBom implements IJLBom {
 	        out.setGeneric(generic);
 
 	        SimpRepData simpRep = JlinkUtils.getSimpRepInfo(solid);
-	        if (simpRep!=null && !simpRep.isDefaultExclude() && simpRep.getItems()==null)
+	        if (simpRep!=null && !simpRep.isDefaultExclude() && simpRep.numPaths()==0)
 	        	simpRep = null;
+	        if (simpRep!=null)
+	        	out.setHasSimpRep(true);
 	        
 	        ArrayList<Integer> curPath = new ArrayList<Integer>();
 	        BomChild dummy = new BomChild();
@@ -278,6 +280,11 @@ public class JLBom implements IJLBom {
                     if (childModel!=null && childModel instanceof CallSolid) {
                         // System.out.println(indent + "checking children for " + child.getFilename());
                         walkGetPaths(session, baseAssembly, (CallSolid)childModel, child, indent+"  ", newseq, curPath, pathlen+1, skeleton, toplevel, paths, incTransform, transformAsTable, excludeInactive, simpRep);
+                    }
+                    if (child.numChildren()==0) {
+                    	if (simpRep!=null && simpRep.excludesDescendant(curPath.subList(0, pathlen+1))) {
+                    		parent.remove(child);
+                    	}
                     }
                 }
             }

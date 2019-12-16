@@ -16,22 +16,36 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.simplifiedlogic.nitro.jshell.json.response;
+package com.simplifiedlogic.nitro.jlink.calls.simprep;
+
+import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcSimpRep.SimpRep;
+import com.ptc.pfc.pfcSimpRep.SubstAsmRep;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Constants defining the JSON response parameters for the bom command
+ * Wrapper for JLink's com.ptc.pfc.pfcSimpRep.SubstAsmRep
  * 
  * @author Adam Andrews
+ *
  */
-public interface JLBomResponseParams {
+public class CallSubstAsmRep extends CallSubstitution {
 
-	// response fields
-    public static final String OUTPUT_GENERIC  = "generic";
-    public static final String OUTPUT_ID       = "id";
-    public static final String OUTPUT_PATH     = "path";
-    public static final String OUTPUT_SEQ_PATH = "seq_path";
-    public static final String OUTPUT_CHILDREN = "children";
-    public static final String OUTPUT_TRANSFORM = "transform";
-    public static final String OUTPUT_HAS_SIMPREP	= "has_simprep";
+	public CallSubstAsmRep(SubstAsmRep subst) {
+		super((SubstAsmRep)subst);
+	}
+
+	public CallSimpRep getAsmRep() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("SubstAsmRep,GetAsmRep", 0, NitroConstants.DEBUG_JLINK_KEY);
+        SimpRep rep = getSubst().GetAsmRep();
+		if (rep==null)
+			return null;
+		return new CallSimpRep(rep);
+	}
+	
+	public SubstAsmRep getSubst() {
+		return (SubstAsmRep)subst;
+	}
 
 }

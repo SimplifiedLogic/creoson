@@ -110,6 +110,10 @@ public class JLJsonBomHelp extends JLJsonCommandHelp implements JLBomRequestPara
     	ret.setDescription("The hierarchy of component data, starting with the top-level assembly");
     	spec.addReturn(ret);
         
+    	ret = new FunctionReturn(OUTPUT_HAS_SIMPREP, FunctionSpec.TYPE_BOOL);
+    	ret.setDescription("Whether the assembly has a Simplified Rep");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	// example with no params
@@ -123,6 +127,7 @@ public class JLJsonBomHelp extends JLJsonCommandHelp implements JLBomRequestPara
     	ex.addOutput(OUTPUT_CHILDREN, rec);
     	rec.put(PARAM_MODEL, "plate_assy.asm");
     	rec.put(OUTPUT_SEQ_PATH, "root");
+    	rec.put(OUTPUT_HAS_SIMPREP, Boolean.TRUE);
 
     	list = new ArrayList<Map<String, Object>>();
     	rec.put(OUTPUT_CHILDREN, list);
