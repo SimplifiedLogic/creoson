@@ -307,11 +307,11 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_DRAWING, "box.drw");
-    	ex.addOutput(OUTPUT_DRAWING, "box.prt");
+    	ex.addOutput(OUTPUT_MODEL, "box.prt");
     	template.addExample(ex);
     	
     	ex = new FunctionExample();
-    	ex.addOutput(OUTPUT_DRAWING, "screw.prt");
+    	ex.addOutput(OUTPUT_MODEL, "screw.prt");
     	template.addExample(ex);
     	
         return template;

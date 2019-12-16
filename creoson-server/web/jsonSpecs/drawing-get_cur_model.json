@@ -29,7 +29,7 @@
         "error" : false
       },
       "data" : {
-        "drawing" : "box.prt"
+        "file" : "box.prt"
       }
     }
   }, {
@@ -43,7 +43,7 @@
         "error" : false
       },
       "data" : {
-        "drawing" : "screw.prt"
+        "file" : "screw.prt"
       }
     }
   } ]
