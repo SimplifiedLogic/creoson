@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitBadContext;
+import com.ptc.pfc.pfcExceptions.XToolkitFound;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
@@ -567,6 +568,9 @@ public class JLWindchill implements IJLWindchill {
 	    	}
 	    	catch (XToolkitNotFound e) {
 	    		// ignore "not found" error
+	    	}
+	    	catch (XToolkitFound e) {
+	    		// ignore "found" error
 	    	}
 	    	finally {
 		    	if (activeWorkspace!=null && activeWorkspace.equals(workspace))
