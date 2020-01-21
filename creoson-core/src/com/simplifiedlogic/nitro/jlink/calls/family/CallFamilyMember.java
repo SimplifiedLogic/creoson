@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -36,6 +36,8 @@ import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcFamily.FamilyMember
+ * <p>
+ * Special note: FamilyMember does not extend Model in JLink.  This is a workaround. 
  * 
  * @author Adam Andrews
  *
