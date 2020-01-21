@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -48,6 +48,11 @@ import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFCustomCreateInstructions;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReference;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReferences;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantDimension;
+import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantValues;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.FeatSelectData;
@@ -1181,6 +1186,141 @@ public class JLFeature implements IJLFeature {
         	}
     	}
 	}		
+
+    public void addUDF(
+    		String filename,
+    		String udfFile,
+    		String csysName,
+    		String csysPrompt,
+    		Map<String, Number> dimensions,
+    		Map<String, Object> parameters,
+    		String sessionId) throws JLIException {
+			
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        addUDF(filename, udfFile, csysName, csysPrompt, dimensions, parameters, sess);
+	}
+
+    public void addUDF(
+    		String filename,
+    		String udfFile,
+    		String csysName,
+    		String csysPrompt,
+    		Map<String, Number> dimensions,
+    		Map<String, Object> parameters,
+    		AbstractJLISession sess) throws JLIException {
+
+
+		DebugLogging.sendDebugMessage("feature.add_udf: " + udfFile, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (udfFile==null || udfFile.trim().length()==0)
+    		throw new JLIException("No UDF File Name parameter given");
+    	if (csysName==null || csysName.trim().length()==0)
+    		throw new JLIException("No Coordinate System parameter given");
+    	if (csysPrompt==null || csysPrompt.trim().length()==0)
+    		throw new JLIException("No Coordinate System prompt given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallSolid solid = JlinkUtils.getModelSolid(session, filename);
+	        
+            CallUDFCustomCreateInstructions instrs =
+            	CallUDFCustomCreateInstructions.create(udfFile);
+
+            if (csysName!=null) {
+        		// get csys
+        		CallCoordSystem csys = (CallCoordSystem)solid.getItemByName(ModelItemType.ITEM_COORD_SYS, csysName);
+        		if (csys==null) 
+        			throw new JLIException("Coordinate System not found: "+csysName);
+
+	            CallUDFReferences refs = CallUDFReferences.create();
+	            CallSelection sel = null;
+	            sel = CallSelection.createModelItemSelection(csys, null);
+	            CallUDFReference ref = CallUDFReference.create(csysPrompt, sel);
+	            refs.set(0, ref);
+	            instrs.setReferences(refs);
+            }
+
+            CallUDFVariantValues vals = null;
+            if (dimensions!=null && dimensions.size()>0) {
+//            	System.out.println("---------------------");
+            	if (vals==null)
+            		vals = CallUDFVariantValues.create();
+
+            	Set<String> keys = dimensions.keySet();
+            	for (String name : keys) {
+            		Number value = dimensions.get(name);
+
+            		if (value!=null) {
+            	        CallUDFVariantDimension uval = CallUDFVariantDimension.create(name, value.doubleValue());
+            	        vals.append(uval);
+//            	        System.out.println("Setting dimension "+name+" = "+value.doubleValue());
+                	}
+            	}
+            }
+//            if (parameters!=null && parameters.size()>0) {
+//            	if (vals==null)
+//            		vals = UDFVariantValues.create();
+//
+//            	Set<String> keys = parameters.keySet();
+//            	for (String name : keys) {
+//            		Object value = parameters.get(name);
+//
+//            		if (value!=null) {
+//            			UDFVariantPatternParam uval = pfcUDFCreate.UDFVariantPatternParam_Create(arg0, arg1)
+//            	        vals.append(uval);
+//                	}
+//            	}
+//            }
+        	if (vals!=null)
+        		instrs.setVariantValues(vals);
+
+            CallFeatureGroup group = solid.createUDFGroup(instrs);
+
+            if (parameters!=null) {
+	            String groupName = group.getGroupName();
+	            //System.out.println("Created group: "+groupName);
+	            CallFeature feat = solid.getFeatureByName(groupName);
+	            if (feat!=null) {
+	            	Set<String> keys = parameters.keySet();
+	            	for (String name : keys) {
+	            		Object value = parameters.get(name);
+
+	            		if (value!=null) {
+	            			String type = null;
+	            			if (value instanceof Integer)
+	            				type = IJLParameter.TYPE_INTEGER;
+	            			else if (value instanceof Number)
+	            				type = IJLParameter.TYPE_DOUBLE;
+	            			else if (value instanceof Boolean)
+	            				type = IJLParameter.TYPE_BOOL;
+	            			else
+	            				type = IJLParameter.TYPE_STRING;
+	            			JLParameter.setOneParameter(solid, feat, name, value, type, IJLParameter.DESIGNATE_OFF, false, false);
+	            		}
+	            	}
+	            }
+            }
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("feature.add_udf: " + udfFile, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
 
     /**
      * Check whether a feature name is valid.  Checks for length and invalid characters.  Returns a reformatted feature name.

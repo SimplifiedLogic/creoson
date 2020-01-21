@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -219,4 +219,20 @@ public interface IJLFeature {
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
 	
+    public void addUDF(
+    		String filename,
+    		String udfFile,
+    		String csysName,
+    		String csysPrompt,
+    		Map<String, Number> dimensions,
+    		Map<String, Object> parameters,
+    		String sessionId) throws JLIException;
+    public void addUDF(
+    		String filename,
+    		String udfFile,
+    		String csysName,
+    		String csysPrompt,
+    		Map<String, Number> dimensions,
+    		Map<String, Object> parameters,
+    		AbstractJLISession sess) throws JLIException;
 }

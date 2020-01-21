@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -22,6 +22,7 @@ import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.Outline3D;
 import com.ptc.pfc.pfcFamily.FamilyMember;
 import com.ptc.pfc.pfcFeature.Feature;
+import com.ptc.pfc.pfcFeature.FeatureGroup;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcFeature.Features;
 import com.ptc.pfc.pfcModelItem.ModelItem;
@@ -34,12 +35,14 @@ import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyMember;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureGroup;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatures;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItemTypes;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
+import com.simplifiedlogic.nitro.jlink.calls.udfgroup.CallUDFGroupCreateInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitConversionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystem;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystems;
@@ -167,6 +170,14 @@ public class CallSolid extends CallFamilyMember {
 	public boolean hasRetrievalErrors() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,HasRetrievalErrors", 0, NitroConstants.DEBUG_JLINK_KEY);
 		return getSolid().HasRetrievalErrors();
+	}
+
+	public CallFeatureGroup createUDFGroup(CallUDFGroupCreateInstructions instructions) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,CreateUDFGroup", 0, NitroConstants.DEBUG_JLINK_KEY);
+		FeatureGroup group = getSolid().CreateUDFGroup(instructions.getInstr());
+		if (group==null)
+			return null;
+		return new CallFeatureGroup(group);
 	}
 
 	public Solid getSolid() {
