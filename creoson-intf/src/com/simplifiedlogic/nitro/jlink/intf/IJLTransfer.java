@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -164,4 +164,16 @@ public interface IJLTransfer {
 			Boolean useDrawingSettings, 
 			AbstractJLISession sess) throws JLIException;
 
+	public String importPV(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId) throws JLIException;
+	public String importPV(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess) throws JLIException;
 }

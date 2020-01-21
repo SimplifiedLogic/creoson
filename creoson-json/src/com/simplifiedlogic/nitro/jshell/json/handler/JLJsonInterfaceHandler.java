@@ -66,6 +66,8 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 			return actionExportProgram(sessionId, input);
 		else if (function.equals(FUNC_IMPORT_PROGRAM))
 			return actionImportProgram(sessionId, input);
+		else if (function.equals(FUNC_IMPORT_PV))
+			return actionImportPV(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -220,6 +222,22 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
             throw new JLIException("Cannot specify both model and input file");
 		
         String outModel = intfHandler.importProgram(dirname, filename, model, sessionId);
+        
+        if (outModel!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			out.put(OUTPUT_MODEL, outModel);
+        	return out;
+        }
+        return null;
+	}
+
+	private Hashtable<String, Object> actionImportPV(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+        String filename = checkStringParameter(input, PARAM_FILENAME, false);
+        String newName = checkStringParameter(input, PARAM_NEWNAME, false);
+        String newModelType = checkStringParameter(input, PARAM_NEWMODELTYPE, false);
+        
+        String outModel = intfHandler.importPV(dirname, filename, newName, newModelType, sessionId);
         
         if (outModel!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

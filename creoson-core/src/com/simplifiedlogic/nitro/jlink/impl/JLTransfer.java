@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -19,14 +19,16 @@
 package com.simplifiedlogic.nitro.jlink.impl;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
+import com.ptc.pfc.pfcExceptions.XToolkitFound;
 import com.ptc.pfc.pfcExceptions.XToolkitNotDisplayed;
 import com.ptc.pfc.pfcExport.AssemblyConfiguration;
 import com.ptc.pfc.pfcExport.ProductViewFormat;
+import com.ptc.pfc.pfcImport.NewModelImportType;
 import com.ptc.pfc.pfcModel.ExportType;
 import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcWindow.DotsPerInch;
 import com.ptc.pfc.pfcWindow.RasterDepth;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.export.CallGeometryFlags;
 import com.simplifiedlogic.nitro.jlink.calls.mfg.CallMFG;
@@ -38,6 +40,7 @@ import com.simplifiedlogic.nitro.jlink.calls.window.CallRasterImageExportInstruc
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.ExportResults;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLTransfer;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
@@ -633,6 +636,118 @@ public class JLTransfer implements IJLTransfer {
     	finally {
         	if (NitroConstants.TIME_TASKS) {
         		DebugLogging.sendTimerMessage("interface.exportPV,"+model, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importPV(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String importPV(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId)
+			throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return importPV(dirname, filename, newName, newModelType, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importPV(java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public String importPV(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess)
+			throws JLIException {
+
+		DebugLogging.sendDebugMessage("interface.import_pv: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+
+    	if (filename==null || filename.trim().length()==0)
+    		throw new JLIException("No file name parameter given");
+    	if (newModelType==null)
+    		newModelType = "asm";
+
+    	try {
+	        JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	        
+            ModelType type = JlinkUtils.getModelTypeForExtension(newModelType);
+            if (type==null)
+            	throw new JLIException("Invalid new model type: "+newModelType);
+
+            dirname = JlinkUtils.resolveRelativePath(session, dirname);
+
+            String savedir = session.getCurrentDirectory();
+            
+            if (dirname == null) {
+                dirname = savedir;
+            }
+            
+            if (newName==null)
+            	newName = filename;
+            newName = NitroUtils.removeExtension(newName);
+
+            CallModel m = null;
+            try {
+	            if (dirname != null && !dirname.equals(savedir)) {
+	                JlinkUtils.changeDirectory(session, dirname);
+	                try {
+	                    m = session.importNewModel(
+	                    		filename, 
+	                    		NewModelImportType.IMPORT_NEW_PRODUCTVIEW, 
+	                    		type, 
+	                    		newName, 
+	                    		null);
+	                }
+	                finally {
+	                	JlinkUtils.changeDirectory(session, savedir);
+	                }
+	            }
+	            else {
+	                m = session.importNewModel(
+	                		filename, 
+	                		NewModelImportType.IMPORT_NEW_PRODUCTVIEW, 
+	                		type, 
+	                		newName, 
+	                		null);
+	            }
+            }
+            catch (XToolkitFound e) {
+            	throw new JLIException("A model named '"+(newName+"."+newModelType)+"' already exists in memory or the current working directory");
+            }
+            catch (XToolkitCantOpen e) {
+            	throw new JLIException("The file '"+filename+"' could not be opened");
+            }
+
+            if (m==null)
+            	return null;
+            
+            return m.getFileName();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("interface.import_pv,"+filename, start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}

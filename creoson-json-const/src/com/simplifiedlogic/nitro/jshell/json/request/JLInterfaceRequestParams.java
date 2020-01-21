@@ -35,6 +35,7 @@ public interface JLInterfaceRequestParams {
     public static final String FUNC_EXPORT_3DPDF	= "export_3dpdf";
     public static final String FUNC_EXPORT_PROGRAM	= "export_program";
     public static final String FUNC_IMPORT_PROGRAM	= "import_program";
+    public static final String FUNC_IMPORT_PV		= "import_pv";
     public static final String FUNC_PLOT			= "plot";
     public static final String FUNC_MAPKEY			= "mapkey";
 
@@ -53,6 +54,8 @@ public interface JLInterfaceRequestParams {
     public static final String PARAM_DRIVER   = "driver";
     public static final String PARAM_GEOM_FLAGS	= "geom_flags";
     public static final String PARAM_ADVANCED	= "advanced";
+    public static final String PARAM_NEWNAME	= "new_name";
+    public static final String PARAM_NEWMODELTYPE	= "new_model_type";
 
     // export file types
     public static final String TYPE_PROPROGRAM = "Pro/PROGRAM";

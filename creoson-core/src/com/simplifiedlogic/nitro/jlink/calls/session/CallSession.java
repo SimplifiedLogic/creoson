@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -24,8 +24,11 @@ import com.ptc.pfc.pfcBase.ColorRGB;
 import com.ptc.pfc.pfcBase.StdColor;
 import com.ptc.pfc.pfcDrawing.Drawing;
 import com.ptc.pfc.pfcExport.AssemblyConfiguration;
+import com.ptc.pfc.pfcImport.LayerImportFilter;
+import com.ptc.pfc.pfcImport.NewModelImportType;
 import com.ptc.pfc.pfcModel.ExportType;
 import com.ptc.pfc.pfcModel.Model;
+import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcModel.Models;
 import com.ptc.pfc.pfcProToolkit.Dll;
 import com.ptc.pfc.pfcSelect.SelectionBuffer;
@@ -40,6 +43,7 @@ import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawingCreateOptions;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModels;
+import com.simplifiedlogic.nitro.jlink.calls.pfcimport.CallLayerImportFilter;
 import com.simplifiedlogic.nitro.jlink.calls.protoolkit.CallDll;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionBuffer;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
@@ -272,6 +276,17 @@ public class CallSession {
 		if (buffer==null)
 			return null;
 		return new CallSelectionBuffer(buffer);
+	}
+
+	public CallModel importNewModel(String fileToImport, NewModelImportType newModelType, ModelType type, String newModelName, CallLayerImportFilter filter) throws jxthrowable {
+		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Session,ImportNewModel", 0, NitroConstants.DEBUG_JLINK_KEY);
+		LayerImportFilter filt = null;
+		if (filter!=null)
+			filt = filter.getFilter();
+		Model m = session.ImportNewModel(fileToImport, newModelType, type, newModelName, filt);
+		if (m==null)
+			return null;
+		return CallModel.create(m);
 	}
 
 	public Session getSession() {

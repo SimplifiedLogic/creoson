@@ -1,0 +1,73 @@
+{
+  "spec" : {
+    "function_description" : "Import a ProductView file as a model",
+    "command" : "interface",
+    "function" : "import_pv",
+    "request" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Source directory",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Source file name",
+      "required" : true
+    }, {
+      "name" : "new_name",
+      "type" : "string",
+      "description" : "New model name.  Any extension will be stripped off and replaced with one based on new_model_type.",
+      "default" : "The name of the PV file with an extension based on new_model_type."
+    }, {
+      "name" : "new_model_type",
+      "type" : "string",
+      "description" : "New model type",
+      "default" : "asm",
+      "valid_values" : "asm, prt"
+    } ],
+    "response" : [ {
+      "name" : "file",
+      "type" : "double",
+      "description" : "Name of the model imported"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "import_pv",
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "file" : "box.pvz"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "box.asm"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "import_pv",
+      "data" : {
+        "dirname" : "c:/myfiles/parts",
+        "filename" : "box.pvz",
+        "new_name" : "mymodel.prt",
+        "new_model_type" : "asm"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "file" : "mymodel.asm"
+      }
+    }
+  } ]
+}

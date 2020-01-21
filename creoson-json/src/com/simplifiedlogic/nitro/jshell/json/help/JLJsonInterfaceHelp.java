@@ -57,6 +57,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 		list.add(helpExportPDF(false));
 		list.add(helpExportProgram());
 		list.add(helpImportProgram());
+		list.add(helpImportPV());
 		list.add(helpMapkey());
 		list.add(helpPlot());
 		return list;
@@ -504,6 +505,57 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	ex = new FunctionExample();
     	ex.addOutput(OUTPUT_DIRNAME, "C:/myfiles/parts");
     	ex.addOutput(OUTPUT_FILENAME, "abc123.als");
+    	template.addExample(ex);
+
+    	return template;
+	}
+
+	private FunctionTemplate helpImportPV() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_PV);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Import a ProductView file as a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source directory");
+    	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_FILENAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source file name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model name.  Any extension will be stripped off and replaced with one based on "+PARAM_NEWMODELTYPE+".");
+    	arg.setDefaultValue("The name of the PV file with an extension based on "+PARAM_NEWMODELTYPE+".");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWMODELTYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model type");
+    	arg.setValidValues(new String[] {"asm", "prt"});
+    	arg.setDefaultValue("asm");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Name of the model imported");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_MODEL, "box.pvz");
+    	ex.addOutput(OUTPUT_MODEL, "box.asm");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_FILENAME, "box.pvz");
+    	ex.addInput(PARAM_NEWNAME, "mymodel.prt");
+    	ex.addInput(PARAM_NEWMODELTYPE, "asm");
+    	ex.addOutput(OUTPUT_MODEL, "mymodel.asm");
     	template.addExample(ex);
 
     	return template;
