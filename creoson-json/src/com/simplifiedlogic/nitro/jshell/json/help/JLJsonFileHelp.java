@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -46,6 +46,13 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 	public static final String OBJ_POINT = "JLPoint";
 	public static final String OBJ_TRANSFORM = "JLTransform";
 	
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getCommand()
+	 */
+	public String getCommand() {
+		return COMMAND;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getHelp()
 	 */

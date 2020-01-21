@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -46,6 +46,13 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
 	public static final String OBJ_DIM_DETAIL_DATA = "DimDetailData";
 	public static final String OBJ_DIM_SELECT_DATA = "DimSelectData";
 	
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getCommand()
+	 */
+	public String getCommand() {
+		return COMMAND;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getHelp()
 	 */

@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -39,7 +39,13 @@ public abstract class JLJsonCommandHelp {
 	 * @return A list of function templates
 	 */
 	public abstract List<FunctionTemplate> getHelp();
-	
+
+	/**
+	 * Get the command for this family of functions
+	 * @return The command (function family) name
+	 */
+	public abstract String getCommand();
+
 	/**
 	 * Get a list of data objects used in function templates for this family of functions.
 	 * 

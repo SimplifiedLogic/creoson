@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2019 Simplified Logic, Inc
+ * Copyright 2000-2020 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -84,6 +84,14 @@ public class JLJsonHelpHandler {
 				list.addAll(temp);
 		}
 		return list.size()>0 ? list : null;
+	}
+
+	/**
+	 * Get the list of help-doc handlers, one per function family
+	 * @return The list of help handlers
+	 */
+	public List<JLJsonCommandHelp> getHelps() {
+		return helps;
 	}
 	
 }
