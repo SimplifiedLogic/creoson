@@ -238,15 +238,16 @@ public class JLConnection implements IJLConnection {
 	 */
 	@Override
     public boolean isProeRunning(AbstractJLISession sess) throws JLIException {
-		try {
-			if (sess!=null)
+		if (sess!=null) {
+			try {
 				return JLConnectionUtil.isRunning(sess.getConnectionId());
-			else
-				return JLConnectionUtil.isRunning();
-    	}
-    	catch (jxthrowable e) {
-    		throw JlinkUtils.createException(e);
-    	}
+			}
+			catch (Throwable e) {
+				return false;
+			}
+		}
+		else
+			return JLConnectionUtil.isRunning();
     }
 
 	/* (non-Javadoc)
