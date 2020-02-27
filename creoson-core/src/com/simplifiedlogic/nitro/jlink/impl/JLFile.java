@@ -2209,13 +2209,14 @@ public class JLFile implements IJLFile {
 		                if (asmrefCsys!=null && cntAssembled==0)
 		                    throw new JLIException("No Coord Systems matching '" + asmrefCsys + "' were found in the assembly component");
 			        }
-			        else if (!packageAssembly) {
+			        else {
 			            try {
 			            	CallComponentFeat newfeat = (CallComponentFeat)assembly.assembleComponent((CallSolid)m, transform);
 			                int cid = newfeat.getId();
 			                out.setFeatureId(cid);
 	
-			                newfeat.redefineThroughUI();
+					        if (!packageAssembly)
+					        	newfeat.redefineThroughUI();
 	
 		                    if (suppress) {
 		                    	suppressNewFeature(session, assembly, newfeat);
