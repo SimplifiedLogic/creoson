@@ -19,9 +19,10 @@
 package com.simplifiedlogic.nitro.jlink.calls.solid;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcSolid.Inertia;
 import com.ptc.pfc.pfcSolid.MassProperty;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcSolid.MassProperty
@@ -55,6 +56,30 @@ public class CallMassProperty {
 	public double getSurfaceArea() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("MassProperty,GetSurfaceArea", 0, NitroConstants.DEBUG_JLINK_KEY);
 		return massprop.GetSurfaceArea();
+	}
+
+	public CallInertia getCenterGravityInertiaTensor() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("MassProperty,GetCenterGravityInertiaTensor", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Inertia inertia = massprop.GetCenterGravityInertiaTensor();
+		if (inertia==null)
+			return null;
+		return new CallInertia(inertia);
+	}
+
+	public CallInertia getCoordSysInertia() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("MassProperty,GetCoordSysInertia", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Inertia inertia = massprop.GetCoordSysInertia();
+		if (inertia==null)
+			return null;
+		return new CallInertia(inertia);
+	}
+
+	public CallInertia getCoordSysInertiaTensor() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("MassProperty,GetCoordSysInertiaTensor", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Inertia inertia = massprop.GetCoordSysInertiaTensor();
+		if (inertia==null)
+			return null;
+		return new CallInertia(inertia);
 	}
 
 	public MassProperty getMassprop() {

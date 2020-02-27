@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.DataUtils;
+import com.simplifiedlogic.nitro.jlink.data.JLInertia;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
@@ -324,7 +325,7 @@ public abstract class JLJsonCommandHandler {
     /**
      * Convert a JLTransform object to a generic JSON structure
      * 
-     * @param xform The JLPoint object to write
+     * @param xform The JLTransform object to write
      * @return The JSON data as a Hashtable.
      */
     protected Hashtable<String, Object> writeTransform(JLTransform xform) {
@@ -354,6 +355,13 @@ public abstract class JLJsonCommandHandler {
 		return rec;
     }
 
+    /**
+     * Convert an input JSON structure into a JLTransform object
+     * 
+     * @param rec The JSON structure as a Map 
+     * @return The JLTransform object
+     * @throws JLIException
+     */
     protected JLTransform readTransform(Map<String, Object> rec) throws JLIException {
     	if (rec==null)
     		return null;
@@ -384,4 +392,43 @@ public abstract class JLJsonCommandHandler {
     	return trans;
     }
 
+    /**
+     * Convert a JLInertia object to a generic JSON structure
+     * 
+     * @param xform The JLInertia object to write
+     * @return The JSON data as a Hashtable.
+     */
+    protected Hashtable<String, Object> writeInertia(JLInertia xform) {
+    	if (xform==null)
+    		return null;
+		Hashtable<String, Object> rec = new Hashtable<String, Object>();
+		Map<String, Object> recPt;
+		recPt = writePoint(xform.xvector);
+		if (recPt!=null)
+			rec.put(JLFileResponseParams.OUTPUT_XAXIS, recPt);
+		recPt = writePoint(xform.yvector);
+		if (recPt!=null)
+			rec.put(JLFileResponseParams.OUTPUT_YAXIS, recPt);
+		recPt = writePoint(xform.zvector);
+		if (recPt!=null)
+			rec.put(JLFileResponseParams.OUTPUT_ZAXIS, recPt);
+
+		return rec;
+    }
+
+    /**
+     * Check whether a string contains a pattern (wildcard) value.  This checks for the
+     * characters *, ?, | or [ in the string.
+     * @param pattern The pattern to check
+     * @return Whether the string contains a pattern
+     */
+    public boolean isPattern(String pattern) {
+        if (pattern==null || pattern.length()==0) return false;
+        if (pattern.indexOf('*') >= 0) return true;
+        if (pattern.indexOf('?') >= 0) return true;
+        if (pattern.indexOf('|') >= 0) return true;
+        if (pattern.indexOf('[') >= 0) return true;
+        return false;
+    }
+    
 }

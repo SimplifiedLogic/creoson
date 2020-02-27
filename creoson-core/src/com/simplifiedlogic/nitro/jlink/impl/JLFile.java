@@ -63,6 +63,7 @@ import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
+import com.simplifiedlogic.nitro.jlink.calls.solid.CallInertia;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallMassProperty;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallRegenInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
@@ -507,6 +508,7 @@ public class JLFile implements IJLFile {
 	        boolean changedir=false;
 	        String curdir = session.getCurrentDirectory();
 	        if (onlyInSession) {
+	        	// we're doing this because creo renames it on disk anyway, if you're in the model's working dir already
 	            JlinkUtils.changeDirectory(session, System.getProperty("java.io.tmpdir"));
 	            changedir=true;
 	        }
@@ -1366,6 +1368,22 @@ public class JLFile implements IJLFile {
 	        ret.setMass(prop.getMass());
 	        ret.setDensity(prop.getDensity());
 	        ret.setSurfaceArea(prop.getSurfaceArea());
+	        
+	        CallInertia inertia = prop.getCenterGravityInertiaTensor();
+	        if (inertia!=null) {
+	        	ret.setCenterGravityInertiaTensor(JLMatrixMaker.writeInertia(inertia));
+	        }
+	        
+	        inertia = prop.getCoordSysInertia();
+	        if (inertia!=null) {
+	        	ret.setCoordSysInertia(JLMatrixMaker.writeInertia(inertia));
+	        }
+	        
+	        inertia = prop.getCoordSysInertiaTensor();
+	        if (inertia!=null) {
+	        	ret.setCoordSysInertiaTensor(JLMatrixMaker.writeInertia(inertia));
+	        }
+	        
 	        return ret;
     	}
     	catch (jxthrowable e) {

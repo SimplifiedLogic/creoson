@@ -1,0 +1,17 @@
+{
+  "object_name" : "JLInertia",
+  "description" : "A matrix representing an inertia or inertia tensor",
+  "data" : [ {
+    "name" : "x_axis",
+    "type" : "object:JLPoint",
+    "description" : "Matrix X Axis"
+  }, {
+    "name" : "y_axis",
+    "type" : "object:JLPoint",
+    "description" : "Matrix Y Axis"
+  }, {
+    "name" : "z_axis",
+    "type" : "object:JLPoint",
+    "description" : "Matrix Z Axis"
+  } ]
+}

@@ -29,6 +29,9 @@ public class MasspropsData {
 	private double mass;
 	private double density;
 	private double surfaceArea;
+	private JLInertia centerGravityInertiaTensor;
+	private JLInertia coordSysInertia;
+	private JLInertia coordSysInertiaTensor;
 
 	/**
 	 * @return Model volume
@@ -85,5 +88,29 @@ public class MasspropsData {
 	public void setSurfaceArea(double surfaceArea) {
 		this.surfaceArea = surfaceArea;
 	}
-	
+
+	public JLInertia getCenterGravityInertiaTensor() {
+		return centerGravityInertiaTensor;
+	}
+
+	public void setCenterGravityInertiaTensor(JLInertia centerGravityInertiaTensor) {
+		this.centerGravityInertiaTensor = centerGravityInertiaTensor;
+	}
+
+	public JLInertia getCoordSysInertia() {
+		return coordSysInertia;
+	}
+
+	public void setCoordSysInertia(JLInertia coordSysInertia) {
+		this.coordSysInertia = coordSysInertia;
+	}
+
+	public JLInertia getCoordSysInertiaTensor() {
+		return coordSysInertiaTensor;
+	}
+
+	public void setCoordSysInertiaTensor(JLInertia coordSysInertiaTensor) {
+		this.coordSysInertiaTensor = coordSysInertiaTensor;
+	}
+
 }

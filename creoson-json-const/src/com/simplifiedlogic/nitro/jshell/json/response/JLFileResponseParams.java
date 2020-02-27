@@ -46,6 +46,10 @@ public interface JLFileResponseParams {
     public static final String OUTPUT_UNITS		= "units";
     public static final String OUTPUT_MATERIAL	= "material";
     public static final String OUTPUT_MATERIALS	= "materials";
+    public static final String OUTPUT_CTR_GRAV_INERTIA_TENSOR	= "ctr_grav_inertia_tensor";
+    public static final String OUTPUT_COORD_SYS_INERTIA			= "coord_sys_inertia";
+    public static final String OUTPUT_COORD_SYS_INERTIA_TENSOR	= "coord_sys_inertia_tensor";
+    
 
     // point/matrix/transform params
 	public static final String OUTPUT_X			= "x";

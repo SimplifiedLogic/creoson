@@ -81,4 +81,17 @@ public abstract class JLJsonCommandHelp {
 		return rec;
 	}
 
+	protected Map<String, Object> makeInertia(
+			Map<String, Object> xvector,
+			Map<String, Object> yvector,
+			Map<String, Object> zvector) {
+
+		Map<String, Object> rec = new OrderedMap<String, Object>();
+		rec.put(JLFileResponseParams.OUTPUT_XAXIS, xvector);
+		rec.put(JLFileResponseParams.OUTPUT_YAXIS, yvector);
+		rec.put(JLFileResponseParams.OUTPUT_ZAXIS, zvector);
+		
+		return rec;
+	}
+
 }

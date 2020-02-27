@@ -3,6 +3,7 @@
     "function_description" : "Get mass property information about a model",
     "command" : "file",
     "function" : "massprops",
+    "notes" : [ "PTC's description of coord_sys_inertia: \"The inertia matrix with respect to coordinate frame:(element ij is the integral of x_i x_j over the object)\"", "PTC's description of coord_sys_inertia_tensor: \"The inertia tensor with respect to coordinate frame:CoordSysInertiaTensor = trace(CoordSysInertia) * identity - CoordSysInertia\"" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -25,6 +26,18 @@
       "name" : "surface_area",
       "type" : "double",
       "description" : "Model surface area"
+    }, {
+      "name" : "ctr_grav_inertia_tensor",
+      "type" : "object:JLInertia",
+      "description" : "Model's Inertia Tensor translated to center of gravity."
+    }, {
+      "name" : "coord_sys_inertia",
+      "type" : "object:JLInertia",
+      "description" : "Model's Inertia Matrix with respect to the coordinate frame."
+    }, {
+      "name" : "coord_sys_inertia_tensor",
+      "type" : "object:JLInertia",
+      "description" : "Model's Inertia Tensor with respect to the coordinate frame."
     } ]
   },
   "examples" : [ {
@@ -44,7 +57,58 @@
         "volume" : 40762.91034040907,
         "mass" : 40762.91034040907,
         "density" : 1.0,
-        "surface_area" : 11820.348301046597
+        "surface_area" : 11820.348301046597,
+        "ctr_grav_inertia_tensor" : {
+          "x_axis" : {
+            "x" : 0.6779467214807345,
+            "y" : 0.0,
+            "z" : 0.0
+          },
+          "y_axis" : {
+            "x" : 0.0,
+            "y" : 0.6780732249931747,
+            "z" : 0.0
+          },
+          "z_axis" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 0.003650664136195683
+          }
+        },
+        "coord_sys_inertia" : {
+          "x_axis" : {
+            "x" : 0.001888583824317897,
+            "y" : 0.0,
+            "z" : 0.0
+          },
+          "y_axis" : {
+            "x" : 0.0,
+            "y" : 0.0017620803118777856,
+            "z" : 0.0
+          },
+          "z_axis" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 2.652848778057265
+          }
+        },
+        "coord_sys_inertia_tensor" : {
+          "x_axis" : {
+            "x" : 2.654610858369143,
+            "y" : 0.0,
+            "z" : 0.0
+          },
+          "y_axis" : {
+            "x" : 0.0,
+            "y" : 2.654737361881583,
+            "z" : 0.0
+          },
+          "z_axis" : {
+            "x" : 0.0,
+            "y" : 0.0,
+            "z" : 0.003650664136195683
+          }
+        }
       }
     }
   } ]

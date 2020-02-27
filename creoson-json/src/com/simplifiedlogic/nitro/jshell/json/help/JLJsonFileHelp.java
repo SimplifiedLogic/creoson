@@ -45,6 +45,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 	public static final String OBJ_CONSTRAINT = "JLConstraint";
 	public static final String OBJ_POINT = "JLPoint";
 	public static final String OBJ_TRANSFORM = "JLTransform";
+	public static final String OBJ_INERTIA = "JLInertia";
 	
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getCommand()
@@ -103,6 +104,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 	public List<FunctionObject> getHelpObjects() {
 		List<FunctionObject> list = new ArrayList<FunctionObject>();
 		list.add(helpJLConstraint());
+		list.add(helpJLInertia());
 		list.add(helpJLPoint());
 		list.add(helpJLTransform());
 		return list;
@@ -625,6 +627,8 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_MASSPROPS);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get mass property information about a model");
+    	spec.addFootnote("PTC's description of "+OUTPUT_COORD_SYS_INERTIA+": \"The inertia matrix with respect to coordinate frame:(element ij is the integral of x_i x_j over the object)\"");
+    	spec.addFootnote("PTC's description of "+OUTPUT_COORD_SYS_INERTIA_TENSOR+": \"The inertia tensor with respect to coordinate frame:CoordSysInertiaTensor = trace(CoordSysInertia) * identity - CoordSysInertia\"");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -649,6 +653,18 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ret.setDescription("Model surface area");
     	spec.addReturn(ret);
 
+    	ret = new FunctionReturn(OUTPUT_CTR_GRAV_INERTIA_TENSOR, FunctionSpec.TYPE_OBJECT, OBJ_INERTIA);
+    	ret.setDescription("Model's Inertia Tensor translated to center of gravity.");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(OUTPUT_COORD_SYS_INERTIA, FunctionSpec.TYPE_OBJECT, OBJ_INERTIA);
+    	ret.setDescription("Model's Inertia Matrix with respect to the coordinate frame.");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(OUTPUT_COORD_SYS_INERTIA_TENSOR, FunctionSpec.TYPE_OBJECT, OBJ_INERTIA);
+    	ret.setDescription("Model's Inertia Tensor with respect to the coordinate frame.");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
@@ -657,6 +673,24 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex.addOutput(OUTPUT_MASS, 40762.91034040907);
     	ex.addOutput(OUTPUT_DENSITY, 1.0);
     	ex.addOutput(OUTPUT_SURFACE_AREA, 11820.348301046597);
+    	ex.addOutput(OUTPUT_CTR_GRAV_INERTIA_TENSOR, 
+    			makeInertia(
+    					makePoint(0.6779467214807345, 0, 0), 
+    					makePoint(0, 0.6780732249931747, 0), 
+    					makePoint(0, 0, 0.003650664136195683) 
+    					));
+    	ex.addOutput(OUTPUT_COORD_SYS_INERTIA, 
+    			makeInertia(
+    					makePoint(0.001888583824317897, 0, 0), 
+    					makePoint(0, 0.0017620803118777856, 0), 
+    					makePoint(0, 0, 2.652848778057265) 
+    					));
+    	ex.addOutput(OUTPUT_COORD_SYS_INERTIA_TENSOR, 
+    			makeInertia(
+    					makePoint(2.654610858369143, 0, 0), 
+    					makePoint(0, 2.654737361881583, 0), 
+    					makePoint(0, 0, 0.003650664136195683) 
+    					));
     	template.addExample(ex);
 
         return template;
@@ -1538,6 +1572,26 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	arg = new FunctionArgument(PARAM_Z_ROT, FunctionSpec.TYPE_DOUBLE);
     	arg.setDescription("Z rotation in degrees");
+    	obj.add(arg);
+
+        return obj;
+    }
+    
+	private FunctionObject helpJLInertia() {
+    	FunctionObject obj = new FunctionObject(OBJ_TRANSFORM);
+    	obj.setDescription("A matrix representing an inertia or inertia tensor");
+
+    	FunctionArgument arg;
+    	arg = new FunctionArgument(PARAM_XAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	arg.setDescription("Matrix X Axis");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(PARAM_YAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	arg.setDescription("Matrix Y Axis");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(PARAM_ZAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	arg.setDescription("Matrix Z Axis");
     	obj.add(arg);
 
         return obj;

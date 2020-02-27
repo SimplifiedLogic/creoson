@@ -23,6 +23,8 @@ import com.simplifiedlogic.nitro.jlink.calls.base.CallMatrix3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallVector3D;
+import com.simplifiedlogic.nitro.jlink.calls.solid.CallInertia;
+import com.simplifiedlogic.nitro.jlink.data.JLInertia;
 import com.simplifiedlogic.nitro.jlink.data.JLMatrix;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
@@ -418,6 +420,34 @@ public class JLMatrixMaker {
         catch (jxthrowable jxe) {
         	throw new JLIException(JlinkUtils.ptcError(jxe, "A PTC error has occurred when retrieving a Transform matrix"), jxe);
         }
+    }
+    
+    /**
+     * Convert a Creo Inertia object to a JLInertia
+     * @param inertia The Creo inertia object
+     * @return The JShell inertia object created
+     * @throws JLIException
+     */
+    public static JLInertia writeInertia(CallInertia inertia) throws jxthrowable {
+        JLInertia xf = new JLInertia();
+
+        xf.xvector = new JLPoint(
+        		inertia.get(0, 0),
+        		inertia.get(0, 1),
+        		inertia.get(0, 2)
+        		);
+        xf.yvector = new JLPoint(
+        		inertia.get(1, 0),
+        		inertia.get(1, 1),
+        		inertia.get(1, 2)
+        		);
+        xf.zvector = new JLPoint(
+        		inertia.get(2, 0),
+        		inertia.get(2, 1),
+        		inertia.get(2, 2)
+        		);
+    
+        return xf;
     }
     
     /**

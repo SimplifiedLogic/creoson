@@ -315,6 +315,24 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 			out.put(OUTPUT_MASS, result.getMass());
 			out.put(OUTPUT_DENSITY, result.getDensity());
 			out.put(OUTPUT_SURFACE_AREA, result.getSurfaceArea());
+			
+			if (result.getCenterGravityInertiaTensor()!=null) {
+				Hashtable<String, Object> tmp = writeInertia(result.getCenterGravityInertiaTensor());
+				if (tmp!=null)
+					out.put(OUTPUT_CTR_GRAV_INERTIA_TENSOR, tmp);
+			}
+			
+			if (result.getCoordSysInertia()!=null) {
+				Hashtable<String, Object> tmp = writeInertia(result.getCoordSysInertia());
+				if (tmp!=null)
+					out.put(OUTPUT_COORD_SYS_INERTIA, tmp);
+			}
+			
+			if (result.getCoordSysInertiaTensor()!=null) {
+				Hashtable<String, Object> tmp = writeInertia(result.getCoordSysInertiaTensor());
+				if (tmp!=null)
+					out.put(OUTPUT_COORD_SYS_INERTIA_TENSOR, tmp);
+			}
         	return out;
         }
 		return null;
