@@ -28,6 +28,7 @@ import com.simplifiedlogic.nitro.jlink.data.FileListInstancesResults;
 import com.simplifiedlogic.nitro.jlink.data.FileOpenResults;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
+import com.simplifiedlogic.nitro.jlink.data.ListMaterialResults;
 import com.simplifiedlogic.nitro.jlink.data.MasspropsData;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 
@@ -192,18 +193,18 @@ public interface IJLFile {
     public List<String> listSimpReps(String filename, String name, String sessionId) throws JLIException;
     public List<String> listSimpReps(String filename, String name, AbstractJLISession sess) throws JLIException;
 
-    public String getCurrentMaterial(String filename, String sessionId) throws JLIException;
-	public String getCurrentMaterial(String filename, AbstractJLISession sess) throws JLIException;
+    public List<ListMaterialResults> getCurrentMaterial(String filename, boolean includeNonMatchingParts, String sessionId) throws JLIException;
+	public List<ListMaterialResults> getCurrentMaterial(String filename, boolean includeNonMatchingParts, AbstractJLISession sess) throws JLIException;
 
-	public List<String> listMaterials(String filename, String materialName, String sessionId) throws JLIException;
-	public List<String> listMaterials(String filename, String materialName, AbstractJLISession sess) throws JLIException;
+	public List<ListMaterialResults> listMaterials(String filename, String materialName, boolean includeNonMatchingParts, String sessionId) throws JLIException;
+	public List<ListMaterialResults> listMaterials(String filename, String materialName, boolean includeNonMatchingParts, AbstractJLISession sess) throws JLIException;
 
-	public void loadMaterialFile(String filename, String dirname, String materialFile, String sessionId) throws JLIException;
-	public void loadMaterialFile(String filename, String dirname, String materialFile, AbstractJLISession sess) throws JLIException;
+	public List<String> loadMaterialFile(String filename, String dirname, String materialFile, boolean set, String sessionId) throws JLIException;
+	public List<String> loadMaterialFile(String filename, String dirname, String materialFile, boolean set, AbstractJLISession sess) throws JLIException;
 
-	public void setCurrentMaterial(String filename, String materialName, String sessionId) throws JLIException;
-	public void setCurrentMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
+	public List<String> setCurrentMaterial(String filename, String materialName, String sessionId) throws JLIException;
+	public List<String> setCurrentMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
 
-	public void deleteMaterial(String filename, String materialName, String sessionId) throws JLIException;
-	public void deleteMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
+	public List<String> deleteMaterial(String filename, String materialName, String sessionId) throws JLIException;
+	public List<String> deleteMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
 }

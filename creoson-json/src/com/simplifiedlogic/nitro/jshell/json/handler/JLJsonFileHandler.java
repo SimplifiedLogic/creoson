@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.simplifiedlogic.nitro.jlink.data.AssembleInstructions;
 import com.simplifiedlogic.nitro.jlink.data.FileAssembleResults;
@@ -30,6 +31,7 @@ import com.simplifiedlogic.nitro.jlink.data.FileListInstancesResults;
 import com.simplifiedlogic.nitro.jlink.data.FileOpenResults;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
+import com.simplifiedlogic.nitro.jlink.data.ListMaterialResults;
 import com.simplifiedlogic.nitro.jlink.data.MasspropsData;
 import com.simplifiedlogic.nitro.jlink.intf.IJLFile;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
@@ -92,8 +94,10 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 		else if (function.equals(FUNC_GET_TRANSFORM)) return actionGetTransform(sessionId, input);
 		else if (function.equals(FUNC_LIST_SIMP_REPS)) return actionListSimpReps(sessionId, input);
 		else if (function.equals(FUNC_GET_CUR_MATL)) return actionGetCurrentMaterial(sessionId, input);
+		else if (function.equals(FUNC_GET_CUR_MATL_WILDCARD)) return actionGetCurrentMaterialWildcard(sessionId, input);
 		else if (function.equals(FUNC_SET_CUR_MATL)) return actionSetCurrentMaterial(sessionId, input);
 		else if (function.equals(FUNC_LIST_MATERIALS)) return actionListMaterials(sessionId, input);
+		else if (function.equals(FUNC_LIST_MATERIALS_WILDCARD)) return actionListMaterialsWildcard(sessionId, input);
 		else if (function.equals(FUNC_LOAD_MATL_FILE)) return actionLoadMaterialFile(sessionId, input);
 		else if (function.equals(FUNC_DELETE_MATERIAL)) return actionDeleteMaterial(sessionId, input);
 		else {
@@ -574,12 +578,42 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 
 	private Hashtable<String, Object> actionGetCurrentMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
         String filename = checkStringParameter(input, PARAM_MODEL, false);
+        if (isPattern(filename))
+        	throw new JLIException("Not allowed to use wildcards in "+PARAM_MODEL+" argument.");
         
-        String matl = fileHandler.getCurrentMaterial(filename, sessionId);
+        List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, true, sessionId);
 
-        if (matl!=null) {
+        if (matls!=null && matls.size()>0) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			String matl = matls.get(0).getMaterialName();
        		out.put(OUTPUT_MATERIAL, matl);
+        	return out;
+        }
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionGetCurrentMaterialWildcard(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        boolean includeNonMatchingParts = checkFlagParameter(input, PARAM_INCLUDE_NON_MATCHING, false, false);
+        
+        List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, includeNonMatchingParts, sessionId);
+
+        if (matls!=null && matls.size()>0) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			Vector<Map<String, Object>> outMatls = new Vector<Map<String, Object>>();
+			Map<String, Object> outMatl = null;
+			for (ListMaterialResults matl : matls) {
+				outMatl = new Hashtable<String, Object>();
+				if (matl.getFilename()!=null)
+					outMatl.put(PARAM_MODEL, matl.getFilename());
+				if (matl.getMaterialName()!=null)
+					outMatl.put(PARAM_MATERIAL, matl.getMaterialName());
+				
+				outMatls.add(outMatl);
+			}
+			if (outMatls.size()>0)
+				out.put(OUTPUT_MATERIALS, outMatls);
         	return out;
         }
 
@@ -597,13 +631,48 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 
 	private Hashtable<String, Object> actionListMaterials(String sessionId, Hashtable<String, Object> input) throws JLIException {
         String filename = checkStringParameter(input, PARAM_MODEL, false);
+        if (isPattern(filename))
+        	throw new JLIException("Not allowed to use wildcards in "+PARAM_MODEL+" argument.");
         String materialName = checkStringParameter(input, PARAM_MATERIAL, false);
         
-        List<String> matls = fileHandler.listMaterials(filename, materialName, sessionId);
+        List<ListMaterialResults> result = fileHandler.listMaterials(filename, materialName, true, sessionId);
 
-        if (matls!=null) {
+        if (result!=null && result.size()>0) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
-       		out.put(OUTPUT_MATERIALS, matls);
+			List<String> matls = new ArrayList<String>();
+			for (ListMaterialResults res : result)
+				if (res.getMaterialName()!=null)
+					matls.add(res.getMaterialName());
+			if (matls.size()>0)
+				out.put(OUTPUT_MATERIALS, matls);
+        	return out;
+        }
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionListMaterialsWildcard(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String materialName = checkStringParameter(input, PARAM_MATERIAL, false);
+        boolean includeNonMatchingParts = checkFlagParameter(input, PARAM_INCLUDE_NON_MATCHING, false, false);
+        
+        List<ListMaterialResults> matls = fileHandler.listMaterials(filename, materialName, includeNonMatchingParts, sessionId);
+
+        if (matls!=null && matls.size()>0) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			Vector<Map<String, Object>> outMatls = new Vector<Map<String, Object>>();
+			Map<String, Object> outMatl = null;
+			for (ListMaterialResults matl : matls) {
+				outMatl = new Hashtable<String, Object>();
+				if (matl.getFilename()!=null)
+					outMatl.put(PARAM_MODEL, matl.getFilename());
+				if (matl.getMaterialName()!=null)
+					outMatl.put(PARAM_MATERIAL, matl.getMaterialName());
+				
+				outMatls.add(outMatl);
+			}
+			if (outMatls.size()>0)
+				out.put(OUTPUT_MATERIALS, outMatls);
         	return out;
         }
 
@@ -615,7 +684,13 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
         String materialName = checkStringParameter(input, PARAM_MATERIAL, true);
         
-        fileHandler.loadMaterialFile(filename, dirname, materialName, sessionId);
+        List<String> files = fileHandler.loadMaterialFile(filename, dirname, materialName, false, sessionId);
+
+        if (files!=null && files.size()>0) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			out.put(OUTPUT_MODELS, files);
+        	return out;
+        }
 
         return null;
 	}
@@ -624,7 +699,13 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         String filename = checkStringParameter(input, PARAM_MODEL, false);
         String materialName = checkStringParameter(input, PARAM_MATERIAL, true);
         
-        fileHandler.deleteMaterial(filename, materialName, sessionId);
+        List<String> files = fileHandler.deleteMaterial(filename, materialName, sessionId);
+
+        if (files!=null && files.size()>0) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			out.put(OUTPUT_MODELS, files);
+        	return out;
+        }
 
         return null;
 	}

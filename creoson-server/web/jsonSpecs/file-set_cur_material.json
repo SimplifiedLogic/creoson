@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Set the current material for a part",
+    "function_description" : "Set the current material for a part or parts",
     "command" : "file",
     "function" : "set_cur_material",
     "notes" : [ "If 'material' has a file extension, it will be removed before the material is set." ],
@@ -8,7 +8,8 @@
       "name" : "file",
       "type" : "string",
       "description" : "Part name",
-      "default" : "Currently active model"
+      "default" : "Currently active model",
+      "wildcards_allowed" : true
     }, {
       "name" : "material",
       "type" : "string",
@@ -30,6 +31,27 @@
     "response" : {
       "status" : {
         "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "set_cur_material",
+      "data" : {
+        "file" : "*.prt",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt", "lid.prt", "handle.prt" ]
       }
     }
   } ]

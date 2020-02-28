@@ -46,6 +46,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 	public static final String OBJ_POINT = "JLPoint";
 	public static final String OBJ_TRANSFORM = "JLTransform";
 	public static final String OBJ_INERTIA = "JLInertia";
+	public static final String OBJ_FILEMATERIAL = "FileMaterial";
 	
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jshell.json.help.JLJsonCommandHelp#getCommand()
@@ -69,6 +70,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpExists());
 		list.add(helpGetActive());
 		list.add(helpGetCurrentMaterial());
+		list.add(helpGetCurrentMaterialWildcard());
 		list.add(helpGetFileinfo());
 		list.add(helpGetLengthUnits());
 		list.add(helpGetMassUnits());
@@ -78,6 +80,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpList());
 		list.add(helpListInstances());
 		list.add(helpListMaterials());
+		list.add(helpListMaterialsWildcard());
 		list.add(helpListSimpReps());
 		list.add(helpLoadMaterialFile());
 		list.add(helpMassprops());
@@ -103,6 +106,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 	 */
 	public List<FunctionObject> getHelpObjects() {
 		List<FunctionObject> list = new ArrayList<FunctionObject>();
+		list.add(helpFileMaterial());
 		list.add(helpJLConstraint());
 		list.add(helpJLInertia());
 		list.add(helpJLPoint());
@@ -1302,12 +1306,14 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_CUR_MATL);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get the current material for a part");
+    	spec.addFootnote("This is the same as '"+FUNC_GET_CUR_MATL_WILDCARD+"' but this function does not allow wildcards on the part name.  They are separate functions because the return structures are different.  This function is retained for backwards compatibility.");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Part name");
     	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(false);
     	spec.addArgument(arg);
 
     	ret = new FunctionReturn(OUTPUT_MATERIAL, FunctionSpec.TYPE_STRING);
@@ -1328,16 +1334,67 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
         return template;
     }
     
-	private FunctionTemplate helpSetCurrentMaterial() {
-    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_CUR_MATL);
+	private FunctionTemplate helpGetCurrentMaterialWildcard() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_CUR_MATL_WILDCARD);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Set the current material for a part");
-    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is set.");
+    	spec.setFunctionDescription("Get the current material for a part or parts");
+    	spec.addFootnote("This is the same as '"+FUNC_GET_CUR_MATL+"' but this function allows wildcards on the part name.  They are separate functions because the return structures are different.");
     	FunctionArgument arg;
+    	FunctionReturn ret;
 
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Part name");
     	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(true);
+    	spec.addArgument(arg);
+    	
+    	arg = new FunctionArgument(PARAM_INCLUDE_NON_MATCHING, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to include parts that match the part name pattern but don't have a current material");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MATERIALS, FunctionSpec.TYPE_OBJARRAY, OBJ_FILEMATERIAL);
+    	ret.setDescription("A list of part and current-material pairs.");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	List<Map<String, Object>> matls;
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "wingnut.prt");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	matls.add(makeFileMaterial("lid.prt", "bronze"));
+    	matls.add(makeFileMaterial("handle.prt", "steel"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpSetCurrentMaterial() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_CUR_MATL);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set the current material for a part or parts");
+    	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is set.");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(true);
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
@@ -1346,11 +1403,25 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	arg.setRequired(true);
     	spec.addArgument(arg);
 
+    	ret = new FunctionReturn(OUTPUT_MODELS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of models which had the material set");
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{"box.prt"});
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{
+    			"box.prt",
+    			"lid.prt",
+    			"handle.prt"
+    			});
     	template.addExample(ex);
 
         return template;
@@ -1359,13 +1430,15 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 	private FunctionTemplate helpLoadMaterialFile() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LOAD_MATL_FILE);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Load a new material file into a part");
+    	spec.setFunctionDescription("Load a new material file into a part or parts");
     	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is loaded.");
     	FunctionArgument arg;
+    	FunctionReturn ret;
 
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Part name");
     	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(true);
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
@@ -1378,21 +1451,37 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	arg.setRequired(true);
     	spec.addArgument(arg);
 
+    	ret = new FunctionReturn(OUTPUT_MODELS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of models which had the material loaded");
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{"box.prt"});
     	template.addExample(ex);
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_DIRNAME, "C:/mydir/materials");
     	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{"box.prt"});
     	template.addExample(ex);
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{"box.prt"});
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{
+    			"box.prt",
+    			"lid.prt",
+    			"handle.prt"
+    			});
     	template.addExample(ex);
 
         return template;
@@ -1402,12 +1491,14 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_MATERIALS);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("List materials on a part");
+    	spec.addFootnote("This is the same as '"+FUNC_LIST_MATERIALS_WILDCARD+"' but this function does not allow wildcards on the part name.  They are separate functions because the return structures are different.  This function is retained for backwards compatibility.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Part name");
     	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(false);
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
@@ -1442,16 +1533,112 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
         return template;
     }
     
+	private FunctionTemplate helpListMaterialsWildcard() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_MATERIALS_WILDCARD);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List materials on a part or parts");
+    	spec.addFootnote("This is the same as '"+FUNC_LIST_MATERIALS+"' but this function allows wildcards on the part name.  They are separate functions because the return structures are different.");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Material name pattern");
+    	arg.setWildcards(true);
+    	arg.setDefaultValue("All materials");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_INCLUDE_NON_MATCHING, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to include parts that match the part name pattern but don't have any materials matching the material pattern");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MATERIALS, FunctionSpec.TYPE_OBJARRAY, OBJ_FILEMATERIAL);
+    	ret.setDescription("A list of part and material pairs.  If a part has more than one material, it will have multiple entries in this array.");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	List<Map<String, Object>> matls;
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	matls.add(makeFileMaterial("box.prt", "bronze"));
+    	matls.add(makeFileMaterial("box.prt", "steel"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "br*");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	matls.add(makeFileMaterial("box.prt", "bronze"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	matls.add(makeFileMaterial("box.prt", "bronze"));
+    	matls.add(makeFileMaterial("box.prt", "steel"));
+    	matls.add(makeFileMaterial("lid.prt", "bronze"));
+    	matls.add(makeFileMaterial("handle.prt", "steel"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	ex.addInput(PARAM_MATERIAL, "br*");
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	matls.add(makeFileMaterial("box.prt", "bronze"));
+    	matls.add(makeFileMaterial("lid.prt", "bronze"));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	ex.addInput(PARAM_MATERIAL, "br*");
+    	ex.addInput(PARAM_INCLUDE_NON_MATCHING, true);
+    	matls = new ArrayList<Map<String, Object>>();
+    	matls.add(makeFileMaterial("box.prt", "brass"));
+    	matls.add(makeFileMaterial("box.prt", "bronze"));
+    	matls.add(makeFileMaterial("lid.prt", "bronze"));
+    	matls.add(makeFileMaterial("handle.prt", null));
+    	ex.addOutput(OUTPUT_MATERIALS, matls);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
 	private FunctionTemplate helpDeleteMaterial() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_DELETE_MATERIAL);
     	FunctionSpec spec = template.getSpec();
-    	spec.setFunctionDescription("Delete a material from a part");
+    	spec.setFunctionDescription("Delete a material from a part or parts");
     	spec.addFootnote("If '"+PARAM_MATERIAL+"' has a file extension, it will be removed before the material is deleted.");
     	FunctionArgument arg;
+    	FunctionReturn ret;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("Part name");
     	arg.setDefaultValue("Current active model");
+    	arg.setWildcards(true);
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_MATERIAL, FunctionSpec.TYPE_STRING);
@@ -1459,11 +1646,26 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	arg.setRequired(true);
     	spec.addArgument(arg);
 
+    	ret = new FunctionReturn(OUTPUT_MODELS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("List of models which had the material deleted");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.prt");
     	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{"box.prt"});
+    	template.addExample(ex);
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "*.prt");
+    	ex.addInput(PARAM_MATERIAL, "brass");
+    	ex.addOutput(OUTPUT_MODELS, new String[]{
+    			"box.prt",
+    			"lid.prt",
+    			"handle.prt"
+    			});
     	template.addExample(ex);
     	
         return template;
@@ -1578,7 +1780,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     }
     
 	private FunctionObject helpJLInertia() {
-    	FunctionObject obj = new FunctionObject(OBJ_TRANSFORM);
+    	FunctionObject obj = new FunctionObject(OBJ_INERTIA);
     	obj.setDescription("A matrix representing an inertia or inertia tensor");
 
     	FunctionArgument arg;
@@ -1592,6 +1794,33 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	arg = new FunctionArgument(PARAM_ZAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
     	arg.setDescription("Matrix Z Axis");
+    	obj.add(arg);
+
+        return obj;
+    }
+    
+	private Map<String, Object> makeFileMaterial(String filename, String material) {
+
+		Map<String, Object> rec = new OrderedMap<String, Object>();
+		if (filename!=null)
+			rec.put(JLFileResponseParams.OUTPUT_MODEL, filename);
+		if (material!=null)
+			rec.put(JLFileResponseParams.OUTPUT_MATERIAL, material);
+		
+		return rec;
+	}
+
+	private FunctionObject helpFileMaterial() {
+    	FunctionObject obj = new FunctionObject(OBJ_FILEMATERIAL);
+    	obj.setDescription("An object representing a part and material pair");
+
+    	FunctionArgument arg;
+    	arg = new FunctionArgument(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Part name");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_MATERIAL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Material name");
     	obj.add(arg);
 
         return obj;

@@ -3,6 +3,7 @@
     "function_description" : "Get the current material for a part",
     "command" : "file",
     "function" : "get_cur_material",
+    "notes" : [ "This is the same as 'get_cur_material_wildcard' but this function does not allow wildcards on the part name.  They are separate functions because the return structures are different.  This function is retained for backwards compatibility." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

@@ -27,6 +27,7 @@ public interface JLFileResponseParams {
 
 	// response fields
     public static final String OUTPUT_MODEL		= "file";
+    public static final String OUTPUT_MODELS	= "files";
     public static final String OUTPUT_GENERIC	= "generic";
     public static final String OUTPUT_DIRNAME	= "dirname";
     public static final String OUTPUT_FILES		= "files";

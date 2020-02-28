@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Load a new material file into a part",
+    "function_description" : "Load a new material file into a part or parts",
     "command" : "file",
     "function" : "load_material_file",
     "notes" : [ "If 'material' has a file extension, it will be removed before the material is loaded." ],
@@ -8,7 +8,8 @@
       "name" : "file",
       "type" : "string",
       "description" : "Part name",
-      "default" : "Currently active model"
+      "default" : "Currently active model",
+      "wildcards_allowed" : true
     }, {
       "name" : "dirname",
       "type" : "string",
@@ -35,6 +36,9 @@
     "response" : {
       "status" : {
         "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt" ]
       }
     }
   }, {
@@ -51,6 +55,9 @@
     "response" : {
       "status" : {
         "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt" ]
       }
     }
   }, {
@@ -65,6 +72,27 @@
     "response" : {
       "status" : {
         "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "load_material_file",
+      "data" : {
+        "file" : "*.prt",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt", "lid.prt", "handle.prt" ]
       }
     }
   } ]

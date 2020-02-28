@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Delete a material from a part",
+    "function_description" : "Delete a material from a part or parts",
     "command" : "file",
     "function" : "delete_material",
     "notes" : [ "If 'material' has a file extension, it will be removed before the material is deleted." ],
@@ -8,14 +8,19 @@
       "name" : "file",
       "type" : "string",
       "description" : "Part name",
-      "default" : "Current active model"
+      "default" : "Current active model",
+      "wildcards_allowed" : true
     }, {
       "name" : "material",
       "type" : "string",
       "description" : "Material name",
       "required" : true
     } ],
-    "response" : [ ]
+    "response" : [ {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of models which had the material deleted"
+    } ]
   },
   "examples" : [ {
     "request" : {
@@ -30,6 +35,27 @@
     "response" : {
       "status" : {
         "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt" ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "delete_material",
+      "data" : {
+        "file" : "*.prt",
+        "material" : "brass"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "files" : [ "box.prt", "lid.prt", "handle.prt" ]
       }
     }
   } ]

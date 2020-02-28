@@ -1,0 +1,13 @@
+{
+  "object_name" : "FileMaterial",
+  "description" : "An object representing a part and material pair",
+  "data" : [ {
+    "name" : "file",
+    "type" : "string",
+    "description" : "Part name"
+  }, {
+    "name" : "material",
+    "type" : "string",
+    "description" : "Material name"
+  } ]
+}

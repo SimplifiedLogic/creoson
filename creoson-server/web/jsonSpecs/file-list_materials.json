@@ -3,6 +3,7 @@
     "function_description" : "List materials on a part",
     "command" : "file",
     "function" : "list_materials",
+    "notes" : [ "This is the same as 'list_materials_wildcard' but this function does not allow wildcards on the part name.  They are separate functions because the return structures are different.  This function is retained for backwards compatibility." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
