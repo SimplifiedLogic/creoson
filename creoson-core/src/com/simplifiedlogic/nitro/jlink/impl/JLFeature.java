@@ -1677,6 +1677,7 @@ public class JLFeature implements IJLFeature {
 				return false;
 			CallSolid solid = (CallSolid)m;
 	        SuppressLooper2 looper = new SuppressLooper2();
+	        looper.clip = clip;
 			if (featureId>0) {
 				CallFeature feat = solid.getFeatureById(featureId);
 				if (feat!=null) {
@@ -1695,7 +1696,6 @@ public class JLFeature implements IJLFeature {
 		        looper.setTypePattern(featureType);
 		        if (featureName==null)
 		        	looper.setIncludeUnnamed(true);
-		        looper.clip = clip;
 	
 		        looper.loop(solid);
 			}
