@@ -2162,7 +2162,7 @@ public class JLFile implements IJLFile {
 			                compPath = res.compPath;
 			                assembly = assembleToRoot ? (CallAssembly)assemblyModel : res.parent;
 			                subComponent = res.item;
-			                if (asmrefCsys!=null && asmrefCsys.indexOf('*')>=0) {
+			                if (asmrefCsys!=null && NitroUtils.isPattern(asmrefCsys)) {
 			                    List<JLConstraint> other_con = getNonCsysConstraint(constraints);
 			                    //AssembleLooper looper = new AssembleLooper(assembly, subComponent, m, compPath, transform, csys_con, other_con);
 			                    AssembleLooper2 looper = new AssembleLooper2();
@@ -2177,7 +2177,7 @@ public class JLFile implements IJLFile {
 			                        ModelItemEntry entry;
 			                        for (int k=0; k<num_items; k++) {
 			                            entry = (ModelItemEntry)looper.items.get(k);
-			                            assembleItem(session, assembly, subComponent, m, compPath, transform, csys_con, other_con, entry.item, suppress);
+			                            assembleItem(session, assembly, subComponent, m, compPath, transform, csys_con, other_con, entry.item, suppress, packageAssembly);
 			                        }
 			                        looper.items.clear();
 			                        cntAssembled += num_items;
@@ -2198,6 +2198,8 @@ public class JLFile implements IJLFile {
 			                    
 			                    if (constrs!=null)
 			                        newfeat.setConstraints(constrs, null);
+			                    else if (!packageAssembly)
+						        	newfeat.redefineThroughUI();
 	
 			                    if (suppress) {
 			                    	suppressNewFeature(session, assembly, newfeat);
@@ -2311,10 +2313,14 @@ public class JLFile implements IJLFile {
         int len = constraints.size();
 
         JLConstraint con;
-        CallComponentConstraints constrs = CallComponentConstraints.create();
+        CallComponentConstraints constrs = null;
         for (int i=0; i<len; i++) {
             con = (JLConstraint)constraints.get(i);
             CallComponentConstraint ctrt = makeConstraint(subComponent, m, compPath, con);
+            if (ctrt==null)
+            	continue;
+            if (constrs==null)
+            	constrs = CallComponentConstraints.create();
             constrs.append(ctrt);
         }
         return constrs;
@@ -2343,12 +2349,16 @@ public class JLFile implements IJLFile {
                 if (asmItem==null)
                     throw new JLIException("Coord System '" + con.asmref + "' was not found in the assembly component");
             }
+            else
+            	return null;
             if (con.compref!=null) {
             	// set the component reference
                 compItem = m.getItemByName(ModelItemType.ITEM_COORD_SYS, con.compref);
                 if (compItem==null)
                     throw new JLIException("Coord System '" + con.compref + "' was not found in the new component");
             }
+            else
+            	return null;
         }
         CallComponentConstraint ctrt = CallComponentConstraint.create(ComponentConstraintType.FromInt(con.type));
         if (asmItem!=null) {
@@ -2394,11 +2404,12 @@ public class JLFile implements IJLFile {
             JLConstraint csys_con,
             List<JLConstraint> other_con,
             CallModelItem item,
-            boolean suppress
+            boolean suppress,
+            boolean packageAssembly
             ) throws JLIException, jxthrowable {
         
     	CallComponentConstraints constrs = makeConstraints(subComponent, part, compPath, other_con);
-        if (csys_con!=null) {
+        if (csys_con!=null && csys_con.compref!=null) {
             JLConstraint clone = csys_con.copy();
             clone.asmref = item.getName();
             CallComponentConstraint ctrt = makeConstraint(subComponent, part, compPath, clone);
@@ -2413,6 +2424,8 @@ public class JLFile implements IJLFile {
         
         if (constrs!=null)
             newfeat.setConstraints(constrs, null);
+        else if (!packageAssembly)
+        	newfeat.redefineThroughUI();
 
         if (suppress) {
         	suppressNewFeature(session, assembly, newfeat);
