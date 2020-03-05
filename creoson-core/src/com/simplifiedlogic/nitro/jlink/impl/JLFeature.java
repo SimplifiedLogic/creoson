@@ -598,7 +598,8 @@ public class JLFeature implements IJLFeature {
                 subLooper = new ResumeLooper2();
                 subLooper.setStatusPattern("suppressed");
                 subLooper.featOps = featOps;
-                
+                subLooper.setIncludeUnnamed(true);
+
                 subLooper.loop(feat);
                 
                 // restore this code if going with separate featOps
@@ -708,6 +709,7 @@ public class JLFeature implements IJLFeature {
                 subLooper = new SuppressLooper2();
                 subLooper.featOps = featOps;
                 subLooper.clip = clip;
+                subLooper.setIncludeUnnamed(true);
                 
                 subLooper.loop(feat);
                 
