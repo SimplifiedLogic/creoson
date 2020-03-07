@@ -39,13 +39,18 @@ public abstract class WorkspaceFileLooper {
 	private CallSession session = null;
     private String serverAlias = null;
     private String workspace = null;
+//    private boolean onServer = false;
     
     public void loop() throws JLIException,jxthrowable {
 
         if (namePattern==null)
         	namePattern="*";
         
-		String workspaceUrl = JlinkUtils.makeWindchillUrl(serverAlias, workspace);
+		String workspaceUrl = null;
+//		if (onServer)
+//			workspaceUrl = JlinkUtils.makeWindchillServerUrl(serverAlias, workspace);
+//		else
+			workspaceUrl = JlinkUtils.makeWindchillUrl(serverAlias, workspace);
         CallStringSeq files = session.listFiles(namePattern, LIST_OPT, workspaceUrl);
         
         if (files==null)
@@ -122,5 +127,13 @@ public abstract class WorkspaceFileLooper {
 	public void setNamePattern(String namePattern) {
 		this.namePattern = namePattern;
 	}
+
+//	public boolean isOnServer() {
+//		return onServer;
+//	}
+
+//	public void setOnServer(boolean onServer) {
+//		this.onServer = onServer;
+//	}
 
 }

@@ -1694,6 +1694,19 @@ public class JlinkUtils {
 		return buf.toString();
 	}
 	
+	public static String makeWindchillServerUrl(String serverAlias, String workspace) throws jxthrowable {
+		StringBuffer buf = new StringBuffer();
+		buf.append("wtpub://");
+		buf.append(serverAlias);
+		buf.append("/");
+		buf.append("Libraries"); //???
+		buf.append("/");
+		buf.append(workspace);
+		buf.append("/");
+		
+		return buf.toString();
+	}
+
 	/**
 	 * Take a Windchill workspace file URL and strip out file name.
 	 * @param fileUrl The URL for the Windchill workspace file
