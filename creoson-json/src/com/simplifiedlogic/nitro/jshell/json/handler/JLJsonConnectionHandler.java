@@ -18,9 +18,15 @@
  */
 package com.simplifiedlogic.nitro.jshell.json.handler;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.JLStatus;
 import com.simplifiedlogic.nitro.jlink.intf.IJLConnection;
 import com.simplifiedlogic.nitro.jshell.json.request.JLConnectRequestParams;
@@ -36,6 +42,8 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
 public class JLJsonConnectionHandler extends JLJsonCommandHandler implements JLConnectRequestParams, JLConnectResponseParams {
 
 	private IJLConnection connHandler = null;
+
+    public static final String ALLOWED_CREOSON_CMD = "creoson_run.bat";
 
 	/**
 	 * @param connHandler
@@ -107,8 +115,20 @@ public class JLJsonConnectionHandler extends JLJsonCommandHandler implements JLC
         String startDir = checkStringParameter(input, PARAM_START_DIR, true);
         String startCommand = checkStringParameter(input, PARAM_START_COMMAND, true);
         int retries = checkIntParameter(input, PARAM_RETRIES, false, -1);
-		
-		connHandler.startProe(startDir, startCommand, retries, sessionId);
+        boolean useDesktop = checkFlagParameter(input, PARAM_USE_DESKTOP, false, false);
+//        boolean startTempService = checkFlagParameter(input, PARAM_START_TEMP_SERVICE, false, false);
+//        String creosonCommandDir = checkStringParameter(input, PARAM_CREOSON_COMMAND_DIR, false);
+//        int port = checkIntParameter(input, PARAM_CREOSON_PORT, false, 0);
+        
+//        if (startTempService && creosonCommandDir==null) 
+//        	throw new JLIException("If "+PARAM_START_TEMP_SERVICE+" is true then "+PARAM_CREOSON_COMMAND_DIR+" must also be set.");
+//        if (startTempService && port==0) 
+//        	throw new JLIException("If "+PARAM_START_TEMP_SERVICE+" is true then "+PARAM_CREOSON_PORT+" must also be set.");
+
+//        if (startTempService)
+//        	startSecondCreoson(startDir, startCommand, retries, useDesktop, creosonCommandDir, port);
+//        else
+        	connHandler.startProe(startDir, startCommand, retries, useDesktop, sessionId);
 		
 		return null;
 	}
@@ -125,6 +145,161 @@ public class JLJsonConnectionHandler extends JLJsonCommandHandler implements JLC
 		connHandler.killProe();
 		
 		return null;
+	}
+
+    private void startSecondCreoson(String path, String cmd, int retries, boolean useDesktop, String creosonCommandDir, int port) throws JLIException {
+
+    	File f = null;
+    	if (creosonCommandDir!=null)
+    		f = new File(creosonCommandDir, ALLOWED_CREOSON_CMD);
+    	else
+    		f = new File(ALLOWED_CREOSON_CMD);
+        if (!f.exists())
+            throw new JLIException("Command file '" + f.getAbsolutePath() + "' does not exist");
+        if (f.isDirectory())
+            throw new JLIException("Command file '" + f.getAbsolutePath() + "' is a directory");
+
+    	StringBuffer buf = new StringBuffer();
+    	buf.append("\"");
+    	buf.append(f.getAbsolutePath());
+    	buf.append("\"");
+    	buf.append(" ");
+    	if (path!=null) {
+        	buf.append("\"");
+    		buf.append(PARAM_START_DIR);
+    		buf.append("=");
+    		buf.append(path);
+        	buf.append("\"");
+        	buf.append(" ");
+    	}
+    	if (cmd!=null) {
+        	buf.append("\"");
+    		buf.append(PARAM_START_COMMAND);
+    		buf.append("=");
+    		buf.append(cmd);
+        	buf.append("\"");
+        	buf.append(" ");
+    	}
+    	buf.append(PARAM_RETRIES);
+    	buf.append("=");
+    	buf.append(String.valueOf(retries));
+    	buf.append(" ");
+    	buf.append("port");
+    	buf.append("=");
+    	buf.append(String.valueOf(port));
+    	buf.append(" ");
+    	
+    	buf.append(" > creoson_start_log.txt");
+    	
+    	String runcmd = buf.toString();
+    	path = creosonCommandDir;
+    	
+    	System.out.println("Creoson command: "+runcmd);
+
+        try {
+	    	if (useDesktop && Desktop.isDesktopSupported()) {
+	    		File dir = new File(path);
+	    		String oldDir = System.getProperty("user.dir");
+	    		System.setProperty("user.dir", dir.getAbsolutePath()); // this does not seem to work for setting creo's working dir
+	    		String newDir = System.getProperty("user.dir");
+	    		try {
+	    			Desktop.getDesktop().open(f);
+	    		}
+	    		finally {
+	    			System.setProperty("user.dir", oldDir);
+	    		}
+	    	}
+	    	else {
+	            runcmd = "cmd.exe /c " + cmd;
+	            f = new File(path);
+	            
+	            Runtime rt = Runtime.getRuntime();
+	            
+	    		Map<String, String> env = System.getenv();
+	    		Map<String, String> env2 = new HashMap<String, String>();
+	    		env2.put("JSON_PORT", String.valueOf(port));
+	    		String[] envp = convertEnv(env, env2);
+
+	    		buf = new StringBuffer();
+	    		buf.append("\"");
+	    		buf.append(env.get("JAVA_HOME"));
+	    		buf.append("\\bin\\java\"");
+	    		buf.append(" ");
+	    		buf.append("-classpath ");
+	    		buf.append("\"");
+	    		buf.append(System.getProperty("java.class.path"));
+	    		buf.append("\"");
+	    	    buf.append(" -Dsli.jlink.timeout=200 ");
+	    		buf.append("-Dsli.socket.port=");
+	    		buf.append(String.valueOf(port));
+	    		buf.append(" ");
+	    		buf.append("com.simplifiedlogic.nitro.jshell.MainServer ");
+
+	        	if (path!=null) {
+	            	buf.append("\"");
+	        		buf.append(PARAM_START_DIR);
+	        		buf.append("=");
+	        		buf.append(path);
+	            	buf.append("\"");
+	            	buf.append(" ");
+	        	}
+	        	if (cmd!=null) {
+	            	buf.append("\"");
+	        		buf.append(PARAM_START_COMMAND);
+	        		buf.append("=");
+	        		buf.append(cmd);
+	            	buf.append("\"");
+	            	buf.append(" ");
+	        	}
+	        	buf.append(PARAM_RETRIES);
+	        	buf.append("=");
+	        	buf.append(String.valueOf(retries));
+	        	buf.append(" ");
+//	        	buf.append(" > d:\\ptc\\githup\\creoson_start_log7.txt");
+
+	        	System.out.println(buf.toString());
+	        	
+//	            Process pr = rt.exec(runcmd, envp, f.getParentFile());
+	            Process pr = rt.exec(buf.toString(), envp, f.getParentFile());
+
+	//           pr.waitFor();
+	    	}
+
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+        	throw new JLIException(e);
+        }
+    }
+
+	public static String[] convertEnv(Map<String, String> env, Map<String, String> env2) {
+		if (env==null)
+			return convertEnv(env2, null);
+		
+		List<String> list = new ArrayList<String>();
+		String key, value;
+		Iterator<String> iter = env.keySet().iterator();
+		while (iter.hasNext()) {
+			key = iter.next();
+			value = env.get(key);
+			key = key.toUpperCase();
+			if (env2!=null && env2.get(key)!=null) {
+				value = env2.remove(key);
+			}
+			list.add(key + "=" + value);
+		}
+		iter = env2.keySet().iterator();
+		while (iter.hasNext()) {
+			key = iter.next();
+			value = env2.get(key);
+			key = key.toUpperCase();
+			list.add(key + "=" + value);
+		}
+		int len = list.size();
+		String[] list2 = new String[len];
+		for (int i=0; i<len; i++) 
+			list2[i] = list.get(i);
+		return list2;
 	}
 
 }

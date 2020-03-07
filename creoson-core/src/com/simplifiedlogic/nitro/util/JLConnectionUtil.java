@@ -18,6 +18,7 @@
  */
 package com.simplifiedlogic.nitro.util;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -237,15 +238,16 @@ public class JLConnectionUtil implements NitroConstants {
      * @param path Directory location for the .bat file
      * @param cmd The name of the command file
      * @param retries Number of times to retry making the Creo connection
+     * @param useDesktop Use the desktop to start Creo rather than the Runtime
      * @return The new connection ID
      * @throws JLIException
      * @throws jxthrowable
      * @throws Exception
      */
-    public static String startProe(String connId, String path, String cmd, int retries) throws JLIException,jxthrowable,Exception {
+    public static String startProe(String connId, String path, String cmd, int retries, boolean useDesktop) throws JLIException,jxthrowable,Exception {
         if (SINGLE_CONNECT && isRunning())
             throw new JLIException("Creo is already running");
-        
+
         if (path!=null) {
             if (!path.endsWith("/") && !path.endsWith("\\"))
                 cmd = path + "/" + cmd;
@@ -262,13 +264,25 @@ public class JLConnectionUtil implements NitroConstants {
         // we're doing this because AsyncConnection_Start() freezes up when running a .bat file,
         // and the UG troubleshooting steps don't seem to help
         if (cmd.trim().toLowerCase().endsWith(".bat")) {
-            cmd = "cmd.exe /c " + cmd;
-            f = new File(path);
-            
-            Runtime rt = Runtime.getRuntime();
-            Process pr = rt.exec(cmd, null, f);
-//           	pr.waitFor();
-
+        	if (useDesktop && Desktop.isDesktopSupported()) {
+        		File dir = new File(path);
+//        		String oldDir = System.getProperty("user.dir");
+//        		System.setProperty("user.dir", dir.getAbsolutePath()); // this does not seem to work for setting creo's working dir
+        		try {
+        			Desktop.getDesktop().open(f);
+        		}
+        		finally {
+//        			System.setProperty("user.dir", oldDir);
+        		}
+        	}
+        	else {
+	            cmd = "cmd.exe /c " + cmd;
+	            f = new File(path);
+	            
+	            Runtime rt = Runtime.getRuntime();
+	            Process pr = rt.exec(cmd, null, f.getParentFile());
+	//           	pr.waitFor();
+        	}
             JLGlobal.loadLibrary(); 
             String newConnId = null;
             if (retries < 0)
@@ -288,7 +302,7 @@ public class JLConnectionUtil implements NitroConstants {
 	            if (newConnId==null)
 	                throw new JlinkConnectException("Started Creo, but failed to connect after " + RETRY_LIMIT + " attempts.");
             }
-            
+
             connId = newConnId;
         }
         else {

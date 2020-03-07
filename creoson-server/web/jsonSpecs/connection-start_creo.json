@@ -3,7 +3,7 @@
     "function_description" : "Execute an external .bat file to start Creo, then attempts to connect to Creo.",
     "command" : "connection",
     "function" : "start_creo",
-    "notes" : [ "The .bat file is restricted to a specific name to make the function more secure.", "Set retries to 0 to NOT attempt to connect to Creo.", "The server will pause for 3 seconds before attempting a connection, and will pause for 10 seconds between connection retries", "If Creo pops up a message after startup, this function may cause Creo to crash unless retries is set to 0." ],
+    "notes" : [ "The .bat file is restricted to a specific name to make the function more secure.", "Set retries to 0 to NOT attempt to connect to Creo.", "The server will pause for 3 seconds before attempting a connection, and will pause for 10 seconds between connection retries", "If Creo pops up a message after startup, this function may cause Creo to crash unless retries is set to 0.", "&lt;b&gt;If use_desktop is set, make sure that your nitro_proe_remote.bat file contains a cd command to change to the directory where you want Creo to start!&lt;/b&gt;" ],
     "request" : [ {
       "name" : "start_dir",
       "type" : "string",
@@ -20,6 +20,11 @@
       "type" : "integer",
       "description" : "Number of retries to make when connecting",
       "default" : "20"
+    }, {
+      "name" : "use_desktop",
+      "type" : "boolean",
+      "description" : "Whether to use the desktop to start creo rather than the java runtime.  Should only be used if the runtime method doesn't work.",
+      "default" : "false"
     } ],
     "response" : [ ]
   },

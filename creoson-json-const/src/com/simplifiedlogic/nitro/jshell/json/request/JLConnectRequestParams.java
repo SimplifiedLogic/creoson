@@ -43,6 +43,10 @@ public interface JLConnectRequestParams {
     public static final String PARAM_START_DIR	= "start_dir";
     public static final String PARAM_START_COMMAND	= "start_command";
     public static final String PARAM_RETRIES	= "retries";
+    public static final String PARAM_USE_DESKTOP	= "use_desktop";
+//    public static final String PARAM_START_TEMP_SERVICE	= "start_temp_service";
+//    public static final String PARAM_CREOSON_COMMAND_DIR	= "creoson_command_dir";
+//    public static final String PARAM_CREOSON_PORT	= "creoson_port";
 
     // special data value for connect function
 	public static final String APP_PROE = "pro/e";

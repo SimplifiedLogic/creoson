@@ -144,6 +144,7 @@ public class JLJsonConnectionHelp extends JLJsonCommandHelp implements JLConnect
     	spec.addFootnote("Set " + PARAM_RETRIES + " to 0 to NOT attempt to connect to Creo.");
     	spec.addFootnote("The server will pause for 3 seconds before attempting a connection, and will pause for 10 seconds between connection retries");
     	spec.addFootnote("If Creo pops up a message after startup, this function may cause Creo to crash unless retries is set to 0.");
+    	spec.addFootnote("<b>If "+PARAM_USE_DESKTOP+" is set, make sure that your "+"nitro_proe_remote.bat"+" file contains a cd command to change to the directory where you want Creo to start!</b>");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_START_DIR, FunctionSpec.TYPE_STRING);
@@ -160,6 +161,11 @@ public class JLJsonConnectionHelp extends JLJsonCommandHelp implements JLConnect
     	arg = new FunctionArgument(PARAM_RETRIES, FunctionSpec.TYPE_INTEGER);
     	arg.setDescription("Number of retries to make when connecting");
     	arg.setDefaultValue("20");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_USE_DESKTOP, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to use the desktop to start creo rather than the java runtime.  Should only be used if the runtime method doesn't work.");
+    	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
     	FunctionExample ex;

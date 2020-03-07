@@ -141,20 +141,20 @@ public class JLConnection implements IJLConnection {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLConnection#startProe(java.lang.String, java.lang.String, int, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLConnection#startProe(java.lang.String, java.lang.String, int, boolean, java.lang.String)
 	 */
 	@Override
-    public AbstractJLISession startProe(String startDir, String startCommand, int retries, String sessionId) throws JLIException {
+    public AbstractJLISession startProe(String startDir, String startCommand, int retries, boolean useDesktop, String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
         
-    	return startProe(startDir, startCommand, retries, sess);
+    	return startProe(startDir, startCommand, retries, useDesktop, sess);
     }
     
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLConnection#startProe(java.lang.String, java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLConnection#startProe(java.lang.String, java.lang.String, int, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-    public AbstractJLISession startProe(String startDir, String startCommand, int retries, AbstractJLISession sess) throws JLIException {
+    public AbstractJLISession startProe(String startDir, String startCommand, int retries, boolean useDesktop, AbstractJLISession sess) throws JLIException {
         if (startDir==null || startDir.length()==0)
             throw new JLIException("Must specify a startDir parameter");
         if (startCommand==null || startCommand.length()==0)
@@ -172,7 +172,7 @@ public class JLConnection implements IJLConnection {
         }
 
         try {
-	        String connId = JLConnectionUtil.startProe(null, startDir, startCommand, retries);
+	        String connId = JLConnectionUtil.startProe(null, startDir, startCommand, retries, useDesktop);
 	        if (sess!=null) {
 	        	sess.setConnectionId(connId);
 	        }

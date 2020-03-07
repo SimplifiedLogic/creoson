@@ -31,8 +31,8 @@ public interface IJLConnection {
 	public void disconnect(AbstractJLISession sess) throws JLIException;
 	public void disconnect(String sessionId) throws JLIException;
 	
-	public AbstractJLISession startProe(String startDir, String startCommand, int retries, AbstractJLISession sess) throws JLIException;
-	public AbstractJLISession startProe(String startDir, String startCommand, int retries, String sessionId) throws JLIException;
+	public AbstractJLISession startProe(String startDir, String startCommand, int retries, boolean useDesktop, AbstractJLISession sess) throws JLIException;
+	public AbstractJLISession startProe(String startDir, String startCommand, int retries, boolean useDesktop, String sessionId) throws JLIException;
 
 	public void stopProe(AbstractJLISession sess) throws JLIException;
 	public void stopProe(String sessionId) throws JLIException;

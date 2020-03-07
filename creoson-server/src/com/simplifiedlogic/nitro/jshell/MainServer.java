@@ -72,6 +72,33 @@ public class MainServer {
 				System.err.println("Invalid port: " + port);
 				return;
 			}
+/*
+			if (args.length>0) {
+				if (args[0].equals(JLConnectRequestParams.FUNC_START_PROE)) {
+					JShellJsonHandler hdlr = new JShellJsonHandler();
+					BaseRequest req = new BaseRequest();
+					req.setCommand(JLConnectRequestParams.COMMAND);
+					req.setFunction(JLConnectRequestParams.FUNC_START_PROE);
+					Hashtable<String, Object> data = new Hashtable<String, Object>();
+					req.setData(data);
+//					data.put(JLConnectRequestParams.PARAM_START_DIR, "d:/ptc/workspace35-nitro/JshellClient");
+//					data.put(JLConnectRequestParams.PARAM_START_COMMAND, "nitro_proe_remote.bat");
+					
+					for (int i=1; i<args.length; i++) {
+						String[] arr = args[i].split("=");
+						if (arr.length!=2) // bad argument
+							continue;
+						if (arr[0].equalsIgnoreCase("port")) {
+							port = Integer.valueOf(arr[1]).intValue();
+						}
+						data.put(arr[0], arr[1]);
+					}
+					
+					hdlr.handleRequest(req);
+					return;
+				}
+			}
+*/
 			HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 			server.createContext(ENDPOINT_CREOSON, new JshellHttpHandler());
 			server.createContext(ENDPOINT_STATUS, new StatusHttpHandler());
