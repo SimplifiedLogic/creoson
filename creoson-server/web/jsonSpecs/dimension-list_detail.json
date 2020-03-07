@@ -3,7 +3,7 @@
     "function_description" : "Get a list of dimension details from a model",
     "command" : "dimension",
     "function" : "list_detail",
-    "notes" : [ "If select is true, then the current selection in Creo will be cleared even if no items are found." ],
+    "notes" : [ "If select is true, then the current selection in Creo will be cleared even if no items are found.", "See the documentation for object : DimDetailData to find out which values are returned for drawings vs models." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -49,6 +49,38 @@
       "function" : "list_detail",
       "data" : {
         "file" : "box.prt",
+        "name" : "d*1"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dimlist" : [ {
+          "name" : "d21",
+          "value" : 32.5,
+          "encoded" : false,
+          "dwg_dim" : false,
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ]
+        }, {
+          "name" : "d31",
+          "value" : 5.0,
+          "encoded" : false,
+          "dwg_dim" : false,
+          "dim_type" : "linear",
+          "text" : [ "{0:@D}\n" ]
+        } ]
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "dimension",
+      "function" : "list_detail",
+      "data" : {
+        "file" : "box.drw",
         "name" : "d*1"
       }
     },
@@ -159,7 +191,7 @@
       "command" : "dimension",
       "function" : "list_detail",
       "data" : {
-        "file" : "box.prt",
+        "file" : "box.drw",
         "name" : "d1",
         "encoded" : true
       }
@@ -195,7 +227,7 @@
       "command" : "dimension",
       "function" : "list_detail",
       "data" : {
-        "file" : "box.prt",
+        "file" : "box.drw",
         "dim_type" : "linear"
       }
     },

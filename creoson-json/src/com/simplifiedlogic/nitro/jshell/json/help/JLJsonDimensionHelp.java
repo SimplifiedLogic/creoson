@@ -396,6 +396,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get a list of dimension details from a model");
     	spec.addFootnote("If "+PARAM_SELECT+" is true, then the current selection in Creo will be cleared even if no items are found.");
+    	spec.addFootnote("See the documentation for "+"object"+" : "+OBJ_DIM_DETAIL_DATA+" to find out which values are returned for drawings vs models.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -447,6 +448,31 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	ex.addInput(PARAM_NAME, "d*1");
     	Map<String, Object> rec;
     	List<Map<String, Object>> params = new ArrayList<Map<String, Object>>();
+    	// record 1
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "d21");
+		rec.put(OUTPUT_VALUE, 32.5);
+		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
+		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
+		rec.put(OUTPUT_TEXT, new String[] {"{0:@D}\n"});
+    	// record 2
+    	rec = new OrderedMap<String, Object>();
+    	params.add(rec);
+    	rec.put(OUTPUT_NAME, "d31");
+		rec.put(OUTPUT_VALUE, 5.0);
+		rec.put(OUTPUT_ENCODED, false);
+		rec.put(OUTPUT_DWG_DIM, false);
+		rec.put(OUTPUT_DIM_TYPE, DimDetailData.TYPE_LINEAR);
+		rec.put(OUTPUT_TEXT, new String[] {"{0:@D}\n"});
+		ex.addOutput(OUTPUT_DIMLIST, params);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	ex.addInput(PARAM_NAME, "d*1");
+    	params = new ArrayList<Map<String, Object>>();
     	// record 1
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
@@ -523,7 +549,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	template.addExample(ex);
 
     	ex = new FunctionExample();
-    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MODEL, "box.drw");
     	ex.addInput(PARAM_NAME, "d1");
     	ex.addInput(PARAM_ENCODED, true);
     	params = new ArrayList<Map<String, Object>>();
@@ -546,7 +572,7 @@ public class JLJsonDimensionHelp extends JLJsonCommandHelp implements JLDimensio
     	template.addExample(ex);
 
     	ex = new FunctionExample();
-    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_MODEL, "box.drw");
     	ex.addInput(PARAM_DIM_TYPE, DimDetailData.TYPE_LINEAR);
     	params = new ArrayList<Map<String, Object>>();
     	// record 1
