@@ -58,6 +58,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 		list.add(helpExportProgram());
 		list.add(helpImportProgram());
 		list.add(helpImportPV());
+		list.add(helpImportFile());
 		list.add(helpMapkey());
 		list.add(helpPlot());
 		return list;
@@ -173,7 +174,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	spec.addFootnote("The " + PARAM_GEOM_FLAGS + " option only applies to " + TYPE_IGES + " and " + TYPE_STEP + " exports.");
     	spec.addFootnote("Setting " + PARAM_GEOM_FLAGS + " to '" + IJLTransfer.GEOM_DEFAULT + "' will cause it to check the Creo config option 'intf3d_out_default_option' for the setting");
     	spec.addFootnote("The " + PARAM_ADVANCED + " option will cause the Export to use settings defined in the appropriate \"export_profiles\" Creo Config Option for the file type.");
-    	spec.addFootnote("The " + PARAM_ADVANCED + " option only applies to " + TYPE_DXF + ", " + TYPE_IGES + " and " + TYPE_STEP + " exports.");
+    	spec.addFootnote("The " + PARAM_ADVANCED + " option only applies to " + TYPE_DXF + ", " + TYPE_IGES + ", " + TYPE_NEUTRAL + " and " + TYPE_STEP + " exports.");
     	spec.addFootnote("The " + PARAM_ADVANCED + " option will only work with Creo 4 M030 or later.");
     	FunctionArgument arg;
     	FunctionReturn ret;
@@ -185,6 +186,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 //    			TYPE_CATIA,
     			TYPE_DXF,
     			TYPE_IGES,
+    			TYPE_NEUTRAL,
     			TYPE_PV,
     			TYPE_STEP,
     			TYPE_VRML
@@ -514,6 +516,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_PV);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Import a ProductView file as a model");
+    	spec.addFootnote("This function is deprecated; use "+FUNC_IMPORT_PV+" with "+PARAM_TYPE+"="+TYPE_PV+" instead.");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -561,4 +564,170 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	return template;
 	}
 
+	private FunctionTemplate helpImportFile() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_FILE);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Import a file as a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_TYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File type");
+    	arg.setRequired(true);
+    	arg.setValidValues(new String[] {
+    			TYPE_IGES,
+    			TYPE_NEUTRAL,
+    			TYPE_PV,
+    			TYPE_STEP
+        	});
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source directory");
+    	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_FILENAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source file name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model name.  Any extension will be stripped off and replaced with one based on "+PARAM_NEWMODELTYPE+".");
+    	arg.setDefaultValue("The name of the file with an extension based on "+PARAM_NEWMODELTYPE+".");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWMODELTYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model type");
+    	arg.setValidValues(new String[] {"asm", "prt"});
+    	arg.setDefaultValue("asm");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Name of the model imported");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_TYPE, TYPE_STEP);
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_MODEL, "box.stp");
+    	ex.addOutput(OUTPUT_MODEL, "box.asm");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_TYPE, TYPE_IGES);
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_FILENAME, "box.igs");
+    	ex.addInput(PARAM_NEWNAME, "mymodel");
+    	ex.addInput(PARAM_NEWMODELTYPE, "asm");
+    	ex.addOutput(OUTPUT_MODEL, "mymodel.asm");
+    	template.addExample(ex);
+
+    	return template;
+	}
+/*
+	private FunctionTemplate helpImportIGES() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_IGES);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Import an IGES file as a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source directory");
+    	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_FILENAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source file name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model name.  Any extension will be stripped off and replaced with one based on "+PARAM_NEWMODELTYPE+".");
+    	arg.setDefaultValue("The name of the IGES file with an extension based on "+PARAM_NEWMODELTYPE+".");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWMODELTYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model type");
+    	arg.setValidValues(new String[] {"asm", "prt"});
+    	arg.setDefaultValue("asm");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Name of the model imported");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_MODEL, "box.igs");
+    	ex.addOutput(OUTPUT_MODEL, "box.asm");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_FILENAME, "box.igs");
+    	ex.addInput(PARAM_NEWNAME, "mymodel.prt");
+    	ex.addInput(PARAM_NEWMODELTYPE, "asm");
+    	ex.addOutput(OUTPUT_MODEL, "mymodel.asm");
+    	template.addExample(ex);
+
+    	return template;
+	}
+
+	private FunctionTemplate helpImportNeutral() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_NEUTRAL);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Import a Neutral file as a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_DIRNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source directory");
+    	arg.setDefaultValue("Creo's current working directory");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_FILENAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Source file name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWNAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model name.  Any extension will be stripped off and replaced with one based on "+PARAM_NEWMODELTYPE+".");
+    	arg.setDefaultValue("The name of the Neutral file with an extension based on "+PARAM_NEWMODELTYPE+".");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NEWMODELTYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New model type");
+    	arg.setValidValues(new String[] {"asm", "prt"});
+    	arg.setDefaultValue("asm");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Name of the model imported");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+    	
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_MODEL, "box.neu");
+    	ex.addOutput(OUTPUT_MODEL, "box.asm");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
+    	ex.addInput(PARAM_FILENAME, "box.neu");
+    	ex.addInput(PARAM_NEWNAME, "mymodel.prt");
+    	ex.addInput(PARAM_NEWMODELTYPE, "asm");
+    	ex.addOutput(OUTPUT_MODEL, "mymodel.asm");
+    	template.addExample(ex);
+
+    	return template;
+	}
+*/
 }

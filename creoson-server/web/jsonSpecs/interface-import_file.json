@@ -1,10 +1,15 @@
 {
   "spec" : {
-    "function_description" : "Import a ProductView file as a model",
+    "function_description" : "Import a file as a model",
     "command" : "interface",
-    "function" : "import_pv",
-    "notes" : [ "This function is deprecated; use import_pv with type=PV instead." ],
+    "function" : "import_file",
     "request" : [ {
+      "name" : "type",
+      "type" : "string",
+      "description" : "File type",
+      "required" : true,
+      "valid_values" : "IGES, NEUTRAL, PV, STEP"
+    }, {
       "name" : "dirname",
       "type" : "string",
       "description" : "Source directory",
@@ -18,7 +23,7 @@
       "name" : "new_name",
       "type" : "string",
       "description" : "New model name.  Any extension will be stripped off and replaced with one based on new_model_type.",
-      "default" : "The name of the PV file with an extension based on new_model_type."
+      "default" : "The name of the file with an extension based on new_model_type."
     }, {
       "name" : "new_model_type",
       "type" : "string",
@@ -36,10 +41,11 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "interface",
-      "function" : "import_pv",
+      "function" : "import_file",
       "data" : {
+        "type" : "STEP",
         "dirname" : "c:/myfiles/parts",
-        "file" : "box.pvz"
+        "file" : "box.stp"
       }
     },
     "response" : {
@@ -54,11 +60,12 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "interface",
-      "function" : "import_pv",
+      "function" : "import_file",
       "data" : {
+        "type" : "IGES",
         "dirname" : "c:/myfiles/parts",
-        "filename" : "box.pvz",
-        "new_name" : "mymodel.prt",
+        "filename" : "box.igs",
+        "new_name" : "mymodel",
         "new_model_type" : "asm"
       }
     },

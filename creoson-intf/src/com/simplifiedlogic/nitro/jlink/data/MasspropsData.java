@@ -89,26 +89,44 @@ public class MasspropsData {
 		this.surfaceArea = surfaceArea;
 	}
 
+	/**
+	 * @return Model Center of Gravity Inertia Tensor
+	 */
 	public JLInertia getCenterGravityInertiaTensor() {
 		return centerGravityInertiaTensor;
 	}
 
+	/**
+	 * @param density Model Center of Gravity Inertia Tensor
+	 */
 	public void setCenterGravityInertiaTensor(JLInertia centerGravityInertiaTensor) {
 		this.centerGravityInertiaTensor = centerGravityInertiaTensor;
 	}
 
+	/**
+	 * @return Model Coordinate System Inertia
+	 */
 	public JLInertia getCoordSysInertia() {
 		return coordSysInertia;
 	}
 
+	/**
+	 * @param density Model Coordinate System Inertia
+	 */
 	public void setCoordSysInertia(JLInertia coordSysInertia) {
 		this.coordSysInertia = coordSysInertia;
 	}
 
+	/**
+	 * @return Model Coordinate System Inertia Tensor
+	 */
 	public JLInertia getCoordSysInertiaTensor() {
 		return coordSysInertiaTensor;
 	}
 
+	/**
+	 * @param density Model Coordinate System Inertia Tensor
+	 */
 	public void setCoordSysInertiaTensor(JLInertia coordSysInertiaTensor) {
 		this.coordSysInertiaTensor = coordSysInertiaTensor;
 	}

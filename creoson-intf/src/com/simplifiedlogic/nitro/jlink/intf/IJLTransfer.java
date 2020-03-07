@@ -56,6 +56,7 @@ public interface IJLTransfer {
     public static final String EXT_PV         = ".pvz";
     public static final String EXT_DXF        = ".dxf";
     public static final String EXT_PDF        = ".pdf";
+    public static final String EXT_NEUTRAL    = ".neu";
     
     public static final String GEOM_DEFAULT		= "default";
     public static final String GEOM_SOLIDS		= "solids";
@@ -128,6 +129,13 @@ public interface IJLTransfer {
 			String filename, String dirname,  
 			boolean advanced, AbstractJLISession sess) throws JLIException;
 	
+	public ExportResults exportNeutral(String model, 
+			String filename, String dirname, 
+			boolean advanced, String sessionId) throws JLIException;
+	public ExportResults exportNeutral(String model, 
+			String filename, String dirname, 
+			boolean advanced, AbstractJLISession sess) throws JLIException;
+
 	public String importProgram(String dirname, String filename, String model, 
 			String sessionId) throws JLIException;
 	public String importProgram(String dirname, String filename, String model, 
@@ -176,4 +184,44 @@ public interface IJLTransfer {
 			String newName,
 			String newModelType,
 			AbstractJLISession sess) throws JLIException;
+
+	public String importSTEP(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId) throws JLIException;
+	public String importSTEP(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess) throws JLIException;
+
+	public String importNeutral(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId) throws JLIException;
+	public String importNeutral(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess) throws JLIException;
+
+	public String importIGES(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId) throws JLIException;
+	public String importIGES(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess) throws JLIException;
+
 }

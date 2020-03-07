@@ -19,16 +19,16 @@
 package com.simplifiedlogic.nitro.jlink.calls.model;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcExport.AssemblyConfiguration;
 import com.ptc.pfc.pfcExport.ProductViewExportInstructions;
 import com.ptc.pfc.pfcExport.ProductViewExportOptions;
 import com.ptc.pfc.pfcExport.ProductViewFormat;
 import com.ptc.pfc.pfcExport.pfcExport;
-import com.ptc.pfc.pfcExport.AssemblyConfiguration;
 import com.ptc.pfc.pfcModel.ExportInstructions;
 import com.ptc.pfc.pfcModel.pfcModel;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.export.CallGeometryFlags;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcModel.ExportInstructions
@@ -104,6 +104,14 @@ public class CallExportInstructions {
 		return new CallExportInstructions(pxi);
 	}
 	
+	public static CallExportInstructions createNEUTRALFileExport() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("pfcExport,NEUTRALFileExportInstructions_Create", 0, NitroConstants.DEBUG_JLINK_KEY);
+		ExportInstructions instr = pfcExport.NEUTRALFileExportInstructions_Create();
+		if (instr==null)
+			return null;
+		return new CallExportInstructions(instr);
+	}
+
 	public ExportInstructions getInstr() {
 		return instr;
 	}

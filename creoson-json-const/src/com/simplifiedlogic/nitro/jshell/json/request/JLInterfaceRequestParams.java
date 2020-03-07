@@ -35,7 +35,11 @@ public interface JLInterfaceRequestParams {
     public static final String FUNC_EXPORT_3DPDF	= "export_3dpdf";
     public static final String FUNC_EXPORT_PROGRAM	= "export_program";
     public static final String FUNC_IMPORT_PROGRAM	= "import_program";
-    public static final String FUNC_IMPORT_PV		= "import_pv";
+    public static final String FUNC_IMPORT_PV		= "import_pv"; // legacy
+//    public static final String FUNC_IMPORT_STEP		= "import_step";
+//    public static final String FUNC_IMPORT_IGES		= "import_iges";
+//    public static final String FUNC_IMPORT_NEUTRAL	= "import_neutral";
+    public static final String FUNC_IMPORT_FILE		= "import_file";
     public static final String FUNC_PLOT			= "plot";
     public static final String FUNC_MAPKEY			= "mapkey";
 
@@ -71,5 +75,6 @@ public interface JLInterfaceRequestParams {
     public static final String TYPE_PV         = "PV";
     public static final String TYPE_SAT        = "SAT";
     public static final String TYPE_DXF        = "DXF";
+    public static final String TYPE_NEUTRAL    = "NEUTRAL";
     
 }

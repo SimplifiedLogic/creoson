@@ -68,6 +68,14 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 			return actionImportProgram(sessionId, input);
 		else if (function.equals(FUNC_IMPORT_PV))
 			return actionImportPV(sessionId, input);
+		else if (function.equals(FUNC_IMPORT_FILE))
+			return actionImportFile(sessionId, input);
+//		else if (function.equals(FUNC_IMPORT_STEP))
+//			return actionImportSTEP(sessionId, input);
+//		else if (function.equals(FUNC_IMPORT_IGES))
+//			return actionImportIGES(sessionId, input);
+//		else if (function.equals(FUNC_IMPORT_NEUTRAL))
+//			return actionImportNeutral(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -123,6 +131,8 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         	results = intfHandler.exportSTEP(model, filename, dirname, geomType, advanced, sessionId);
         else if (TYPE_VRML.equalsIgnoreCase(type))
         	results = intfHandler.exportVRML(model, filename, dirname, sessionId);
+        else if (TYPE_NEUTRAL.equalsIgnoreCase(type))
+        	results = intfHandler.exportNeutral(model, filename, dirname, advanced, sessionId);
         
         if (results!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
@@ -232,12 +242,40 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 	}
 
 	private Hashtable<String, Object> actionImportPV(String sessionId, Hashtable<String, Object> input) throws JLIException {
+//        String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
+//        String filename = checkStringParameter(input, PARAM_FILENAME, false);
+//        String newName = checkStringParameter(input, PARAM_NEWNAME, false);
+//        String newModelType = checkStringParameter(input, PARAM_NEWMODELTYPE, false);
+//        
+//        String outModel = intfHandler.importPV(dirname, filename, newName, newModelType, sessionId);
+//        
+//        if (outModel!=null) {
+//			Hashtable<String, Object> out = new Hashtable<String, Object>();
+//			out.put(OUTPUT_MODEL, outModel);
+//        	return out;
+//        }
+//        return null;
+		
+		input.put(PARAM_TYPE, TYPE_PV);
+		return actionImportFile(sessionId, input);
+	}
+
+	private Hashtable<String, Object> actionImportFile(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String type = checkStringParameter(input, PARAM_TYPE, true);
         String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
         String filename = checkStringParameter(input, PARAM_FILENAME, false);
         String newName = checkStringParameter(input, PARAM_NEWNAME, false);
         String newModelType = checkStringParameter(input, PARAM_NEWMODELTYPE, false);
         
-        String outModel = intfHandler.importPV(dirname, filename, newName, newModelType, sessionId);
+        String outModel = null;
+        if (TYPE_PV.equalsIgnoreCase(type))
+        	outModel = intfHandler.importPV(dirname, filename, newName, newModelType, sessionId);
+        else if (TYPE_STEP.equalsIgnoreCase(type))
+        	outModel = intfHandler.importSTEP(dirname, filename, newName, newModelType, sessionId);
+        else if (TYPE_IGES.equalsIgnoreCase(type))
+        	outModel = intfHandler.importIGES(dirname, filename, newName, newModelType, sessionId);
+        else if (TYPE_NEUTRAL.equalsIgnoreCase(type))
+        	outModel = intfHandler.importNeutral(dirname, filename, newName, newModelType, sessionId);
         
         if (outModel!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

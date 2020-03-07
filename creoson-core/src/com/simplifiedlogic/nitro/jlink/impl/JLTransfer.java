@@ -66,6 +66,7 @@ public class JLTransfer implements IJLTransfer {
     public static final int TRAN_PV         = 11;
     public static final int TRAN_DXF		= 12;
     public static final int TRAN_PDF        = 13;
+    public static final int TRAN_NEUTRAL    = 14;
     
     public static final String OPTION_INTF3D_OUT_DEFAULT = "intf3d_out_default_option";
 
@@ -250,6 +251,121 @@ public class JLTransfer implements IJLTransfer {
         		DebugLogging.sendTimerMessage("interface.exportSTEP,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importSTEP(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String importSTEP(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId)
+			throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return importSTEP(dirname, filename, newName, newModelType, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importSTEP(java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public String importSTEP(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess)
+			throws JLIException {
+
+		return importFile(dirname, filename, newName, newModelType, "STEP", NewModelImportType.IMPORT_NEW_STEP, sess);
+/*
+		DebugLogging.sendDebugMessage("interface.import_step: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+
+    	if (filename==null || filename.trim().length()==0)
+    		throw new JLIException("No file name parameter given");
+    	if (newModelType==null)
+    		newModelType = "asm";
+
+    	try {
+	        JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	        
+            ModelType type = JlinkUtils.getModelTypeForExtension(newModelType);
+            if (type==null)
+            	throw new JLIException("Invalid new model type: "+newModelType);
+
+            dirname = JlinkUtils.resolveRelativePath(session, dirname);
+
+            String savedir = session.getCurrentDirectory();
+            
+            if (dirname == null) {
+                dirname = savedir;
+            }
+            
+            if (newName==null)
+            	newName = filename;
+            newName = NitroUtils.removeExtension(newName);
+
+            CallModel m = null;
+            try {
+	            if (dirname != null && !dirname.equals(savedir)) {
+	                JlinkUtils.changeDirectory(session, dirname);
+	                try {
+	                    m = session.importNewModel(
+	                    		filename, 
+	                    		NewModelImportType.IMPORT_NEW_STEP, 
+	                    		type, 
+	                    		newName, 
+	                    		null);
+	                }
+	                finally {
+	                	JlinkUtils.changeDirectory(session, savedir);
+	                }
+	            }
+	            else {
+	                m = session.importNewModel(
+	                		filename, 
+	                		NewModelImportType.IMPORT_NEW_STEP, 
+	                		type, 
+	                		newName, 
+	                		null);
+	            }
+            }
+            catch (XToolkitFound e) {
+            	throw new JLIException("A model named '"+(newName+"."+newModelType)+"' already exists in memory or the current working directory");
+            }
+            catch (XToolkitCantOpen e) {
+            	throw new JLIException("The file '"+filename+"' could not be opened");
+            }
+
+            if (m==null)
+            	return null;
+            
+            return m.getFileName();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("interface.import_step,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+*/
 	}
 
 	/* (non-Javadoc)
@@ -669,87 +785,7 @@ public class JLTransfer implements IJLTransfer {
 			AbstractJLISession sess)
 			throws JLIException {
 
-		DebugLogging.sendDebugMessage("interface.import_pv: " + filename, NitroConstants.DEBUG_KEY);
-		if (sess==null)
-			throw new JLIException("No session found");
-
-    	long start = 0;
-    	if (NitroConstants.TIME_TASKS)
-    		start = System.currentTimeMillis();
-
-    	if (filename==null || filename.trim().length()==0)
-    		throw new JLIException("No file name parameter given");
-    	if (newModelType==null)
-    		newModelType = "asm";
-
-    	try {
-	        JLGlobal.loadLibrary();
-
-	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
-	        if (session == null)
-	            return null;
-	        
-            ModelType type = JlinkUtils.getModelTypeForExtension(newModelType);
-            if (type==null)
-            	throw new JLIException("Invalid new model type: "+newModelType);
-
-            dirname = JlinkUtils.resolveRelativePath(session, dirname);
-
-            String savedir = session.getCurrentDirectory();
-            
-            if (dirname == null) {
-                dirname = savedir;
-            }
-            
-            if (newName==null)
-            	newName = filename;
-            newName = NitroUtils.removeExtension(newName);
-
-            CallModel m = null;
-            try {
-	            if (dirname != null && !dirname.equals(savedir)) {
-	                JlinkUtils.changeDirectory(session, dirname);
-	                try {
-	                    m = session.importNewModel(
-	                    		filename, 
-	                    		NewModelImportType.IMPORT_NEW_PRODUCTVIEW, 
-	                    		type, 
-	                    		newName, 
-	                    		null);
-	                }
-	                finally {
-	                	JlinkUtils.changeDirectory(session, savedir);
-	                }
-	            }
-	            else {
-	                m = session.importNewModel(
-	                		filename, 
-	                		NewModelImportType.IMPORT_NEW_PRODUCTVIEW, 
-	                		type, 
-	                		newName, 
-	                		null);
-	            }
-            }
-            catch (XToolkitFound e) {
-            	throw new JLIException("A model named '"+(newName+"."+newModelType)+"' already exists in memory or the current working directory");
-            }
-            catch (XToolkitCantOpen e) {
-            	throw new JLIException("The file '"+filename+"' could not be opened");
-            }
-
-            if (m==null)
-            	return null;
-            
-            return m.getFileName();
-    	}
-    	catch (jxthrowable e) {
-    		throw JlinkUtils.createException(e);
-    	}
-    	finally {
-        	if (NitroConstants.TIME_TASKS) {
-        		DebugLogging.sendTimerMessage("interface.import_pv,"+filename, start, NitroConstants.DEBUG_KEY);
-        	}
-    	}
+		return importFile(dirname, filename, newName, newModelType, "PVZ", NewModelImportType.IMPORT_NEW_PRODUCTVIEW, sess);
 	}
 
 	/* (non-Javadoc)
@@ -853,6 +889,168 @@ public class JLTransfer implements IJLTransfer {
         		DebugLogging.sendTimerMessage("interface.exportDXF,"+model, start, NitroConstants.DEBUG_KEY);
         	}
     	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportNeutral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.String)
+	 */
+	@Override
+	public ExportResults exportNeutral(String model, String filename, String dirname, boolean advanced, String sessionId)
+			throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return exportNeutral(model, filename, dirname, advanced, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportNeutral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public ExportResults exportNeutral(String model, String filename, String dirname, boolean advanced, AbstractJLISession sess)
+			throws JLIException {
+
+		DebugLogging.sendDebugMessage("interface.exportNeutral: " + model, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	        
+	        CallModel m;
+	        m = JlinkUtils.getFile(session, model, true);
+
+	        if (filename==null)
+	        	filename = generateFilenameForModel(m, TRAN_NEUTRAL);
+	        else
+	        	filename = NitroUtils.setFileExtension(filename, EXT_NEUTRAL);
+
+	        JlinkUtils.validateFilename(filename);
+
+	        String olddir = session.getCurrentDirectory();
+	        if (dirname == null) {
+	            dirname = olddir;
+	        }
+	        dirname = JlinkUtils.resolveRelativePath(session, dirname);
+
+	        NitroUtils.validateDirFile(dirname, filename, true);
+	        
+	        if (!advanced) {
+		        CallExportInstructions pxi = CallExportInstructions.createNEUTRALFileExport();
+	
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	m.export(filename, pxi);
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+		        	m.export(filename, pxi);
+		        }
+	        }
+	        else {
+		        if (dirname != null && !dirname.equals(olddir)) {
+		            JlinkUtils.changeDirectory(session, dirname);
+		            try {
+		            	exportAdvanced(session, m, filename, ExportType.EXPORT_NEUTRAL, "export_profiles_neutral");
+		            }
+		            finally {
+		            	JlinkUtils.changeDirectory(session, olddir);
+		            }
+		        }
+		        else {
+	            	exportAdvanced(session, m, filename, ExportType.EXPORT_NEUTRAL, "export_profiles_neutral");
+		        }
+	        }
+
+	        ExportResults result = new ExportResults();
+	        result.setDirname(dirname);
+	        result.setFilename(filename);
+	
+	        return result;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("interface.exportNeutral,"+model, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importNeutral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String importNeutral(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId)
+			throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return importNeutral(dirname, filename, newName, newModelType, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importNeutral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public String importNeutral(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess)
+			throws JLIException {
+
+		return importFile(dirname, filename, newName, newModelType, "neutral", NewModelImportType.IMPORT_NEW_NEUTRAL, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importNeutral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String importIGES(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String sessionId)
+			throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return importIGES(dirname, filename, newName, newModelType, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#importNeutral(java.lang.String, java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	@Override
+	public String importIGES(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			AbstractJLISession sess)
+			throws JLIException {
+
+		return importFile(dirname, filename, newName, newModelType, "iges", NewModelImportType.IMPORT_NEW_IGES, sess);
 	}
 
 	/* (non-Javadoc)
@@ -1324,6 +1522,99 @@ public class JLTransfer implements IJLTransfer {
     	}
 	}
 
+	private String importFile(
+			String dirname, 
+			String filename, 
+			String newName,
+			String newModelType,
+			String type, 
+			NewModelImportType importType, 
+			AbstractJLISession sess)
+			throws JLIException {
+
+		DebugLogging.sendDebugMessage("interface.import_file: " + filename + " (" + type + ")", NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+
+    	if (filename==null || filename.trim().length()==0)
+    		throw new JLIException("No file name parameter given");
+    	if (newModelType==null)
+    		newModelType = "asm";
+
+    	try {
+	        JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	        
+            ModelType mtype = JlinkUtils.getModelTypeForExtension(newModelType);
+            if (mtype==null)
+            	throw new JLIException("Invalid new model type: "+newModelType);
+
+            dirname = JlinkUtils.resolveRelativePath(session, dirname);
+
+            String savedir = session.getCurrentDirectory();
+            
+            if (dirname == null) {
+                dirname = savedir;
+            }
+            
+            if (newName==null)
+            	newName = filename;
+            newName = NitroUtils.removeExtension(newName);
+
+            CallModel m = null;
+            try {
+	            if (dirname != null && !dirname.equals(savedir)) {
+	                JlinkUtils.changeDirectory(session, dirname);
+	                try {
+	                    m = session.importNewModel(
+	                    		filename, 
+	                    		importType, 
+	                    		mtype, 
+	                    		newName, 
+	                    		null);
+	                }
+	                finally {
+	                	JlinkUtils.changeDirectory(session, savedir);
+	                }
+	            }
+	            else {
+	                m = session.importNewModel(
+	                		filename, 
+	                		importType, 
+	                		mtype, 
+	                		newName, 
+	                		null);
+	            }
+            }
+            catch (XToolkitFound e) {
+            	throw new JLIException("A model named '"+(newName+"."+newModelType)+"' already exists in memory or the current working directory");
+            }
+            catch (XToolkitCantOpen e) {
+            	throw new JLIException("The file '"+filename+"' could not be opened");
+            }
+
+            if (m==null)
+            	return null;
+            
+            return m.getFileName();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("interface.import_file,"+filename+"+"+type, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, java.lang.String)
 	 */
@@ -1476,6 +1767,8 @@ public class JLTransfer implements IJLTransfer {
             ext = EXT_DXF;
         else if (type==TRAN_PDF)
             ext = EXT_PDF;
+        else if (type==TRAN_NEUTRAL)
+            ext = EXT_NEUTRAL;
         else
             throw new JLIException("Invalid type to generateFilenameFromModel: " + type);
 
