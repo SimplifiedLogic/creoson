@@ -27,6 +27,9 @@
 				<fileset dir="${jackson_dir}/">
 					<include name="jackson*.jar"/>
 				</fileset>
+				<fileset dir="${apache_commons_codec_dir}/">
+					<include name="commons-codec*.jar"/>
+				</fileset>
 	    		</classpath>
 	    		<arg value="${server_dir}/web/jsonSpecs" />
     		</java>
