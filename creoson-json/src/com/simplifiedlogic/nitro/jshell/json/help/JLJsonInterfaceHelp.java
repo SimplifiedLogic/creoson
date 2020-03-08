@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.simplifiedlogic.nitro.jlink.intf.IJLTransfer;
+import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLInterfaceRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLInterfaceResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionArgument;
@@ -122,11 +123,11 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("24");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
         
-    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the output file");
     	spec.addReturn(ret);
         
@@ -225,11 +226,11 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDescription("Whether to use the newer Creo 4 file export function.");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
         
-    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the output file");
     	spec.addReturn(ret);
         
@@ -312,11 +313,11 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
         
-    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the output file");
     	spec.addReturn(ret);
         
@@ -378,11 +379,11 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue(TYPE_POSTSCRIPT);
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
         
-    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_FILENAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the output file");
     	spec.addReturn(ret);
         
@@ -455,7 +456,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("Currently active model, or the model for the " + PARAM_FILENAME + " parameter if given");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the model updated");
     	spec.addReturn(ret);
         
@@ -488,11 +489,11 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("Currently active model");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
         
-    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the output file");
     	spec.addReturn(ret);
         
@@ -541,7 +542,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("asm");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the model imported");
     	spec.addReturn(ret);
         
@@ -568,6 +569,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_FILE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Import a file as a model");
+    	spec.addFootnote("NOTE: This function will not automatically display or activate the imported model.  If you want that, you should take the file name returned by this function and pass it to "+JLJsonFileHelp.COMMAND+":"+JLFileRequestParams.FUNC_OPEN+".");
     	spec.addFootnote("Users of the old import_pv function should start using this function instead.");
     	FunctionArgument arg;
     	FunctionReturn ret;
@@ -604,7 +606,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("asm");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the model imported");
     	spec.addReturn(ret);
         
@@ -657,7 +659,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("asm");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the model imported");
     	spec.addReturn(ret);
         
@@ -708,7 +710,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("asm");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_DOUBLE);
+    	ret = new FunctionReturn(OUTPUT_MODEL, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Name of the model imported");
     	spec.addReturn(ret);
         
