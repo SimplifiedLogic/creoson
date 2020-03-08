@@ -35,7 +35,7 @@ public interface JLInterfaceRequestParams {
     public static final String FUNC_EXPORT_3DPDF	= "export_3dpdf";
     public static final String FUNC_EXPORT_PROGRAM	= "export_program";
     public static final String FUNC_IMPORT_PROGRAM	= "import_program";
-    public static final String FUNC_IMPORT_PV		= "import_pv"; // legacy
+//    public static final String FUNC_IMPORT_PV		= "import_pv"; // legacy
 //    public static final String FUNC_IMPORT_STEP		= "import_step";
 //    public static final String FUNC_IMPORT_IGES		= "import_iges";
 //    public static final String FUNC_IMPORT_NEUTRAL	= "import_neutral";

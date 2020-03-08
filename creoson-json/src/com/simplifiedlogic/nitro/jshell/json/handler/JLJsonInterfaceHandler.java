@@ -66,8 +66,8 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 			return actionExportProgram(sessionId, input);
 		else if (function.equals(FUNC_IMPORT_PROGRAM))
 			return actionImportProgram(sessionId, input);
-		else if (function.equals(FUNC_IMPORT_PV))
-			return actionImportPV(sessionId, input);
+//		else if (function.equals(FUNC_IMPORT_PV))
+//			return actionImportPV(sessionId, input);
 		else if (function.equals(FUNC_IMPORT_FILE))
 			return actionImportFile(sessionId, input);
 //		else if (function.equals(FUNC_IMPORT_STEP))
@@ -240,7 +240,7 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         }
         return null;
 	}
-
+/*
 	private Hashtable<String, Object> actionImportPV(String sessionId, Hashtable<String, Object> input) throws JLIException {
 //        String dirname = checkStringParameter(input, PARAM_DIRNAME, false);
 //        String filename = checkStringParameter(input, PARAM_FILENAME, false);
@@ -259,7 +259,7 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 		input.put(PARAM_TYPE, TYPE_PV);
 		return actionImportFile(sessionId, input);
 	}
-
+*/
 	private Hashtable<String, Object> actionImportFile(String sessionId, Hashtable<String, Object> input) throws JLIException {
         String type = checkStringParameter(input, PARAM_TYPE, true);
         String dirname = checkStringParameter(input, PARAM_DIRNAME, false);

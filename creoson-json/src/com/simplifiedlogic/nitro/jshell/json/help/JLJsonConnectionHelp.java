@@ -144,7 +144,7 @@ public class JLJsonConnectionHelp extends JLJsonCommandHelp implements JLConnect
     	spec.addFootnote("Set " + PARAM_RETRIES + " to 0 to NOT attempt to connect to Creo.");
     	spec.addFootnote("The server will pause for 3 seconds before attempting a connection, and will pause for 10 seconds between connection retries");
     	spec.addFootnote("If Creo pops up a message after startup, this function may cause Creo to crash unless retries is set to 0.");
-    	spec.addFootnote("<b>If "+PARAM_USE_DESKTOP+" is set, make sure that your "+"nitro_proe_remote.bat"+" file contains a cd command to change to the directory where you want Creo to start!</b>");
+    	spec.addFootnote("If "+PARAM_USE_DESKTOP+" is set, make sure that your "+"nitro_proe_remote.bat"+" file contains a cd command to change to the directory where you want Creo to start!");
     	FunctionArgument arg;
 
     	arg = new FunctionArgument(PARAM_START_DIR, FunctionSpec.TYPE_STRING);

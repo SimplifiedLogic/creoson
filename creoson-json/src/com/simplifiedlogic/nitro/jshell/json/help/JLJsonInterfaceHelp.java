@@ -57,7 +57,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 		list.add(helpExportPDF(false));
 		list.add(helpExportProgram());
 		list.add(helpImportProgram());
-		list.add(helpImportPV());
+//		list.add(helpImportPV());
 		list.add(helpImportFile());
 		list.add(helpMapkey());
 		list.add(helpPlot());
@@ -511,7 +511,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 
     	return template;
 	}
-
+/*
 	private FunctionTemplate helpImportPV() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_PV);
     	FunctionSpec spec = template.getSpec();
@@ -563,11 +563,12 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 
     	return template;
 	}
-
+*/
 	private FunctionTemplate helpImportFile() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_IMPORT_FILE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Import a file as a model");
+    	spec.addFootnote("Users of the old import_pv function should start using this function instead.");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -612,7 +613,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	ex = new FunctionExample();
     	ex.addInput(PARAM_TYPE, TYPE_STEP);
     	ex.addInput(PARAM_DIRNAME, "c:/myfiles/parts");
-    	ex.addInput(PARAM_MODEL, "box.stp");
+    	ex.addInput(PARAM_FILENAME, "box.stp");
     	ex.addOutput(OUTPUT_MODEL, "box.asm");
     	template.addExample(ex);
 
