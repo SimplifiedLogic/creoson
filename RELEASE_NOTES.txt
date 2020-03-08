@@ -32,6 +32,8 @@ R E L E A S E   N O T E S
 		windchill
 			clear_workspace - ignore "found" error, which just means that files were found (Issue #37)
 
+	- Revamp of embedded web pages, new folder structure and new page layouts
+
 2.5.0
 	- Added new functions:
 		dimension
