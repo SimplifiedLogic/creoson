@@ -1,0 +1,89 @@
+{
+  "spec" : {
+    "function_description" : "Export a model plot",
+    "command" : "interface",
+    "function" : "plot",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Model name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Destination directory",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "driver",
+      "type" : "string",
+      "default" : "POSTSCRIPT",
+      "valid_values" : "POSTSCRIPT, JPEG, TIFF"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory of the output file"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Name of the output file"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "plot",
+      "data" : {
+        "file" : "box.prt",
+        "driver" : "JPEG"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "box.jpeg"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "plot",
+      "data" : {
+        "file" : "box.prt",
+        "dirname" : "subdir"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts/subdir",
+        "filename" : "box.ps"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "plot",
+      "data" : {
+        "driver" : "TIFF"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "abc123.tiff"
+      }
+    }
+  } ]
+}

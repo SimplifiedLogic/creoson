@@ -1,0 +1,37 @@
+
+/*!
+ * Custom fix for json2Table styling
+ */
+
+div.td_head2 {
+    background-color : lightgreen;
+    /*color: white;*/
+    padding-left: 10px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+
+.td_headModified {
+    background-color : lightgrey;
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.theme-bg-helptables {
+    background: lightgray;
+}
+
+.theme-bg-helptables-commands {
+    color: white;
+    background: dimgrey;
+}
+
+.theme-bg-helptables-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: white;
+    background: dimgrey;
+}
+

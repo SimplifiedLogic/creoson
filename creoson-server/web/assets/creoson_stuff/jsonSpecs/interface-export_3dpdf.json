@@ -1,0 +1,127 @@
+{
+  "spec" : {
+    "function_description" : "Export a model to a 3D PDF file",
+    "command" : "interface",
+    "function" : "export_3dpdf",
+    "notes" : [ "When use_drawing_settings is true, the Font Stroke option will be set to Stroke All Fonts, and the Color Depth option will be set to Grayscale." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Model name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Destination file name.  May also contain a path to the file.",
+      "default" : "The model name with the appropriate file extension, in Creo's working directory"
+    }, {
+      "name" : "height",
+      "type" : "double",
+      "description" : "PDF Image height",
+      "default" : "Creo default export height"
+    }, {
+      "name" : "width",
+      "type" : "double",
+      "description" : "PDF Image width",
+      "default" : "Creo default export width"
+    }, {
+      "name" : "dpi",
+      "type" : "integer",
+      "description" : "PDF Image DPI",
+      "default" : "Creo default export DPI"
+    }, {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Destination directory",
+      "default" : "Creo's current working directory"
+    }, {
+      "name" : "use_drawing_settings",
+      "type" : "boolean",
+      "description" : "Whether to use special settings for exporting drawings",
+      "default" : "false"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory of the output file"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Name of the output file"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_3dpdf",
+      "data" : {
+        "file" : "box.prt",
+        "filename" : "box-export.pdf",
+        "dirname" : "subdir",
+        "height" : 7.5,
+        "width" : 13.0
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts/subdir",
+        "filename" : "box-export.pdf"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_3dpdf",
+      "data" : {
+        "file" : "box.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "box.pdf"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_3dpdf"
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "abc123.pdf"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_3dpdf",
+      "data" : {
+        "filename" : "C:/testing/abc123.pdf"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/testing",
+        "filename" : "abc123.pdf"
+      }
+    }
+  } ]
+}

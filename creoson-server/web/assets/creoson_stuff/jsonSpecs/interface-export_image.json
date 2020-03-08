@@ -1,0 +1,134 @@
+{
+  "spec" : {
+    "function_description" : "Export a model to an image file",
+    "command" : "interface",
+    "function" : "export_image",
+    "request" : [ {
+      "name" : "type",
+      "type" : "string",
+      "description" : "Image type",
+      "required" : true,
+      "valid_values" : "BMP, EPS, JPEG, TIFF"
+    }, {
+      "name" : "file",
+      "type" : "string",
+      "description" : "Model name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Destination file name.  May also contain a path to the file.",
+      "default" : "The model name with the appropriate file extension, in Creo's working directory"
+    }, {
+      "name" : "height",
+      "type" : "double",
+      "description" : "Image height",
+      "default" : "7.5"
+    }, {
+      "name" : "width",
+      "type" : "double",
+      "description" : "Image width",
+      "default" : "10.0"
+    }, {
+      "name" : "dpi",
+      "type" : "integer",
+      "description" : "Image DPI",
+      "default" : "100"
+    }, {
+      "name" : "depth",
+      "type" : "integer",
+      "description" : "Image depth",
+      "default" : "24"
+    } ],
+    "response" : [ {
+      "name" : "dirname",
+      "type" : "string",
+      "description" : "Directory of the output file"
+    }, {
+      "name" : "filename",
+      "type" : "string",
+      "description" : "Name of the output file"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_image",
+      "data" : {
+        "file" : "box.prt",
+        "filename" : "box-img.bmp",
+        "type" : "BMP",
+        "height" : 7.5,
+        "width" : 13.0
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "box-img.bmp"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_image",
+      "data" : {
+        "file" : "box.prt",
+        "type" : "TIFF",
+        "height" : 7.5,
+        "width" : 13.0
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "box.tiff"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_image",
+      "data" : {
+        "type" : "JPEG"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/myfiles/parts",
+        "filename" : "abc123.jpg"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "export_image",
+      "data" : {
+        "filename" : "C:/testing/abc123.jpg",
+        "type" : "JPEG"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "dirname" : "C:/testing",
+        "filename" : "abc123.jpg"
+      }
+    }
+  } ]
+}
