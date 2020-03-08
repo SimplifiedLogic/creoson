@@ -1,6 +1,37 @@
 R E L E A S E   N O T E S
 =========================
 
+2.6.0
+	- Added new functions:
+		file
+			get_cur_material_wildcard - a version of get_cur_material which allows wildcards on model names and returns a different structure.
+				- this was made a separate function so that users of get_cur_material don't need to change their code to handle the new return object.
+			import_file - imports PV, STEP, IGES, and NEUTRAL files
+			list_materials_wildcard - a version of list_materials which allows wildcards on model names and returns a different structure.
+				- this was made a separate function so that users of list_materials don't need to change their code to handle the new return object.
+	- Modified functions:
+		bom
+			get_paths - handle nested Simplified Reps
+			          - return has_simprep flag to indicate whether model has a Simplified Rep
+		connection
+			is_creo_running - if a Creo exception occurs, return false rather than returning the error
+		dimension
+			list_detail - fix function doc to use drawings for examples, not parts
+		feature
+			resume - fix bug where unnamed children were not being resumed (Issue #46)
+			suppress - fix bug where clip flag was being ignored when using a feature ID instead of a name (Issue #46)
+			         - fix bug where unnamed children were not being suppressed (Issue #46)
+		file
+			assemble - fix bug where package_assembly flag was being ignored
+			         - if asmref or compref are null in a constraint, ignore that constraint
+			delete_material - allow wildcards on model names
+			export_file - added NEUTRAL option for type argument
+			load_material_file - allow wildcards on model names
+			massprops - added inertia matrices to output (ctr_grav_inertia_tensor, coord_sys_inertia, coord_sys_inertia_tensor)
+			set_cur_material - allow wildcards on model names
+		windchill
+			clear_workspace - ignore "found" error, which just means that files were found (Issue #37)
+
 2.5.0
 	- Added new functions:
 		dimension
