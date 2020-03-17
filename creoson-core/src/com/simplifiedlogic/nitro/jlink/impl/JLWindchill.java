@@ -337,7 +337,12 @@ public class JLWindchill implements IJLWindchill {
 	    		IJLFile fileHandler = JShellProvider.getInstance().getJLFile();
 	    		if (fileHandler!=null)
 	    			fileHandler.erase(null, null, true, sess);
-				server.setActiveWorkspace(workspace);
+	    		try {
+	    			server.setActiveWorkspace(workspace);
+	    		}
+		    	catch (XToolkitFound e) {
+		    		// ignore "found" error, means that the workspace was already set
+		    	}
 	    	}
 
     	}
@@ -560,8 +565,14 @@ public class JLWindchill implements IJLWindchill {
 			}
 
     		String activeWorkspace = server.getActiveWorkspace();
-	    	if (activeWorkspace==null || !activeWorkspace.equals(workspace))
-	    		server.setActiveWorkspace(workspace);
+	    	if (activeWorkspace==null || !activeWorkspace.equals(workspace)) {
+	    		try {
+	    			server.setActiveWorkspace(workspace);
+	    		}
+		    	catch (XToolkitFound e) {
+		    		// ignore "found" error, means that the workspace was already set
+		    	}
+	    	}
 
 	    	try {
 	    		server.removeObjects(seq);
@@ -573,8 +584,14 @@ public class JLWindchill implements IJLWindchill {
 	    		// ignore "found" error
 	    	}
 	    	finally {
-		    	if (activeWorkspace!=null && activeWorkspace.equals(workspace))
-		    		server.setActiveWorkspace(activeWorkspace);
+		    	if (activeWorkspace!=null && activeWorkspace.equals(workspace)) {
+		    		try {
+		    			server.setActiveWorkspace(activeWorkspace);
+		    		}
+			    	catch (XToolkitFound e) {
+			    		// ignore "found" error, means that the workspace was already set
+			    	}
+		    	}
 	    	}
     	}
     	catch (jxthrowable e) {
