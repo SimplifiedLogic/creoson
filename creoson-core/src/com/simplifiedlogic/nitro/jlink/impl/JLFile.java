@@ -3697,13 +3697,18 @@ public class JLFile implements IJLFile {
         	if (!(m instanceof CallPart))
         		return false;
         	CallPart p = (CallPart)m;
+        	
         	CallMaterial matl = null;
-    		try {
-    			matl = p.retrieveMaterial(materialName);
-    		}
-    		catch (XToolkitNotFound e) {
-    			throw new JLIException("Material file not found: "+materialName);
-    		}
+        	
+        	matl = p.getMaterial(materialName);
+        	if (matl==null) {
+	    		try {
+	    			matl = p.retrieveMaterial(materialName);
+	    		}
+	    		catch (XToolkitNotFound e) {
+	    			throw new JLIException("Material file not found: "+materialName);
+	    		}
+        	}
     		if (setCurrent)
     			p.setCurrentMaterial(matl);
 
