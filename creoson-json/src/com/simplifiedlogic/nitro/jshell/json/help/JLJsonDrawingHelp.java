@@ -1072,7 +1072,6 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	rec = new OrderedMap<String, Object>();
     	rec.put(JLFileRequestParams.PARAM_X, 2.5);
     	rec.put(JLFileRequestParams.PARAM_Y, 4.0);
-    	rec.put(JLFileRequestParams.PARAM_Z, 0.5);
     	ex.addInput(PARAM_POINT, rec);
     	template.addExample(ex);
     	
