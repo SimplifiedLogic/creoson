@@ -545,7 +545,7 @@ batchFiles();
                             $('#editorCreoOpenResponse').empty().append(JSON.stringify(resObj,null,2));
 
                             // cleanup last reqeust for presetnation - hack!  but works :)
-                            let prettyRequest = JSON.parse(JSON.stringify(creo.ajax.requestObj));
+                            let prettyRequest = JSON.parse(JSON.stringify(creo.ajax.lastRequestObj));
                             prettyRequest = JSON.parse(prettyRequest.data);
 
                             $('#creoson_requestResponseOpen')
@@ -619,7 +619,7 @@ batchFiles();
                             $('#editorCreoOpenResponse').empty().append(JSON.stringify(resObj,null,2));
 
                             // cleanup last reqeust for presetnation - hack!  but works :)
-                            let prettyRequest = JSON.parse(JSON.stringify(creo.ajax.requestObj));
+                            let prettyRequest = JSON.parse(JSON.stringify(creo.ajax.lastRequestObj));
                             prettyRequest = JSON.parse(prettyRequest.data);
 
                             $('#creoson_requestResponseParams')
@@ -727,21 +727,24 @@ batchFiles();
 
     var editorCreoConn = new ace.edit("editorCreoConn", {
         minLines: 2,
-        maxLines: 30
+        maxLines: 30,
+        useWorker : false
     });
     editorCreoConn.setTheme("ace/theme/xcode");
     editorCreoConn.session.setMode("ace/mode/javascript");
 
     var editorCreoOpen = new ace.edit("editorCreoOpen", {
         minLines: 2,
-        maxLines: 30
+        maxLines: 30,
+        useWorker : false
     });
     editorCreoOpen.setTheme("ace/theme/xcode");
     editorCreoOpen.session.setMode("ace/mode/javascript");
 
     var editorCreoParam = new ace.edit("editorCreoParam", {
         minLines: 2,
-        maxLines: 30
+        maxLines: 30,
+        useWorker : false
     });
     editorCreoParam.setTheme("ace/theme/xcode");
     editorCreoParam.session.setMode("ace/mode/javascript");
@@ -749,7 +752,8 @@ batchFiles();
 
     var editorBatchExample = new ace.edit("editorBatchExample", {
         minLines: 2,
-        maxLines: 30
+        maxLines: 30,
+        useWorker : false
     });
     editorBatchExample.setTheme("ace/theme/xcode");
     editorBatchExample.session.setMode("ace/mode/javascript");

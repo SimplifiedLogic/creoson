@@ -12,20 +12,12 @@ creo.ajax = (function (pub) {
         pub.sessionId = -1;
         pub.url  =  '/creoson';
         pub.port =  9050;
-        pub.dataType =  "json";
+        pub.dataType =  "json";          
         pub.type =  'post';
         pub.traditional = true;
 
-        pub.requestObj = {
-            url: pub.url,
-            port: pub.port,
-            dataType: pub.dataType,
-            type: pub.type,
-            async : false,
-            traditional: pub.traditional,
-            data: null
-        };
-
+        pub.lastRequestObj = {};
+        
         pub.request = function(dataObj) {
             console.log('got into : creo.ajax request');
 
@@ -35,12 +27,25 @@ creo.ajax = (function (pub) {
                     dataObj.sessionId = pub.sessionId;
                 }
 
-                // set the transaction
-                pub.requestObj.data = JSON.stringify(dataObj);
-                
-                console.log(JSON.stringify(pub.requestObj, null, 2));
+                // define the default request - inherit current pub vars
+                let requestObjConst = {
+                    url: pub.url,
+                    port: pub.port,
+                    dataType: pub.dataType,
+                    type: pub.type,
+                    async : false,
+                    traditional: pub.traditional,
+                    data: null
+                };
+
+                requestObjConst.data = JSON.stringify(dataObj); // set the transaction to the request object
+
+                pub.lastRequestObj = requestObjConst;  // expose the request
+
+                // log the request to the console
+                console.log(JSON.stringify(requestObjConst, null, 2));
                 $.ajax(
-                    pub.requestObj
+                    requestObjConst
                 )
                     .done(function (data) {
 
