@@ -2502,6 +2502,8 @@ public class JLDrawing implements IJLDrawing {
 	        
 	        CallModelItem item0 = drw.getItemById(ModelItemType.ITEM_DTL_SYM_INSTANCE, symbolId);
 	        CallDetailSymbolInstItem item = (CallDetailSymbolInstItem)item0;
+    		// this doesn't ACTUALLY delete the instance, it just removes it from the screen; 
+    		// you get an error if you try to run this twice
 	        if (item!=null)
 	        	item.delete();
     	}
@@ -3236,9 +3238,7 @@ public class JLDrawing implements IJLDrawing {
 		@Override
 		public boolean loopAction(CallModel2D drawing, int sheetno) throws JLIException,jxthrowable {
 
-    		// this doesn't ACTUALLY delete the instance, it just removes it from the screen; 
-    		// you get an error if you try to run this twice
-	    	CallDetailItems items = drawing.listDetailItems(DetailType.DETAIL_SYM_INSTANCE, null);
+	    	CallDetailItems items = drawing.listDetailItems(DetailType.DETAIL_SYM_INSTANCE, sheetno);
 	    	if (items==null)
 	    		return false;
 	    	
