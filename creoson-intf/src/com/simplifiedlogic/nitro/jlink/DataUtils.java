@@ -72,7 +72,7 @@ public class DataUtils {
             val = new String((byte[])in);
         else
             val = in.toString();
-        if (val.endsWith(".0"))
+        if (val.endsWith(".0") || val.endsWith(",0"))
         	val = val.substring(0, val.length()-2);
 
         // Integer's value parsing can only handle up to 1E6, but an Integer can hold up to ~1E9 ??
