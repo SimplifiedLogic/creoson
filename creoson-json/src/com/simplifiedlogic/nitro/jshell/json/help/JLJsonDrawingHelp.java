@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.simplifiedlogic.nitro.jlink.data.SymbolInstData;
 import com.simplifiedlogic.nitro.jlink.data.ViewDisplayData;
 import com.simplifiedlogic.nitro.jshell.json.request.JLDrawingRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
@@ -1592,20 +1593,39 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	ex.addInput(PARAM_DRAWING, "box.drw");
     	List<Map<String, Object>> params = new ArrayList<Map<String, Object>>();
     	Map<String, Object> rec = new OrderedMap<String, Object>();
+    	Map<String, Object> rec2;
     	params.add(rec);
     	rec.put(OUTPUT_ID, 1);
     	rec.put(OUTPUT_SYMBOL_NAME, "MY_SYMBOL");
 		rec.put(OUTPUT_SHEET, 1);
-    	rec = new OrderedMap<String, Object>();
+    	rec2 = new OrderedMap<String, Object>();
+    	rec2.put(JLFileRequestParams.PARAM_X, 10.0);
+    	rec2.put(JLFileRequestParams.PARAM_Y, 3.25);
+    	rec2.put(JLFileRequestParams.PARAM_Z, 0.0);
+    	rec.put(OUTPUT_LOCATION, rec2);
+		rec.put(OUTPUT_ATTACH_TYPE, "free");
+		rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_ID, 2);
     	rec.put(OUTPUT_SYMBOL_NAME, "LAST_SYMBOL");
 		rec.put(OUTPUT_SHEET, 1);
+    	rec2 = new OrderedMap<String, Object>();
+    	rec2.put(JLFileRequestParams.PARAM_X, 30.0);
+    	rec2.put(JLFileRequestParams.PARAM_Y, 14.70);
+    	rec2.put(JLFileRequestParams.PARAM_Z, 0.0);
+    	rec.put(OUTPUT_LOCATION, rec2);
+		rec.put(OUTPUT_ATTACH_TYPE, "unknown");
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_ID, 3);
     	rec.put(OUTPUT_SYMBOL_NAME, "NOTE_SYMBOL");
 		rec.put(OUTPUT_SHEET, 2);
+    	rec2 = new OrderedMap<String, Object>();
+    	rec2.put(JLFileRequestParams.PARAM_X, 25.50);
+    	rec2.put(JLFileRequestParams.PARAM_Y, 23.0);
+    	rec2.put(JLFileRequestParams.PARAM_Z, 0.0);
+    	rec.put(OUTPUT_LOCATION, rec2);
+		rec.put(OUTPUT_ATTACH_TYPE, "free");
 		ex.addOutput(OUTPUT_SYMBOLS, params);
     	template.addExample(ex);
 
@@ -1618,6 +1638,12 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	rec.put(OUTPUT_ID, 1);
     	rec.put(OUTPUT_SYMBOL_NAME, "MY_SYMBOL");
 		rec.put(OUTPUT_SHEET, 1);
+    	rec2 = new OrderedMap<String, Object>();
+    	rec2.put(JLFileRequestParams.PARAM_X, 10.0);
+    	rec2.put(JLFileRequestParams.PARAM_Y, 3.25);
+    	rec2.put(JLFileRequestParams.PARAM_Z, 0.0);
+    	rec.put(OUTPUT_LOCATION, rec2);
+		rec.put(OUTPUT_ATTACH_TYPE, "free");
     	rec = new OrderedMap<String, Object>();
 		ex.addOutput(OUTPUT_SYMBOLS, params);
     	template.addExample(ex);
@@ -1627,7 +1653,7 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     
 	private FunctionObject helpSymbolInstData() {
     	FunctionObject obj = new FunctionObject(OBJ_SYMBOL_INST_DATA);
-    	obj.setDescription("Information about a drawing symbol");
+    	obj.setDescription("Information about a drawing symbol instance");
 
     	FunctionArgument arg;
     	arg = new FunctionArgument(OUTPUT_ID, FunctionSpec.TYPE_INTEGER);
@@ -1635,11 +1661,24 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_SYMBOL_NAME, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("Symbol name");
+    	arg.setDescription("Symbol definition name");
     	obj.add(arg);
 
     	arg = new FunctionArgument(OUTPUT_SHEET, FunctionSpec.TYPE_INTEGER);
     	arg.setDescription("Sheet Number");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_LOCATION, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	arg.setDescription("Location of symbol instance, in drawing coordinates");
+    	obj.add(arg);
+    	
+    	arg = new FunctionArgument(OUTPUT_ATTACH_TYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Type of attachment location ("+
+    			SymbolInstData.ATTACH_TYPE_FREE+","+
+    			SymbolInstData.ATTACH_TYPE_OFFSET+","+
+    			SymbolInstData.ATTACH_TYPE_PARAMETRIC+","+
+    			SymbolInstData.ATTACH_TYPE_UNKNOWN+
+    			")");
     	obj.add(arg);
 
         return obj;

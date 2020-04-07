@@ -20,6 +20,7 @@ package com.simplifiedlogic.nitro.jlink.calls.detail;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcDetail.DetailCreateInstructions;
+import com.ptc.pfc.pfcDetail.DetailLeaders;
 import com.ptc.pfc.pfcDetail.DetailSymbolDefItem;
 import com.ptc.pfc.pfcDetail.DetailSymbolInstInstructions;
 import com.ptc.pfc.pfcDetail.pfcDetail;
@@ -62,6 +63,14 @@ public class CallDetailSymbolInstInstructions extends CallDetailCreateInstructio
 	public void setTextValues(CallDetailVariantTexts value) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailSymbolInstInstructions,SetTextValues", 0, NitroConstants.DEBUG_JLINK_KEY);
 		getInst().SetTextValues(value!=null ? value.getTexts() : null);
+	}
+	
+	public CallDetailLeaders getInstAttachment() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("DetailSymbolInstInstructions,GetInstAttachment", 0, NitroConstants.DEBUG_JLINK_KEY);
+		DetailLeaders leaders = getInst().GetInstAttachment();
+		if (leaders==null)
+			return null;
+		return new CallDetailLeaders(leaders);
 	}
 
 	public DetailSymbolInstInstructions getInst() {

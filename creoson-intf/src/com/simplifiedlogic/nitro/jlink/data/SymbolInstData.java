@@ -26,11 +26,16 @@ package com.simplifiedlogic.nitro.jlink.data;
  */
 public class SymbolInstData {
 
+	public static final String ATTACH_TYPE_FREE 		= "free";
+	public static final String ATTACH_TYPE_PARAMETRIC 	= "parametric";
+	public static final String ATTACH_TYPE_UNKNOWN 		= "unknown";
+	public static final String ATTACH_TYPE_OFFSET 		= "offset";
+
 	private int id;
 	private String name;
 	private int sheet;
-	// not ready for position yet, would require diving down into the Leaders / Attachments to find a FreeAttachment object
-//	private JLPoint location;
+	private JLPoint location;
+	private String attachType;
 
 	/**
 	 * @return The symbol ID
@@ -56,12 +61,18 @@ public class SymbolInstData {
 	public void setName(String name) {
 		this.name = name;
 	}
-//	public JLPoint getLocation() {
-//		return location;
-//	}
-//	public void setLocation(JLPoint location) {
-//		this.location = location;
-//	}
+	/**
+	 * @return The symbol's location
+	 */
+	public JLPoint getLocation() {
+		return location;
+	}
+	/**
+	 * @param location The symbol's location
+	 */
+	public void setLocation(JLPoint location) {
+		this.location = location;
+	}
 	/**
 	 * @return The sheet number containing the symbol
 	 */
@@ -73,6 +84,18 @@ public class SymbolInstData {
 	 */
 	public void setSheet(int sheet) {
 		this.sheet = sheet;
+	}
+	/**
+	 * @return The symbol instance's attachment type
+	 */
+	public String getAttachType() {
+		return attachType;
+	}
+	/**
+	 * @param attachType The symbol instance's attachment type
+	 */
+	public void setAttachType(String attachType) {
+		this.attachType = attachType;
 	}
 
 }

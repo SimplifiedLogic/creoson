@@ -27,6 +27,7 @@ import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.CableDisplayStyle;
 import com.ptc.pfc.pfcBase.DisplayStyle;
 import com.ptc.pfc.pfcBase.TangentEdgeDisplayStyle;
+import com.ptc.pfc.pfcDetail.AttachmentType;
 import com.ptc.pfc.pfcDetail.DetailType;
 import com.ptc.pfc.pfcDrawing.DrawingCreateOption;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
@@ -41,6 +42,7 @@ import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallVector3D;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallAttachment;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailItems;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailLeaders;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolDefInstructions;
@@ -50,6 +52,9 @@ import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailSymbolInstItem;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailVariantText;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallDetailVariantTexts;
 import com.simplifiedlogic.nitro.jlink.calls.detail.CallFreeAttachment;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallOffsetAttachment;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallParametricAttachment;
+import com.simplifiedlogic.nitro.jlink.calls.detail.CallUnsupportedAttachment;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawing;
 import com.simplifiedlogic.nitro.jlink.calls.drawing.CallDrawingCreateOptions;
 import com.simplifiedlogic.nitro.jlink.calls.drawingformat.CallDrawingFormat;
@@ -57,6 +62,7 @@ import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.model2d.CallModel2D;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.sheet.CallSheetData;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
@@ -3253,9 +3259,49 @@ public class JLDrawing implements IJLDrawing {
 		    		rec = new SymbolInstData();
 
 		    		rec.setId(item.getId());
-		    		rec.setName(instDef.getName());
+		    		if (instDef!=null)
+		    			rec.setName(instDef.getName());
 		    		rec.setSheet(sheetno);
 		    		
+		    		CallDetailLeaders leaders = instInst.getInstAttachment();
+		    		if (leaders!=null) {
+		    			CallAttachment attach = leaders.getItemAttachment();
+		    			if (attach!=null) {
+				    		CallPoint3D pt=null;
+				    		int type = attach.getType().getValue();
+				    		switch (type) {
+				    			case AttachmentType._ATTACH_FREE: 
+				    				CallFreeAttachment freeAttach = (CallFreeAttachment)attach;
+				    				pt = freeAttach.getAttachmentPoint();
+				    				rec.setAttachType(SymbolInstData.ATTACH_TYPE_FREE);
+				    				break;
+				    			case AttachmentType._ATTACH_PARAMETRIC:
+				    				CallParametricAttachment paramAttach = (CallParametricAttachment)attach;
+				    				CallSelection sel = paramAttach.getAttachedGeometry();
+				    				pt = sel.getPoint();
+				    				rec.setAttachType(SymbolInstData.ATTACH_TYPE_PARAMETRIC);
+				    				break;
+				    			case AttachmentType._ATTACH_TYPE_UNSUPPORTED: 
+				    				CallUnsupportedAttachment unAttach = (CallUnsupportedAttachment)attach;
+				    				pt = unAttach.getAttachmentPoint();
+				    				rec.setAttachType(SymbolInstData.ATTACH_TYPE_UNKNOWN);
+				    				break;
+				    			case AttachmentType._ATTACH_OFFSET: 
+				    				CallOffsetAttachment offsetAttach = (CallOffsetAttachment)attach;
+				    				pt = offsetAttach.getAttachmentPoint();
+				    				if (pt==null) {
+				    					sel = offsetAttach.getAttachedGeometry();
+					    				pt = sel.getPoint();
+				    				}
+				    				rec.setAttachType(SymbolInstData.ATTACH_TYPE_OFFSET);
+				    				break;
+				    		}
+				    		
+				            CallPoint3D pt0 = JLDrawing.screenToDrawingPoint(drawing, sheetno, pt);
+				            rec.setLocation(new JLPoint(pt0.get(0), pt0.get(1), pt0.get(2)));
+		    			}
+		    		}
+		        	
 			    	if (outvals==null)
 			    		outvals = new ArrayList<SymbolInstData>();
 			    	outvals.add(rec);

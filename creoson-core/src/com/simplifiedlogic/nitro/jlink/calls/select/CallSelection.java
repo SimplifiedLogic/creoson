@@ -20,15 +20,17 @@ package com.simplifiedlogic.nitro.jlink.calls.select;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcAssembly.ComponentPath;
+import com.ptc.pfc.pfcBase.Point3D;
 import com.ptc.pfc.pfcModel.Model;
 import com.ptc.pfc.pfcModelItem.ModelItem;
 import com.ptc.pfc.pfcSelect.Selection;
 import com.ptc.pfc.pfcSelect.pfcSelect;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcSelect.Selection
@@ -76,6 +78,14 @@ public class CallSelection {
 		return new CallSelection(sel);
 	}
 
+	public CallPoint3D getPoint() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Selection,GetPoint", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Point3D pt = sel.GetPoint();
+		if (pt==null)
+			return null;
+		return new CallPoint3D(pt);
+	}
+	
 	public Selection getSel() {
 		return sel;
 	}

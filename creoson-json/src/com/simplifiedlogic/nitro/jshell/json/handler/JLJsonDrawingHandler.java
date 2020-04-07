@@ -527,6 +527,10 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 					outView.put(OUTPUT_SYMBOL_NAME, v.getName());
 				outView.put(OUTPUT_SHEET, v.getSheet());
 				
+				outView.put(OUTPUT_ATTACH_TYPE, v.getAttachType());
+				if (v.getLocation()!=null)
+					outView.put(OUTPUT_LOCATION, writePoint(v.getLocation()));
+
 				outViews.add(outView);
 			}
     		return out;

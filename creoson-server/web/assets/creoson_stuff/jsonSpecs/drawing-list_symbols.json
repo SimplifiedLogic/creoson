@@ -42,15 +42,33 @@
         "symbols" : [ {
           "id" : 1,
           "symbol_name" : "MY_SYMBOL",
-          "sheet" : 1
+          "sheet" : 1,
+          "location" : {
+            "x" : 10.0,
+            "y" : 3.25,
+            "z" : 0.0
+          },
+          "attach_type" : "free"
         }, {
           "id" : 2,
           "symbol_name" : "LAST_SYMBOL",
-          "sheet" : 1
+          "sheet" : 1,
+          "location" : {
+            "x" : 30.0,
+            "y" : 14.7,
+            "z" : 0.0
+          },
+          "attach_type" : "unknown"
         }, {
           "id" : 3,
           "symbol_name" : "NOTE_SYMBOL",
-          "sheet" : 2
+          "sheet" : 2,
+          "location" : {
+            "x" : 25.5,
+            "y" : 23.0,
+            "z" : 0.0
+          },
+          "attach_type" : "free"
         } ]
       }
     }
@@ -72,7 +90,13 @@
         "symbols" : [ {
           "id" : 1,
           "symbol_name" : "MY_SYMBOL",
-          "sheet" : 1
+          "sheet" : 1,
+          "location" : {
+            "x" : 10.0,
+            "y" : 3.25,
+            "z" : 0.0
+          },
+          "attach_type" : "free"
         } ]
       }
     }

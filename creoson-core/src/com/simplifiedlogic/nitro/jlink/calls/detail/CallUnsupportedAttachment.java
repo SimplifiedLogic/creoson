@@ -19,47 +19,49 @@
 package com.simplifiedlogic.nitro.jlink.calls.detail;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcBase.Point3D;
 import com.ptc.pfc.pfcDetail.Attachment;
 import com.ptc.pfc.pfcDetail.AttachmentType;
-import com.ptc.pfc.pfcDetail.FreeAttachment;
-import com.ptc.pfc.pfcDetail.OffsetAttachment;
-import com.ptc.pfc.pfcDetail.ParametricAttachment;
 import com.ptc.pfc.pfcDetail.UnsupportedAttachment;
+import com.ptc.pfc.pfcDetail.pfcDetail;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
+import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcDetail.Attachment
+ * Wrapper for JLink's com.ptc.pfc.pfcDetail.UnsupportedAttachment
  * 
  * @author Adam Andrews
  *
  */
-public class CallAttachment {
+public class CallUnsupportedAttachment extends CallAttachment {
 
-	protected Attachment attachment;
-
-	protected CallAttachment(Attachment attachment) {
-		this.attachment = attachment;
-	}
-	
-	public AttachmentType getType() throws jxthrowable {
-		return null;
+	public CallUnsupportedAttachment(UnsupportedAttachment attachment) {
+		super((Attachment)attachment);
 	}
 
-	public static CallAttachment create(Attachment attachment) {
+	public static CallUnsupportedAttachment createAttachment(UnsupportedAttachment attachment) {
 		if (attachment==null)
 			return null;
-		if (attachment instanceof FreeAttachment) 
-			return CallFreeAttachment.createAttachment((FreeAttachment)attachment);
-		else if (attachment instanceof OffsetAttachment) 
-			return CallOffsetAttachment.createAttachment((OffsetAttachment)attachment);
-		else if (attachment instanceof ParametricAttachment) 
-			return CallParametricAttachment.createAttachment((ParametricAttachment)attachment);
-		else if (attachment instanceof UnsupportedAttachment) 
-			return CallUnsupportedAttachment.createAttachment((UnsupportedAttachment)attachment);
-		else
-			return new CallAttachment(attachment);
+		return new CallUnsupportedAttachment(attachment);
 	}
 
-	public Attachment getAttachment() {
-		return attachment;
+	public CallPoint3D getAttachmentPoint() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("UnsupportedAttachment,GetAttachmentPoint", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Point3D pt = getUnsupportedAttachment().GetAttachmentPoint();
+		if (pt==null)
+			return null;
+		return new CallPoint3D(pt);
+	}
+
+	public AttachmentType getType() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("UnsupportedAttachment,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
+		if (attachment==null)
+			return null;
+		return attachment.GetType();
+	}
+
+	public UnsupportedAttachment getUnsupportedAttachment() {
+		return (UnsupportedAttachment)getAttachment();
 	}
 }

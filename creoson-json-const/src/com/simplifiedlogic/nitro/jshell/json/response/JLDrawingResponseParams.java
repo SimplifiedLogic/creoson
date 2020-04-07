@@ -53,4 +53,5 @@ public interface JLDrawingResponseParams {
     public static final String OUTPUT_LOCATION					= "location";
     public static final String OUTPUT_TEXT_HEIGHT				= "text_height";
 	public static final String OUTPUT_SYMBOL_NAME				= "symbol_name";
+    public static final String OUTPUT_ATTACH_TYPE				= "attach_type";
 }
