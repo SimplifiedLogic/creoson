@@ -1157,21 +1157,21 @@ public class JLTransfer implements IJLTransfer {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#mapkey(java.lang.String, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#mapkey(java.lang.String, int, java.lang.String)
 	 */
 	@Override
-	public void mapkey(String script, String sessionId) throws JLIException {
+	public void mapkey(String script, int delay, String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
         
-        mapkey(script, sess);
+        mapkey(script, delay, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#mapkey(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#mapkey(java.lang.String, int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public void mapkey(String script, AbstractJLISession sess)
+	public void mapkey(String script, int delay, AbstractJLISession sess)
 			throws JLIException {
 
         // TODO: support filename/dirname parameters as well
@@ -1204,6 +1204,14 @@ public class JLTransfer implements IJLTransfer {
 	        script = buf.toString();
 	        
 	        session.runMacro(script);
+	        
+	        if (delay>0) {
+	        	try {
+					Thread.sleep(delay);
+				} catch (InterruptedException e) {
+					// ignore
+				}
+	        }
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);

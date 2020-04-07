@@ -49,6 +49,7 @@ public interface JLInterfaceRequestParams {
     public static final String PARAM_FILENAME	= "filename";
     public static final String PARAM_DIRNAME	= "dirname";
     public static final String PARAM_SCRIPT		= "script";
+    public static final String PARAM_DELAY		= "delay";
     public static final String PARAM_USE_DRW_SETTINGS = "use_drawing_settings";
     // request fields for image parameters
     public static final String PARAM_WIDTH    = "width";

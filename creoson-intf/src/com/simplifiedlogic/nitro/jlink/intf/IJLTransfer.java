@@ -146,9 +146,9 @@ public interface IJLTransfer {
 	public ExportResults plot(String model, String dirname, String driver, 
 			AbstractJLISession sess) throws JLIException;
 	
-	public void mapkey(String script, 
+	public void mapkey(String script, int delay, 
 			String sessionId) throws JLIException;
-	public void mapkey(String script, 
+	public void mapkey(String script, int delay, 
 			AbstractJLISession sess) throws JLIException;
 	
 	public ExportResults exportPDF(

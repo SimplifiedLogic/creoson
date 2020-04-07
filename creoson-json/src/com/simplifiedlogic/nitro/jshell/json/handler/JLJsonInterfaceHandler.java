@@ -203,8 +203,9 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 
 	private Hashtable<String, Object> actionMapkey(String sessionId, Hashtable<String, Object> input) throws JLIException {
         String script = checkStringParameter(input, PARAM_SCRIPT, true);
+        int delay = checkIntParameter(input, PARAM_DELAY, false, 0);
 
-        intfHandler.mapkey(script, sessionId);
+        intfHandler.mapkey(script, delay, sessionId);
         
         return null;
 	}

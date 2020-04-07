@@ -9,6 +9,11 @@
       "type" : "string",
       "description" : "The mapkey script to run",
       "required" : true
+    }, {
+      "name" : "delay",
+      "type" : "integer",
+      "description" : "Amount of time to wait after starting the mapkey, in milliseconds.",
+      "default" : "0"
     } ],
     "response" : [ ]
   },
@@ -19,6 +24,21 @@
       "function" : "mapkey",
       "data" : {
         "script" : "~ Select `main_dlg_cur` `View:casc340798662`;~ Close `main_dlg_cur` `View:casc340798662`;~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "interface",
+      "function" : "mapkey",
+      "data" : {
+        "script" : "~ Select `main_dlg_cur` `View:casc340798662`;~ Close `main_dlg_cur` `View:casc340798662`;~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;",
+        "delay" : 1000
       }
     },
     "response" : {

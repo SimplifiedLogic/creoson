@@ -424,10 +424,20 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setRequired(true);
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_DELAY, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Amount of time to wait after starting the mapkey, in milliseconds.");
+    	arg.setDefaultValue("0");
+    	spec.addArgument(arg);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_SCRIPT, "~ Select `main_dlg_cur` `View:casc340798662`;~ Close `main_dlg_cur` `View:casc340798662`;~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_SCRIPT, "~ Select `main_dlg_cur` `View:casc340798662`;~ Close `main_dlg_cur` `View:casc340798662`;~ Command `ProCmdNamedViewsGalSelect`  `FRONT`;");
+    	ex.addInput(PARAM_DELAY, 1000);
     	template.addExample(ex);
 
     	return template;
