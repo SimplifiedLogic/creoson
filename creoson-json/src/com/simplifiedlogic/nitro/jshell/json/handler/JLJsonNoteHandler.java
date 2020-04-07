@@ -144,7 +144,7 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
 	        	if (note.getName()!=null)
 	        		outNote.put(OUTPUT_NAME, note.getName());
 	        	if (note.getValue()!=null)
-	        		out.put(OUTPUT_VALUE, note.getValue());
+	        		outNote.put(OUTPUT_VALUE, note.getValue());
 	        	if (note.getValueExpanded()!=null)
 	        		outNote.put(OUTPUT_VALUE_EXPANDED, note.getValueExpanded());
 	        	outNote.put(OUTPUT_ENCODED, note.isEncoded());
