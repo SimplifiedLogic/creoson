@@ -12,6 +12,6 @@
   }, {
     "name" : "expired",
     "type" : "boolean",
-    "description" : "Whether the user's session has expired"
+    "description" : "Whether the users session has expired"
   } ]
 }

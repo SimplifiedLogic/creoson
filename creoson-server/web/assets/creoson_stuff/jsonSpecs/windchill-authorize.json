@@ -1,17 +1,17 @@
 {
   "spec" : {
-    "function_description" : "Set user's Windchill login/password",
+    "function_description" : "Set users Windchill login/password",
     "command" : "windchill",
     "function" : "authorize",
     "request" : [ {
       "name" : "user",
       "type" : "string",
-      "description" : "User's Windchill login",
+      "description" : "Users Windchill login",
       "required" : true
     }, {
       "name" : "password",
       "type" : "string",
-      "description" : "User's Windchill password",
+      "description" : "Users Windchill password",
       "required" : true
     } ],
     "response" : [ ]

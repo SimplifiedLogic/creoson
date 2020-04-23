@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Set one of Creo's standard colors",
+    "function_description" : "Set one of Creos standard colors",
     "command" : "creo",
     "function" : "set_std_color",
     "request" : [ {

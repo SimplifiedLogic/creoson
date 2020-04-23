@@ -14,7 +14,7 @@
       "name" : "dirname",
       "type" : "string",
       "description" : "Directory name containing the material file",
-      "default" : "Creo's 'pro_material_dir' config setting, or search path, or current working directory"
+      "default" : "Creos 'pro_material_dir' config setting, or search path, or current working directory"
     }, {
       "name" : "material",
       "type" : "string",

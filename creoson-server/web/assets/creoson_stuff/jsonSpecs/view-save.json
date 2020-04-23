@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Save a model's current orientation as a new view",
+    "function_description" : "Save a models current orientation as a new view",
     "command" : "view",
     "function" : "save",
     "request" : [ {

@@ -12,7 +12,7 @@
       "name" : "dirname",
       "type" : "string",
       "description" : "Destination directory",
-      "default" : "Creo's current working directory"
+      "default" : "Creos current working directory"
     }, {
       "name" : "driver",
       "type" : "string",

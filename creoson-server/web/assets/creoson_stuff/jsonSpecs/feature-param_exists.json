@@ -22,7 +22,7 @@
       "name" : "params",
       "type" : "array:string",
       "description" : "List of parameter names",
-      "default" : "The param parameter is used; if both are empty, then it checks for any parameter's existence"
+      "default" : "The param parameter is used; if both are empty, then it checks for any parameters existence"
     } ],
     "response" : [ {
       "name" : "exists",

@@ -26,6 +26,6 @@
   }, {
     "name" : "relation_id",
     "type" : "integer",
-    "description" : "Relation ID for the dimension's model"
+    "description" : "Relation ID for the dimensions model"
   } ]
 }

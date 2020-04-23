@@ -17,12 +17,12 @@
       "name" : "csys",
       "type" : "string",
       "description" : "Coordinate system on the component to calculate the transform for",
-      "default" : "The component's default coordinate system"
+      "default" : "The components default coordinate system"
     } ],
     "response" : [ {
       "name" : "transform",
       "type" : "object:JLTransform",
-      "description" : "The 3D transform from the assembly to the component's coordinate system"
+      "description" : "The 3D transform from the assembly to the components coordinate system"
     } ]
   },
   "examples" : [ {

@@ -17,7 +17,7 @@
       "name" : "names",
       "type" : "array:string",
       "description" : "List of note names",
-      "default" : "The name parameter is used; if both are empty, then it checks for any note's existence"
+      "default" : "The name parameter is used; if both are empty, then it checks for any notes existence"
     } ],
     "response" : [ {
       "name" : "exists",

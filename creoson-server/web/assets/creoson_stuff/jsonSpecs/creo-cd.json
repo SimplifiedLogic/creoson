@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Change Creo's working directory",
+    "function_description" : "Change Creos working directory",
     "command" : "creo",
     "function" : "cd",
     "request" : [ {

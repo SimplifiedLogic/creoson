@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Return the server's execution directory",
+    "function_description" : "Return the servers execution directory",
     "command" : "server",
     "function" : "pwd",
     "notes" : [ "*** WARNING *** WARNING *** WARNING ***", "-", "The endpoint for this function must be /server, not /creoson", "-", "*** WARNING *** WARNING *** WARNING ***" ],

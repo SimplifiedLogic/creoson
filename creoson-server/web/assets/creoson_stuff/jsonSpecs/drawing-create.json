@@ -12,7 +12,7 @@
       "name" : "drawing",
       "type" : "string",
       "description" : "New drawing name",
-      "default" : "A name derived from the model's instance name"
+      "default" : "A name derived from the models instance name"
     }, {
       "name" : "template",
       "type" : "string",

@@ -13,7 +13,7 @@
       "name" : "filename",
       "type" : "string",
       "description" : "Destination file name.  May also contain a path to the file.",
-      "default" : "The model name with the appropriate file extension, in Creo's working directory"
+      "default" : "The model name with the appropriate file extension, in Creos working directory"
     }, {
       "name" : "height",
       "type" : "double",
@@ -33,7 +33,7 @@
       "name" : "dirname",
       "type" : "string",
       "description" : "Destination directory",
-      "default" : "Creo's current working directory"
+      "default" : "Creos current working directory"
     }, {
       "name" : "use_drawing_settings",
       "type" : "boolean",

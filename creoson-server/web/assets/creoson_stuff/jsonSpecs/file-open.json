@@ -7,7 +7,7 @@
       "name" : "dirname",
       "type" : "string",
       "description" : "Directory name",
-      "default" : "Creo's current working directory"
+      "default" : "Creos current working directory"
     }, {
       "name" : "file",
       "type" : "string",

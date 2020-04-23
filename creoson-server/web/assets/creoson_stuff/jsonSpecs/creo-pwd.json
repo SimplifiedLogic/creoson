@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Return Creo's current working directory",
+    "function_description" : "Return Creos current working directory",
     "command" : "creo",
     "function" : "pwd",
     "request" : [ ],

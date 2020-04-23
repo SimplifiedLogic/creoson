@@ -14,7 +14,7 @@
   }, {
     "name" : "path",
     "type" : "array:integer",
-    "description" : "Creo's component path for the component"
+    "description" : "Creos component path for the component"
   }, {
     "name" : "transform",
     "type" : "object:JLTransform",

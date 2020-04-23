@@ -3,7 +3,7 @@
     "function_description" : "Set the current length units for a model",
     "command" : "file",
     "function" : "set_length_units",
-    "notes" : [ "This will search the model's available Unit Systems for the first one which contains the given length unit" ],
+    "notes" : [ "This will search the models available Unit Systems for the first one which contains the given length unit" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -17,7 +17,7 @@
     }, {
       "name" : "convert",
       "type" : "boolean",
-      "description" : "Whether to convert the model's length values to the new units (true) or leave them the same value (false)",
+      "description" : "Whether to convert the models length values to the new units (true) or leave them the same value (false)",
       "default" : "true"
     } ],
     "response" : [ ]

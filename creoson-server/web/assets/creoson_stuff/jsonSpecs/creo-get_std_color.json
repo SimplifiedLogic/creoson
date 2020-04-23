@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Get one of Creo's standard colors",
+    "function_description" : "Get one of Creos standard colors",
     "command" : "creo",
     "function" : "get_std_color",
     "request" : [ {

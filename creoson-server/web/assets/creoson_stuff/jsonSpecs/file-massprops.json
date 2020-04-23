@@ -3,7 +3,7 @@
     "function_description" : "Get mass property information about a model",
     "command" : "file",
     "function" : "massprops",
-    "notes" : [ "PTC's description of coord_sys_inertia: \"The inertia matrix with respect to coordinate frame:(element ij is the integral of x_i x_j over the object)\"", "PTC's description of coord_sys_inertia_tensor: \"The inertia tensor with respect to coordinate frame:CoordSysInertiaTensor = trace(CoordSysInertia) * identity - CoordSysInertia\"" ],
+    "notes" : [ "PTCs description of coord_sys_inertia: \"The inertia matrix with respect to coordinate frame:(element ij is the integral of x_i x_j over the object)\"", "PTCs description of coord_sys_inertia_tensor: \"The inertia tensor with respect to coordinate frame:CoordSysInertiaTensor = trace(CoordSysInertia) * identity - CoordSysInertia\"" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -29,15 +29,15 @@
     }, {
       "name" : "ctr_grav_inertia_tensor",
       "type" : "object:JLInertia",
-      "description" : "Model's Inertia Tensor translated to center of gravity."
+      "description" : "Models Inertia Tensor translated to center of gravity."
     }, {
       "name" : "coord_sys_inertia",
       "type" : "object:JLInertia",
-      "description" : "Model's Inertia Matrix with respect to the coordinate frame."
+      "description" : "Models Inertia Matrix with respect to the coordinate frame."
     }, {
       "name" : "coord_sys_inertia_tensor",
       "type" : "object:JLInertia",
-      "description" : "Model's Inertia Tensor with respect to the coordinate frame."
+      "description" : "Models Inertia Tensor with respect to the coordinate frame."
     } ]
   },
   "examples" : [ {

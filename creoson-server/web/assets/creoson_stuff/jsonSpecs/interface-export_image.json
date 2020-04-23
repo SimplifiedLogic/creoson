@@ -18,7 +18,7 @@
       "name" : "filename",
       "type" : "string",
       "description" : "Destination file name.  May also contain a path to the file.",
-      "default" : "The model name with the appropriate file extension, in Creo's working directory"
+      "default" : "The model name with the appropriate file extension, in Creos working directory"
     }, {
       "name" : "height",
       "type" : "double",

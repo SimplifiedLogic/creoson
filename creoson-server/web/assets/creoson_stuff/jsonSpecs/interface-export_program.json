@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "Export a model's program to a file",
+    "function_description" : "Export a models program to a file",
     "command" : "interface",
     "function" : "export_program",
     "request" : [ {

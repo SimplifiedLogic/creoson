@@ -11,8 +11,8 @@
     }, {
       "name" : "symbol_dir",
       "type" : "string",
-      "description" : "Directory containing the symbol file; if relative, assumed to be relative to Creo's current working directory",
-      "default" : "Creo's current working directory"
+      "description" : "Directory containing the symbol file; if relative, assumed to be relative to Creos current working directory",
+      "default" : "Creos current working directory"
     }, {
       "name" : "symbol_file",
       "type" : "string",

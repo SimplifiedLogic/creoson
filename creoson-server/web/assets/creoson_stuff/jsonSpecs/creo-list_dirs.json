@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "List subdirectories of Creo's current working directory",
+    "function_description" : "List subdirectories of Creos current working directory",
     "command" : "creo",
     "function" : "list_dirs",
     "request" : [ {

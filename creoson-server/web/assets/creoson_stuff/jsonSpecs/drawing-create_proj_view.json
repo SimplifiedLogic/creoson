@@ -13,7 +13,7 @@
       "name" : "view",
       "type" : "string",
       "description" : "New view name",
-      "default" : "Creo's default name for a new view"
+      "default" : "Creos default name for a new view"
     }, {
       "name" : "sheet",
       "type" : "integer",

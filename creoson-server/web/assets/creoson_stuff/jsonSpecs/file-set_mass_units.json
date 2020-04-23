@@ -3,7 +3,7 @@
     "function_description" : "Set the current mass units for a model",
     "command" : "file",
     "function" : "set_mass_units",
-    "notes" : [ "This will search the model's available Unit Systems for the first one which contains the given mass unit" ],
+    "notes" : [ "This will search the models available Unit Systems for the first one which contains the given mass unit" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",
@@ -17,7 +17,7 @@
     }, {
       "name" : "convert",
       "type" : "boolean",
-      "description" : "Whether to convert the model's mass values to the new units (true) or leave them the same value (false)",
+      "description" : "Whether to convert the models mass values to the new units (true) or leave them the same value (false)",
       "default" : "true"
     } ],
     "response" : [ ]

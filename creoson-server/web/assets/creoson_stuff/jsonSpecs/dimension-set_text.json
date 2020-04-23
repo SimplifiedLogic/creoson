@@ -18,7 +18,7 @@
       "name" : "text",
       "type" : "depends on data type",
       "description" : "Dimension text",
-      "default" : "Sets the dimension's text to @D if missing"
+      "default" : "Sets the dimensions text to @D if missing"
     }, {
       "name" : "encoded",
       "type" : "boolean",

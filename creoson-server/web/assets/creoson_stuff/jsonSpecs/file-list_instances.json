@@ -1,6 +1,6 @@
 {
   "spec" : {
-    "function_description" : "List instances in a model's family table",
+    "function_description" : "List instances in a models family table",
     "command" : "file",
     "function" : "list_instances",
     "request" : [ {

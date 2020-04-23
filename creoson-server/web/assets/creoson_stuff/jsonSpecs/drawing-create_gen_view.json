@@ -37,7 +37,7 @@
       "name" : "scale",
       "type" : "double",
       "description" : "View scale",
-      "default" : "The sheet's scale"
+      "default" : "The sheets scale"
     }, {
       "name" : "display_data",
       "type" : "object:ViewDisplayData",

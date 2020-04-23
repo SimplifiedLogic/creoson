@@ -17,7 +17,7 @@
     "response" : [ {
       "name" : "exists",
       "type" : "boolean",
-      "description" : "Whether the instance exists in the model's family table; returns false if there is no family table in the model"
+      "description" : "Whether the instance exists in the models family table; returns false if there is no family table in the model"
     } ]
   },
   "examples" : [ {
