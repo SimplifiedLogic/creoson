@@ -153,7 +153,9 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         Double width = checkDoubleParameter(input, PARAM_WIDTH, false);
         Integer dpi = checkIntParameter(input, PARAM_DPI, false, null);
 
-        ExportResults results = intfHandler.exportPDF(model, filename, dirname, false, height, width, dpi, useDrawingSettings, sessionId);
+        String sheetRange = checkStringParameter(input, PARAM_SHEET_RANGE, false);
+
+        ExportResults results = intfHandler.exportPDF(model, filename, dirname, false, height, width, dpi, useDrawingSettings, sheetRange, sessionId);
         
         if (results!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
@@ -174,7 +176,9 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         Double width = checkDoubleParameter(input, PARAM_WIDTH, false);
         Integer dpi = checkIntParameter(input, PARAM_DPI, false, null);
 
-        ExportResults results = intfHandler.exportPDF(model, filename, dirname, true, height, width, dpi, useDrawingSettings, sessionId);
+        String sheetRange = checkStringParameter(input, PARAM_SHEET_RANGE, false);
+
+        ExportResults results = intfHandler.exportPDF(model, filename, dirname, true, height, width, dpi, useDrawingSettings, sheetRange, sessionId);
         
         if (results!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();

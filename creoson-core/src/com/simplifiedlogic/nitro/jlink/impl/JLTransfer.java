@@ -1624,21 +1624,21 @@ public class JLTransfer implements IJLTransfer {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, java.lang.String)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, java.lang.Boolean, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, String sessionId) throws JLIException {
+	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, String sheetRange, String sessionId) throws JLIException {
 
 		JLISession sess = JLISession.getSession(sessionId);
 		
-		return exportPDF(model, filename, dirname, export3D, height, width, dpi, useDrawingSettings, sess);
+		return exportPDF(model, filename, dirname, export3D, height, width, dpi, useDrawingSettings, sheetRange, sess);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLTransfer#exportPDF(java.lang.String, java.lang.String, java.lang.String, boolean, java.lang.Double, java.lang.Double, java.lang.Integer, java.lang.Boolean, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
 	 */
 	@Override
-	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, AbstractJLISession sess)
+	public ExportResults exportPDF(String model, String filename, String dirname, boolean export3D, Double height, Double width, Integer dpi, Boolean useDrawingSettings, String sheetRange, AbstractJLISession sess)
 			throws JLIException {
 
 		DebugLogging.sendDebugMessage("interface.export_pdf: " + model + (export3D?" (3D)":""), NitroConstants.DEBUG_KEY);
@@ -1691,7 +1691,8 @@ public class JLTransfer implements IJLTransfer {
 	            	height,
 	            	width,
 	            	dpi,
-	            	useDrawingSettings
+	            	useDrawingSettings,
+	            	sheetRange
 	            };
 	            String func;
 	            if (export3D)

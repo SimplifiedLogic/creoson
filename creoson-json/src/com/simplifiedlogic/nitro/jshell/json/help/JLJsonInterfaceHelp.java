@@ -275,6 +275,7 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Export a model to a " + (use3d?"3D ":"") + "PDF file");
     	spec.addFootnote("When "+PARAM_USE_DRW_SETTINGS+" is true, the Font Stroke option will be set to Stroke All Fonts, and the Color Depth option will be set to Grayscale.");
+    	spec.addFootnote("The numeric values for "+PARAM_SHEET_RANGE+" need to be in a format that Creo expects, which may depend on your region.");
     	FunctionArgument arg;
     	FunctionReturn ret;
 
@@ -313,6 +314,16 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_SHEET_RANGE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Range of drawing sheets to export");
+    	arg.setDefaultValue(IJLTransfer.SHEET_RANGE_ALL);
+    	arg.setValidValues(new String[] {
+        		IJLTransfer.SHEET_RANGE_ALL,
+        		IJLTransfer.SHEET_RANGE_CURRENT,
+        		"range of sheet numbers"
+        	});
+    	spec.addArgument(arg);
+
     	ret = new FunctionReturn(OUTPUT_DIRNAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Directory of the output file");
     	spec.addReturn(ret);
@@ -348,6 +359,20 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
     	ex.addInput(PARAM_FILENAME, "C:/testing/abc123.pdf");
     	ex.addOutput(OUTPUT_DIRNAME, "C:/testing");
     	ex.addOutput(OUTPUT_FILENAME, "abc123.pdf");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	ex.addInput(PARAM_SHEET_RANGE, IJLTransfer.SHEET_RANGE_CURRENT);
+    	ex.addOutput(OUTPUT_DIRNAME, "C:/myfiles/parts/subdir");
+    	ex.addOutput(OUTPUT_FILENAME, "box-export.pdf");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.drw");
+    	ex.addInput(PARAM_SHEET_RANGE, "1,3-4");
+    	ex.addOutput(OUTPUT_DIRNAME, "C:/myfiles/parts/subdir");
+    	ex.addOutput(OUTPUT_FILENAME, "box-export.pdf");
     	template.addExample(ex);
 
     	return template;

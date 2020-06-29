@@ -51,6 +51,7 @@ public interface JLInterfaceRequestParams {
     public static final String PARAM_SCRIPT		= "script";
     public static final String PARAM_DELAY		= "delay";
     public static final String PARAM_USE_DRW_SETTINGS = "use_drawing_settings";
+    public static final String PARAM_SHEET_RANGE	= "sheet_range";
     // request fields for image parameters
     public static final String PARAM_WIDTH    = "width";
     public static final String PARAM_HEIGHT   = "height";

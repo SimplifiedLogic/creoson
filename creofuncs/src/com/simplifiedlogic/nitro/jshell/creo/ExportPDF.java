@@ -29,6 +29,7 @@ import com.ptc.pfc.pfcExport.PDFOption;
 import com.ptc.pfc.pfcExport.PDFOptionType;
 import com.ptc.pfc.pfcExport.PDFOptions;
 import com.ptc.pfc.pfcExport.PDFSelectedViewMode;
+import com.ptc.pfc.pfcExport.PrintSheets;
 import com.ptc.pfc.pfcExport.pfcExport;
 import com.ptc.pfc.pfcModel.Model;
 import com.ptc.pfc.pfcModel.PlotPaperSize;
@@ -61,6 +62,10 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
  */
 public class ExportPDF implements CreoFunctionInterface {
 
+	// must agree with the constants in IJLTransfer
+    public static final String SHEET_RANGE_ALL		= "all";
+    public static final String SHEET_RANGE_CURRENT	= "current";
+
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.CreoFunctionInterface#execute(java.lang.Object[])
 	 */
@@ -76,6 +81,9 @@ public class ExportPDF implements CreoFunctionInterface {
 		Double width = (Double)args[3];
 		Integer dpi = (Integer)args[4];
 		Boolean useDrawingSettings = (Boolean)args[5];
+		String sheetOpt = null;
+		if (args.length>6)
+			sheetOpt = (String)args[6];
 
 		PDFExportInstructions pxi = pfcExport.PDFExportInstructions_Create();
 		
@@ -139,6 +147,24 @@ public class ExportPDF implements CreoFunctionInterface {
 			opt = pfcExport.PDFOption_Create();
 			opt.SetOptionType(PDFOptionType.PDFOPT_WIDTH);
 			opt.SetOptionValue(pfcArgument.CreateDoubleArgValue(width.doubleValue()));
+			opts.append(opt);
+		}
+		
+		if (sheetOpt!=null) {
+			opt = pfcExport.PDFOption_Create();
+			opt.SetOptionType(PDFOptionType.PDFOPT_SHEETS);
+			if (SHEET_RANGE_ALL.equalsIgnoreCase(sheetOpt))
+				opt.SetOptionValue(pfcArgument.CreateIntArgValue(PrintSheets._PRINT_ALL_SHEETS));
+			else if (SHEET_RANGE_CURRENT.equalsIgnoreCase(sheetOpt))
+				opt.SetOptionValue(pfcArgument.CreateIntArgValue(PrintSheets._PRINT_CURRENT_SHEET));
+			else {
+				opt.SetOptionValue(pfcArgument.CreateIntArgValue(PrintSheets._PRINT_SELECTED_SHEETS));
+				opts.append(opt);
+
+				opt = pfcExport.PDFOption_Create();
+				opt.SetOptionType(PDFOptionType.PDFOPT_SHEET_RANGE);
+				opt.SetOptionValue(pfcArgument.CreateStringArgValue(sheetOpt));
+			}
 			opts.append(opt);
 		}
 		

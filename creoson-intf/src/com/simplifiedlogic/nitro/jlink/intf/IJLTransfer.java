@@ -64,7 +64,10 @@ public interface IJLTransfer {
     public static final String GEOM_WIREFRAME	= "wireframe";
     public static final String GEOM_WIREFRAME_SURFACES	= "wireframe_surfaces";
     public static final String GEOM_QUILTS		= "quilts";
-    
+
+    public static final String SHEET_RANGE_ALL		= "all";
+    public static final String SHEET_RANGE_CURRENT	= "current";
+
 	public static final boolean EXPORT3D_YES = true;
 	public static final boolean EXPORT3D_NO = false;
 	public static final Boolean USE_DRAWING_SETTINGS_YES = Boolean.TRUE;
@@ -160,6 +163,7 @@ public interface IJLTransfer {
 			Double width, 
 			Integer dpi, 
 			Boolean useDrawingSettings, 
+			String sheetRange, 
 			String sessionId) throws JLIException;
 	public ExportResults exportPDF(
 			String model, 
@@ -170,6 +174,7 @@ public interface IJLTransfer {
 			Double width, 
 			Integer dpi, 
 			Boolean useDrawingSettings, 
+			String sheetRange, 
 			AbstractJLISession sess) throws JLIException;
 
 	public String importPV(
