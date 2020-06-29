@@ -48,7 +48,9 @@ import com.simplifiedlogic.nitro.util.JLMatrixMaker;
  * @author Adam Andrews
  */
 public class JLBom implements IJLBom {
-    
+
+	public static final boolean verbose = false;
+
     /* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.impl.IJLBom#getPaths(java.lang.String, boolean, boolean, boolean, boolean, java.lang.String)
 	 */
@@ -116,7 +118,13 @@ public class JLBom implements IJLBom {
 	        BomChild dummy = new BomChild();
 	        dummy.setFilename(out.getModelname());
 	        dummy.setSequencePath("root");
-	        walkGetPaths(session, (CallAssembly)solid, solid, dummy, "  ", "root", curPath, 0, skeleton, toplevel, paths, incTransform, transformAsTable, excludeInactive, simpRep);
+	        if (simpRep!=null)
+	        	dummy.setSimpRep(simpRep.getName());
+	        if (verbose) {
+	        	System.out.println("================================================");
+	        	System.out.println("Exporting BOM for "+out.getModelname());
+	        }
+	        walkGetPaths(session, (CallAssembly)solid, solid, dummy, "  ", "root", curPath, 0, skeleton, toplevel, paths, incTransform, transformAsTable, excludeInactive, simpRep, SimpRepData.DEFAULT_UNKNOWN);
 	
 	    	out.setRoot(dummy);
 	        
@@ -164,7 +172,8 @@ public class JLBom implements IJLBom {
     		List<Integer> curPath, int pathlen, 
     		boolean skeleton, boolean toplevel, boolean paths, 
     		boolean incTransform, boolean transformAsTable, boolean excludeInactive, 
-    		SimpRepData simpRep) throws JLIException,jxthrowable {
+    		SimpRepData simpRep,
+    		int simpRepDefault) throws JLIException,jxthrowable {
     	
         // TODO: (10/29/2013) Skip over PRO_MDL_CE_SOLID components encountered, otherwise app may crash with no error.
         CallFeatures components = wrapping_solid.listFeaturesByType(Boolean.FALSE, FeatureType.FEATTYPE_COMPONENT);
@@ -172,7 +181,19 @@ public class JLBom implements IJLBom {
             return;
         int len = components.getarraysize();
         if (len==0) return;
-        // System.out.println(indent + "processing " + wrapping_solid.getFileName() + ", " + len + " child components");
+        if (verbose)
+        	System.out.println(indent + "processing " + wrapping_solid.getFileName() + ", " + len + " child components");
+        
+        if (simpRep!=null) {
+        	if (simpRepDefault==SimpRepData.DEFAULT_UNKNOWN) {
+   	        	simpRepDefault = simpRep.isDefaultExclude() ? SimpRepData.DEFAULT_EXCLUDE : SimpRepData.DEFAULT_INCLUDE;
+        	}
+        	else {
+	        	int newDefault = simpRep.getLevelDefault(curPath.subList(0, pathlen));
+	        	if (newDefault!=SimpRepData.DEFAULT_UNKNOWN)
+	        		simpRepDefault = newDefault;
+        	}
+        }
 
         CallComponentFeat component;
         CallModelDescriptor desc = null;
@@ -190,14 +211,21 @@ public class JLBom implements IJLBom {
             component = (CallComponentFeat)feat;
             try {
             	int status = component.getStatus();
-            	// System.out.println("Comp ID:" + component.getId() + ", status=" + status);
+            	if (verbose)
+                	System.out.println(indent + "Comp ID:" + component.getId() + ", status=" + status);
                 if (status!=FeatureStatus._FEAT_ACTIVE) {
                 	if (!excludeInactive) {
-                        if (status!=FeatureStatus._FEAT_INACTIVE && status!=FeatureStatus._FEAT_UNREGENERATED)
+                        if (status!=FeatureStatus._FEAT_INACTIVE && status!=FeatureStatus._FEAT_UNREGENERATED) {
+                        	if (verbose)
+                            	System.out.println(indent + "    Skipping component due to status (not excludeInactive)");
                     		continue;
+                        }
                 	}
-                	else
+                	else {
+                		if (verbose)
+                        	System.out.println(indent + "    Skipping component due to status");
                 		continue;
+                	}
                 }
 //                System.out.println("model item type: " + component.getFeatType() + " feature type: " + component.getFeatTypeName());
 //              try {
@@ -225,15 +253,21 @@ public class JLBom implements IJLBom {
                       "instance_and_generic_deps"
                    */
 //              }
-                if (desc==null)
+                if (desc==null) {
+                	if (verbose)
+                    	System.out.println(indent + "    Skipping component due to no ModelDescr");
                 	continue;
+                }
                 childModel = null;
                 if (!skeleton) {
                 	childModel = session.getModelFromDescr(desc);
                     if (childModel instanceof CallSolid) {
                         boolean skel = ((CallSolid)childModel).getIsSkeleton();
-                        if (skel)
+                        if (skel) {
+                        	if (verbose)
+                            	System.out.println(indent + "    Skipping skeleton");
                             continue;
+                        }
                     }
                 }
                 type = desc.getType();
@@ -247,9 +281,31 @@ public class JLBom implements IJLBom {
                         curPath.add(new Integer(id));
                 }
                 
+                String subRepName = null;
+                if (simpRep!=null) {
                 // workaround for PTC bug https://support.ptc.com/apps/case_logger_viewer/auth/ssl/case=13183655
-                if (simpRep!=null && simpRep.excludes(curPath.subList(0, pathlen+1)))
-                	continue;
+//                    if (simpRep.excludes(curPath.subList(0, pathlen+1))) { // do the subList because we've already added onto curPath
+                	if (type==ModelType._MDL_ASSEMBLY) {
+//	                	if (!simpRep.hasOwnSubRep(curPath.subList(0, pathlen+1))) {
+//		                	if (verbose)
+//		                    	System.out.println(indent + "    Skipping subassembly due to simplified rep");
+//		                	continue;
+//	                	}
+                		
+                		SimpRepData subRep = simpRep.getSimpRep(curPath.subList(0, pathlen+1));
+                		if (subRep!=null)
+                			subRepName = subRep.getName();
+                	}
+                	else {
+                		boolean hasItem = simpRep.hasItem(curPath.subList(0, pathlen+1)); // do the subList because we've already added onto curPath?
+                		if ((hasItem && simpRepDefault==SimpRepData.DEFAULT_INCLUDE) ||
+                			(!hasItem && simpRepDefault==SimpRepData.DEFAULT_EXCLUDE)) {
+		                	if (verbose)
+		                    	System.out.println(indent + "    Skipping part due to simplified rep");
+		                	continue;
+                		}
+                	}
+                }
                 
                 filename = desc.getFileName();
     
@@ -271,6 +327,10 @@ public class JLBom implements IJLBom {
                 	else
                 		child.setTransform(JLMatrixMaker.create(JlinkUtils.genTransformTable2(baseAssembly, curPath, pathlen+1)));
                 }
+                child.setSimpRep(subRepName);
+
+                if (verbose)
+                	System.out.println(indent + "Adding component to BOM: "+filename);
                 parent.add(child);
                 
                 // recurse into the child components
@@ -278,11 +338,14 @@ public class JLBom implements IJLBom {
                     if (childModel==null)
                     	childModel = session.getModelFromDescr(desc);
                     if (childModel!=null && childModel instanceof CallSolid) {
-                        // System.out.println(indent + "checking children for " + child.getFilename());
-                        walkGetPaths(session, baseAssembly, (CallSolid)childModel, child, indent+"  ", newseq, curPath, pathlen+1, skeleton, toplevel, paths, incTransform, transformAsTable, excludeInactive, simpRep);
+                    	if (verbose)
+                        	System.out.println(indent + "checking children for " + child.getFilename());
+                        walkGetPaths(session, baseAssembly, (CallSolid)childModel, child, indent+"   ", newseq, curPath, pathlen+1, skeleton, toplevel, paths, incTransform, transformAsTable, excludeInactive, simpRep, simpRepDefault);
                     }
                     if (child.numChildren()==0) {
-                    	if (simpRep!=null && simpRep.excludesDescendant(curPath.subList(0, pathlen+1))) {
+                    	if (simpRep!=null && simpRep.excludesDescendant(curPath.subList(0, pathlen+1))) { // sure we need the second clause?
+                    		if (verbose)
+                            	System.out.println(indent + "Removing child component from BOM: "+filename);
                     		parent.remove(child);
                     	}
                     }

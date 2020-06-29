@@ -38,6 +38,7 @@ public class BomChild implements Serializable {
 	List<Integer> componentPath;
 	JLMatrix transform;
 	JLTransform transformTable;
+	String simpRep;
 
 	BomChild parent;
 	List<BomChild> children;
@@ -260,5 +261,19 @@ public class BomChild implements Serializable {
 	 */
 	public void setTransformTable(JLTransform transformTable) {
 		this.transformTable = transformTable;
+	}
+
+	/**
+	 * @return The name of the simplified rep active for this component (assemblies only)
+	 */
+	public String getSimpRep() {
+		return simpRep;
+	}
+
+	/**
+	 * @param simpRep The name of the simplified rep active for this component (assemblies only)
+	 */
+	public void setSimpRep(String simpRep) {
+		this.simpRep = simpRep;
 	}
 }

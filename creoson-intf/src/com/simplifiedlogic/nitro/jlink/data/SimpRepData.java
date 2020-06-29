@@ -38,6 +38,10 @@ public class SimpRepData {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final int DEFAULT_UNKNOWN = -1;
+	public static final int DEFAULT_EXCLUDE = 0;
+	public static final int DEFAULT_INCLUDE = 1;
+
 	private List<Integer> path;
 	private String name;
 	private boolean defaultExclude;
@@ -74,17 +78,15 @@ public class SimpRepData {
 		if (containsItem(path)) 
 			return !defaultExclude;
 		else {
-//			ret = defaultExclude;
 			if (subItems!=null) {
 				for (SimpRepData rep : subItems) {
 					List<Integer> subpath = rep.getPath();
 					if (isSubpath(path, subpath) && path.size()>subpath.size()) {
-						List<Integer> newpath = new ArrayList<Integer>();
-						for (int i=subpath.size(); i<path.size(); i++) {
-							newpath.add(path.get(i));
-						}
+						List<Integer> newpath = trimSubpath(path, rep);
 						if (rep.excludes(newpath))
 							return true;
+						else
+							return false; // ??
 					}
 				}
 			}
@@ -97,6 +99,12 @@ public class SimpRepData {
 	 * the representation.<p>
 	 * If the input path is empty, then it will check whether the
 	 * representation excludes <b>anything</b>.
+	 * 
+	 * The PROBLEM with this is that it only works right when the rep 
+	 * is defaultExclude=false.  When defaultExclude=true BUT all
+	 * the components in the rep are items (included) then it will return
+	 * true when it should return false.
+	 *  
 	 * @param path The component path to check
 	 * @return Whether the component is excluded from the representation
 	 */
@@ -116,10 +124,7 @@ public class SimpRepData {
 				for (SimpRepData rep : subItems) {
 					List<Integer> subpath = rep.getPath();
 					if (isSubpath(path, subpath)) {
-						List<Integer> newpath = new ArrayList<Integer>();
-						for (int i=subpath.size(); i<path.size(); i++) {
-							newpath.add(path.get(i));
-						}
+						List<Integer> newpath = trimSubpath(path, rep);
 						if (rep.excludesDescendant(newpath))
 							return true;
 					}
@@ -141,6 +146,22 @@ public class SimpRepData {
 		return true;
 	}
 
+//	public boolean hasOwnSubRep(List<Integer> path) {
+//		if (containsItem(path))
+//			return true;
+//		if (subItems==null || subItems.size()==0)
+//			return false;
+//		for (SimpRepData rep : subItems) {
+//			List<Integer> subpath = rep.getPath();
+//			if (isSubpath(path, subpath) && path.size()>=subpath.size()) {
+//				List<Integer> newpath = trimSubpath(path, rep);
+//				if (rep.hasOwnSubRep(newpath))
+//					return true;
+//			}
+//		}
+//		return false;
+//	}
+	
 	/**
 	 * Check whether the representation contains a reference to a component.
 	 * Note that this does NOT indicate that the component is excluded or
@@ -170,6 +191,175 @@ public class SimpRepData {
 		}
 	}
 	
+	/**
+	 * Check whether the representation contains a nested rep for a 
+	 * specified assembly component path.
+	 * @param path The component path for the subassembly
+	 * @return The nested rep for the subassembly
+	 */
+	public SimpRepData containsNestedRep(List<Integer> path) {
+		if (path==null || subItems==null || subItems.size()==0)
+			return null;
+		else {
+			for (SimpRepData rep : subItems) {
+				if (rep.path.size()!=path.size())
+					continue;
+				int len = path.size();
+				boolean valid=true;
+				for (int i=0; i<len; i++) 
+					if (!rep.path.get(i).equals(path.get(i))) {
+						valid=false;
+						break;
+					}
+				if (valid)
+					return rep;
+			}
+			return null;
+		}
+	}
+	
+//	public boolean findLowestDefaultExclude(List<Integer> path) {
+//		List<Integer> newpath = new ArrayList<Integer>();
+//		for (int i=0; i<path.size(); i++) {
+//			newpath.add(path.get(i));
+//		}
+//
+//		boolean tmp = false;
+//		do {
+//			boolean contains = containsItem(newpath);
+//			if (contains) {
+//				// something
+//				tmp = defaultExclude;
+//				break;
+//			}
+//			newpath.remove(newpath.size()-1);
+//		} while (newpath.size()>0);
+//
+//		if (subItems==null || subItems.size()==0)
+//			return tmp;
+//		
+//	}
+
+//	public SimpRepData findLowestSimpRep(List<Integer> path) {
+//		SimpRepData rep = findClosestSubItem(path);
+//		
+//		if (rep!=null) {
+//			// something
+//			List<Integer> subpath = rep.getPath();
+//			if (isSubpath(path, subpath) && path.size()>subpath.size()) {
+//				List<Integer> newpath = trimSubpath(path, rep);
+//				SimpRepData newrep = findLowestSimpRep(newpath);
+//				if (newrep!=null)
+//					return newrep;
+//				else
+//					return rep;
+//			}
+//		}
+//
+//		return rep;
+//	}
+
+	/**
+	 * Finds the subItem (nested rep) with the longest path that
+	 * is a sub-path of the given one.
+	 */
+	private SimpRepData findClosestSubItem(List<Integer> path) {
+		if (subItems==null || subItems.size()==0)
+			return null;
+		SimpRepData rep = containsNestedRep(path);
+		if (rep!=null)
+			return rep;
+		if (path.size()==1)
+			return null;
+
+		// no exact match, so look for the next shortest one
+		List<Integer> newpath = new ArrayList<Integer>();
+		for (int i=0; i<path.size()-1; i++) {
+			newpath.add(path.get(i));
+		}
+		do {
+			rep = containsNestedRep(newpath);
+			if (rep!=null) {
+				return rep;
+			}
+			newpath.remove(newpath.size()-1);
+		} while (newpath.size()>0);
+
+		return rep;
+	}
+	
+	/**
+	 * Returns the default status (include or exclude) for the givem 
+	 * subassembly path
+	 * @param path The component path for the subassembly
+	 * @return One of DEFAULT_INCLUDE, DEFAULT_EXCLUDE, or DEFAULT_UNKNOWN
+	 */
+	public int getLevelDefault(List<Integer> path) {
+		if (containsItem(path)) {
+			// because if an item exists it is the opposite of the default
+			return defaultExclude ? DEFAULT_INCLUDE : DEFAULT_EXCLUDE;
+		}
+		SimpRepData rep = findClosestSubItem(path);
+		if (rep==null)
+			return DEFAULT_UNKNOWN;
+
+		List<Integer> newpath = trimSubpath(path, rep);
+		if (newpath.size()==0)
+			// return the default for this report
+			return rep.defaultExclude ? DEFAULT_EXCLUDE : DEFAULT_INCLUDE;
+
+		int newdef = rep.getLevelDefault(newpath);
+		if (newdef!=DEFAULT_UNKNOWN)
+			return newdef;
+		else
+			// return the default for this report
+			return rep.defaultExclude ? DEFAULT_EXCLUDE : DEFAULT_INCLUDE;
+	}
+
+	/**
+	 * Checks whether the specified component exists as an item
+	 * anywhere in the simplified rep tree
+	 * @param path The component path for the component
+	 * @return Whether the item was found
+	 */
+	public boolean hasItem(List<Integer> path) {
+		if (containsItem(path))
+			return true;
+		SimpRepData rep = findClosestSubItem(path);
+		if (rep==null)
+			return false;
+
+		List<Integer> newpath = trimSubpath(path, rep);
+		return rep.hasItem(newpath);
+	}
+	
+	private List<Integer> trimSubpath(List<Integer> path, SimpRepData rep) {
+		List<Integer> subpath = rep.getPath();
+		List<Integer> newpath = new ArrayList<Integer>();
+		for (int i=subpath.size(); i<path.size(); i++) {
+			newpath.add(path.get(i));
+		}
+		return newpath;
+	}
+
+	/**
+	 * Finds the simplified rep specific to the given subassembly.
+	 * @param path The component path for the subassembly
+	 * @return The simplified rep for that subassembly, or null if there is none
+	 */
+	public SimpRepData getSimpRep(List<Integer> path) {
+		SimpRepData rep = findClosestSubItem(path);
+		if (rep==null)
+			return null;
+
+		List<Integer> newpath = trimSubpath(path, rep);
+		if (newpath.size()==0)
+			// return the default for this report
+			return rep;
+
+		return rep.getSimpRep(newpath);
+	}
+
 	/**
 	 * Check whether the representation contains a reference to a descendant
 	 * of the specified component.  A descendant may not be an immediate child.
