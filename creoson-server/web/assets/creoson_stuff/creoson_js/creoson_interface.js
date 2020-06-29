@@ -6,6 +6,7 @@ creo = (function (pub) {
     pub.InterfaceObj = function(propsObj) {
         // BASE OBJECT
         this.advanced = undefined; // boolean - Whether to use the newer Creo 4 file export function.
+        this.delay = undefined; // integer - Amount of time to wait after starting the mapkey, in milliseconds.
         this.depth = undefined; // integer - Image depth
         this.dirname = undefined; // string - Destination directory
         this.dpi = undefined; // integer - PDF Image DPI
@@ -17,6 +18,7 @@ creo = (function (pub) {
         this.new_model_type = undefined; // string - New model type
         this.new_name = undefined; // string - New model name.  Any extension will be stripped off and replaced with one based on new_model_type.
         this.script = undefined; // string - The mapkey script to run
+        this.sheet_range = undefined; // string - Range of drawing sheets to export
         this.type = undefined; // string - File type
         this.use_drawing_settings = undefined; // boolean - Whether to use special settings for exporting drawings
         this.width = undefined; // double - PDF Image width
@@ -55,6 +57,7 @@ creo = (function (pub) {
         if (this.dpi) reqObj.data.dpi = this.dpi;
         if (this.dirname) reqObj.data.dirname = this.dirname;
         if (this.use_drawing_settings) reqObj.data.use_drawing_settings = this.use_drawing_settings;
+        if (this.sheet_range) reqObj.data.sheet_range = this.sheet_range;
 
 
         return creo.ajax.request(reqObj)
@@ -165,6 +168,7 @@ creo = (function (pub) {
         if (this.dpi) reqObj.data.dpi = this.dpi;
         if (this.dirname) reqObj.data.dirname = this.dirname;
         if (this.use_drawing_settings) reqObj.data.use_drawing_settings = this.use_drawing_settings;
+        if (this.sheet_range) reqObj.data.sheet_range = this.sheet_range;
 
 
         return creo.ajax.request(reqObj)
@@ -295,6 +299,7 @@ creo = (function (pub) {
 
         // set the properties for the request
         if (this.script) reqObj.data.script = this.script;
+        if (this.delay) reqObj.data.delay = this.delay;
 
 
         return creo.ajax.request(reqObj)
