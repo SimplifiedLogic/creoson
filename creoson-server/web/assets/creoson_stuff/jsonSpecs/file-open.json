@@ -3,6 +3,7 @@
     "function_description" : "Open one or more files in memory or from the drive",
     "command" : "file",
     "function" : "open",
+    "notes" : [ "The display, activate, new_window and regen_force parameters are *ignored* if file contains wildcards or if files contains a list of names" ],
     "request" : [ {
       "name" : "dirname",
       "type" : "string",

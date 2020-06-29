@@ -118,6 +118,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_OPEN);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Open one or more files in memory or from the drive");
+    	spec.addFootnote("The "+PARAM_DISPLAY+", "+PARAM_ACTIVATE+", "+PARAM_NEWWIN+" and "+PARAM_FORCE+" parameters are *ignored* if "+PARAM_MODEL+" contains wildcards or if "+PARAM_MODELS+" contains a list of names");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
