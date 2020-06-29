@@ -49,7 +49,7 @@ public abstract class ModelLooper extends LooperBase {
     public boolean singleOp = false;
     
     public void loop() throws JLIException,jxthrowable {
-    	if (drawing==null) {
+    	if (drawing==null && nameList==null) {
 	        if ((namePattern==null && defaultToActive) || (namePattern!=null && !isNamePattern)) {
 	            currentName = null;
 	            singleOp = true;
