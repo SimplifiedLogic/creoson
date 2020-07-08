@@ -1093,44 +1093,72 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	arg.setDefaultValue("The component's default coordinate system");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_TRANSFORM, FunctionSpec.TYPE_OBJECT, OBJ_TRANSFORM);
-    	ret.setDescription("The 3D transform from the assembly to the component's coordinate system");
-    	spec.addReturn(ret);
+//    	ret = new FunctionReturn(OUTPUT_TRANSFORM, FunctionSpec.TYPE_OBJECT, OBJ_TRANSFORM);
+//    	ret.setDescription("The 3D transform from the assembly to the component's coordinate system");
+//    	spec.addReturn(ret);
         
+    	ret = new FunctionReturn(PARAM_ORIGIN, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	ret.setDescription("Matrix origin");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(PARAM_XAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	ret.setDescription("Matrix X Axis");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(PARAM_YAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	ret.setDescription("Matrix Y Axis");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(PARAM_ZAXIS, FunctionSpec.TYPE_OBJECT, OBJ_POINT);
+    	ret.setDescription("Matrix Z Axis");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(PARAM_X_ROT, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("X rotation in degrees");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(PARAM_Y_ROT, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Y rotation in degrees");
+    	spec.addReturn(ret);
+
+    	ret = new FunctionReturn(PARAM_Z_ROT, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Z rotation in degrees");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_ASM, "plate_assy.asm");
     	ex.addInput(PARAM_PATH, new int[] {54,23,45});
     	ex.addInput(PARAM_CSYS, "CS0");
-    	ex.addOutput(OUTPUT_TRANSFORM, 
-    			makeTransform(
-    					makePoint(380.0000554810615, 120.0, 1.000000000017174E-20), 
-    					makePoint(0, 1, 0), 
-    					makePoint(1, 0, 0), 
-    					makePoint(0, 0, 1), 
-    					-0, -0, -0));
+		makeTransform(
+				ex, 
+				makePoint(380.0000554810615, 120.0, 1.000000000017174E-20), 
+				makePoint(0, 1, 0), 
+				makePoint(1, 0, 0), 
+				makePoint(0, 0, 1), 
+				-0, -0, -0);
     	template.addExample(ex);
     	
     	ex = new FunctionExample();
     	ex.addInput(PARAM_PATH, new int[] {54,23,52});
-    	ex.addOutput(OUTPUT_TRANSFORM, 
-    			makeTransform(
-    					makePoint(305.0000554810615, 19.999999999999996, -4.592173826833917E-16), 
-    					makePoint(1.836909530733566E-16, -1.0, 0), 
-    					makePoint(1, 1.836909530733566E-16, 0), 
-    					makePoint(0, 0, 1), 
-    					0, 0, 90));
+		makeTransform(
+				ex, 
+				makePoint(305.0000554810615, 19.999999999999996, -4.592173826833917E-16), 
+				makePoint(1.836909530733566E-16, -1.0, 0), 
+				makePoint(1, 1.836909530733566E-16, 0), 
+				makePoint(0, 0, 1), 
+				0, 0, 90);
     	template.addExample(ex);
     	
     	ex = new FunctionExample();
-    	ex.addOutput(OUTPUT_TRANSFORM, 
-    			makeTransform(
-    					makePoint(50.0, 20.0, 0.0), 
-    					makePoint(1, 0, 0),
-    					makePoint(0, 1, 0), 
-    					makePoint(0, 0, 1), 
-    					-0, -0, -0));
+		makeTransform(
+				ex, 
+				makePoint(50.0, 20.0, 0.0), 
+				makePoint(1, 0, 0),
+				makePoint(0, 1, 0), 
+				makePoint(0, 0, 1), 
+				-0, -0, -0);
     	template.addExample(ex);
     	
         return template;

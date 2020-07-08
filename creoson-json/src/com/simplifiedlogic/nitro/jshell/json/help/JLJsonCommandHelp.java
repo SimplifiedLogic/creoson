@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplifiedlogic.nitro.jshell.json.response.JLFileResponseParams;
+import com.simplifiedlogic.nitro.jshell.json.template.FunctionExample;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionObject;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionTemplate;
 
@@ -70,6 +71,23 @@ public abstract class JLJsonCommandHelp {
 		rec.put(JLFileResponseParams.OUTPUT_Z_ROT, zrot);
 		
 		return rec;
+	}
+	
+	protected void makeTransform(
+			FunctionExample ex, 
+			Map<String, Object> origin,
+			Map<String, Object> xvector,
+			Map<String, Object> yvector,
+			Map<String, Object> zvector,
+			double xrot, double yrot, double zrot) {
+
+		ex.addOutput(JLFileResponseParams.OUTPUT_ORIGIN, origin);
+		ex.addOutput(JLFileResponseParams.OUTPUT_XAXIS, xvector);
+		ex.addOutput(JLFileResponseParams.OUTPUT_YAXIS, yvector);
+		ex.addOutput(JLFileResponseParams.OUTPUT_ZAXIS, zvector);
+		ex.addOutput(JLFileResponseParams.OUTPUT_X_ROT, xrot);
+		ex.addOutput(JLFileResponseParams.OUTPUT_Y_ROT, yrot);
+		ex.addOutput(JLFileResponseParams.OUTPUT_Z_ROT, zrot);
 	}
 
 	protected Map<String, Object> makePoint(double x, double y, double z) {
