@@ -26,6 +26,7 @@ import com.simplifiedlogic.nitro.jlink.data.FileAssembleResults;
 import com.simplifiedlogic.nitro.jlink.data.FileInfoResults;
 import com.simplifiedlogic.nitro.jlink.data.FileListInstancesResults;
 import com.simplifiedlogic.nitro.jlink.data.FileOpenResults;
+import com.simplifiedlogic.nitro.jlink.data.JLAccuracy;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
 import com.simplifiedlogic.nitro.jlink.data.ListMaterialResults;
@@ -207,4 +208,7 @@ public interface IJLFile {
 
 	public List<String> deleteMaterial(String filename, String materialName, String sessionId) throws JLIException;
 	public List<String> deleteMaterial(String filename, String materialName, AbstractJLISession sess) throws JLIException;
+	
+	public JLAccuracy getAccuracy(String filename, String sessionId) throws JLIException;
+	public JLAccuracy getAccuracy(String filename, AbstractJLISession sess) throws JLIException;
 }

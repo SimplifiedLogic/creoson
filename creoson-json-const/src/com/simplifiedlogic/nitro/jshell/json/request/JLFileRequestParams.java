@@ -67,6 +67,7 @@ public interface JLFileRequestParams {
 	public static final String FUNC_LIST_MATERIALS_WILDCARD	= "list_materials_wildcard";
 	public static final String FUNC_LOAD_MATL_FILE			= "load_material_file";
 	public static final String FUNC_DELETE_MATERIAL			= "delete_material";
+	public static final String FUNC_GET_ACCURACY			= "get_accuracy";
 	
 	// request fields
     public static final String PARAM_MODEL       = "file";

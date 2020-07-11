@@ -313,6 +313,37 @@ creo = (function (pub) {
     };
 
 
+    // Get a solid's accuracy
+    pub.FileObj.prototype.get_accuracy = function () {
+
+        console.log('got into : pub.FileObj.get_accuracy');
+
+        let reqObj = {
+            command : "file",
+            function : "get_accuracy",
+            data : {}
+        };
+
+        // set the properties for the request
+        if (this.file) reqObj.data.file = this.file;
+
+
+        return creo.ajax.request(reqObj)
+            .then(function (respObj) {
+                if (respObj.data) {
+                    return Promise.resolve(respObj.data);
+                } else {
+                    return Promise.resolve(respObj);
+                }
+            })
+            .catch(function (err) {
+                console.log('Error : '+JSON.stringify(err));
+                return Promise.reject(err);
+            });
+
+    };
+
+
     // Get the active model from Creo
     pub.FileObj.prototype.get_active = function () {
 

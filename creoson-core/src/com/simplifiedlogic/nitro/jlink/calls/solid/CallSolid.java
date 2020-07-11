@@ -180,6 +180,18 @@ public class CallSolid extends CallFamilyMember {
 		return new CallFeatureGroup(group);
 	}
 
+	public Double getAbsoluteAccuracy() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,GetAbsoluteAccuracy", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Double accuracy = getSolid().GetAbsoluteAccuracy();
+		return accuracy;
+	}
+
+	public Double getRelativeAccuracy() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,GetRelativeAccuracy", 0, NitroConstants.DEBUG_JLINK_KEY);
+		Double accuracy = getSolid().GetRelativeAccuracy();
+		return accuracy;
+	}
+
 	public Solid getSolid() {
 		return (Solid)m;
 	}

@@ -50,6 +50,8 @@ public interface JLFileResponseParams {
     public static final String OUTPUT_CTR_GRAV_INERTIA_TENSOR	= "ctr_grav_inertia_tensor";
     public static final String OUTPUT_COORD_SYS_INERTIA			= "coord_sys_inertia";
     public static final String OUTPUT_COORD_SYS_INERTIA_TENSOR	= "coord_sys_inertia_tensor";
+    public static final String OUTPUT_ACCURACY	= "accuracy";
+    public static final String OUTPUT_RELATIVE	= "relative";
     
 
     // point/matrix/transform params

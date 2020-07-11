@@ -29,6 +29,7 @@ import com.simplifiedlogic.nitro.jlink.data.FileAssembleResults;
 import com.simplifiedlogic.nitro.jlink.data.FileInfoResults;
 import com.simplifiedlogic.nitro.jlink.data.FileListInstancesResults;
 import com.simplifiedlogic.nitro.jlink.data.FileOpenResults;
+import com.simplifiedlogic.nitro.jlink.data.JLAccuracy;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
 import com.simplifiedlogic.nitro.jlink.data.ListMaterialResults;
@@ -100,6 +101,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 		else if (function.equals(FUNC_LIST_MATERIALS_WILDCARD)) return actionListMaterialsWildcard(sessionId, input);
 		else if (function.equals(FUNC_LOAD_MATL_FILE)) return actionLoadMaterialFile(sessionId, input);
 		else if (function.equals(FUNC_DELETE_MATERIAL)) return actionDeleteMaterial(sessionId, input);
+		else if (function.equals(FUNC_GET_ACCURACY)) return actionGetAccuracy(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -704,6 +706,21 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         if (files!=null && files.size()>0) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODELS, files);
+        	return out;
+        }
+
+        return null;
+	}
+
+	private Hashtable<String, Object> actionGetAccuracy(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        
+        JLAccuracy accuracy = fileHandler.getAccuracy(filename, sessionId);
+
+        if (accuracy!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+       		out.put(OUTPUT_ACCURACY, String.valueOf(accuracy.getAccuracy()));
+       		out.put(OUTPUT_RELATIVE, String.valueOf(accuracy.isRelative()));
         	return out;
         }
 

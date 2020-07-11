@@ -68,6 +68,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpErase());
 		list.add(helpEraseNotDisplayed());
 		list.add(helpExists());
+		list.add(helpGetAccuracy());
 		list.add(helpGetActive());
 		list.add(helpGetCurrentMaterial());
 		list.add(helpGetCurrentMaterialWildcard());
@@ -1697,6 +1698,45 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     			});
     	template.addExample(ex);
     	
+        return template;
+    }
+    
+	private FunctionTemplate helpGetAccuracy() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_ACCURACY);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Get a solid's accuracy");
+    	spec.addFootnote("If the model has no accuracy value, this function will return null");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(false);
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_ACCURACY, FunctionSpec.TYPE_DOUBLE);
+    	ret.setDescription("Accuracy value");
+    	spec.addReturn(ret);
+        
+    	ret = new FunctionReturn(OUTPUT_RELATIVE, FunctionSpec.TYPE_BOOL);
+    	ret.setDescription("Whether the accuracy is relative; false = absolute accuracy");
+    	spec.addReturn(ret);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.asm");
+    	ex.addOutput(OUTPUT_ACCURACY, "0.0012");
+    	ex.addOutput(OUTPUT_RELATIVE, "true");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "wingnut.prt");
+    	ex.addOutput(OUTPUT_ACCURACY, "0.001");
+    	ex.addOutput(OUTPUT_RELATIVE, "false");
+    	template.addExample(ex);
+
         return template;
     }
     

@@ -1,0 +1,60 @@
+{
+  "spec" : {
+    "function_description" : "Get a solid's accuracy",
+    "command" : "file",
+    "function" : "get_accuracy",
+    "notes" : [ "If the model has no accuracy value, this function will return null" ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "accuracy",
+      "type" : "double",
+      "description" : "Accuracy value"
+    }, {
+      "name" : "relative",
+      "type" : "boolean",
+      "description" : "Whether the accuracy is relative; false = absolute accuracy"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_accuracy",
+      "data" : {
+        "file" : "box.asm"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "accuracy" : "0.0012",
+        "relative" : "true"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_accuracy",
+      "data" : {
+        "file" : "wingnut.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "accuracy" : "0.001",
+        "relative" : "false"
+      }
+    }
+  } ]
+}

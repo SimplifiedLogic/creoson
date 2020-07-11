@@ -78,6 +78,7 @@ import com.simplifiedlogic.nitro.jlink.data.FileAssembleResults;
 import com.simplifiedlogic.nitro.jlink.data.FileInfoResults;
 import com.simplifiedlogic.nitro.jlink.data.FileListInstancesResults;
 import com.simplifiedlogic.nitro.jlink.data.FileOpenResults;
+import com.simplifiedlogic.nitro.jlink.data.JLAccuracy;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraint;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
 import com.simplifiedlogic.nitro.jlink.data.JLMatrix;
@@ -3189,6 +3190,70 @@ public class JLFile implements IJLFile {
         	}
     	}
 	}
+
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getAccuracy(java.lang.String, java.lang.String)
+     */
+    public JLAccuracy getAccuracy(
+    		String filename,
+    		String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+		
+		return getAccuracy(filename, sess);
+    }
+
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getAccuracy(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    public JLAccuracy getAccuracy(
+    		String filename,
+            AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("file.get_accuracy: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+	
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        if (!(m instanceof CallSolid))
+	            throw new JLIException("File '" + m.getFileName() + "' must be a solid");
+
+	        CallSolid solid = (CallSolid)m;
+
+	        Double d = solid.getAbsoluteAccuracy();
+	        boolean relative = false;
+	        if (d==null) {
+	        	d = solid.getRelativeAccuracy();
+	        	if (d!=null)
+	        		relative=true;
+	        }
+	        if (d==null)
+	        	return null;
+	        
+	        JLAccuracy result = new JLAccuracy();
+	        result.setAccuracy(d.doubleValue());
+	        result.setRelative(relative);
+	        return result;
+	        
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.get_accuracy,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
 
     /**
      * Walk the hierarchy of an assembly to find a list of sub-components to assemble a new component to
