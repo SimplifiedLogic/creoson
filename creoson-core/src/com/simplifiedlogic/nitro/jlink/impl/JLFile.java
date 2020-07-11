@@ -1438,11 +1438,13 @@ public class JLFile implements IJLFile {
             CallUnitSystem system = solid.getPrincipalUnits();
 
 	        if (system==null)
-	        	throw new JLIException("No Unit System found for part");
+//	        	throw new JLIException("No Unit System found for part");
+	        	return null;
 
 	        CallUnit unit = system.getUnit(UnitType.UNIT_MASS);
 	        if (unit==null)
-	        	throw new JLIException("No Mass Unit found for part");
+//	        	throw new JLIException("No Mass Unit found for part");
+	        	return null;
 	        
 	        String ret = unit.getName();
 	        
@@ -1586,11 +1588,13 @@ public class JLFile implements IJLFile {
             CallUnitSystem system = solid.getPrincipalUnits();
 
 	        if (system==null)
-	        	throw new JLIException("No Unit System found for part");
+//	        	throw new JLIException("No Unit System found for part");
+	        	return null;
 
 	        CallUnit unit = system.getUnit(UnitType.UNIT_LENGTH);
 	        if (unit==null)
-	        	throw new JLIException("No Length Unit found for part");
+//	        	throw new JLIException("No Length Unit found for part");
+	        	return null;
 	        
 	        String ret = unit.getName();
 	        
@@ -3755,7 +3759,7 @@ public class JLFile implements IJLFile {
 
 	        CallMaterial matl = p.getMaterial(materialName);
 	        if (matl==null)
-	        	throw new JLIException("Material "+materialName+" has not been loaded on file"+m.getFileName());
+	        	throw new JLIException("Material "+materialName+" has not been loaded on file: "+m.getFileName());
 
     		return false;
         }
