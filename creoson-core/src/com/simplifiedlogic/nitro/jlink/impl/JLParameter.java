@@ -32,7 +32,11 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameterOwner;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.ParameterCollData;
+import com.simplifiedlogic.nitro.jlink.data.ParameterCollFileData;
 import com.simplifiedlogic.nitro.jlink.data.ParameterData;
+import com.simplifiedlogic.nitro.jlink.data.ParameterDeleteData;
+import com.simplifiedlogic.nitro.jlink.data.ParameterDesignateData;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLParameter;
 import com.simplifiedlogic.nitro.rpc.JLIException;
@@ -128,6 +132,75 @@ public class JLParameter implements IJLParameter {
     	finally {
         	if (NitroConstants.TIME_TASKS) {
         		DebugLogging.sendTimerMessage("parameter.set," + paramName + "," + value, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}		
+    
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#setBatch(com.simplifiedlogic.nitro.jlink.data.ParameterBatchData, boolean, boolean, java.lang.String)
+     */
+    @Override
+	public void setBatch(
+			ParameterCollData batch, 
+			boolean encoded,
+			boolean noCreate,
+			String sessionId) throws JLIException {
+		
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        setBatch(batch, encoded, noCreate, sess);
+	}
+    
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#setBatch(com.simplifiedlogic.nitro.jlink.data.ParameterBatchData, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    @Override
+	public void setBatch(
+			ParameterCollData batch, 
+			boolean encoded,
+			boolean noCreate,
+			AbstractJLISession sess) throws JLIException {
+		
+		DebugLogging.sendDebugMessage("parameter.setBatch", NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (batch==null || batch.size()==0)
+    		throw new JLIException("No batch parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+    		for (ParameterCollFileData file : batch.getFiles()) {
+    			if (file.size()==0)
+    				continue;
+    			for (ParameterData param : file.getParams())
+    		        param.setName(validateParameter(param.getName(), param.getValue(), encoded));
+    		}
+	        
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+	
+	        SetBatchLooper looper = new SetBatchLooper();
+            looper.setNameList(batch.getFileNames());
+	        looper.setDefaultToActive(false);
+	        looper.setSession(session);
+	        looper.setDebugKey(NitroConstants.DEBUG_SET_PARAM_KEY);
+	        looper.batch = batch;
+	        looper.encoded = encoded;
+	        looper.noCreate = noCreate;
+	        looper.loop();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("parameter.setBatch", start, NitroConstants.DEBUG_KEY);
         	}
     	}
 	}		
@@ -748,6 +821,76 @@ public class JLParameter implements IJLParameter {
     }
 
     /**
+     * An implementation of ModelLooper which sets a list of parameters on a list of models
+     * @author Adam Andrews
+     *
+     */
+    public class SetBatchLooper extends ModelLooper {
+    	
+    	/**
+    	 * The structure of files/parameters to set
+    	 */
+    	ParameterCollData batch;
+		/**
+		 *  Whether to NOT create the parameter if it does not exist
+		 */
+		boolean noCreate;
+		/**
+		 * Whether the values are Base64-encoded
+		 */
+		boolean encoded;
+
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
+		 */
+		@Override
+		public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
+			String name = m.getFileName();
+			ParameterCollFileData fileData = null;
+			for (ParameterCollFileData file : batch.getFiles()) {
+				if (file.getFileName().equalsIgnoreCase(name)) {
+					fileData = file;
+					break;
+				}
+			}
+			if (fileData==null)
+				return false;
+			if (fileData.size()==0)
+				return false;
+			for (ParameterData param : fileData.getParams()) {
+				if (param instanceof ParameterDesignateData) {
+					CallParameter p = m.getParam(param.getName());
+					if (p!=null) {
+						boolean designate = param.isDesignate();
+				        if (designate) {
+				        	// make parameter designated
+				            if (!p.getIsDesignated()) {
+				            	p.setIsDesignated(true);
+				            }
+				        }
+				        else {
+				        	// make parameter not designated
+				            if (p.getIsDesignated()) {
+				            	p.setIsDesignated(false);
+				            }
+				        }
+					}
+				}
+				else if (param instanceof ParameterDeleteData) {
+					CallParameter p = m.getParam(param.getName());
+					if (p!=null)
+						p.delete();
+				}
+				else {
+					setOneParameter(m, m, param.getName(), param.getValue(), param.getType(), param.getSetDesignate(), noCreate, encoded);
+				}
+			}
+			return false;
+		}
+    	
+    }
+
+    /**
      * An implementation of ModelLooper which sets a parameter's designated state 
      * on a list of models
      * @author Adam Andrews
@@ -876,7 +1019,7 @@ public class JLParameter implements IJLParameter {
 		public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
 			if (inputs.size()>1) {
 				toName=null;
-				designate=-1;
+				designate=IJLParameter.DESIGNATE_UNKNOWN;
 			}
 			if (exceptFileName!=null && m.getFileName().equals(exceptFileName)) {
 				if (namePattern!=null && !namePattern.equalsIgnoreCase(m.getFileName()))
@@ -884,7 +1027,7 @@ public class JLParameter implements IJLParameter {
 			}
 
 			for (CallParameter param : inputs) {
-				copyOneParam(param, m, toName, -1);
+				copyOneParam(param, m, toName, designate);
 			}
 			return false;
 		}

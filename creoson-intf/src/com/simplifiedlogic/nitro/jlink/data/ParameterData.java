@@ -35,6 +35,7 @@ public class ParameterData implements Serializable {
 	Object value;
 	String type;
 	boolean designate;
+	int setDesignate;
 	boolean encoded;
 	int ownerId;
 	String ownerName;
@@ -191,6 +192,14 @@ public class ParameterData implements Serializable {
 	 */
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public int getSetDesignate() {
+		return setDesignate;
+	}
+
+	public void setSetDesignate(int setDesignate) {
+		this.setDesignate = setDesignate;
 	}
 
 }

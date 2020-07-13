@@ -21,6 +21,7 @@ package com.simplifiedlogic.nitro.jlink.intf;
 import java.util.List;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.ParameterCollData;
 import com.simplifiedlogic.nitro.jlink.data.ParameterData;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 
@@ -47,7 +48,12 @@ public interface IJLParameter {
 	public void set(String filename, String paramName,
 			Object value, String type, int designate,
 			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
-	
+
+	public void setBatch(ParameterCollData batch, 
+			boolean encoded, boolean noCreate, String sessionId) throws JLIException;
+	public void setBatch(ParameterCollData batch, 
+			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
+
 	public void setDesignated(String filename, String paramName,
 			boolean designate, String sessionId) throws JLIException;
 	public void setDesignated(String filename, String paramName,
