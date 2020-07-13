@@ -119,6 +119,8 @@ public class DataUtils {
             val = new String((byte[])in);
         else
             val = in.toString();
+        // handle most popular international decimal symbol
+        val = val.replace(',', '.');
         return Double.valueOf(val).doubleValue();
     }
 
