@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XInvalidFileName;
 import com.ptc.pfc.pfcExceptions.XStringTooLong;
+import com.ptc.pfc.pfcExceptions.XToolkitBadContext;
 import com.ptc.pfc.pfcExceptions.XToolkitBadInputs;
 import com.ptc.pfc.pfcExceptions.XToolkitCheckoutConflict;
 import com.ptc.pfc.pfcExceptions.XToolkitCommError;
@@ -504,19 +505,24 @@ public class JlinkUtils {
      * @throws jxthrowable
      */
     public static void displayModel(CallSession session, CallModel m, boolean activate) throws jxthrowable {
-        CallWindow win = session.getModelWindow(m);
-        CallWindow winActive = session.getCurrentWindow();
-        if (win!=null && !win.equals(winActive)) {
-//            session.SetCurrentWindow(win);
-            m.display();
-            if (activate)
-            	win.activate();
-        }
-        else if (win==null) {
-            m.display();
-            if (activate)
-                winActive.activate();
-        }
+    	try {
+	        CallWindow win = session.getModelWindow(m);
+	        CallWindow winActive = session.getCurrentWindow();
+	        if (win!=null && !win.equals(winActive)) {
+	//            session.SetCurrentWindow(win);
+	            m.display();
+	            if (activate)
+	            	win.activate();
+	        }
+	        else if (win==null) {
+	            m.display();
+	            if (activate)
+	                winActive.activate();
+	        }
+    	}
+    	catch (XToolkitBadContext e) {
+    		// ignore, may be caused by "no_graphics" mode
+    	}
     }
 
     /**
