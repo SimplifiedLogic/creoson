@@ -720,6 +720,9 @@ public class JLParameter implements IJLParameter {
         	catch (JLIException e) {
         		throw e;
         	}
+        	catch (NumberFormatException e) {
+        		throw new JLIException("Unable to set data value " + value + " for type " + type + ": Invalid number format");
+        	}
         	catch (Exception e) {
         		throw new JLIException("Unable to set data value " + value + " for type " + type + ": " + e.getMessage());
         	}

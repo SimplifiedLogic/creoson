@@ -898,8 +898,11 @@ public class JlinkUtils {
     	catch (JLIException e) {
     		throw e;
     	}
+    	catch (NumberFormatException e) {
+    		throw new JLIException("Unable to set data value " + value + " for type " + getParamTypeString(type) + ": Invalid number format");
+    	}
     	catch (Exception e) {
-    		throw new JLIException("Unable to set data value for type " + getParamTypeString(type) + ": " + e.getMessage());
+    		throw new JLIException("Unable to set data value " + value + " for type " + getParamTypeString(type) + ": " + e.getMessage());
     	}
     }
 

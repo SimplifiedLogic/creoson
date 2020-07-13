@@ -33,6 +33,7 @@ import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
 import com.ptc.pfc.pfcExceptions.XToolkitInUse;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
+import com.ptc.pfc.pfcExceptions.XUnknownModelExtension;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModel.ModelType;
@@ -205,6 +206,9 @@ public class JLFile implements IJLFile {
 	                        catch (JLIException e) { 
 	                            //ignore file not found exception 
 	                        }
+	                        catch (XUnknownModelExtension e) {
+	                        	throw new JLIException("Unknown model extension on file: "+namelist[i]);
+	                        }
 	                        found_names = tmpResults.getFilenames();
 	                        if (found_names!=null && found_names.length>0)
 	                            out_files.add(namelist[i]);
@@ -215,7 +219,17 @@ public class JLFile implements IJLFile {
 	                    File dir = new File(dirname);
 	                    if (!dir.exists() || !dir.isDirectory())
 	                        throw new JLIException("Directory '" + dirname + "' does not exist");
-	    
+
+/* preliminary work for handling things like "wide*<bracket-2>.prt"
+	                    if (genericname!=null && filter.getNamePattern()!=null) {
+	                    	String topGeneric=genericname;
+	                    	if (topGeneric!=null && topGeneric.indexOf('<')>=0)
+	                    		topGeneric = JlinkUtils.extractTopGeneric(topGeneric);
+	                    	int pos = NitroUtils.findFileExtension(filename);
+	                    	String ext = filename.substring(pos);
+	                    	filter.setNamePattern(topGeneric+ext);
+	                    }
+*/
 	                    File[] files = dir.listFiles(filter);
 	                    int numfiles = files.length;
 	                    if (numfiles>0) {
@@ -233,10 +247,47 @@ public class JLFile implements IJLFile {
 	                                    	CallModelDescriptor descr = m.getDescr();
 	                                    	fileRevision = descr.getFileVersion();
 	                                    }
+
+/* preliminary work for handling things like "wide*<bracket-2>.prt" -- does not handle nested family tables
+		                            	if (genericname==null || !NitroUtils.isPattern(filename)) {
+			                                found_names = tmpResults.getFilenames();
+			                                if (found_names!=null && found_names.length>0)
+			                                    out_files.add(subname);
+		                            	}
+		                            	else if (m instanceof CallSolid) {
+		                            		JLFamilyTable.ListLooper looper = new JLFamilyTable.ListLooper();
+		        	                    	int pos = NitroUtils.findFileExtension(filename);
+		                        	        looper.setNamePattern(filename.substring(0, pos));
+		                        	        looper.setGetColumns(false);
+		                        	        
+		                        	        looper.loop((CallSolid)m);
+		                        	        
+		                        	        List<String> instances = looper.output;
+		                        	        if (instances==null) {
+		                        	        	// can't erase the model, might have been opened for something else
+		                        	        }
+		                        	        else {
+		                        	        	for (String inst : instances) {
+		                        	        		String instfile = JlinkUtils.instGenericExtToFilename(inst, genericname, filename.substring(pos));
+		    	                                    m = doFileOpen(session, tmpResults, false, 
+		    	                                            dirname, null, instfile, null,  
+		    	                                            false, false, false, false);
+					                                found_names = tmpResults.getFilenames();
+					                                if (found_names!=null && found_names.length>0)
+					                                    out_files.add(subname);
+		                        	        	}
+		                        	        }
+		                            		
+		                            	}
+*/
 	                                }
 	                                catch (JLIException e) { 
 	                                    //ignore file not found exception 
 	                                }
+	    	                        catch (XUnknownModelExtension e) {
+	    	                        	throw new JLIException("Unknown model extension on file: "+subname);
+	    	                        }
+/* preliminary work for handling things like "wide*<bracket-2>.prt" - remove these 3 lines */
 	                                found_names = tmpResults.getFilenames();
 	                                if (found_names!=null && found_names.length>0)
 	                                    out_files.add(subname);
@@ -919,7 +970,7 @@ public class JLFile implements IJLFile {
 	        }
     	}
     	catch (jxthrowable e) {
-    		System.err.println("Error regenerating: " + e.getClass().getName() + " : "+ e.getMessage());
+    		System.err.println("Error regenerating "+filename+": " + e.getClass().getName() + " : "+ e.getMessage());
     		throw JlinkUtils.createException(e);
     	}
     	finally {
