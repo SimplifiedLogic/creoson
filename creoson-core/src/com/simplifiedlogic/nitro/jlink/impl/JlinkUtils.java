@@ -1198,7 +1198,12 @@ public class JlinkUtils {
         String type = null;
         
         boolean filterChecked=false;
-        switch (pval.getParamValueType()) {
+        int ptype = pval.getParamValueType();
+//        if (ptype==ParamValueType._PARAM_NOT_SET) {
+//        	return false;
+//        }
+        switch (ptype) {
+        
             case ParamValueType._PARAM_STRING: 
                 value = pval.getStringValue();
                 type = IJLParameter.TYPE_STRING;
@@ -1251,6 +1256,8 @@ public class JlinkUtils {
                 }
                 type = IJLParameter.TYPE_NOTE;
                 break;
+            case ParamValueType._PARAM_VOID: 
+            case ParamValueType._PARAM_NOT_SET: 
             default:
                 value = "";
                 type = "";
