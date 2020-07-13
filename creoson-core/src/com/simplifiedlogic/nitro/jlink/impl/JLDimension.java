@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.impl;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,8 +27,10 @@ import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcDimension.DimToleranceType;
 import com.ptc.pfc.pfcDimension.DimensionType;
 import com.ptc.pfc.pfcDimension.ToleranceTableType;
+import com.ptc.pfc.pfcDrawingFormat.DrawingFormat;
 import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
+import com.ptc.pfc.pfcModel2D.Model2D;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
@@ -561,10 +564,20 @@ public class JLDimension implements IJLDimension {
 	        	CallModel2D drw = (CallModel2D)m;
 	        	CallModels drawingModels = drw.listModels();
         		CallDimension2D dim;
+        		CallDimension2Ds dimsShown;
+        		CallModel drwModel;
 	        	if (drawingModels!=null && drawingModels.getarraysize()>0) {
+		        	List<String> topModels = new ArrayList<String>();
+		        	boolean hasAsm=false;
 	        		int len = drawingModels.getarraysize();
 	        		for (int i=0; i<len; i++) {
-	        			CallDimension2Ds dimsShown = ((CallModel2D)m).listShownDimensions(drawingModels.get(i), null);
+	        			drwModel = drawingModels.get(i);
+	        			topModels.add(drwModel.getFileName()+"+"+drwModel.getGenericName());
+	        			if (drwModel instanceof CallAssembly)
+	        				hasAsm=true;
+
+	        			// get the model's dimensions that are shown on the drawing
+	        			dimsShown = ((CallModel2D)m).listShownDimensions(drwModel, null);
 	        			if (dimsShown!=null && dimsShown.getarraysize()>0) {
 	    	        		int len2 = dimsShown.getarraysize();
 	    	        		for (int k=0; k<len2; k++) {
@@ -574,6 +587,40 @@ public class JLDimension implements IJLDimension {
 
 	    	        			looper.loopAction(dim);
 	    	        		}
+	        			}
+	        		}
+
+	        		// get children of assemblies that are on the drawing
+	        		if (hasAsm) {
+	        			CallModels openModels = session.listModels();
+	        			len = openModels.getarraysize();
+	        			for (int i=0; i<len; i++) {
+	        				drwModel = openModels.get(i);
+	        	    		if (drwModel instanceof Model2D || drwModel instanceof DrawingFormat)
+	        	    			continue;
+	        	    		// skip models that were already hit on the above loop
+	        	    		if (topModels.contains(drwModel.getFileName()+"+"+drwModel.getGenericName()))
+	        	    			continue;
+
+	        	    		// get the model's dimensions that are shown on the drawing
+	        	    		try {
+	        	    			dimsShown = ((CallModel2D)m).listShownDimensions(drwModel, null);
+	        	    		}
+	        	    		catch (Exception e) {
+	        	    			// a BadInputException can occur if the model is of the type who can't have dimensions -- like a DrawingFormat
+	        	    			// assume other exceptions might happen too
+	        	    			continue;
+	        	    		}
+		        			if (dimsShown!=null && dimsShown.getarraysize()>0) {
+		    	        		int len2 = dimsShown.getarraysize();
+		    	        		for (int k=0; k<len2; k++) {
+		    	        			dim = dimsShown.get(k);
+		    	                    if (!looper.checkName(dim))
+		    	                        continue;
+
+		    	        			looper.loopAction(dim);
+		    	        		}
+		        			}
 	        			}
 	        		}
 	        	}
