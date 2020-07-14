@@ -1,6 +1,34 @@
 R E L E A S E   N O T E S
 =========================
 
+2.7.0
+	- Added new functions:
+		file
+			get_accuracy - to return model accuracy
+	- Modified functions:
+		bom
+			get_paths - revamp handling of simplified reps to behave more like Creo expects
+		dimension
+			list_detail - will now return drawing dimensions that belong to subcomponents on a drawing assembly
+		file
+			get_length_units - if no units found, return null instead of erroring
+			get_mass_units - if no units found, return null instead of erroring
+			get_transform - fix doc/examples so output is correct
+			load_material_file - don't try to load a material if it's already loaded
+			open - ignore bad-context error, possibly caused by running in "no_graphics" mode
+			save - fix bug where input file list was not handled properly
+		drawing
+			list_symbols - fix bug where sheet number was not used when listing symbols
+				     - add location and attach_type to output
+		interface
+			export_pdf - add sheet_range option
+			export_3dpdf - add sheet_range option
+			mapkey - add delay option
+		note
+			list - fix bug where note value was in wrong part of output
+		windchill
+			clear_workspace - ignore "Found" error when setting active workspace
+
 2.6.0
 	- Added new functions:
 		file
