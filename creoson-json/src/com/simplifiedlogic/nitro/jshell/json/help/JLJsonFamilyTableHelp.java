@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.intf.IJLParameter;
+import com.simplifiedlogic.nitro.jshell.json.request.JLCreoRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFamilyTableRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLFamilyTableResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionArgument;
@@ -387,6 +388,7 @@ public class JLJsonFamilyTableHelp extends JLJsonCommandHelp implements JLFamily
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_REPLACE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Replace a model in an assembly with another instance in the same family table");
+    	spec.addFootnote("If you are running Creo 7 or higher, you must call "+JLCreoRequestParams.COMMAND+":"+JLCreoRequestParams.FUNC_SET_CREO_VERSION+" to set the Creo version");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);

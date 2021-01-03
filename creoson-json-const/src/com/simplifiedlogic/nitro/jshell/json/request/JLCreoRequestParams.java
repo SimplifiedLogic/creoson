@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -40,6 +40,7 @@ public interface JLCreoRequestParams {
 	public static final String FUNC_GET_CONFIG		= "get_config";
 	public static final String FUNC_SET_STD_COLOR	= "set_std_color";
 	public static final String FUNC_GET_STD_COLOR	= "get_std_color";
+	public static final String FUNC_SET_CREO_VERSION	= "set_creo_version";
 	
 	// request fields
     public static final String PARAM_DIRNAME	= "dirname";
@@ -52,6 +53,7 @@ public interface JLCreoRequestParams {
     public static final String PARAM_GREEN		= "green";
     public static final String PARAM_BLUE		= "blue";
     public static final String PARAM_IGNORE_ERRORS	= "ignore_errors";
+    public static final String PARAM_VERSION	= "version";
 
     // standard color values
 	public static final String STD_COLOR_LETTER 			= "letter";

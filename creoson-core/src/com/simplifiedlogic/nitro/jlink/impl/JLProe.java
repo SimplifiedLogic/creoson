@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -721,5 +721,27 @@ public class JLProe implements IJLProe {
 			case STD_COLOR_QUILT: return StdColor.COLOR_QUILT;
 		}
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#setProeVersion(int, java.lang.String)
+	 */
+	public void setProeVersion(int version, String sessionId) throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+		setProeVersion(version, sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#setProeVersion(int, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	public void setProeVersion(int version, AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("proe.set_creo_version", NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+        sess.setProeVersion(version);
 	}
 }

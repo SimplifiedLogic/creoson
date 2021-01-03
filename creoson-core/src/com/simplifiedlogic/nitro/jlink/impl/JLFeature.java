@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -26,7 +26,10 @@ import java.util.Vector;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitBadInputs;
 import com.ptc.pfc.pfcExceptions.XToolkitNotExist;
+import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
+import com.ptc.pfc.pfcFeature.Feature;
+import com.ptc.pfc.pfcFeature.FeatureGroups;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
@@ -116,7 +119,7 @@ public class JLFeature implements IJLFeature {
 	            return;
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session);
+	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        DeleteLooper looper = new DeleteLooper();
@@ -260,7 +263,13 @@ public class JLFeature implements IJLFeature {
 
     		CallGroupPattern groupPattern = feat.getGroupPattern();
     		if (groupPattern!=null) {
-    			CallFeatures feats = groupPattern.listFeatMembers(); 
+    			CallFeatures feats = null;
+    			try {
+    				groupPattern.listFeatMembers(); 
+    			}
+    			catch (XToolkitNotFound e) {
+    				feats = null;
+    			}
         		if (feats!=null) {
         			int len = feats.getarraysize();
         			if (len>0) {
@@ -541,7 +550,7 @@ public class JLFeature implements IJLFeature {
 		        return;
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session);
+	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        ResumeLooper looper = new ResumeLooper();
@@ -651,7 +660,7 @@ public class JLFeature implements IJLFeature {
 		        return;
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session);
+	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        SuppressLooper looper = new SuppressLooper();

@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.intf.IJLFeature;
 import com.simplifiedlogic.nitro.jlink.intf.IJLParameter;
+import com.simplifiedlogic.nitro.jshell.json.request.JLCreoRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFeatureRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLParameterRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLFeatureResponseParams;
@@ -145,6 +146,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Delete one or more features that match criteria");
     	spec.addFootnote("Will only delete visible features.");
+    	spec.addFootnote("If you are running Creo 7 or higher, you must call "+JLCreoRequestParams.COMMAND+":"+JLCreoRequestParams.FUNC_SET_CREO_VERSION+" to set the Creo version");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -560,6 +562,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	spec.setFunctionDescription("Resume one or more features that match criteria");
     	spec.addFootnote("Will only resume visible features.");
     	spec.addFootnote("There are 3 ways of specifying features; "+PARAM_ID+", "+PARAM_NAMES+", and "+PARAM_NAME+" in that order.  If none of these are given, then all features may be resumed.");
+    	spec.addFootnote("If you are running Creo 7 or higher, you must call "+JLCreoRequestParams.COMMAND+":"+JLCreoRequestParams.FUNC_SET_CREO_VERSION+" to set the Creo version");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -649,6 +652,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	spec.setFunctionDescription("Suppress one or more features that match criteria");
     	spec.addFootnote("Will only suppress visible features.");
     	spec.addFootnote("There are 3 ways of specifying features; "+PARAM_ID+", "+PARAM_NAMES+", and "+PARAM_NAME+" in that order.  If none of these are given, then all features may be suppressed.");
+    	spec.addFootnote("If you are running Creo 7 or higher, you must call "+JLCreoRequestParams.COMMAND+":"+JLCreoRequestParams.FUNC_SET_CREO_VERSION+" to set the Creo version");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);

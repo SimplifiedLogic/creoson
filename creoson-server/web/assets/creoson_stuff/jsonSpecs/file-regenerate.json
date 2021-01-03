@@ -3,6 +3,7 @@
     "function_description" : "Regenerate one or more models",
     "command" : "file",
     "function" : "regenerate",
+    "notes" : [ "If you are running Creo 7 or higher, you must call creo:set_creo_version to set the Creo version" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

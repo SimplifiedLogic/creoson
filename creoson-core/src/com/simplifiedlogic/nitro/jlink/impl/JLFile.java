@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -30,6 +30,7 @@ import com.ptc.pfc.pfcBase.DatumSide;
 import com.ptc.pfc.pfcBase.UnitType;
 import com.ptc.pfc.pfcComponentFeat.ComponentConstraintType;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
+import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
 import com.ptc.pfc.pfcExceptions.XToolkitInUse;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
@@ -195,7 +196,7 @@ public class JLFile implements IJLFile {
 	                    for (int i=0; i<len; i++) {
 	                        tmpResults = new FileOpenResults();
 	                        try {
-	                        	CallModel m = doFileOpen(session, tmpResults, false, 
+	                        	CallModel m = doFileOpen(session, sess, tmpResults, false, 
 	                                    dirname, null, namelist[i], null,  
 	                                    false, false, false, false);
 	                            if (m!=null && len==1) {
@@ -240,7 +241,7 @@ public class JLFile implements IJLFile {
 	                            if (last_subname==null || !subname.equalsIgnoreCase(last_subname)) {
 	                                tmpResults = new FileOpenResults();
 	                                try {
-	                                    CallModel m = doFileOpen(session, tmpResults, false, 
+	                                    CallModel m = doFileOpen(session, sess, tmpResults, false, 
 	                                            dirname, null, subname, null,  
 	                                            false, false, false, false);
 	                                    if (m!=null && numfiles==1) {
@@ -310,7 +311,7 @@ public class JLFile implements IJLFile {
 	            }
 	            return out;
 	        }
-	        CallModel m = doFileOpen(session, out, true, 
+	        CallModel m = doFileOpen(session, sess, out, true, 
 	                dirname, savedir, filename, genericname,  
 	                display, newwin, activate, forceRegen);
 	        if (m!=null) {
@@ -358,7 +359,7 @@ public class JLFile implements IJLFile {
      * @throws JLIException
      * @throws jxthrowable
      */
-    private CallModel doFileOpen(CallSession session, FileOpenResults out, boolean change_dir, 
+    private CallModel doFileOpen(CallSession session, AbstractJLISession sess, FileOpenResults out, boolean change_dir, 
             String dirname, String savedir, String filename, String generic,  
             boolean display, boolean newwin, boolean activate, boolean regen_force) throws JLIException,jxthrowable {
         
@@ -377,7 +378,7 @@ public class JLFile implements IJLFile {
             if (m instanceof CallSolid && regen_force) {
             	CallSolid solid = (CallSolid)m;
             	CallRegenInstructions reginst = CallRegenInstructions.create(Boolean.FALSE, Boolean.TRUE, null);
-                JlinkUtils.regenerate(session, new RegenerateModel(solid, reginst), true);
+                JlinkUtils.regenerate(session, sess, new RegenerateModel(solid, reginst), true);
                 CallWindow win = session.getModelWindow(solid);
                 if (win!=null)
                     win.refresh();
@@ -426,7 +427,7 @@ public class JLFile implements IJLFile {
                 if (m instanceof CallSolid && regen_force) {
                 	CallSolid solid = (CallSolid)m;
                 	CallRegenInstructions reginst = CallRegenInstructions.create(Boolean.FALSE, Boolean.TRUE, null);
-                    JlinkUtils.regenerate(session, new RegenerateModel(solid, reginst), true);
+                    JlinkUtils.regenerate(session, sess, new RegenerateModel(solid, reginst), true);
                     CallWindow win = session.getModelWindow(solid);
                     if (win!=null)
                         win.refresh();
@@ -950,7 +951,7 @@ public class JLFile implements IJLFile {
 	        //      ComponentFeat
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, NitroConstants.DEBUG_REGEN_KEY);
+	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess, NitroConstants.DEBUG_REGEN_KEY);
 
 	        try {
 		        RegenerateLooper looper = new RegenerateLooper();
@@ -960,6 +961,7 @@ public class JLFile implements IJLFile {
 		            looper.setNamePattern(filename);
 		        looper.display = display;
 	            looper.session = session;
+	            looper.sess = sess;
 		        looper.setDefaultToActive(true);
 		        looper.setSession(session);
 		        looper.setDebugKey(NitroConstants.DEBUG_REGEN_KEY);
@@ -1411,7 +1413,16 @@ public class JLFile implements IJLFile {
 
 	        CallSolid solid = (CallSolid)m;
 
-	        CallMassProperty prop = solid.getMassProperty(null);
+	        CallMassProperty prop = null;
+	        try {
+	        	prop = solid.getMassProperty(null);
+	        }
+	        catch (XToolkitGeneralError e) {
+	        	if (m instanceof CallAssembly)
+		        	throw new JLIException("Could not get mass properties; check that all parts in assembly have an active material.");
+	        	else
+	        		throw new JLIException("Could not get mass properties; check that part has an active material.");
+	        }
 
 	        if (prop==null)
 	        	throw new JLIException("No mass properties found for part");
@@ -2098,7 +2109,7 @@ public class JLFile implements IJLFile {
 	        String savedir = session.getCurrentDirectory();
 	        if (dirname==null)
 	            dirname = savedir;
-	        CallModel m = doFileOpen(session, out, true, 
+	        CallModel m = doFileOpen(session, sess, out, true, 
 	                dirname, savedir, filename, genericName,  
 	                false, false, false, false);
 	        
@@ -2146,7 +2157,7 @@ public class JLFile implements IJLFile {
 
 	        // this is really only needed when suppress=true
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session);
+	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        if (((CallSolid)m).getIsSkeleton()) {
@@ -3510,6 +3521,10 @@ public class JLFile implements IJLFile {
          * The Creo session
          */
         public CallSession session = null;
+        /**
+         * The JShell session - needed for regeneration
+         */
+        public AbstractJLISession sess = null;
         
         public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
             if (display) {
@@ -3527,7 +3542,7 @@ public class JLFile implements IJLFile {
             if (m instanceof CallSolid) {
             	CallSolid solid = (CallSolid)m;
             	CallRegenInstructions reginst = CallRegenInstructions.create(Boolean.FALSE, null, null);
-                JlinkUtils.regenerate(session, new RegenerateModel(solid, reginst), false, NitroConstants.DEBUG_REGEN_KEY);
+                JlinkUtils.regenerate(session, sess, new RegenerateModel(solid, reginst), false, NitroConstants.DEBUG_REGEN_KEY);
             }
             else if (m instanceof CallModel2D) {
                 if (!display) {
@@ -3536,7 +3551,7 @@ public class JLFile implements IJLFile {
                         JlinkUtils.displayModel(getSession(), m, true);
                 }
                 CallModel2D m2d = (CallModel2D)m;
-                JlinkUtils.regenerate(session, new JLDrawing.RegenerateDrawing(m2d), false, NitroConstants.DEBUG_REGEN_KEY);
+                JlinkUtils.regenerate(session, sess, new JLDrawing.RegenerateDrawing(m2d), false, NitroConstants.DEBUG_REGEN_KEY);
             }
             CallWindow win = getSession().getModelWindow(m);
             if (win!=null) {
@@ -3723,6 +3738,14 @@ public class JLFile implements IJLFile {
 		public void regenerate() throws jxthrowable {
 			solid.regenerate(reginst);
 		}
+
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.jlink.impl.JlinkUtils.Regenerator#getInstructions()
+		 */
+		@Override
+		public CallRegenInstructions getInstructions() {
+			return reginst;
+		}
     	
     }
 
@@ -3762,6 +3785,13 @@ public class JLFile implements IJLFile {
             solid.executeFeatureOps(featOps, inst);
 		}
     	
+		/* (non-Javadoc)
+		 * @see com.simplifiedlogic.nitro.jlink.impl.JlinkUtils.Regenerator#getInstructions()
+		 */
+		@Override
+		public CallRegenInstructions getInstructions() {
+			return null;
+		}
     }
 
     /**

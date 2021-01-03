@@ -1,0 +1,30 @@
+{
+  "spec" : {
+    "function_description" : "Set the version of Creo you are running",
+    "command" : "creo",
+    "function" : "set_creo_version",
+    "notes" : [ "This function only needs to be called once per creoson session.", "This function must be called if you are doing certain functions in Creo 7 due to deprecated config options", "Needed for functions: familytable:replace, file:assemble, file:regenerate, feature:delete, feature:resume, feature:suppress" ],
+    "request" : [ {
+      "name" : "version",
+      "type" : "integer",
+      "description" : "Creo version",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "creo",
+      "function" : "set_creo_version",
+      "data" : {
+        "version" : "7"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.simplifiedlogic.nitro.jshell.json.request.JLCreoRequestParams;
+import com.simplifiedlogic.nitro.jshell.json.request.JLFamilyTableRequestParams;
+import com.simplifiedlogic.nitro.jshell.json.request.JLFeatureRequestParams;
+import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLCreoResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionArgument;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionExample;
@@ -88,6 +91,7 @@ public class JLJsonCreoHelp extends JLJsonCommandHelp implements JLCreoRequestPa
 		list.add(helpPwd());
 		list.add(helpRmdir());
 		list.add(helpSetConfig());
+		list.add(helpSetCreoVersion());
 		list.add(helpSetStandardColor());
 		return list;
 	}
@@ -451,6 +455,35 @@ public class JLJsonCreoHelp extends JLJsonCommandHelp implements JLCreoRequestPa
     	ex.addOutput(OUTPUT_RED, 255);
     	ex.addOutput(OUTPUT_GREEN, 127);
     	ex.addOutput(OUTPUT_BLUE, 127);
+    	template.addExample(ex);
+    	
+        return template;
+    }
+    
+	private FunctionTemplate helpSetCreoVersion() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_CREO_VERSION);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set the version of Creo you are running");
+    	spec.addFootnote("This function only needs to be called once per creoson session.");
+    	spec.addFootnote("This function must be called if you are doing certain functions in Creo 7 due to deprecated config options");
+    	spec.addFootnote("Needed for functions: "+
+    			JLFamilyTableRequestParams.COMMAND+":"+JLFamilyTableRequestParams.FUNC_REPLACE+", "+
+    			JLFileRequestParams.COMMAND+":"+JLFileRequestParams.FUNC_ASSEMBLE+", "+
+    			JLFileRequestParams.COMMAND+":"+JLFileRequestParams.FUNC_REGENERATE+", "+
+    			JLFeatureRequestParams.COMMAND+":"+JLFeatureRequestParams.FUNC_DELETE+", "+
+    			JLFeatureRequestParams.COMMAND+":"+JLFeatureRequestParams.FUNC_RESUME+", "+
+    			JLFeatureRequestParams.COMMAND+":"+JLFeatureRequestParams.FUNC_SUPPRESS+"");
+    	FunctionArgument arg;
+    	
+    	arg = new FunctionArgument(PARAM_VERSION, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Creo version");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_VERSION, "7");
     	template.addExample(ex);
     	
         return template;

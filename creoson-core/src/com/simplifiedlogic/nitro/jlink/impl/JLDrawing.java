@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -65,6 +65,7 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.sheet.CallSheetData;
+import com.simplifiedlogic.nitro.jlink.calls.solid.CallRegenInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.calls.view.CallView;
 import com.simplifiedlogic.nitro.jlink.calls.view2d.CallGeneralViewCreateInstructions;
@@ -195,7 +196,7 @@ public class JLDrawing implements IJLDrawing {
             	}
 
 //            	drw.regenerate();
-            	JlinkUtils.regenerate(session, new RegenerateDrawing(drw), true);
+            	JlinkUtils.regenerate(session, sess, new RegenerateDrawing(drw), true);
             	return drw.getFileName();
             }
             
@@ -537,7 +538,7 @@ public class JLDrawing implements IJLDrawing {
 	        
 	        CallDrawing drw = (CallDrawing)m;
 	        
-        	JlinkUtils.regenerate(session, new RegenerateDrawing(drw), true);
+        	JlinkUtils.regenerate(session, sess, new RegenerateDrawing(drw), true);
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
@@ -3328,6 +3329,11 @@ public class JLDrawing implements IJLDrawing {
 		@Override
 		public void regenerate() throws jxthrowable {
 			drw.regenerate();
+		}
+		
+		@Override
+		public CallRegenInstructions getInstructions() {
+			return null;
 		}
     }
 }

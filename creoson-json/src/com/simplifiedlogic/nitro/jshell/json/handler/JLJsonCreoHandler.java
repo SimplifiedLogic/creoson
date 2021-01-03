@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -73,6 +73,8 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
 			return actionSetStandardColor(sessionId, input);
 		else if (function.equals(FUNC_GET_STD_COLOR))
 			return actionGetStandardColor(sessionId, input);
+		else if (function.equals(FUNC_SET_CREO_VERSION))
+			return actionSetCreoVersion(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -267,4 +269,13 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		return type;
 	}
+
+	private Hashtable<String, Object> actionSetCreoVersion(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        int version = checkIntParameter(input, PARAM_VERSION, true, 0);
+       
+		proeHandler.setProeVersion(version, sessionId);
+		
+		return null;
+	}
+
 }

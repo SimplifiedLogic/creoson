@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -62,4 +62,16 @@ public abstract class AbstractJLISession {
      * @param connId The Creo connection ID
      */
     public abstract void setConnectionId(String connId);
+
+    /**
+     * Get the Creo version value
+     * @return The Creo version value
+     */
+	public abstract int getProeVersion();
+
+    /**
+     * Set the Creo version value
+     * @param proeVersion The Creo version value
+     */
+	public abstract void setProeVersion(int proeVersion);
 }

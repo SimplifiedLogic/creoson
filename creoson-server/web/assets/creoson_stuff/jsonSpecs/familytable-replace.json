@@ -3,7 +3,7 @@
     "function_description" : "Replace a model in an assembly with another instance in the same family table",
     "command" : "familytable",
     "function" : "replace",
-    "notes" : [ "You must specify either cur_inst or path." ],
+    "notes" : [ "If you are running Creo 7 or higher, you must call creo:set_creo_version to set the Creo version", "You must specify either cur_inst or path." ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

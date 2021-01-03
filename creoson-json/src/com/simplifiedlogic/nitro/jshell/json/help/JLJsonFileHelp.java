@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
+import com.simplifiedlogic.nitro.jshell.json.request.JLCreoRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.request.JLFileRequestParams;
 import com.simplifiedlogic.nitro.jshell.json.response.JLFileResponseParams;
 import com.simplifiedlogic.nitro.jshell.json.template.FunctionArgument;
@@ -401,6 +402,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_REGENERATE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Regenerate one or more models");
+    	spec.addFootnote("If you are running Creo 7 or higher, you must call "+JLCreoRequestParams.COMMAND+":"+JLCreoRequestParams.FUNC_SET_CREO_VERSION+" to set the Creo version");
     	FunctionArgument arg;
     	
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
@@ -948,6 +950,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_ASSEMBLE);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Assemble a component into an assembly");
+    	spec.addFootnote("If you are running Creo 7 or higher, you must call "+JLCreoRequestParams.COMMAND+":"+JLCreoRequestParams.FUNC_SET_CREO_VERSION+" to set the Creo version");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	

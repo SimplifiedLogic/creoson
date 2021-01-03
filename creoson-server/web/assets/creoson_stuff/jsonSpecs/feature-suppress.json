@@ -3,7 +3,7 @@
     "function_description" : "Suppress one or more features that match criteria",
     "command" : "feature",
     "function" : "suppress",
-    "notes" : [ "Will only suppress visible features.", "There are 3 ways of specifying features; feat_id, names, and name in that order.  If none of these are given, then all features may be suppressed." ],
+    "notes" : [ "Will only suppress visible features.", "There are 3 ways of specifying features; feat_id, names, and name in that order.  If none of these are given, then all features may be suppressed.", "If you are running Creo 7 or higher, you must call creo:set_creo_version to set the Creo version" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

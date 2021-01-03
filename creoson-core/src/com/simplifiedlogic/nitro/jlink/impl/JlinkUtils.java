@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2020 Simplified Logic, Inc
+ * Copyright 2000-2021 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.codec.binary.Base64;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XInvalidFileName;
@@ -68,6 +70,7 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameterOwner;
 import com.simplifiedlogic.nitro.jlink.calls.note.CallNote;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
+import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
 import com.simplifiedlogic.nitro.jlink.calls.server.CallServer;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
@@ -81,8 +84,10 @@ import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRepSubstitute;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSubstAsmRep;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSubstPrtRep;
 import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSubstitution;
+import com.simplifiedlogic.nitro.jlink.calls.solid.CallRegenInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
+import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
 import com.simplifiedlogic.nitro.jlink.data.ParameterData;
 import com.simplifiedlogic.nitro.jlink.data.SimpRepData;
@@ -105,6 +110,8 @@ import com.simplifiedlogic.nitro.util.JLMatrixMaker;
 public class JlinkUtils {
 
     public static final int FILENAME_LIMIT 	= 31;
+    
+    public static final String CREO7_AUTH = "NTQzNWQyMzM1NjNmYmQ3YQ==";
 
     /**
      * Get a model that is open in Creo
@@ -990,8 +997,8 @@ public class JlinkUtils {
      * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back.
      * @throws jxthrowable
      */
-    public static boolean prefixResolveModeFix(CallSession session) throws jxthrowable {
-    	return prefixResolveModeFix(session, null);
+    public static boolean prefixResolveModeFix(CallSession session, AbstractJLISession jlSession) throws jxthrowable {
+    	return prefixResolveModeFix(session, jlSession, null);
     }
     
     /**
@@ -1008,11 +1015,14 @@ public class JlinkUtils {
      * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back.
      * @throws jxthrowable
      */
-    public static boolean prefixResolveModeFix(CallSession session, String debugKey) throws jxthrowable {
+    public static boolean prefixResolveModeFix(CallSession session, AbstractJLISession jlSession, String debugKey) throws jxthrowable {
+//    	if (detectResolveModeOption())
+//    		return true; // return true so that we don't try to turn resolve-mode off
         boolean resolveMode = false;
         // required for WF5 and higher
         try {
         	long start = System.currentTimeMillis();
+       		setAuthCode(session, jlSession);
             String value = session.getConfigOption(OPTION_REGEN_HNDLG);
             if (debugKey!=null)
             	DebugLogging.sendTimerMessage("jlink.GetConfigOption,"+OPTION_REGEN_HNDLG, start, debugKey);
@@ -1067,6 +1077,8 @@ public class JlinkUtils {
     public static void postfixResolveModeFix(CallSession session, boolean resolveMode, String debugKey) throws jxthrowable {
         try {
             if (!resolveMode) {
+//            	if (detectResolveModeOption())
+//            		return;
             	long start = System.currentTimeMillis();
                 session.setConfigOption(OPTION_REGEN_HNDLG, VALUE_NO_RESOLVE);
                 if (debugKey!=null)
@@ -1078,6 +1090,87 @@ public class JlinkUtils {
         }
     }
     
+/*
+    public static boolean detectResolveModeOption() {
+    	try {
+//    		System.out.println("---- Checking Resolve Mode Option");
+	    	Method meth = RegenInstructions.class.getMethod("SetResolveModeRegen", boolean.class);
+//	    	System.out.println("meth: "+meth);
+	    	return meth!=null;
+    	}
+    	catch (Exception e) {
+//    		System.err.println("Method error: "+e.getMessage());
+//            Method[] methods = RegenInstructions.class.getMethods();
+//            for (Method method : methods) {
+//            	System.out.println("    "+method.getName() + "  "+method.toString());
+//            }
+    		return false;
+    	}
+    }
+    
+    public static boolean setResolveModeOption(CallRegenInstructions reginst, boolean value) {
+    	if (reginst==null)
+    		return false;
+    	try {
+    		System.out.println("---- Trying to set Resolve Mode Option");
+	    	Method meth = RegenInstructions.class.getMethod("SetResolveModeRegen", boolean.class);
+//	    	System.out.println("meth: "+meth);
+	    	if (meth!=null) {
+	    		meth.invoke(reginst.getInstr(), value);
+	    		System.out.println("---- Successfully set option");
+		    	return true;
+	    	}
+	    	else
+	    		return false;
+    	}
+    	catch (Exception e) {
+//    		System.err.println("Method error: "+e.getMessage());
+//            Method[] methods = RegenInstructions.class.getMethods();
+//            for (Method method : methods) {
+//            	System.out.println("    "+method.getName() + "  "+method.toString());
+//            }
+    		return false;
+    	}
+    }
+*/
+    private static final String OPTION_DEPRECATED_CONFIG = "allow_deprecated_config";
+    
+    public static void setAuthCode(CallSession session, AbstractJLISession jlSession) throws jxthrowable {
+    	if (jlSession==null)
+    		return;
+    	int version = jlSession.getProeVersion();
+    	if (version<7)
+    		return;
+    	String encoded = null;
+    	if (version==7)
+    		encoded = CREO7_AUTH;
+    	if (encoded==null)
+    		return;
+        String precode = new String(Base64.decodeBase64((String)encoded), Charset.forName("UTF-8"));
+        int len = precode.length();
+    	char[] tmp = new char[len];
+    	for (int i=0; i<len; i++) {
+    		tmp[len-i-1] = precode.charAt(i);
+    	}
+    	String code = new String(tmp);
+
+    	// Check for the value already being set -- we're doing this because
+    	// the config option is a "multi-valued option".  This means that any time 
+    	// you set a value in JLink, the value is appended to the list of values.
+    	// That could really add up.
+    	CallStringSeq seq = session.getConfigOptionValues(OPTION_DEPRECATED_CONFIG);
+    	if (seq!=null) {
+    		len = seq.getarraysize();
+    		String entry;
+    		for (int i=0; i<len; i++) {
+    			entry = seq.get(i);
+    			if (code.equals(entry))
+    				return;
+    		}
+    	}
+        session.setConfigOption(OPTION_DEPRECATED_CONFIG, code);
+    }
+
     /**
      * Regenerate a Creo object
      * @param session The Creo session
@@ -1085,8 +1178,8 @@ public class JlinkUtils {
      * @param setConfig True to update the "regen_failure_handling" config option
      * @throws jxthrowable
      */
-    public static void regenerate(CallSession session, Regenerator regener, boolean setConfig) throws jxthrowable {
-    	regenerate(session, regener, setConfig, null);
+    public static void regenerate(CallSession session, AbstractJLISession jlSession, Regenerator regener, boolean setConfig) throws jxthrowable {
+    	regenerate(session, jlSession, regener, setConfig, null);
     }
     
     /**
@@ -1099,13 +1192,19 @@ public class JlinkUtils {
      * @param debugKey If not null, a debug log message is sent with this debug key
      * @throws jxthrowable
      */
-    public static void regenerate(CallSession session, Regenerator regener, boolean setConfig, String debugKey) throws jxthrowable {
+    public static void regenerate(CallSession session, AbstractJLISession jlSession, Regenerator regener, boolean setConfig, String debugKey) throws jxthrowable {
         if (session==null)
             setConfig = false;
         boolean resolveMode = false;
         long start;
-        if (setConfig)
-        	resolveMode = prefixResolveModeFix(session, debugKey);
+        if (setConfig) {
+        	// why comment this out?  because it is needless overhead when not in Creo 7.0.2 or higher, and 
+        	// since it won't work with Feature operations then we might as well stick with the old method.
+//        	if (!setResolveModeOption(regener.getInstructions(), false))
+        		resolveMode = prefixResolveModeFix(session, jlSession, debugKey);
+        }
+//        else 
+//        	setResolveModeOption(regener.getInstructions(), false);
         
         try {
         	start = System.currentTimeMillis();
@@ -1128,8 +1227,10 @@ public class JlinkUtils {
                 throw e;
         }
         finally {
-            if (setConfig)
-            	postfixResolveModeFix(session, resolveMode, debugKey);
+            if (setConfig) {
+            	if (resolveMode)
+            		postfixResolveModeFix(session, true, debugKey);
+            }
         }
     }
 
@@ -1750,6 +1851,11 @@ public class JlinkUtils {
     	 * @throws jxthrowable
     	 */
     	public void regenerate() throws jxthrowable;
+    	/**
+    	 * Get the JLink regenerate instructions, if any.
+    	 * @return The regenerate instructions
+    	 */
+    	public CallRegenInstructions getInstructions();
     }
 
     /**

@@ -3,6 +3,7 @@
     "function_description" : "Assemble a component into an assembly",
     "command" : "file",
     "function" : "assemble",
+    "notes" : [ "If you are running Creo 7 or higher, you must call creo:set_creo_version to set the Creo version" ],
     "request" : [ {
       "name" : "dirname",
       "type" : "string",

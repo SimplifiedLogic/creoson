@@ -3,7 +3,7 @@
     "function_description" : "Resume one or more features that match criteria",
     "command" : "feature",
     "function" : "resume",
-    "notes" : [ "Will only resume visible features.", "There are 3 ways of specifying features; feat_id, names, and name in that order.  If none of these are given, then all features may be resumed." ],
+    "notes" : [ "Will only resume visible features.", "There are 3 ways of specifying features; feat_id, names, and name in that order.  If none of these are given, then all features may be resumed.", "If you are running Creo 7 or higher, you must call creo:set_creo_version to set the Creo version" ],
     "request" : [ {
       "name" : "file",
       "type" : "string",

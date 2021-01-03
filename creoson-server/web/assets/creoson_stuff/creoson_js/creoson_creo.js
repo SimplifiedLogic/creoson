@@ -15,6 +15,7 @@ creo = (function (pub) {
         this.name = undefined; // string - Option name
         this.red = undefined; // integer - Red value (0-255)
         this.value = undefined; // string - New option value
+        this.version = undefined; // integer - Creo version
         
 		// VALIDATE and SET ANY REQUESTED PROPERTIES
 		if (typeof propsObj === "object") {
@@ -326,6 +327,37 @@ creo = (function (pub) {
         if (this.name) reqObj.data.name = this.name;
         if (this.value) reqObj.data.value = this.value;
         if (this.ignore_errors) reqObj.data.ignore_errors = this.ignore_errors;
+
+
+        return creo.ajax.request(reqObj)
+            .then(function (respObj) {
+                if (respObj.data) {
+                    return Promise.resolve(respObj.data);
+                } else {
+                    return Promise.resolve(respObj);
+                }
+            })
+            .catch(function (err) {
+                console.log('Error : '+JSON.stringify(err));
+                return Promise.reject(err);
+            });
+
+    };
+
+
+    // Set the version of Creo you are running
+    pub.CreoObj.prototype.set_creo_version = function () {
+
+        console.log('got into : pub.CreoObj.set_creo_version');
+
+        let reqObj = {
+            command : "creo",
+            function : "set_creo_version",
+            data : {}
+        };
+
+        // set the properties for the request
+        if (this.version) reqObj.data.version = this.version;
 
 
         return creo.ajax.request(reqObj)
