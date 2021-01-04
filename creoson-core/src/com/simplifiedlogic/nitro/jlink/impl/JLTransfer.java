@@ -1438,6 +1438,8 @@ public class JLTransfer implements IJLTransfer {
 	            m = session.getModelFromFileName(model);
 	        else
 	            m = session.getCurrentModel();
+	        if (m!=null && m instanceof CallDrawing)
+	        	throw new JLIException("Cannot export an image of a drawing");
 	        if (filename==null) {
 	            if (m==null)
 	                filename = "screen";
