@@ -583,12 +583,14 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         if (isPattern(filename))
         	throw new JLIException("Not allowed to use wildcards in "+PARAM_MODEL+" argument.");
         
-        List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, true, sessionId);
+        List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, false, sessionId);
 
         if (matls!=null && matls.size()>0) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			String matl = matls.get(0).getMaterialName();
-       		out.put(OUTPUT_MATERIAL, matl);
+			if (matl==null)
+				return null;
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			out.put(OUTPUT_MATERIAL, matl);
         	return out;
         }
 
