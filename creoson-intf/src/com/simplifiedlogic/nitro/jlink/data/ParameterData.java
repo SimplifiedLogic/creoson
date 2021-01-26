@@ -40,6 +40,7 @@ public class ParameterData implements Serializable {
 	int ownerId;
 	String ownerName;
 	String ownerType;
+	String description;
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -206,6 +207,20 @@ public class ParameterData implements Serializable {
 	 */
 	public void setSetDesignate(int setDesignate) {
 		this.setDesignate = setDesignate;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

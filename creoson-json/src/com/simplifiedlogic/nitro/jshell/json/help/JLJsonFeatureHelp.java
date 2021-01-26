@@ -928,6 +928,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.put(PARAM_NAME, "PTC_BRAND");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_STRING);
 		rec.put(JLParameterRequestParams.PARAM_VALUE, "ALPHA");
+		rec.put(JLParameterRequestParams.PARAM_DESCRIPTION, "Brand");
 		rec.put(JLParameterRequestParams.PARAM_DESIGNATE, false);
 		rec.put(JLParameterRequestParams.PARAM_ENCODED, false);
 		rec.put(JLParameterResponseParams.OUTPUT_OWNER_NAME, "TEST_1");
@@ -938,6 +939,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.put(PARAM_NAME, "PTC_LIFETIME");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
 		rec.put(JLParameterRequestParams.PARAM_VALUE, 95);
+		rec.put(JLParameterRequestParams.PARAM_DESCRIPTION, "Lifetime");
 		rec.put(JLParameterRequestParams.PARAM_DESIGNATE, true);
 		rec.put(JLParameterRequestParams.PARAM_ENCODED, false);
 		rec.put(JLParameterResponseParams.OUTPUT_OWNER_NAME, "TEST_1");
@@ -948,6 +950,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.put(PARAM_NAME, "PTC_BRAND");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_STRING);
 		rec.put(JLParameterRequestParams.PARAM_VALUE, "BETA");
+		rec.put(JLParameterRequestParams.PARAM_DESCRIPTION, "Brand");
 		rec.put(JLParameterRequestParams.PARAM_DESIGNATE, false);
 		rec.put(JLParameterRequestParams.PARAM_ENCODED, false);
 		rec.put(JLParameterResponseParams.OUTPUT_OWNER_NAME, "TEST_2");
@@ -958,6 +961,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.put(PARAM_NAME, "PTC_LIFETIME");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
 		rec.put(JLParameterRequestParams.PARAM_VALUE, 70);
+		rec.put(JLParameterRequestParams.PARAM_DESCRIPTION, "Lifetime");
 		rec.put(JLParameterRequestParams.PARAM_DESIGNATE, true);
 		rec.put(JLParameterRequestParams.PARAM_ENCODED, false);
 		rec.put(JLParameterResponseParams.OUTPUT_OWNER_NAME, "TEST_2");
@@ -1043,6 +1047,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.put(PARAM_NAME, "MFG_ID");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_STRING);
 		rec.put(JLParameterRequestParams.PARAM_VALUE, "ZnJpZW5kbHk=");
+		rec.put(JLParameterRequestParams.PARAM_DESCRIPTION, "Manufacturing ID");
 		rec.put(JLParameterRequestParams.PARAM_DESIGNATE, false);
 		rec.put(JLParameterRequestParams.PARAM_ENCODED, true);
 		rec.put(JLParameterResponseParams.OUTPUT_OWNER_NAME, "TEST_10");
@@ -1105,6 +1110,11 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	arg.setDefaultValue("blank");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(JLParameterRequestParams.PARAM_DESCRIPTION, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Parameter description");
+    	arg.setDefaultValue("If missing, leaves the current description in place");
+    	spec.addArgument(arg);
+
     	arg = new FunctionArgument(JLParameterRequestParams.PARAM_NO_CREATE, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("If parameter does not already exist, do not create it");
     	arg.setDefaultValue("false");
@@ -1118,6 +1128,15 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	ex.addInput(PARAM_PARAM, "TEST");
     	ex.addInput(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
     	ex.addInput(JLParameterRequestParams.PARAM_VALUE, 32);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "PLANE_34");
+    	ex.addInput(PARAM_PARAM, "TEST");
+    	ex.addInput(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
+    	ex.addInput(JLParameterRequestParams.PARAM_VALUE, 32);
+    	ex.addInput(JLParameterRequestParams.PARAM_DESCRIPTION, "Test Parameter");
     	template.addExample(ex);
 
     	ex = new FunctionExample();

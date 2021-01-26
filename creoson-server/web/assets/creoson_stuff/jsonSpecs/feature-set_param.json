@@ -42,6 +42,11 @@
       "description" : "Set parameter to be designated/not designated, blank=do not set",
       "default" : "blank"
     }, {
+      "name" : "description",
+      "type" : "string",
+      "description" : "Parameter description",
+      "default" : "If missing, leaves the current description in place"
+    }, {
       "name" : "no_create",
       "type" : "boolean",
       "description" : "If parameter does not already exist, do not create it",
@@ -60,6 +65,25 @@
         "param" : "TEST",
         "type" : "INTEGER",
         "value" : 32
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "feature",
+      "function" : "set_param",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "PLANE_34",
+        "param" : "TEST",
+        "type" : "INTEGER",
+        "value" : 32,
+        "description" : "Test Parameter"
       }
     },
     "response" : {

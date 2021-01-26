@@ -214,10 +214,12 @@ public interface IJLFeature {
 
 	public void setParam(String filename, String featName, String paramName,
 			Object value, String type, int designate,
-			boolean encoded, boolean noCreate, String sessionId) throws JLIException;
+			boolean encoded, boolean noCreate, 
+			String description, String sessionId) throws JLIException;
 	public void setParam(String filename, String featName, String paramName,
 			Object value, String type, int designate,
-			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
+			boolean encoded, boolean noCreate, 
+			String description, AbstractJLISession sess) throws JLIException;
 	
     public void addUDF(
     		String filename,

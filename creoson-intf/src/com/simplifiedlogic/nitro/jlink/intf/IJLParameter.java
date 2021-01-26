@@ -44,10 +44,12 @@ public interface IJLParameter {
 
 	public void set(String filename, String paramName,
 			Object value, String type, int designate,
-			boolean encoded, boolean noCreate, String sessionId) throws JLIException;
+			boolean encoded, boolean noCreate, 
+			String description, String sessionId) throws JLIException;
 	public void set(String filename, String paramName,
 			Object value, String type, int designate,
-			boolean encoded, boolean noCreate, AbstractJLISession sess) throws JLIException;
+			boolean encoded, boolean noCreate, 
+			String description, AbstractJLISession sess) throws JLIException;
 
 	public void setBatch(ParameterCollData batch, 
 			boolean encoded, boolean noCreate, String sessionId) throws JLIException;

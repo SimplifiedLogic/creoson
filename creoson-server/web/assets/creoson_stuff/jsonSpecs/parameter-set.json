@@ -28,6 +28,11 @@
       "description" : "Parameter value",
       "default" : "Clears the parameter value if missing"
     }, {
+      "name" : "description",
+      "type" : "string",
+      "description" : "Parameter description",
+      "default" : "If missing, leaves the current description in place"
+    }, {
       "name" : "encoded",
       "type" : "boolean",
       "description" : "Whether the value is Base64-encoded",
@@ -55,6 +60,24 @@
         "name" : "TEST",
         "type" : "INTEGER",
         "value" : 32
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "parameter",
+      "function" : "set",
+      "data" : {
+        "file" : "box.prt",
+        "name" : "TEST",
+        "type" : "INTEGER",
+        "value" : 32,
+        "description" : "Test Parameter"
       }
     },
     "response" : {

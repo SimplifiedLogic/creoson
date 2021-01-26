@@ -1382,6 +1382,8 @@ public class JlinkUtils {
         out.setType(type);
         out.setEncoded(encoded);
         out.setDesignate(param.getIsDesignated());
+        out.setDescription(param.getDescription());
+
         return true;
     }
 

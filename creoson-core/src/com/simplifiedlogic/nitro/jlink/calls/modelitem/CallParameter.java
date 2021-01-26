@@ -68,6 +68,16 @@ public class CallParameter {
 		param.SetIsDesignated(value);
 	}
 	
+	public void setDescription(String value) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Parameter,SetDescription", 0, NitroConstants.DEBUG_JLINK_KEY);
+		param.SetDescription(value);
+	}
+	
+	public String getDescription() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Parameter,GetDescription", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return param.GetDescription();
+	}
+
 	public void delete() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Parameter,Delete", 0, NitroConstants.DEBUG_JLINK_KEY);
 		param.Delete();

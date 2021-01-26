@@ -62,7 +62,7 @@ public class JLParameter implements IJLParameter {
     public static final int PARAMETER_LIMIT = 31;
     
     /* (non-Javadoc)
-     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#set(java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, java.lang.String)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#set(java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, java.lang.String, java.lang.String)
      */
     @Override
 	public void set(
@@ -73,15 +73,16 @@ public class JLParameter implements IJLParameter {
 			int designate,
 			boolean encoded,
 			boolean noCreate,
+			String description, 
 			String sessionId) throws JLIException {
 		
         JLISession sess = JLISession.getSession(sessionId);
         
-        set(filename, paramName, value, type, designate, encoded, noCreate, sess);
+        set(filename, paramName, value, type, designate, encoded, noCreate, description, sess);
 	}
     
     /* (non-Javadoc)
-     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#set(java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter#set(java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
      */
     @Override
 	public void set(
@@ -92,6 +93,7 @@ public class JLParameter implements IJLParameter {
 			int designate,
 			boolean encoded,
 			boolean noCreate,
+			String description, 
 			AbstractJLISession sess) throws JLIException {
 		
 		DebugLogging.sendDebugMessage("parameter.set: " + paramName + "=" + value, NitroConstants.DEBUG_KEY);
@@ -124,6 +126,7 @@ public class JLParameter implements IJLParameter {
 	        looper.designate = designate;
 	        looper.encoded = encoded;
 	        looper.noCreate = noCreate;
+	        looper.description = description;
 	        looper.loop();
     	}
     	catch (jxthrowable e) {
@@ -652,6 +655,8 @@ public class JLParameter implements IJLParameter {
             if (des!=to_param.getIsDesignated())
             	to_param.setIsDesignated(des);
         }
+
+        to_param.setDescription(param.getDescription());
     }
     
 	/**
@@ -662,12 +667,13 @@ public class JLParameter implements IJLParameter {
 	 * @param value The new parameter value
 	 * @param type The parameter data type
 	 * @param designate Whether the parameter should be designated/not designated/not changed.  Valid values are DESIGNATE_ON, DESIGNATE_OFF, and DESIGNATE_UNKNOWN.
+	 * @param description The parameter description.  If null, then the current description is left alone.
 	 * @param noCreate Whether to NOT create the parameter if it does not exist
 	 * @param encoded Whether the parameter value is Base64-encoded
 	 * @throws JLIException
 	 * @throws jxthrowable
 	 */
-	public static void setOneParameter(CallModel model, CallParameterOwner owner, String paramName, Object value, String type, int designate, boolean noCreate, boolean encoded) throws JLIException, jxthrowable {
+	public static void setOneParameter(CallModel model, CallParameterOwner owner, String paramName, Object value, String type, int designate, String description, boolean noCreate, boolean encoded) throws JLIException, jxthrowable {
 		long start;
 		start = System.currentTimeMillis();
 		CallParameter param = owner.getParam(paramName);
@@ -729,7 +735,7 @@ public class JLParameter implements IJLParameter {
 
             if (pval==null)
                 throw new JLIException("Unable to create parameter value");
-            
+
         	start = System.currentTimeMillis();
             param = owner.createParam(paramName, pval);
 	        DebugLogging.sendTimerMessage("jlink.CreateParam", start, NitroConstants.DEBUG_SET_PARAM_KEY);
@@ -758,6 +764,14 @@ public class JLParameter implements IJLParameter {
 			        DebugLogging.sendTimerMessage("jlink.SetIsDesignated,false", start, NitroConstants.DEBUG_SET_PARAM_KEY);
 	            }
 	        }
+        }
+
+        if (description!=null) {
+        	description = description.trim();
+        	if (description.length()==0)
+        		param.setDescription(null);
+        	else
+        		param.setDescription(description);
         }
 	}
 
@@ -811,13 +825,17 @@ public class JLParameter implements IJLParameter {
 		 * Whether the value is Base64-encoded
 		 */
 		boolean encoded;
+		/**
+		 * Parameter description; if null, then will not set.
+		 */
+		String description;
 
 		/* (non-Javadoc)
 		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
 		 */
 		@Override
 		public boolean loopAction(CallModel m) throws JLIException, jxthrowable {
-			setOneParameter(m, m, paramName, value, type, designate, noCreate, encoded);
+			setOneParameter(m, m, paramName, value, type, designate, description, noCreate, encoded);
 			return false;
 		}
     	
@@ -885,7 +903,7 @@ public class JLParameter implements IJLParameter {
 						p.delete();
 				}
 				else {
-					setOneParameter(m, m, param.getName(), param.getValue(), param.getType(), param.getSetDesignate(), noCreate, encoded);
+					setOneParameter(m, m, param.getName(), param.getValue(), param.getType(), param.getSetDesignate(), param.getDescription(), noCreate, encoded);
 				}
 			}
 			return false;

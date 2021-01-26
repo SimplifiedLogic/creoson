@@ -47,5 +47,6 @@ public interface JLParameterRequestParams {
     public static final String PARAM_TOMODEL    = "to_file";
     public static final String PARAM_ENCODED    = "encoded";
     public static final String PARAM_NO_CREATE  = "no_create";
+    public static final String PARAM_DESCRIPTION = "description";
     
 }

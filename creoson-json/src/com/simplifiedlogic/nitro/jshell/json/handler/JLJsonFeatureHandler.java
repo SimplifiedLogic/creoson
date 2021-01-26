@@ -327,7 +327,9 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 					outParam.put(JLParameterResponseParams.OUTPUT_OWNER_ID, param.getOwnerId());
 				if (param.getOwnerType()!=null)
 					outParam.put(JLParameterResponseParams.OUTPUT_OWNER_TYPE, param.getOwnerType());
-				
+				if (param.getDescription()!=null)
+					outParam.put(JLParameterRequestParams.PARAM_DESCRIPTION, param.getDescription());
+
 				outParams.add(outParam);
 			}
 			
@@ -353,8 +355,9 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         }
         Boolean encoded = checkFlagParameter(input, JLParameterRequestParams.PARAM_ENCODED, false, false);
         boolean noCreate = checkFlagParameter(input, JLParameterRequestParams.PARAM_NO_CREATE, false, false);
-        
-        featHandler.setParam(filename, featureName, paramName, value, type, designate, encoded, noCreate, sessionId);
+        String description = checkStringParameter(input, JLParameterRequestParams.PARAM_DESCRIPTION, false);
+
+        featHandler.setParam(filename, featureName, paramName, value, type, designate, encoded, noCreate, description, sessionId);
         
         return null;
 	}

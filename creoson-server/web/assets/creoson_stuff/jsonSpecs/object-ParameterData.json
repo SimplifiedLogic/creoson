@@ -21,6 +21,10 @@
     "description" : "Value is designated",
     "default" : "false"
   }, {
+    "name" : "description",
+    "type" : "string",
+    "description" : "Description"
+  }, {
     "name" : "encoded",
     "type" : "boolean",
     "description" : "Value is Base64-encoded",

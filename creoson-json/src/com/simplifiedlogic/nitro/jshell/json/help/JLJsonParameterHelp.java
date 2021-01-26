@@ -108,6 +108,11 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	arg.setDefaultValue("Clears the parameter value if missing");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_DESCRIPTION, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Parameter description");
+    	arg.setDefaultValue("If missing, leaves the current description in place");
+    	spec.addArgument(arg);
+
     	arg = new FunctionArgument(PARAM_ENCODED, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("Whether the value is Base64-encoded");
     	arg.setDefaultValue("false");
@@ -140,6 +145,14 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	ex.addInput(PARAM_NAME, "TEST");
     	ex.addInput(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
     	ex.addInput(PARAM_VALUE, 32);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.prt");
+    	ex.addInput(PARAM_NAME, "TEST");
+    	ex.addInput(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
+    	ex.addInput(PARAM_VALUE, 32);
+    	ex.addInput(PARAM_DESCRIPTION, "Test Parameter");
     	template.addExample(ex);
 
     	ex = new FunctionExample();
@@ -332,6 +345,7 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	rec.put(PARAM_NAME, "PTC_BRAND");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_STRING);
 		rec.put(PARAM_VALUE, "ALPHA");
+		rec.put(PARAM_DESCRIPTION, "Brand");
 		rec.put(PARAM_DESIGNATE, false);
 		rec.put(PARAM_ENCODED, false);
 		rec.put(OUTPUT_OWNER_NAME, "box.prt");
@@ -340,6 +354,7 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	rec.put(PARAM_NAME, "PTC_LIFETIME");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_INTEGER);
 		rec.put(PARAM_VALUE, 95);
+		rec.put(PARAM_DESCRIPTION, "Lifetime");
 		rec.put(PARAM_DESIGNATE, true);
 		rec.put(PARAM_ENCODED, false);
 		rec.put(OUTPUT_OWNER_NAME, "box.prt");
@@ -410,6 +425,7 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	rec.put(PARAM_NAME, "MFG_ID");
     	rec.put(PARAM_TYPE, IJLParameter.TYPE_STRING);
 		rec.put(PARAM_VALUE, "ZnJpZW5kbHk=");
+    	rec.put(PARAM_DESCRIPTION, "Manufacturing ID");
 		rec.put(PARAM_DESIGNATE, false);
 		rec.put(PARAM_ENCODED, true);
 		rec.put(OUTPUT_OWNER_NAME, "box.prt");
@@ -447,6 +463,10 @@ public class JLJsonParameterHelp extends JLJsonCommandHelp implements JLParamete
     	arg = new FunctionArgument(PARAM_DESIGNATE, FunctionSpec.TYPE_BOOL);
     	arg.setDescription("Value is designated");
     	arg.setDefaultValue("false");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(PARAM_DESCRIPTION, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Description");
     	obj.add(arg);
 
     	arg = new FunctionArgument(PARAM_ENCODED, FunctionSpec.TYPE_BOOL);

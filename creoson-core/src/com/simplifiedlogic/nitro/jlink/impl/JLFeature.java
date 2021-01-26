@@ -1119,7 +1119,7 @@ public class JLFeature implements IJLFeature {
     }	
 
     /* (non-Javadoc)
-     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#setParam(java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, java.lang.String)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#setParam(java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, java.lang.String, java.lang.String)
      */
     @Override
 	public void setParam(
@@ -1131,15 +1131,16 @@ public class JLFeature implements IJLFeature {
 			int designate,
 			boolean encoded,
 			boolean noCreate,
+			String description, 
 			String sessionId) throws JLIException {
 		
         JLISession sess = JLISession.getSession(sessionId);
         
-        setParam(filename, featName, paramName, value, type, designate, encoded, noCreate, sess);
+        setParam(filename, featName, paramName, value, type, designate, encoded, noCreate, description, sess);
 	}
     
     /* (non-Javadoc)
-     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#setParam(java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#setParam(java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, int, boolean, boolean, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
      */
     @Override
 	public void setParam(
@@ -1151,6 +1152,7 @@ public class JLFeature implements IJLFeature {
 			int designate,
 			boolean encoded,
 			boolean noCreate,
+			String description, 
 			AbstractJLISession sess) throws JLIException {
 		
 		DebugLogging.sendDebugMessage("feature.set_param: " + paramName + "=" + value, NitroConstants.DEBUG_KEY);
@@ -1184,6 +1186,7 @@ public class JLFeature implements IJLFeature {
 	        looper.designate = designate;
 	        looper.encoded = encoded;
 	        looper.noCreate = noCreate;
+	        looper.description = description;
 	        if (featName==null)
 	        	looper.setIncludeUnnamed(true);
 	        looper.loop(solid);
@@ -1317,7 +1320,7 @@ public class JLFeature implements IJLFeature {
 	            				type = IJLParameter.TYPE_BOOL;
 	            			else
 	            				type = IJLParameter.TYPE_STRING;
-	            			JLParameter.setOneParameter(solid, feat, name, value, type, IJLParameter.DESIGNATE_OFF, false, false);
+	            			JLParameter.setOneParameter(solid, feat, name, value, type, IJLParameter.DESIGNATE_OFF, null, false, false);
 	            		}
 	            	}
 	            }
@@ -1973,13 +1976,17 @@ public class JLFeature implements IJLFeature {
 		 * Whether the parameter value is a byte array
 		 */
 		boolean encoded;
+		/**
+		 * Parameter description; if null, then will not set.
+		 */
+		String description;
 
 		/* (non-Javadoc)
 		 * @see com.simplifiedlogic.nitro.util.FeatureLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature)
 		 */
 		@Override
         public void loopAction(CallFeature feat) throws JLIException, jxthrowable {
-			JLParameter.setOneParameter(model, feat, paramName, value, type, designate, noCreate, encoded);
+			JLParameter.setOneParameter(model, feat, paramName, value, type, designate, description, noCreate, encoded);
 		}
     	
     }

@@ -86,8 +86,9 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
         }
         Boolean encoded = checkFlagParameter(input, PARAM_ENCODED, false, false);
         boolean noCreate = checkFlagParameter(input, PARAM_NO_CREATE, false, false);
+        String description = checkStringParameter(input, PARAM_DESCRIPTION, false);
         
-        paramHandler.set(filename, paramName, value, type, designate, encoded, noCreate, sessionId);
+        paramHandler.set(filename, paramName, value, type, designate, encoded, noCreate, description, sessionId);
         
         return null;
 	}
@@ -162,6 +163,8 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
 				outParam.put(PARAM_ENCODED, Boolean.valueOf(param.isEncoded()));
 				if (param.getOwnerName()!=null)
 					outParam.put(OUTPUT_OWNER_NAME, param.getOwnerName());
+				if (param.getDescription()!=null)
+					outParam.put(PARAM_DESCRIPTION, param.getDescription());
 				
 				outParams.add(outParam);
 			}

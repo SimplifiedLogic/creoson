@@ -56,6 +56,7 @@
           "name" : "PTC_BRAND",
           "type" : "STRING",
           "value" : "ALPHA",
+          "description" : "Brand",
           "designate" : false,
           "encoded" : false,
           "owner_name" : "box.prt"
@@ -63,6 +64,7 @@
           "name" : "PTC_LIFETIME",
           "type" : "INTEGER",
           "value" : 95,
+          "description" : "Lifetime",
           "designate" : true,
           "encoded" : false,
           "owner_name" : "box.prt"
@@ -148,6 +150,7 @@
           "name" : "MFG_ID",
           "type" : "STRING",
           "value" : "ZnJpZW5kbHk=",
+          "description" : "Manufacturing ID",
           "designate" : false,
           "encoded" : true,
           "owner_name" : "box.prt"
