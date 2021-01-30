@@ -14,7 +14,11 @@
       "description" : "Instance name",
       "required" : true
     } ],
-    "response" : [ ]
+    "response" : [ {
+      "name" : "name",
+      "type" : "string",
+      "description" : "File name of the new model"
+    } ]
   },
   "examples" : [ {
     "request" : {

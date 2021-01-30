@@ -21,7 +21,11 @@
       "description" : "Material name",
       "required" : true
     } ],
-    "response" : [ ]
+    "response" : [ {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of models which had the material loaded"
+    } ]
   },
   "examples" : [ {
     "request" : {

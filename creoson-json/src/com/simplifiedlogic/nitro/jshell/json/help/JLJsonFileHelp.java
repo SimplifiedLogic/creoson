@@ -483,6 +483,8 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	ret = new FunctionReturn(OUTPUT_FILES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
     	ret.setDescription("List of file names");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
@@ -1314,6 +1316,8 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	ret = new FunctionReturn(OUTPUT_REPS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
     	ret.setDescription("List of simplified rep names");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
@@ -1438,6 +1442,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	ret = new FunctionReturn(OUTPUT_MODELS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
     	ret.setDescription("List of models which had the material set");
+    	spec.addReturn(ret);
 
     	FunctionExample ex;
 
@@ -1486,6 +1491,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
     	ret = new FunctionReturn(OUTPUT_MODELS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_STRING);
     	ret.setDescription("List of models which had the material loaded");
+    	spec.addReturn(ret);
 
     	FunctionExample ex;
 

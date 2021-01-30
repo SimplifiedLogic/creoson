@@ -563,6 +563,7 @@ public class JLJsonFamilyTableHelp extends JLJsonCommandHelp implements JLFamily
     	
     	ret = new FunctionReturn(OUTPUT_NAME, FunctionSpec.TYPE_STRING);
     	ret.setDescription("File name of the new model");
+    	spec.addReturn(ret);
 
     	FunctionExample ex;
 

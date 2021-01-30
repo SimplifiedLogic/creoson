@@ -15,7 +15,11 @@
       "default" : "All simplified reps",
       "wildcards_allowed" : true
     } ],
-    "response" : [ ]
+    "response" : [ {
+      "name" : "reps",
+      "type" : "array:string",
+      "description" : "List of simplified rep names"
+    } ]
   },
   "examples" : [ {
     "request" : {

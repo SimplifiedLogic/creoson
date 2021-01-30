@@ -14,7 +14,11 @@
       "description" : "List of file names",
       "default" : "The file parameter is used; if both are empty, then all files are listed"
     } ],
-    "response" : [ ]
+    "response" : [ {
+      "name" : "files",
+      "type" : "array:string",
+      "description" : "List of file names"
+    } ]
   },
   "examples" : [ {
     "request" : {
