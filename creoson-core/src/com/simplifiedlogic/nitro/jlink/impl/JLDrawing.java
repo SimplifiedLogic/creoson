@@ -2451,7 +2451,10 @@ public class JLDrawing implements IJLDrawing {
 			
 			looper.loop();
 
-	        return looper.outvals;
+			if (looper.outvals==null)
+				return new Vector<SymbolInstData>();
+			else
+				return looper.outvals;
 
     	}
     	catch (jxthrowable e) {
@@ -3304,7 +3307,7 @@ public class JLDrawing implements IJLDrawing {
 		    		}
 		        	
 			    	if (outvals==null)
-			    		outvals = new ArrayList<SymbolInstData>();
+			    		outvals = new Vector<SymbolInstData>();
 			    	outvals.add(rec);
 	    		}
 

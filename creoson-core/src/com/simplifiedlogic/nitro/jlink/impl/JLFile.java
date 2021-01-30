@@ -1100,6 +1100,7 @@ public class JLFile implements IJLFile {
 	        looper.setDefaultToActive(false);
 	        looper.setSession(session);
 	        looper.loop();
+
 	        if (looper.output==null)
 	            return new Vector<String>();
 	        else
@@ -2934,7 +2935,10 @@ public class JLFile implements IJLFile {
             
             looper.loop(m);
 
-            return looper.output;
+            if (looper.output==null)
+            	return new Vector<String>();
+            else
+            	return looper.output;
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
@@ -3036,7 +3040,10 @@ public class JLFile implements IJLFile {
 	        looper.includeNonMatchingParts = includeNonMatchingParts;
 	        looper.loop();
 	        
-	        return looper.output;
+	        if (looper.output==null)
+	        	return new Vector<ListMaterialResults>();
+	        else
+	        	return looper.output;
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);

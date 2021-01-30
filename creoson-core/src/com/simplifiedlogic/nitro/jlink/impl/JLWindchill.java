@@ -277,8 +277,6 @@ public class JLWindchill implements IJLWindchill {
 	        	out.add(wname);
 	        }
 	        
-	        if (out.size()==0)
-	        	return null;
 	        return out;
     	}
     	catch (jxthrowable e) {
@@ -755,6 +753,7 @@ public class JLWindchill implements IJLWindchill {
 	        looper.setServerAlias(server.getAlias());
 	        looper.setWorkspace(workspace);
 	        looper.loop();
+
 	        if (looper.output==null)
 	            return new Vector<String>();
 	        else
