@@ -628,7 +628,13 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         String filename = checkStringParameter(input, PARAM_MODEL, false);
         String materialName = checkStringParameter(input, PARAM_MATERIAL, true);
         
-        fileHandler.setCurrentMaterial(filename, materialName, sessionId);
+        List<String> files = fileHandler.setCurrentMaterial(filename, materialName, sessionId);
+
+        if (files!=null) {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+       		out.put(OUTPUT_FILES, files);
+        	return out;
+        }
 
         return null;
 	}
