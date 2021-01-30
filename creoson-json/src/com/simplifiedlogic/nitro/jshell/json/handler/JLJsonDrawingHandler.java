@@ -500,7 +500,7 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		String symbolFile = checkStringParameter(input, PARAM_SYMBOL_FILE, true);
 		Map<String, Object> pointObj = checkMapParameter(input, PARAM_POINT, true);
 		JLPoint pt = readPoint(pointObj);
-		Map<String, Object> replaceValues = checkMapParameter(input, PARAM_REPLACE_VALUES, true);
+		Map<String, Object> replaceValues = checkMapParameter(input, PARAM_REPLACE_VALUES, false);
 		int sheet = checkIntParameter(input, PARAM_SHEET, false, 0);
 		
 		drawHandler.createSymbol(drawing, symbolFile, pt, replaceValues, sheet, sessionId);
