@@ -306,7 +306,7 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         List<ParameterData> params = featHandler.listParams(modelname, featureName, featureId, namePattern, paramNames, 
         		typePattern, valuePattern, encoded, noDatumFeatures, includeUnnamed, noComponentFeatures, sessionId);
 
-        if (params!=null && params.size()>0) {
+        if (params!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outParams = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_PARAMLIST, outParams);

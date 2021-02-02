@@ -4052,7 +4052,7 @@ public class JLFile implements IJLFile {
         /**
          * An output list of model and material names
          */
-        public List<ListMaterialResults> output = null;
+        public List<ListMaterialResults> output = new Vector<ListMaterialResults>();
     	
     	/**
     	 * Whether to include parts which don't have any matching materials
@@ -4089,9 +4089,6 @@ public class JLFile implements IJLFile {
             }   
             if (currentName==null)
             	currentName = name;
-            
-            if (output==null)
-                output = new Vector<ListMaterialResults>();
             
         	ListMaterialResults res = new ListMaterialResults();
         	res.setFilename(name);

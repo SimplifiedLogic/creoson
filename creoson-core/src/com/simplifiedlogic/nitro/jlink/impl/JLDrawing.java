@@ -1876,10 +1876,8 @@ public class JLDrawing implements IJLDrawing {
 	        looper.loop();
 	        
 	        ViewScaleResults result = new ViewScaleResults();
-	        if (looper.failedViews.size()>0)
-	        	result.setFailedViews(looper.failedViews);
-	        if (looper.successViews.size()>0)
-	        	result.setSuccessViews(looper.successViews);
+        	result.setFailedViews(looper.failedViews);
+        	result.setSuccessViews(looper.successViews);
 	        
 	        return result;
     	}

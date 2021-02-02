@@ -303,8 +303,10 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         		out.put(OUTPUT_DIRNAME, result.getDirname());
         	if (result.getGeneric()!=null)
         		out.put(OUTPUT_GENERIC, result.getGeneric());
-        	if (result.getInstances()!=null && result.getInstances().size()>0)
+        	if (result.getInstances()!=null)
         		out.put(OUTPUT_FILES, result.getInstances());
+        	else
+        		out.put(OUTPUT_FILES, new Vector<String>());
         	return out;
         }
 		return null;
@@ -603,7 +605,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, includeNonMatchingParts, sessionId);
 
-        if (matls!=null && matls.size()>0) {
+        if (matls!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outMatls = new Vector<Map<String, Object>>();
 			Map<String, Object> outMatl = null;
@@ -616,8 +618,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 				
 				outMatls.add(outMatl);
 			}
-			if (outMatls.size()>0)
-				out.put(OUTPUT_MATERIALS, outMatls);
+			out.put(OUTPUT_MATERIALS, outMatls);
         	return out;
         }
 
@@ -647,14 +648,13 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> result = fileHandler.listMaterials(filename, materialName, true, sessionId);
 
-        if (result!=null && result.size()>0) {
+        if (result!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			List<String> matls = new ArrayList<String>();
 			for (ListMaterialResults res : result)
 				if (res.getMaterialName()!=null)
 					matls.add(res.getMaterialName());
-			if (matls.size()>0)
-				out.put(OUTPUT_MATERIALS, matls);
+			out.put(OUTPUT_MATERIALS, matls);
         	return out;
         }
 
@@ -668,7 +668,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> matls = fileHandler.listMaterials(filename, materialName, includeNonMatchingParts, sessionId);
 
-        if (matls!=null && matls.size()>0) {
+        if (matls!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outMatls = new Vector<Map<String, Object>>();
 			Map<String, Object> outMatl = null;
@@ -681,8 +681,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 				
 				outMatls.add(outMatl);
 			}
-			if (outMatls.size()>0)
-				out.put(OUTPUT_MATERIALS, outMatls);
+			out.put(OUTPUT_MATERIALS, outMatls);
         	return out;
         }
 
@@ -696,7 +695,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> files = fileHandler.loadMaterialFile(filename, dirname, materialName, false, sessionId);
 
-        if (files!=null && files.size()>0) {
+        if (files!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODELS, files);
         	return out;
@@ -711,7 +710,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> files = fileHandler.deleteMaterial(filename, materialName, sessionId);
 
-        if (files!=null && files.size()>0) {
+        if (files!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODELS, files);
         	return out;

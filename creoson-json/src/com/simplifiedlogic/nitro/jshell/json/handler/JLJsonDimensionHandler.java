@@ -104,7 +104,7 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 
         List<DimData> dims = dimHandler.list(modelname, namePattern, dimNames, dimType, encoded, select, sessionId);
         
-        if (dims!=null && dims.size()>0) {
+        if (dims!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_DIMLIST, outDims);
@@ -140,7 +140,7 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 
         List<DimDetailData> dims = dimHandler.listDetail(modelname, namePattern, dimNames, dimType, encoded, select, sessionId);
         
-        if (dims!=null && dims.size()>0) {
+        if (dims!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_DIMLIST, outDims);
@@ -225,7 +225,7 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 
         List<DimSelectData> dims = dimHandler.userSelect(modelname, max, sessionId);
         
-        if (dims!=null && dims.size()>0) {
+        if (dims!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_DIMLIST, outDims);

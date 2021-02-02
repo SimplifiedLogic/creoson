@@ -128,7 +128,7 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         if (row!=null) {
     		Hashtable<String, Object> out = new Hashtable<String, Object>();
         	out.put(OUTPUT_INSTANCE, row.getInstanceName());
-        	if (row.getColumns()!=null && row.getColumns().size()>0) {
+        	if (row.getColumns()!=null) {
     			Vector<Map<String, Object>> outColumns = new Vector<Map<String, Object>>();
     			out.put(OUTPUT_COLUMNS, outColumns);
     			Map<String, Object> outColumn = null;
@@ -203,12 +203,12 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         List<FamilyTableRowColumns> cols = ftHandler.getHeader(filename, sessionId);
         
-        if (cols!=null && cols.size()>0) {
+        if (cols!=null) {
     		Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Map<String, Object> outColumn = null;
+			Vector<Map<String, Object>> outColumns = new Vector<Map<String, Object>>();
+			out.put(OUTPUT_COLUMNS, outColumns);
 			for (FamilyTableRowColumns col : cols) {
-    			Vector<Map<String, Object>> outColumns = new Vector<Map<String, Object>>();
-    			out.put(OUTPUT_COLUMNS, outColumns);
 				outColumn = new Hashtable<String, Object>();
 				if (col.getColid()!=null)
 					outColumn.put(OUTPUT_COLID, col.getColid());
@@ -279,7 +279,7 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         FamTableInstance inst = ftHandler.listTree(modelname, erase, sessionId);
         
-        if (inst!=null && inst.getTotal()>0) {
+        if (inst!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			getInstanceTree(inst, out);
         	return out;
@@ -291,7 +291,7 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
 		if (inst.getName()!=null)
 			out.put(OUTPUT_NAME, inst.getName());
 		out.put(OUTPUT_TOTAL, inst.getTotal());
-		if (inst.getChildren()!=null && inst.getChildren().size()>0) {
+		if (inst.getChildren()!=null) {
 			List<Map<String, Object>> list = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_CHILDREN, list);
 			Map<String, Object> rec;

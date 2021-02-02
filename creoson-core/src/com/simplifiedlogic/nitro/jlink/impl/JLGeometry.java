@@ -245,7 +245,7 @@ public class JLGeometry implements IJLGeometry {
 	        	}
 	        }
 	        
-	        return result.size()>0 ? result : null;
+	        return result;
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
@@ -266,7 +266,7 @@ public class JLGeometry implements IJLGeometry {
     	/**
     	 * An output list of surface data
     	 */
-    	public List<SurfaceData> result = null;
+    	public List<SurfaceData> result = new Vector<SurfaceData>();
     	
         /**
          * Constructor needed to initialize model item type
@@ -281,8 +281,6 @@ public class JLGeometry implements IJLGeometry {
         public boolean loopAction(CallModelItem item) throws JLIException, jxthrowable {
         	if (item instanceof CallSurface) {
         		CallSurface surf = (CallSurface)item;
-	        	if (result==null)
-	        		result = new Vector<SurfaceData>();
 	        	
 	        	SurfaceData sdata = new SurfaceData();
 	        	//sdata.surface = surf;

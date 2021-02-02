@@ -130,7 +130,7 @@ public class JLJsonGeometryHandler extends JLJsonCommandHandler implements JLGeo
 					outCont.put(OUTPUT_TRAVERSAL, TRAVERSE_INTERNAL);
 				else
 					outCont.put(OUTPUT_TRAVERSAL, TRAVERSE_EXTERNAL);
-				if (cont.getEdges()!=null && cont.getEdges().size()>0) {
+				if (cont.getEdges()!=null) {
 					Vector<Map<String, Object>> outEdges = new Vector<Map<String, Object>>();
 					outCont.put(OUTPUT_EDGELIST, outEdges);
 					Map<String, Object> outEdge = null;

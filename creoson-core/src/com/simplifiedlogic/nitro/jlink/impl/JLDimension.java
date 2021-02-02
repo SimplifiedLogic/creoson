@@ -913,10 +913,7 @@ public class JLDimension implements IJLDimension {
 //                }
 //    		}
 
-	        if (output.size()==0)
-	        	return null;
-	        else
-	        	return output;
+        	return output;
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);

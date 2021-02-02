@@ -146,7 +146,7 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
 
         List<ParameterData> params = paramHandler.list(filename, namePattern, paramNames, valuePattern, encoded, sessionId);
         
-        if (params!=null && params.size()>0) {
+        if (params!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outParams = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_PARAMLIST, outParams);

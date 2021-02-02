@@ -420,9 +420,9 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		if (result!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
-			if (result.getFailedViews()!=null && result.getFailedViews().size()>0)
+			if (result.getFailedViews()!=null)
 				out.put(OUTPUT_FAILED_VIEWS, result.getFailedViews());
-			if (result.getSuccessViews()!=null && result.getSuccessViews().size()>0)
+			if (result.getSuccessViews()!=null)
 				out.put(OUTPUT_SUCCESS_VIEWS, result.getSuccessViews());
 			return out;
 		}

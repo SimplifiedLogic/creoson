@@ -391,8 +391,6 @@ public class JLProe implements IJLProe {
 
 	        	out_files.add(files[i].getName());
 	        }
-	        if (out_files.size()==0)
-	        	return null;
 	        return out_files;
     	}
     	catch (jxthrowable e) {

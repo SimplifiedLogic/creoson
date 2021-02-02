@@ -132,14 +132,14 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
         boolean getExpanded = checkFlagParameter(input, PARAM_GET_EXPANDED, false, false);
         boolean select = checkFlagParameter(input, PARAM_SELECT, false, false);
 
-        List<NoteData> params = noteHandler.list(filename, namePattern, noteNames, valuePattern, getExpanded, select, sessionId);
+        List<NoteData> notes = noteHandler.list(filename, namePattern, noteNames, valuePattern, getExpanded, select, sessionId);
         
-        if (params!=null && params.size()>0) {
+        if (notes!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outNotes = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_ITEMLIST, outNotes);
 			Map<String, Object> outNote = null;
-			for (NoteData note : params) {
+			for (NoteData note : notes) {
 				outNote = new Hashtable<String, Object>();
 	        	if (note.getName()!=null)
 	        		outNote.put(OUTPUT_NAME, note.getName());

@@ -1284,8 +1284,6 @@ public class JLFamilyTable implements IJLFamilyTable {
 	        	// end of chain
 	        }
 	        
-	        if (instVector.size()==0)
-	        	return null;
 	        return instVector;
     	}
     	catch (jxthrowable e) {

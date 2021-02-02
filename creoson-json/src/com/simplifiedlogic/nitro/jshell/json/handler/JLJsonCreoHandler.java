@@ -120,11 +120,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
 
 	private Hashtable<String, Object> actionListDirs(String sessionId, Hashtable<String, Object> input) throws JLIException {
 
-		String filename= checkStringParameter(input, PARAM_DIRNAME, true);
+		String filename= checkStringParameter(input, PARAM_DIRNAME, false);
         
 		List<String> dirs = proeHandler.list_dirs(filename, sessionId);
 		
-		if (dirs!=null && dirs.size()>0) {
+		if (dirs!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRLIST, dirs);
 			return out;
@@ -134,11 +134,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
 
 	private Hashtable<String, Object> actionListFiles(String sessionId, Hashtable<String, Object> input) throws JLIException {
 
-		String filename= checkStringParameter(input, PARAM_FILENAME, true);
+		String filename= checkStringParameter(input, PARAM_FILENAME, false);
         
 		List<String> files = proeHandler.list_files(filename, sessionId);
 		
-		if (files!=null && files.size()>0) {
+		if (files!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_FILELIST, files);
 			return out;
@@ -158,7 +158,7 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		List<String> files = proeHandler.deleteFiles(dirname, filename, filenames, sessionId);
 		
-		if (files!=null && files.size()>0) {
+		if (files!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_FILELIST, files);
 			return out;
@@ -189,7 +189,7 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		List<String> values = proeHandler.getConfig(name, sessionId);
 		
-		if (values!=null && values.size()>0) {
+		if (values!=null) {
 			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_VALUES, values);
 			return out;
