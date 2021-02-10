@@ -98,12 +98,11 @@ public class JLJsonWindchillHandler extends JLJsonCommandHandler implements JLWi
 	private Hashtable<String, Object> actionListWorkspaces(String sessionId, @SuppressWarnings("unused") Hashtable<String, Object> input) throws JLIException {
 		List<String> ws = windHandler.listWorkspaces(sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (ws!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 	        out.put(OUTPUT_WORKSPACES, ws);
-	       	return out;
 		}
-		return null;
+       	return out;
 	}
 
 	private Hashtable<String, Object> actionSetWorkspace(String sessionId, Hashtable<String, Object> input) throws JLIException {

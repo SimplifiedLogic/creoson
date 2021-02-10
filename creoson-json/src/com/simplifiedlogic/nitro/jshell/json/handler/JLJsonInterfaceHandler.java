@@ -101,13 +101,12 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         else if (TYPE_TIFF.equalsIgnoreCase(type))
         	results = intfHandler.exportTIFF(model, filename, height, width, dpi, depth, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (results!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, results.getDirname());
 			out.put(OUTPUT_FILENAME, results.getFilename());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionExportFile(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -134,13 +133,12 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         else if (TYPE_NEUTRAL.equalsIgnoreCase(type))
         	results = intfHandler.exportNeutral(model, filename, dirname, advanced, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (results!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, results.getDirname());
 			out.put(OUTPUT_FILENAME, results.getFilename());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionExportPDF(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -157,13 +155,12 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 
         ExportResults results = intfHandler.exportPDF(model, filename, dirname, false, height, width, dpi, useDrawingSettings, sheetRange, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (results!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, results.getDirname());
 			out.put(OUTPUT_FILENAME, results.getFilename());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionExport3DPDF(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -180,13 +177,12 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 
         ExportResults results = intfHandler.exportPDF(model, filename, dirname, true, height, width, dpi, useDrawingSettings, sheetRange, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (results!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, results.getDirname());
 			out.put(OUTPUT_FILENAME, results.getFilename());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionPlot(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -196,13 +192,12 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 
         ExportResults results = intfHandler.plot(model, dirname, driver, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (results!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, results.getDirname());
 			out.put(OUTPUT_FILENAME, results.getFilename());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionMapkey(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -219,13 +214,12 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 
         ExportResults results = intfHandler.exportProgram(model, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (results!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, results.getDirname());
 			out.put(OUTPUT_FILENAME, results.getFilename());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionImportProgram(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -238,12 +232,11 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 		
         String outModel = intfHandler.importProgram(dirname, filename, model, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (outModel!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODEL, outModel);
-        	return out;
         }
-        return null;
+    	return out;
 	}
 /*
 	private Hashtable<String, Object> actionImportPV(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -254,12 +247,11 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
 //        
 //        String outModel = intfHandler.importPV(dirname, filename, newName, newModelType, sessionId);
 //        
+//		  Hashtable<String, Object> out = new Hashtable<String, Object>();
 //        if (outModel!=null) {
-//			Hashtable<String, Object> out = new Hashtable<String, Object>();
 //			out.put(OUTPUT_MODEL, outModel);
-//        	return out;
 //        }
-//        return null;
+//        return out;
 		
 		input.put(PARAM_TYPE, TYPE_PV);
 		return actionImportFile(sessionId, input);
@@ -282,12 +274,11 @@ public class JLJsonInterfaceHandler extends JLJsonCommandHandler implements JLIn
         else if (TYPE_NEUTRAL.equalsIgnoreCase(type))
         	outModel = intfHandler.importNeutral(dirname, filename, newName, newModelType, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (outModel!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODEL, outModel);
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 }

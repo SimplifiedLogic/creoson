@@ -92,8 +92,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
         
         NoteData note = noteHandler.get(modelname, notename, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (note!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (note.getName()!=null)
         		out.put(OUTPUT_NAME, note.getName());
         	if (note.getValue()!=null)
@@ -105,9 +105,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
         		out.put(OUTPUT_URL, note.getUrl());
         	if (note.getLocation()!=null)
 				out.put(OUTPUT_LOCATION, writePoint(note.getLocation()));
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionDelete(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -134,8 +133,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
 
         List<NoteData> notes = noteHandler.list(filename, namePattern, noteNames, valuePattern, getExpanded, select, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (notes!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outNotes = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_ITEMLIST, outNotes);
 			Map<String, Object> outNote = null;
@@ -156,9 +155,8 @@ public class JLJsonNoteHandler extends JLJsonCommandHandler implements JLNoteReq
 				outNotes.add(outNote);
 			}
 			
-			return out;
         }
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionCopy(String sessionId, Hashtable<String, Object> input) throws JLIException {

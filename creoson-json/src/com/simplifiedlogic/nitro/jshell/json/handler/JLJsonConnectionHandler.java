@@ -86,13 +86,11 @@ public class JLJsonConnectionHandler extends JLJsonCommandHandler implements JLC
 			else
 				throw new JLIException("Could not connect");
 		}
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (connectStatus.getSessionId()!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_SESSIONID, connectStatus.getSessionId());
-			return out;
 		}
-		
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionDisconnect(String sessionId, Hashtable<String, Object> input) throws JLIException {

@@ -70,12 +70,11 @@ public class JLJsonViewHandler extends JLJsonCommandHandler implements JLViewReq
 
         List<String> result = viewHandler.list(modelName, viewName, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	out.put(OUTPUT_VIEWLIST, result);
-        	return out;
         }
-        return null;
+    	return out;
 	}
 	
 	private Hashtable<String, Object> actionListExploded(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -85,12 +84,11 @@ public class JLJsonViewHandler extends JLJsonCommandHandler implements JLViewReq
 
         List<String> result = viewHandler.listExploded(modelName, viewName, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	out.put(OUTPUT_VIEWLIST, result);
-        	return out;
         }
-        return null;
+    	return out;
 	}
 	
 	private Hashtable<String, Object> actionActivate(String sessionId, Hashtable<String, Object> input) throws JLIException {

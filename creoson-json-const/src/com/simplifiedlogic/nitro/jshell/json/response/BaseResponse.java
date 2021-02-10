@@ -45,7 +45,7 @@ public class BaseResponse {
 	private String sessionId;
 	@JsonInclude(Include.NON_NULL)
 	private String echoString;
-	@JsonInclude(Include.NON_EMPTY)
+	@JsonInclude
 	private Hashtable<String, Object> data;
 	
 	/**

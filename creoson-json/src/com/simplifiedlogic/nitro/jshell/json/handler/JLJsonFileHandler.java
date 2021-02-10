@@ -127,17 +127,16 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         FileOpenResults result = fileHandler.open(dirname, filename, filenames, generic, display, activate, newwin, regen_force, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (result.getDirname()!=null)
         		out.put(OUTPUT_DIRNAME, result.getDirname());
         	if (result.getFilenames()!=null)
         		out.put(OUTPUT_FILES, result.getFilenames());
         	if (result.getFileRevision()>0)
         		out.put(OUTPUT_REVISION, result.getFileRevision());
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionOpenErrors(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -157,12 +156,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         String newFilename = fileHandler.rename(filename, newname, onlysession, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (newFilename!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_MODEL, newFilename);
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionSave(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -225,14 +223,13 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 	private Hashtable<String, Object> actionGetActive(String sessionId, Hashtable<String, Object> input) throws JLIException {
         FileOpenResults result = fileHandler.getActive(sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null && result.hasFile()) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (result.getDirname()!=null)
         		out.put(OUTPUT_DIRNAME, result.getDirname());
        		out.put(OUTPUT_MODEL, result.getFilenames()[0]);
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionList(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -245,13 +242,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> files = fileHandler.list(filename, filenames, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (files!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_FILES, files);
-        	return out;
         }
-		
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionExists(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -269,17 +264,16 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         FileInfoResults result = fileHandler.getFileinfo(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (result.getDirname()!=null)
         		out.put(OUTPUT_DIRNAME, result.getDirname());
         	if (result.getFilename()!=null)
         		out.put(OUTPUT_MODEL, result.getFilename());
         	if (result.getFileRevision()>0)
         		out.put(OUTPUT_REVISION, result.getFileRevision());
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionHasInstances(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -297,8 +291,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         FileListInstancesResults result = fileHandler.listInstances(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (result.getDirname()!=null)
         		out.put(OUTPUT_DIRNAME, result.getDirname());
         	if (result.getGeneric()!=null)
@@ -307,9 +301,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         		out.put(OUTPUT_FILES, result.getInstances());
         	else
         		out.put(OUTPUT_FILES, new Vector<String>());
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionMassprops(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -317,8 +310,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         MasspropsData result = fileHandler.massprops(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_VOLUME, result.getVolume());
 			out.put(OUTPUT_MASS, result.getMass());
 			out.put(OUTPUT_DENSITY, result.getDensity());
@@ -341,9 +334,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 				if (tmp!=null)
 					out.put(OUTPUT_COORD_SYS_INERTIA_TENSOR, tmp);
 			}
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionGetMassUnits(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -351,12 +343,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         String units = fileHandler.getMassUnits(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (units!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_UNITS, units);
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionSetMassUnits(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -374,12 +365,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         String units = fileHandler.getLengthUnits(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (units!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_UNITS, units);
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionSetLengthUnits(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -397,12 +387,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> rels = fileHandler.getRelations(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (rels!=null && rels.size()>0) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 	        out.put(OUTPUT_RELATIONS, rels);
-	        return out;
         }
-        return null;
+        return out;
 	}
 
 	private Hashtable<String, Object> actionRelationsSet(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -422,12 +411,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> rels = fileHandler.getPostRegenRelations(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (rels!=null && rels.size()>0) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 	        out.put(OUTPUT_RELATIONS, rels);
-	        return out;
         }
-        return null;
+        return out;
 	}
 
 	private Hashtable<String, Object> actionPostRegenRelationsSet(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -493,8 +481,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 
         FileAssembleResults result = fileHandler.assemble(instr, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
         	if (result.getDirname()!=null)
         		out.put(OUTPUT_DIRNAME, result.getDirname());
         	if (result.getFilenames()!=null)
@@ -503,9 +491,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         		out.put(OUTPUT_REVISION, result.getFileRevision());
         	if (result.getFeatureId()>0)
         		out.put(OUTPUT_FEATUREID, result.getFeatureId());
-        	return out;
         }
-		return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionRefresh(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -535,7 +522,10 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 			Hashtable<String, Object> out = writeTransform(transform);
         	return out;
         }
-		return null;
+        else {
+    		Hashtable<String, Object> out = new Hashtable<String, Object>();
+    		return out;
+        }
 	}
 
 	private Hashtable<String, Object> actionIsActive(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -571,13 +561,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> reps = fileHandler.listSimpReps(filename, repname, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (reps!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_REPS, reps);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionGetCurrentMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -587,16 +575,13 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, false, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (matls!=null && matls.size()>0) {
 			String matl = matls.get(0).getMaterialName();
-			if (matl==null)
-				return null;
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
-			out.put(OUTPUT_MATERIAL, matl);
-        	return out;
+			if (matl!=null)
+				out.put(OUTPUT_MATERIAL, matl);
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionGetCurrentMaterialWildcard(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -605,8 +590,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> matls = fileHandler.getCurrentMaterial(filename, includeNonMatchingParts, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (matls!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outMatls = new Vector<Map<String, Object>>();
 			Map<String, Object> outMatl = null;
 			for (ListMaterialResults matl : matls) {
@@ -619,10 +604,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 				outMatls.add(outMatl);
 			}
 			out.put(OUTPUT_MATERIALS, outMatls);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionSetCurrentMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -631,13 +614,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> files = fileHandler.setCurrentMaterial(filename, materialName, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (files!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_FILES, files);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionListMaterials(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -648,17 +629,15 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> result = fileHandler.listMaterials(filename, materialName, true, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			List<String> matls = new ArrayList<String>();
 			for (ListMaterialResults res : result)
 				if (res.getMaterialName()!=null)
 					matls.add(res.getMaterialName());
 			out.put(OUTPUT_MATERIALS, matls);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionListMaterialsWildcard(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -668,8 +647,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<ListMaterialResults> matls = fileHandler.listMaterials(filename, materialName, includeNonMatchingParts, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (matls!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outMatls = new Vector<Map<String, Object>>();
 			Map<String, Object> outMatl = null;
 			for (ListMaterialResults matl : matls) {
@@ -682,10 +661,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 				outMatls.add(outMatl);
 			}
 			out.put(OUTPUT_MATERIALS, outMatls);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionLoadMaterialFile(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -695,13 +672,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> files = fileHandler.loadMaterialFile(filename, dirname, materialName, false, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (files!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODELS, files);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionDeleteMaterial(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -710,13 +685,11 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         List<String> files = fileHandler.deleteMaterial(filename, materialName, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (files!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_MODELS, files);
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionGetAccuracy(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -724,14 +697,12 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         
         JLAccuracy accuracy = fileHandler.getAccuracy(filename, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (accuracy!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_ACCURACY, String.valueOf(accuracy.getAccuracy()));
        		out.put(OUTPUT_RELATIVE, String.valueOf(accuracy.isRelative()));
-        	return out;
         }
-
-        return null;
+    	return out;
 	}
 
     protected JLConstraintInput readConstraint(Map<String, Object> rec) throws JLIException {

@@ -85,12 +85,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		String outdir = proeHandler.cd(dirname, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (outdir!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, outdir);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionMkdir(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -98,24 +97,22 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		String outdir = proeHandler.mkdir(dirname, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (outdir!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, outdir);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionPwd(String sessionId, Hashtable<String, Object> input) throws JLIException {
         
 		String outdir = proeHandler.pwd(sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (outdir!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRNAME, outdir);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionListDirs(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -124,12 +121,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		List<String> dirs = proeHandler.list_dirs(filename, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (dirs!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_DIRLIST, dirs);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionListFiles(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -138,12 +134,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		List<String> files = proeHandler.list_files(filename, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (files!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_FILELIST, files);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionDeleteFiles(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -158,12 +153,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		List<String> files = proeHandler.deleteFiles(dirname, filename, filenames, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (files!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_FILELIST, files);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionRmdir(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -189,12 +183,11 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		List<String> values = proeHandler.getConfig(name, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (values!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_VALUES, values);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionGetStandardColor(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -203,14 +196,13 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         
 		JLColor color = proeHandler.getStandardColor(type, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (color!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_RED, color.getRed());
 			out.put(OUTPUT_GREEN, color.getGreen());
 			out.put(OUTPUT_BLUE, color.getBlue());
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionSetStandardColor(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -228,6 +220,14 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         return null;
 	}
 	
+	private Hashtable<String, Object> actionSetCreoVersion(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        int version = checkIntParameter(input, PARAM_VERSION, true, 0);
+       
+		proeHandler.setProeVersion(version, sessionId);
+		
+		return null;
+	}
+
 	private int getColorType(String colorName) {
 		int type=0;
         if (STD_COLOR_LETTER.equalsIgnoreCase(colorName))
@@ -268,14 +268,6 @@ public class JLJsonCreoHandler extends JLJsonCommandHandler implements JLCreoReq
         	type = IJLProe.STD_COLOR_QUILT;
         
 		return type;
-	}
-
-	private Hashtable<String, Object> actionSetCreoVersion(String sessionId, Hashtable<String, Object> input) throws JLIException {
-        int version = checkIntParameter(input, PARAM_VERSION, true, 0);
-       
-		proeHandler.setProeVersion(version, sessionId);
-		
-		return null;
 	}
 
 }

@@ -71,8 +71,8 @@ public class JLJsonBomHandler extends JLJsonCommandHandler implements JLBomReque
 
         GetPathsOutput result = bomHandler.getPaths(modelname, skeleton, paths, toplevel, incTransform, true, excludeInactive, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			if (result.getModelname()!=null)
 				out.put(PARAM_MODEL, result.getModelname());
 			if (result.getGeneric()!=null)
@@ -84,10 +84,8 @@ public class JLJsonBomHandler extends JLJsonCommandHandler implements JLBomReque
 				if (child!=null)
 					out.put(OUTPUT_CHILDREN, child);
 			}
-			
-			return out;
         }
-		return null;
+		return out;
 	}
 	
 	private Map<String, Object> getBomChild(BomChild node) {

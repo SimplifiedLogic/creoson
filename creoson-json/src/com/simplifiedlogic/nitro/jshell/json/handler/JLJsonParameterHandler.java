@@ -146,8 +146,8 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
 
         List<ParameterData> params = paramHandler.list(filename, namePattern, paramNames, valuePattern, encoded, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (params!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outParams = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_PARAMLIST, outParams);
 			Map<String, Object> outParam = null;
@@ -169,9 +169,8 @@ public class JLJsonParameterHandler extends JLJsonCommandHandler implements JLPa
 				outParams.add(outParam);
 			}
 			
-			return out;
         }
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionExists(String sessionId, Hashtable<String, Object> input) throws JLIException {

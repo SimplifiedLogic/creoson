@@ -69,17 +69,16 @@ public class JLJsonGeometryHandler extends JLJsonCommandHandler implements JLGeo
         
         JLBox box = geomHandler.boundingBox(filename, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (box!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_XMIN, box.getXmin());
 			out.put(OUTPUT_XMAX, box.getXmax());
 			out.put(OUTPUT_YMIN, box.getYmin());
 			out.put(OUTPUT_YMAX, box.getYmax());
 			out.put(OUTPUT_ZMIN, box.getZmin());
 			out.put(OUTPUT_ZMAX, box.getZmax());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionGetSurfaces(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -87,8 +86,8 @@ public class JLJsonGeometryHandler extends JLJsonCommandHandler implements JLGeo
 
         List<SurfaceData> surfaces = geomHandler.getSurfaces(filename, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (surfaces!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outSurfaces = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_SURFLIST, outSurfaces);
 			Map<String, Object> outSurf = null;
@@ -106,9 +105,8 @@ public class JLJsonGeometryHandler extends JLJsonCommandHandler implements JLGeo
 				
 				outSurfaces.add(outSurf);
 			}
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionGetEdges(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -117,8 +115,8 @@ public class JLJsonGeometryHandler extends JLJsonCommandHandler implements JLGeo
 
         List<ContourData> conts = geomHandler.getEdges(filename, idList, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (conts!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outContours = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_CONTOURLIST, outContours);
 			Map<String, Object> outCont = null;
@@ -149,9 +147,8 @@ public class JLJsonGeometryHandler extends JLJsonCommandHandler implements JLGeo
 				
 				outContours.add(outCont);
 			}
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 }

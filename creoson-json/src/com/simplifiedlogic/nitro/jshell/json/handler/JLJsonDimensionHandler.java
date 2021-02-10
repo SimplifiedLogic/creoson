@@ -104,8 +104,8 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 
         List<DimData> dims = dimHandler.list(modelname, namePattern, dimNames, dimType, encoded, select, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (dims!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_DIMLIST, outDims);
 			Map<String, Object> outDim = null;
@@ -121,9 +121,8 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 				outDims.add(outDim);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionListDetail(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -140,8 +139,8 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 
         List<DimDetailData> dims = dimHandler.listDetail(modelname, namePattern, dimNames, dimType, encoded, select, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (dims!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_DIMLIST, outDims);
 			Map<String, Object> outDim = null;
@@ -195,9 +194,8 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 				outDims.add(outDim);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionShow(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -225,8 +223,8 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 
         List<DimSelectData> dims = dimHandler.userSelect(modelname, max, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (dims!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outDims = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_DIMLIST, outDims);
 			Map<String, Object> outDim = null;
@@ -246,9 +244,8 @@ public class JLJsonDimensionHandler extends JLJsonCommandHandler implements JLDi
 				outDims.add(outDim);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionSetText(String sessionId, Hashtable<String, Object> input) throws JLIException {

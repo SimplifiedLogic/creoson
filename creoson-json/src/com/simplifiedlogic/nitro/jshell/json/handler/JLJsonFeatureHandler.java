@@ -107,8 +107,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         List<FeatureData> features = featHandler.list(modelname, featureName, statusPattern, typePattern, paths, 
         		noDatumFeatures, includeUnnamed, noComponentFeatures, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (features!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_FEATLIST, outFeats);
 			Map<String, Object> outFeat = null;
@@ -128,9 +128,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 				outFeats.add(outFeat);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionListPatternFeatures(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -141,8 +140,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         
         List<FeatureData> features = featHandler.listPatternFeatures(modelname, featureName, typePattern, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (features!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_FEATLIST, outFeats);
 			Map<String, Object> outFeat = null;
@@ -162,9 +161,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 				outFeats.add(outFeat);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionListGroupFeatures(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -175,8 +173,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         
         List<FeatureData> features = featHandler.listGroupFeatures(modelname, featureName, typePattern, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (features!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_FEATLIST, outFeats);
 			Map<String, Object> outFeat = null;
@@ -196,9 +194,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 				outFeats.add(outFeat);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionRename(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -306,8 +303,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
         List<ParameterData> params = featHandler.listParams(modelname, featureName, featureId, namePattern, paramNames, 
         		typePattern, valuePattern, encoded, noDatumFeatures, includeUnnamed, noComponentFeatures, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (params!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outParams = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_PARAMLIST, outParams);
 			Map<String, Object> outParam = null;
@@ -333,9 +330,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 				outParams.add(outParam);
 			}
 			
-			return out;
         }
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionSetParam(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -368,8 +364,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 
         List<FeatSelectData> features = featHandler.userSelectCsys(modelname, max, sessionId);
 
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (features!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_FEATLIST, outFeats);
 			Map<String, Object> outFeat = null;
@@ -389,9 +385,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 				outFeats.add(outFeat);
 			}
 			
-			return out;
         }
-        return null;
+		return out;
 	}
 
 }

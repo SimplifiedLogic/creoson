@@ -73,8 +73,8 @@ public class JLJsonLayerHandler extends JLJsonCommandHandler implements JLLayerR
 
         List<LayerData> layers = layerHandler.list(modelName, layerName, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (layers!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outLayers = new Vector<Map<String, Object>>();
         	out.put(OUTPUT_LAYERS, outLayers);
 			Map<String, Object> outLayer = null;
@@ -90,9 +90,8 @@ public class JLJsonLayerHandler extends JLJsonCommandHandler implements JLLayerR
 				outLayers.add(outLayer);
 			}
 			
-        	return out;
         }
-        return null;
+    	return out;
 	}
 	
 	private Hashtable<String, Object> actionDelete(String sessionId, Hashtable<String, Object> input) throws JLIException {

@@ -115,12 +115,11 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		String result = drawHandler.create(model, drawing, template, scale, display, activate, newwin, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
     		out.put(OUTPUT_DRAWING, result);
-    		return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionListModels(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -129,12 +128,11 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		List<String> models = drawHandler.listModels(drawing, model, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (models!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
     		out.put(OUTPUT_MODELS, models);
-    		return out;
 		}
-		return null;
+		return out;
 	}
 	
 	private Hashtable<String, Object> actionAddModel(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -161,12 +159,11 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		String result = drawHandler.getCurrentModel(drawing, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
     		out.put(OUTPUT_MODEL, result);
-    		return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionSetCurModel(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -274,12 +271,11 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		String size = drawHandler.getSheetSize(drawing, sheet, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (size!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_SIZE, size);
-			return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionCreateGeneralView(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -326,12 +322,11 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		List<String> views = drawHandler.listViews(drawing, view, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (views!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
     		out.put(OUTPUT_VIEWS, views);
-    		return out;
 		}
-		return null;
+		return out;
 	}
 	
 	private Hashtable<String, Object> actionListViewDetails(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -340,8 +335,8 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		List<ViewDetailData> views = drawHandler.listViewDetails(drawing, view, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (views!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outViews = new Vector<Map<String, Object>>();
     		out.put(OUTPUT_VIEWS, outViews);
 			Map<String, Object> outView = null;
@@ -357,9 +352,8 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 				
 				outViews.add(outView);
 			}
-    		return out;
 		}
-		return null;
+		return out;
 	}
 	
 	private Hashtable<String, Object> actionGetViewLoc(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -372,7 +366,10 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 			Hashtable<String, Object> out = writePoint(pt);
 			return out;
 		}
-		return null;
+		else {
+			Hashtable<String, Object> out = new Hashtable<String, Object>();
+			return out;
+		}
 	}
 
 	private Hashtable<String, Object> actionSetViewLoc(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -418,15 +415,14 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		ViewScaleResults result = drawHandler.scaleView(drawing, view, scale, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			if (result.getFailedViews()!=null)
 				out.put(OUTPUT_FAILED_VIEWS, result.getFailedViews());
 			if (result.getSuccessViews()!=null)
 				out.put(OUTPUT_SUCCESS_VIEWS, result.getSuccessViews());
-			return out;
 		}
-		return null;
+		return out;
 	}
 	
 	private Hashtable<String, Object> actionGetViewScale(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -457,15 +453,14 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
         
         JLBox box = drawHandler.viewBoundingBox(drawing, view, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (box!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_XMIN, box.getXmin());
 			out.put(OUTPUT_XMAX, box.getXmax());
 			out.put(OUTPUT_YMIN, box.getYmin());
 			out.put(OUTPUT_YMAX, box.getYmax());
-        	return out;
         }
-        return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionLoadSymbolDef(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -475,13 +470,12 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		SymbolDefData symbolData = drawHandler.loadSymbolDef(drawing, symbolDir, symbolFile, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (symbolData!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			out.put(OUTPUT_ID, symbolData.getId());
 			out.put(OUTPUT_NAME, symbolData.getName());
-    		return out;
 		}
-		return null;
+		return out;
 	}
 	
 	private Hashtable<String, Object> actionIsSymbolDefLoaded(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -515,8 +509,8 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		List<SymbolInstData> symbols = drawHandler.listSymbols(drawing, symbolFile, sheet, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (symbols!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Vector<Map<String, Object>> outViews = new Vector<Map<String, Object>>();
     		out.put(OUTPUT_SYMBOLS, outViews);
 			Map<String, Object> outView = null;
@@ -533,9 +527,8 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 
 				outViews.add(outView);
 			}
-    		return out;
 		}
-   		return null;
+		return out;
 	}
 	
 	private Hashtable<String, Object> actionDeleteSymbolDef(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -562,17 +555,16 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 		
 		DrawingFormatData result = drawHandler.getSheetFormat(drawing, sheet, sessionId);
 		
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
 		if (result!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			if (result.getFileName()!=null)
 				out.put(OUTPUT_MODEL, result.getFileName());
 			if (result.getFullName()!=null)
 				out.put(OUTPUT_FULLNAME, result.getFullName());
 			if (result.getCommonName()!=null)
 				out.put(OUTPUT_COMMONNAME, result.getCommonName());
-    		return out;
 		}
-		return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionSetSheetFormat(String sessionId, Hashtable<String, Object> input) throws JLIException {

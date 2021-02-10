@@ -125,8 +125,8 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         FamilyTableGetRowReturn row = ftHandler.getRow(filename, instname, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (row!=null) {
-    		Hashtable<String, Object> out = new Hashtable<String, Object>();
         	out.put(OUTPUT_INSTANCE, row.getInstanceName());
         	if (row.getColumns()!=null) {
     			Vector<Map<String, Object>> outColumns = new Vector<Map<String, Object>>();
@@ -150,10 +150,8 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
     				outColumns.add(outColumn);
     			}
         	}
-    		return out;
         }
-
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionGetCell(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -164,8 +162,8 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         FamilyTableRowColumns col = ftHandler.getCell(filename, instname, colid, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (col!=null) {
-    		Hashtable<String, Object> out = new Hashtable<String, Object>();
 			if (col.getColid()!=null)
 				out.put(OUTPUT_COLID, col.getColid());
 			if (col.getValue()!=null)
@@ -179,10 +177,8 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
 				case FamilyTableRowColumns.DATA_TYPE_NOTE : out.put(OUTPUT_DATATYPE, IJLParameter.TYPE_NOTE); break;
 				case FamilyTableRowColumns.DATA_TYPE_STRING : out.put(OUTPUT_DATATYPE, IJLParameter.TYPE_STRING); break;
 			}
-    		return out;
         }
-
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionSetCell(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -203,8 +199,8 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         List<FamilyTableRowColumns> cols = ftHandler.getHeader(filename, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (cols!=null) {
-    		Hashtable<String, Object> out = new Hashtable<String, Object>();
 			Map<String, Object> outColumn = null;
 			Vector<Map<String, Object>> outColumns = new Vector<Map<String, Object>>();
 			out.put(OUTPUT_COLUMNS, outColumns);
@@ -223,10 +219,8 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
 				}
 				outColumns.add(outColumn);
 			}
-    		return out;
         }
-
-        return null;
+		return out;
 	}
 
 	private Hashtable<String, Object> actionAddInst(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -264,12 +258,11 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         List<String> list = ftHandler.list(modelname, namePattern, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (list!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_INSTANCES, list);
-        	return out;
         }
-       	return null;
+    	return out;
 	}
 
 	private Hashtable<String, Object> actionListTree(String sessionId, Hashtable<String, Object> input) throws JLIException {
@@ -279,12 +272,11 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         FamTableInstance inst = ftHandler.listTree(modelname, erase, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (inst!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
 			getInstanceTree(inst, out);
-        	return out;
         }
-       	return null;
+    	return out;
 	}
 	
 	private void getInstanceTree(FamTableInstance inst, Map<String, Object> out) {
@@ -321,12 +313,11 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
         
         List<String> list = ftHandler.getParents(modelname, sessionId);
         
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (list!=null) {
-			Hashtable<String, Object> out = new Hashtable<String, Object>();
        		out.put(OUTPUT_PARENTS, list);
-        	return out;
         }
-       	return null;
+    	return out;
 	}
 
 }
