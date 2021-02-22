@@ -150,6 +150,14 @@ public interface IJLFeature {
 			String featureType, 
 	        AbstractJLISession sess) throws JLIException;
 
+	public List<FeatSelectData> listSelected(boolean paths, String sessionId) throws JLIException;
+	public List<FeatSelectData> listSelected(boolean paths, AbstractJLISession sess) throws JLIException;
+/*
+	public void addSelect(String filename, String featureName, int featureId, List<Integer> componentPath, 
+			boolean clear, String sessionId) throws JLIException;
+	public void addSelect(String filename, String featureName, int featureId, List<Integer> componentPath, 
+			boolean clear, AbstractJLISession sess) throws JLIException;
+*/
 	public void rename(
 	        String filename,
 	        String featureName, 

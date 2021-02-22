@@ -31,7 +31,7 @@
     }, {
       "name" : "paths",
       "type" : "boolean",
-      "description" : "Whether feature ID and feature number are returned with the data",
+      "description" : "Whether feature number is returned with the data",
       "default" : "false"
     }, {
       "name" : "no_datum",

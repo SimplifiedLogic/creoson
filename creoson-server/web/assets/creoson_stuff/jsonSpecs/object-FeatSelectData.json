@@ -1,0 +1,34 @@
+{
+  "object_name" : "FeatSelectData",
+  "description" : "Information about a feature that has been selected",
+  "data" : [ {
+    "name" : "name",
+    "type" : "string",
+    "description" : "Feature name"
+  }, {
+    "name" : "type",
+    "type" : "string",
+    "description" : "Feature type"
+  }, {
+    "name" : "status",
+    "type" : "string",
+    "description" : "Feature status",
+    "valid_values" : "ACTIVE, INACTIVE, FAMILY_TABLE_SUPPRESSED, SIMP_REP_SUPPRESSED, PROGRAM_SUPPRESSED, SUPPRESSED, UNREGENERATED"
+  }, {
+    "name" : "feat_id",
+    "type" : "integer",
+    "description" : "Feature ID"
+  }, {
+    "name" : "feat_number",
+    "type" : "integer",
+    "description" : "Feature Number"
+  }, {
+    "name" : "file",
+    "type" : "string",
+    "description" : "File name containing the feature"
+  }, {
+    "name" : "path",
+    "type" : "array:integer",
+    "description" : "Component Path to feature (optional)"
+  } ]
+}

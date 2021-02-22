@@ -5,6 +5,7 @@ creo = (function (pub) {
 
     pub.ParameterObj = function(propsObj) {
         // BASE OBJECT
+        this.description = undefined; // string - Parameter description
         this.designate = undefined; // boolean - Set copied parameter to be designated/not designated, blank=do not set
         this.encoded = undefined; // boolean - Whether to return the values Base64-encoded
         this.file = undefined; // string - Source model
@@ -182,6 +183,7 @@ creo = (function (pub) {
         if (this.name) reqObj.data.name = this.name;
         if (this.type) reqObj.data.type = this.type;
         if (this.value) reqObj.data.value = this.value;
+        if (this.description) reqObj.data.description = this.description;
         if (this.encoded) reqObj.data.encoded = this.encoded;
         if (this.designate) reqObj.data.designate = this.designate;
         if (this.no_create) reqObj.data.no_create = this.no_create;

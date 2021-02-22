@@ -18,6 +18,7 @@
  */
 package com.simplifiedlogic.nitro.jlink.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,11 +29,10 @@ import com.ptc.pfc.pfcExceptions.XToolkitBadInputs;
 import com.ptc.pfc.pfcExceptions.XToolkitNotExist;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.ptc.pfc.pfcExceptions.XToolkitUserAbort;
-import com.ptc.pfc.pfcFeature.Feature;
-import com.ptc.pfc.pfcFeature.FeatureGroups;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
+import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallDeleteOperation;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureGroup;
@@ -47,8 +47,10 @@ import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
+import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionBuffer;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelectionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelections;
+import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFCustomCreateInstructions;
@@ -424,6 +426,179 @@ public class JLFeature implements IJLFeature {
 		output.add(item);
 	}
 
+	@Override
+	public List<FeatSelectData> listSelected(boolean paths, String sessionId) throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+        return listSelected(paths, sess);
+	}
+
+	@Override
+	public List<FeatSelectData> listSelected(boolean paths, AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("feature.list_selected", NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        Vector<FeatSelectData> output = new Vector<FeatSelectData>();
+
+	        CallSelectionBuffer buf = session.getCurrentSelectionBuffer();
+	        if (buf!=null) {
+				CallSelections sels = buf.getContents();
+	        	if (sels!=null && sels.getarraysize()>0) {
+	        		int len = sels.getarraysize();
+	        		CallSelection sel;
+	        		CallFeature feat;
+	        		for (int i=0; i<len; i++) {
+	        			sel = sels.get(i);
+	        			CallModelItem item = sel.getSelItem();
+	        			if (item!=null && item instanceof CallFeature) {
+	        				feat = (CallFeature)item;
+
+	        				// block copied from ListLooper
+	        	            FeatSelectData outvals = new FeatSelectData();
+	        	            CallModel m = sel.getSelModel();
+	        	            if (m!=null) {
+	        	            	outvals.setFilename(m.getFileName());
+	        	            }
+	        	            outvals.setName(feat.getName());
+	        	            outvals.setStatus(JlinkUtils.translateFeatureStatus(feat.getStatus()));
+	        	            outvals.setFeatureType(feat.getFeatTypeName());
+	        	            outvals.setFeatureId(feat.getId());
+	        	            if (paths) {
+	        	                Integer no = feat.getNumber();
+	        	                if (no!=null)
+	        	                	outvals.setFeatureNumber(no.intValue());
+
+	        	                CallComponentPath path = sel.getPath();
+	        	                if (path!=null) {
+	        	                	CallIntSeq seq = path.getComponentIds();
+	        	                	int pathlen = seq.getarraysize();
+	        	                	List<Integer> newPath = new ArrayList<Integer>();
+	        	                	for (int k=0; k<pathlen; k++) {
+	        	                		newPath.add(seq.get(k));
+	        	                	}
+	        	                	newPath.add(outvals.getFeatureId());
+	        	                    outvals.setComponentPath(newPath);
+	        	                }
+	        	            }
+	        	            output.add(outvals);
+	        			}
+	        		}
+	        	}
+	        }
+
+	        return output;
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("feature.list_selected", start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+/*
+	@Override
+	public void addSelect(String filename, String featureName, int featureId, List<Integer> componentPath, 
+			boolean clear, String sessionId) throws JLIException {
+		
+		JLISession sess = JLISession.getSession(sessionId);
+
+		addSelect(filename, featureName, featureId, componentPath, clear, sess);
+	}
+
+	@Override
+	public void addSelect(String filename, String featureName, int featureId, List<Integer> componentPath, 
+			boolean clear, AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("feature.add_select: " + featureName, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        if (NitroUtils.isPattern(featureName))
+	            throw new JLIException("Name patterns are not supported for this command");
+	        if (featureName==null && featureId<=0) 
+	        	throw new JLIException("Must specify a feature name or ID");
+	        
+	        JLGlobal.loadLibrary();
+	    	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+		        return;
+	
+	        CallSolid solid = JlinkUtils.getModelSolid(session, filename);
+
+	        CallFeature feat = null;
+	        if (featureId>0) {
+	        	try {
+	        		feat = solid.getFeatureById(featureId);
+	        	}
+                catch (XToolkitBadInputs e) {}  // ignore this exception because it's thrown when the ID is not found
+                catch (XToolkitNotExist e) {}  // ignore this exception because it's thrown when the ID is not found
+		        if (feat==null)
+		        	throw new JLIException("No feature found for ID: " + featureId);
+	        }
+	        else {
+	        	feat = solid.getFeatureByName(featureName);
+		        if (feat==null)
+		        	throw new JLIException("No feature found for name: " + featureName);
+	        }
+	        System.out.println("Feature name: "+feat.getName());
+
+	        CallSelectionBuffer buf = session.getCurrentSelectionBuffer();
+	        if (buf!=null) {
+				if (clear)
+					buf.clear();
+
+		        CallComponentPath compPath = null;
+		        CallIntSeq ids = CallIntSeq.create();
+		        if (componentPath!=null) {
+//		        	CallFeature f = JlinkUtils.getFeatureForPath(session, assembly, componentPath);
+//		            if (!(f instanceof CallComponentFeat))
+//		                throw new JLIException("Component path does not point to a component feature");
+//		            subComponent = session.getModelFromDescr(((CallComponentFeat)f).getModelDescr());
+		            // create pro/e component path
+		            int len = componentPath.size();
+		            for (int i=0; i<len; i++) {
+		                ids.append(componentPath.get(i).intValue());
+		            }
+		        }
+            	CallSelection sel = CallSelection.createModelItemSelection(feat, compPath);
+            	if (sel!=null) {
+            		System.out.println(sel.getSelItem().getName());
+            		System.out.println(sel.getSelModel().getFileName());
+            		buf.addSelection(sel);
+            	}
+	        }
+
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("feature.add_select,"+featureName, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+	}
+*/
 	/* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#rename(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String)
 	 */
@@ -796,7 +971,12 @@ public class JLFeature implements IJLFeature {
 	                        f.setFeatureType("csys");
                             int id = feat.getId();
 	                        f.setFeatureId(new Integer(id));
-	                        
+
+	                        CallModel m = sel.getSelModel();
+	        	            if (m!=null) {
+	        	            	f.setFilename(m.getFileName());
+	        	            }
+
 	                        output.add(f);
 	                    }
 //	                    else if (modelItem instanceof Feature) {
@@ -1412,8 +1592,6 @@ public class JLFeature implements IJLFeature {
             outvals.setFeatureType(currentType==null?"":currentType);
             outvals.setFeatureId(feat.getId());
             if (paths) {
-                int id = feat.getId();
-                outvals.setFeatureId(id);
                 Integer no = feat.getNumber();
                 if (no!=null)
                 	outvals.setFeatureNumber(no.intValue());

@@ -46,6 +46,7 @@ import com.simplifiedlogic.nitro.jshell.json.template.FunctionTemplate;
 public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureRequestParams, JLFeatureResponseParams {
 
 	public static final String OBJ_FEATURE_DATA = "FeatureData";
+	public static final String OBJ_FEAT_SELECT_DATA = "FeatSelectData";
 	
 	private String[] validStatuses;
 	private Map<String, Map<String, Object>> sampleFeatures;
@@ -123,6 +124,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
 		list.add(helpListParams());
 		list.add(helpListGroupFeatures());
 		list.add(helpListPatternFeatures());
+		list.add(helpListSelected());
 		list.add(helpParamExists());
 		list.add(helpRename());
 		list.add(helpResume());
@@ -138,6 +140,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
 	public List<FunctionObject> getHelpObjects() {
 		List<FunctionObject> list = new ArrayList<FunctionObject>();
 		list.add(helpFeatureData());
+		list.add(helpFeatSelectData());
 		return list;
 	}
 	
@@ -255,7 +258,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_PATHS, FunctionSpec.TYPE_BOOL);
-    	arg.setDescription("Whether feature ID and feature number are returned with the data");
+    	arg.setDescription("Whether feature number is returned with the data");
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
@@ -413,6 +416,23 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
         return obj;
     }
     
+	private FunctionObject helpFeatSelectData() {
+		FunctionObject obj = helpFeatureData();
+		obj.setObjectName(OBJ_FEAT_SELECT_DATA);
+    	obj.setDescription("Information about a feature that has been selected");
+		
+    	FunctionArgument arg;
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name containing the feature");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(PARAM_PATH, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_INTEGER);
+    	arg.setDescription("Component Path to feature (optional)");
+    	obj.add(arg);
+
+    	return obj;
+	}
+
 	private FunctionTemplate helpListPatternFeatures() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_PATTERN_FEATURES);
     	FunctionSpec spec = template.getSpec();
@@ -1155,6 +1175,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_USER_SELECT_CSYS);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Prompt the user to select one or more coordinate systems, and return their selections");
+    	spec.addFootnote("The "+OUTPUT_FEATNO+" and "+OUTPUT_PATH+" values will not be set in the return object.");
     	FunctionArgument arg;
     	FunctionReturn ret;
     	
@@ -1168,7 +1189,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	arg.setDefaultValue("1");
     	spec.addArgument(arg);
 
-    	ret = new FunctionReturn(OUTPUT_FEATLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_FEATURE_DATA);
+    	ret = new FunctionReturn(OUTPUT_FEATLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_FEAT_SELECT_DATA);
     	ret.setDescription("List of feature information");
     	spec.addReturn(ret);
     	
@@ -1180,6 +1201,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	Map<String, Object> rec;
     	rec = new OrderedMap<String, Object>();
     	rec.putAll(sampleFeatures.get("CS3"));
+    	rec.put(PARAM_MODEL, "box.prt");
     	rec.put(OUTPUT_ID, 44);
     	rec.put(OUTPUT_FEATNO, 3);
     	feats.add(rec);
@@ -1192,6 +1214,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	feats = new ArrayList<Map<String, Object>>();
     	rec = new OrderedMap<String, Object>();
     	rec.putAll(sampleFeatures.get("CS3"));
+    	rec.put(PARAM_MODEL, "box.prt");
     	rec.put(OUTPUT_ID, 44);
     	rec.put(OUTPUT_FEATNO, 3);
     	feats.add(rec);
@@ -1199,6 +1222,61 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.putAll(sampleFeatures.get("CS0"));
     	rec.put(OUTPUT_ID, 40);
     	rec.put(OUTPUT_FEATNO, 1);
+    	feats.add(rec);
+		ex.addOutput(OUTPUT_FEATLIST, feats);
+    	template.addExample(ex);
+
+        return template;
+    }
+    
+	private FunctionTemplate helpListSelected() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_LIST_SELECTED);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("List features that have been selected");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_PATHS, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether feature number and component path is returned with the data");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_FEATLIST, FunctionSpec.TYPE_OBJARRAY, OBJ_FEAT_SELECT_DATA);
+    	ret.setDescription("List of feature information");
+    	spec.addReturn(ret);
+    	
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	List<Map<String, Object>> feats = new ArrayList<Map<String, Object>>();
+    	Map<String, Object> rec;
+    	rec = new OrderedMap<String, Object>();
+    	rec.putAll(sampleFeatures.get("CS3"));
+    	rec.put(PARAM_MODEL, "box.prt");
+    	rec.put(OUTPUT_ID, 44);
+    	feats.add(rec);
+    	rec = new OrderedMap<String, Object>();
+    	rec.putAll(sampleFeatures.get("CS0"));
+    	rec.put(PARAM_MODEL, "box.prt");
+    	rec.put(OUTPUT_ID, 40);
+    	feats.add(rec);
+		ex.addOutput(OUTPUT_FEATLIST, feats);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	feats = new ArrayList<Map<String, Object>>();
+    	rec = new OrderedMap<String, Object>();
+    	rec.putAll(sampleFeatures.get("CS3"));
+    	rec.put(OUTPUT_ID, 44);
+    	rec.put(OUTPUT_FEATNO, 3);
+    	rec.put(OUTPUT_PATH, new int[] {30, 44});
+    	feats.add(rec);
+    	rec = new OrderedMap<String, Object>();
+    	rec.putAll(sampleFeatures.get("CS0"));
+    	rec.put(PARAM_MODEL, "box.prt");
+    	rec.put(OUTPUT_ID, 40);
+    	rec.put(OUTPUT_FEATNO, 1);
+    	rec.put(OUTPUT_PATH, new int[] {30, 40});
     	feats.add(rec);
 		ex.addOutput(OUTPUT_FEATLIST, feats);
     	template.addExample(ex);

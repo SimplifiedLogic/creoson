@@ -18,6 +18,8 @@
  */
 package com.simplifiedlogic.nitro.jlink.data;
 
+import java.util.List;
+
 /**
  * Information about a feature that the user has selected
  * @author Adam Andrews
@@ -27,4 +29,19 @@ public class FeatSelectData extends FeatureData {
 
 	private static final long serialVersionUID = 1L;
 	
+	private String filename;
+	private List<Integer> componentPath;
+
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	public List<Integer> getComponentPath() {
+		return componentPath;
+	}
+	public void setComponentPath(List<Integer> componentPath) {
+		this.componentPath = componentPath;
+	}
 }

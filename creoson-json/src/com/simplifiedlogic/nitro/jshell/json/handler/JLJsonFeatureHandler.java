@@ -70,6 +70,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 		else if (function.equals(FUNC_LIST_PATTERN_FEATURES)) return actionListPatternFeatures(sessionId, input);
 		else if (function.equals(FUNC_LIST_GROUP_FEATURES)) return actionListGroupFeatures(sessionId, input);
 		else if (function.equals(FUNC_USER_SELECT_CSYS)) return actionUserSelectCsys(sessionId, input);
+		else if (function.equals(FUNC_LIST_SELECTED)) return actionListSelected(sessionId, input);
+//		else if (function.equals(FUNC_ADD_SELECT)) return actionAddSelect(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -198,6 +200,57 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 		return out;
 	}
 
+	private Hashtable<String, Object> actionListSelected(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        boolean paths = checkFlagParameter(input, PARAM_PATHS, false, false);
+        
+        List<FeatSelectData> features = featHandler.listSelected(paths, sessionId);
+
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        if (features!=null) {
+			Vector<Map<String, Object>> outFeats = new Vector<Map<String, Object>>();
+			out.put(OUTPUT_FEATLIST, outFeats);
+			Map<String, Object> outFeat = null;
+			for (FeatSelectData feat : features) {
+				outFeat = new Hashtable<String, Object>();
+				if (feat.getFilename()!=null)
+					outFeat.put(PARAM_MODEL, feat.getFilename());
+				if (feat.getName()!=null)
+					outFeat.put(PARAM_NAME, feat.getName());
+				if (feat.getStatus()!=null)
+					outFeat.put(PARAM_STATUS, feat.getStatus());
+				if (feat.getFeatureType()!=null)
+					outFeat.put(PARAM_TYPE, feat.getFeatureType());
+				if (feat.getFeatureId()>0)
+					outFeat.put(OUTPUT_ID, Integer.valueOf(feat.getFeatureId()));
+				if (feat.getFeatureNumber()>0)
+					outFeat.put(OUTPUT_FEATNO, Integer.valueOf(feat.getFeatureNumber()));
+				if (feat.getComponentPath()!=null)
+					outFeat.put(OUTPUT_PATH, feat.getComponentPath());
+				
+				outFeats.add(outFeat);
+			}
+			
+        }
+		return out;
+	}
+/*
+	private Hashtable<String, Object> actionAddSelect(String sessionId, Hashtable<String, Object> input) throws JLIException {
+		
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String featureName = checkStringParameter(input, PARAM_NAME, false);
+        int featureId = checkIntParameter(input, PARAM_ID, false, 0);
+        List<Integer> path = getIntArray(PARAM_PATH, checkParameter(input, PARAM_PATH, false));
+        boolean clear = checkFlagParameter(input, PARAM_CLEAR, false, false);
+
+        if (featureName==null && featureId<=0) 
+        	throw new JLIException("Must specify a feature name or ID");
+
+        featHandler.addSelect(modelname, featureName, featureId, path, clear, sessionId);
+
+        return null;
+	}
+*/
 	private Hashtable<String, Object> actionRename(String sessionId, Hashtable<String, Object> input) throws JLIException {
 		
         String modelname = checkStringParameter(input, PARAM_MODEL, false);
@@ -371,6 +424,8 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 			Map<String, Object> outFeat = null;
 			for (FeatSelectData feat : features) {
 				outFeat = new Hashtable<String, Object>();
+				if (feat.getFilename()!=null)
+					outFeat.put(PARAM_MODEL, feat.getFilename());
 				if (feat.getName()!=null)
 					outFeat.put(PARAM_NAME, feat.getName());
 				if (feat.getStatus()!=null)
@@ -379,9 +434,9 @@ public class JLJsonFeatureHandler extends JLJsonCommandHandler implements JLFeat
 					outFeat.put(PARAM_TYPE, feat.getFeatureType());
 				if (feat.getFeatureId()>0)
 					outFeat.put(OUTPUT_ID, Integer.valueOf(feat.getFeatureId()));
-				if (feat.getFeatureNumber()>0)
-					outFeat.put(OUTPUT_FEATNO, Integer.valueOf(feat.getFeatureNumber()));
-				
+//				if (feat.getFeatureNumber()>0)
+//					outFeat.put(OUTPUT_FEATNO, Integer.valueOf(feat.getFeatureNumber()));
+
 				outFeats.add(outFeat);
 			}
 			

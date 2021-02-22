@@ -18,14 +18,15 @@
  */
 package com.simplifiedlogic.nitro.jlink.calls.assembly;
 
+import com.ptc.cipjava.intseq;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcAssembly.ComponentPath;
 import com.ptc.pfc.pfcAssembly.pfcAssembly;
 import com.ptc.pfc.pfcBase.Transform3D;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallIntSeq;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcAssembly.ComponentPath
@@ -55,6 +56,14 @@ public class CallComponentPath {
 		if (trans==null)
 			return null;
 		return new CallTransform3D(trans);
+	}
+	
+	public CallIntSeq getComponentIds() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("ComponentPath,GetComponentIds", 0, NitroConstants.DEBUG_JLINK_KEY);
+		intseq ids = compPath.GetComponentIds();
+		if (ids==null)
+			return null;
+		return new CallIntSeq(ids);
 	}
 	
 	public ComponentPath getCompPath() {

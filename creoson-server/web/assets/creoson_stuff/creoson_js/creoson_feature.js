@@ -6,6 +6,7 @@ creo = (function (pub) {
     pub.FeatureObj = function(propsObj) {
         // BASE OBJECT
         this.clip = undefined; // boolean - Whether to clip-delete ANY features from this feature through the end of the structure
+        this.description = undefined; // string - Parameter description
         this.designate = undefined; // boolean - Set parameter to be designated/not designated, blank=do not set
         this.encoded = undefined; // boolean - Whether to return the values Base64-encoded
         this.feat_id = undefined; // integer - Feature ID
@@ -21,7 +22,7 @@ creo = (function (pub) {
         this.no_datum = undefined; // boolean - Whether to exclude datum-type features from the list; these are COORD_SYS, CURVE, DATUM_AXIS, DATUM_PLANE, DATUM_POINT, DATUM_QUILT, and DATUM_SURFACE features.
         this.param = undefined; // string - Parameter name
         this.params = undefined; // array:string - List of parameter names
-        this.paths = undefined; // boolean - Whether feature ID and feature number are returned with the data
+        this.paths = undefined; // boolean - Whether feature number is returned with the data
         this.pattern_name = undefined; // string - Pattern name
         this.status = undefined; // string - Feature status pattern
         this.type = undefined; // string - Feature type pattern
@@ -257,6 +258,37 @@ creo = (function (pub) {
     };
 
 
+    // List features that have been selected
+    pub.FeatureObj.prototype.list_selected = function () {
+
+        console.log('got into : pub.FeatureObj.list_selected');
+
+        let reqObj = {
+            command : "feature",
+            function : "list_selected",
+            data : {}
+        };
+
+        // set the properties for the request
+        if (this.paths) reqObj.data.paths = this.paths;
+
+
+        return creo.ajax.request(reqObj)
+            .then(function (respObj) {
+                if (respObj.data) {
+                    return Promise.resolve(respObj.data);
+                } else {
+                    return Promise.resolve(respObj);
+                }
+            })
+            .catch(function (err) {
+                console.log('Error : '+JSON.stringify(err));
+                return Promise.reject(err);
+            });
+
+    };
+
+
     // Check whether parameter(s) exists on a feature
     pub.FeatureObj.prototype.param_exists = function () {
 
@@ -381,6 +413,7 @@ creo = (function (pub) {
         if (this.value) reqObj.data.value = this.value;
         if (this.encoded) reqObj.data.encoded = this.encoded;
         if (this.designate) reqObj.data.designate = this.designate;
+        if (this.description) reqObj.data.description = this.description;
         if (this.no_create) reqObj.data.no_create = this.no_create;
 
 

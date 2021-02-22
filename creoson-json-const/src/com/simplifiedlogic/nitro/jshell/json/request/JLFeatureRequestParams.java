@@ -41,6 +41,8 @@ public interface JLFeatureRequestParams {
     public static final String FUNC_LIST_PATTERN_FEATURES	= "list_pattern_features";
     public static final String FUNC_LIST_GROUP_FEATURES		= "list_group_features";
     public static final String FUNC_USER_SELECT_CSYS		= "user_select_csys";
+    public static final String FUNC_LIST_SELECTED	= "list_selected";
+//    public static final String FUNC_ADD_SELECT		= "add_select";
 
     // request fields
     public static final String PARAM_MODEL      = "file";
@@ -63,5 +65,7 @@ public interface JLFeatureRequestParams {
     public static final String PARAM_PARAM		= "param";
     public static final String PARAM_PARAMS		= "params";
     public static final String PARAM_MAX		= "max";
+//    public static final String PARAM_CLEAR		= "clear";
+    public static final String PARAM_PATH       = "path";
 
 }

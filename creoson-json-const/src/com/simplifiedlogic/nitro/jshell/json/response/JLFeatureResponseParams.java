@@ -31,5 +31,6 @@ public interface JLFeatureResponseParams {
     public static final String OUTPUT_ID        = "feat_id";
     public static final String OUTPUT_FEATNO    = "feat_number";
     public static final String OUTPUT_EXISTS    = "exists";
+    public static final String OUTPUT_PATH		= "path";
     
 }

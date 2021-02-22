@@ -1,19 +1,13 @@
 {
   "spec" : {
-    "function_description" : "Prompt the user to select one or more coordinate systems, and return their selections",
+    "function_description" : "List features that have been selected",
     "command" : "feature",
-    "function" : "user_select_csys",
-    "notes" : [ "The feat_number and path values will not be set in the return object." ],
+    "function" : "list_selected",
     "request" : [ {
-      "name" : "file",
-      "type" : "string",
-      "description" : "File name",
-      "default" : "The currently active model"
-    }, {
-      "name" : "max",
-      "type" : "integer",
-      "description" : "The maximum number of dimensions that the user can select",
-      "default" : "1"
+      "name" : "paths",
+      "type" : "boolean",
+      "description" : "Whether feature number and component path is returned with the data",
+      "default" : "false"
     } ],
     "response" : [ {
       "name" : "featlist",
@@ -25,10 +19,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "feature",
-      "function" : "user_select_csys",
-      "data" : {
-        "file" : "box.prt"
-      }
+      "function" : "list_selected"
     },
     "response" : {
       "status" : {
@@ -40,8 +31,13 @@
           "type" : "COORDINATE SYSTEM",
           "status" : "ACTIVE",
           "file" : "box.prt",
-          "feat_id" : 44,
-          "feat_number" : 3
+          "feat_id" : 44
+        }, {
+          "name" : "CS0",
+          "type" : "COORDINATE SYSTEM",
+          "status" : "ACTIVE",
+          "file" : "box.prt",
+          "feat_id" : 40
         } ]
       }
     }
@@ -49,11 +45,7 @@
     "request" : {
       "sessionId" : "~sessionId~",
       "command" : "feature",
-      "function" : "user_select_csys",
-      "data" : {
-        "file" : "box.prt",
-        "max" : 2
-      }
+      "function" : "list_selected"
     },
     "response" : {
       "status" : {
@@ -64,15 +56,17 @@
           "name" : "CS3",
           "type" : "COORDINATE SYSTEM",
           "status" : "ACTIVE",
-          "file" : "box.prt",
           "feat_id" : 44,
-          "feat_number" : 3
+          "feat_number" : 3,
+          "path" : [ 30, 44 ]
         }, {
           "name" : "CS0",
           "type" : "COORDINATE SYSTEM",
           "status" : "ACTIVE",
+          "file" : "box.prt",
           "feat_id" : 40,
-          "feat_number" : 1
+          "feat_number" : 1,
+          "path" : [ 30, 40 ]
         } ]
       }
     }
