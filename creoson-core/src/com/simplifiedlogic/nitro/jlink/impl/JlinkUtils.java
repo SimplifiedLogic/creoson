@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.binary.Base64;
-
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XInvalidFileName;
 import com.ptc.pfc.pfcExceptions.XStringTooLong;
@@ -1146,7 +1144,7 @@ public class JlinkUtils {
     		encoded = CREO7_AUTH;
     	if (encoded==null)
     		return;
-        String precode = new String(Base64.decodeBase64((String)encoded), Charset.forName("UTF-8"));
+        String precode = (String)DataUtils.decodeBase64(encoded);
         int len = precode.length();
     	char[] tmp = new char[len];
     	for (int i=0; i<len; i++) {
