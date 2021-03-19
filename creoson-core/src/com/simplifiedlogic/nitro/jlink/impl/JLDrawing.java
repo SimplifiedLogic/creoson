@@ -18,7 +18,6 @@
  */
 package com.simplifiedlogic.nitro.jlink.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -65,6 +64,7 @@ import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallModelItem;
 import com.simplifiedlogic.nitro.jlink.calls.select.CallSelection;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.sheet.CallSheetData;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallRegenInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.calls.view.CallView;
@@ -3061,6 +3061,13 @@ public class JLDrawing implements IJLDrawing {
         			// this error was thrown for a view that was Suppressed
         			return false;
         		}
+
+        		CallModel m = view.getModel();
+        		if (m!=null)
+        			vd.setModel(m.getFileName());
+        		CallSimpRep rep = view.getSimpRep();
+        		if (rep!=null)
+        			vd.setSimpRep(rep.getName());
 
                 CallOutline3D outline = view.getOutline();
                 CallPoint3D pt0 = screenToDrawingPoint(getDrawing(), vd.getSheetNo(), outline.get(0));

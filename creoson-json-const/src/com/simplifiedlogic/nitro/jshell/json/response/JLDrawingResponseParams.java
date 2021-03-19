@@ -42,6 +42,8 @@ public interface JLDrawingResponseParams {
     public static final String OUTPUT_NAME		= "name";
     public static final String OUTPUT_LOADED	= "loaded";
 	public static final String OUTPUT_SYMBOLS	= "symbols";
+	public static final String OUTPUT_VIEW_MODEL = "view_model";
+	public static final String OUTPUT_SIMPREP	= "simp_rep";
 
     public static final String OUTPUT_XMIN	= "xmin";
 	public static final String OUTPUT_XMAX	= "xmax";

@@ -971,18 +971,24 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		rec.put(OUTPUT_SHEET, 1);
         rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(2.5, 4.0, 0.0));
 		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+		rec.put(OUTPUT_VIEW_MODEL, "box.prt");
+		rec.put(OUTPUT_SIMPREP, "Master Rep");
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_NAME, "RIGHT");
 		rec.put(OUTPUT_SHEET, 1);
         rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(6.0, 4.0, 0.0));
 		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+		rec.put(OUTPUT_VIEW_MODEL, "box.prt");
+		rec.put(OUTPUT_SIMPREP, "Master Rep");
     	rec = new OrderedMap<String, Object>();
     	params.add(rec);
     	rec.put(OUTPUT_NAME, "TOP");
 		rec.put(OUTPUT_SHEET, 1);
         rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(2.5, 7.2, 0.0));
 		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+		rec.put(OUTPUT_VIEW_MODEL, "box.prt");
+		rec.put(OUTPUT_SIMPREP, "Master Rep");
 		ex.addOutput(OUTPUT_VIEWS, params);
     	template.addExample(ex);
 
@@ -995,6 +1001,8 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		rec.put(OUTPUT_SHEET, 1);
         rec.put(OUTPUT_LOCATION, JLJsonFileHelp.writePoint(6.0, 4.0, 0.0));
 		rec.put(OUTPUT_TEXT_HEIGHT, 0.2);
+		rec.put(OUTPUT_VIEW_MODEL, "box.prt");
+		rec.put(OUTPUT_SIMPREP, "Master Rep");
 		ex.addOutput(OUTPUT_VIEWS, params);
     	template.addExample(ex);
 
@@ -1378,6 +1386,14 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 
     	arg = new FunctionArgument(OUTPUT_TEXT_HEIGHT, FunctionSpec.TYPE_DOUBLE);
     	arg.setDescription("Text Height in Drawing Units");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_VIEW_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View model name");
+    	obj.add(arg);
+
+    	arg = new FunctionArgument(OUTPUT_SIMPREP, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("View simplified rep name");
     	obj.add(arg);
 
         return obj;

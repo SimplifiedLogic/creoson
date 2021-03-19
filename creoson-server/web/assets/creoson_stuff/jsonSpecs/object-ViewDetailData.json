@@ -17,5 +17,13 @@
     "name" : "text_height",
     "type" : "double",
     "description" : "Text Height in Drawing Units"
+  }, {
+    "name" : "view_model",
+    "type" : "string",
+    "description" : "View model name"
+  }, {
+    "name" : "simp_rep",
+    "type" : "string",
+    "description" : "View simplified rep name"
   } ]
 }

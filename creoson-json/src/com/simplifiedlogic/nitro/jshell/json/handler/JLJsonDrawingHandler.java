@@ -349,6 +349,10 @@ public class JLJsonDrawingHandler extends JLJsonCommandHandler implements JLDraw
 				if (recPt!=null)
 					outView.put(OUTPUT_LOCATION, recPt);
 				outView.put(OUTPUT_TEXT_HEIGHT, v.getTextHeight());
+				if (v.getModel()!=null)
+					outView.put(OUTPUT_VIEW_MODEL, v.getModel());
+				if (v.getSimpRep()!=null)
+					outView.put(OUTPUT_SIMPREP, v.getSimpRep());
 				
 				outViews.add(outView);
 			}

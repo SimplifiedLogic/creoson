@@ -34,6 +34,8 @@ public class ViewDetailData implements Serializable {
 	private int sheetNo;
 	private JLPoint location;
 	private double textHeight;
+	private String model;
+	private String simpRep;
 	
 	/**
 	 * @return The view name
@@ -82,5 +84,29 @@ public class ViewDetailData implements Serializable {
 	 */
 	public void setLocation(JLPoint location) {
 		this.location = location;
+	}
+	/**
+	 * @return The view model name
+	 */
+	public String getModel() {
+		return model;
+	}
+	/**
+	 * @param model The view model name
+	 */
+	public void setModel(String model) {
+		this.model = model;
+	}
+	/**
+	 * @return The view's simplified rep, if any
+	 */
+	public String getSimpRep() {
+		return simpRep;
+	}
+	/**
+	 * @param simpRep The view's simplified rep
+	 */
+	public void setSimpRep(String simpRep) {
+		this.simpRep = simpRep;
 	}
 }

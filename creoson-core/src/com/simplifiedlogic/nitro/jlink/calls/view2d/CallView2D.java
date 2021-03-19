@@ -21,12 +21,14 @@ package com.simplifiedlogic.nitro.jlink.calls.view2d;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.Outline3D;
 import com.ptc.pfc.pfcModel.Model;
+import com.ptc.pfc.pfcSimpRep.SimpRep;
 import com.ptc.pfc.pfcView2D.View2D;
 import com.ptc.pfc.pfcView2D.ViewDisplay;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallVector3D;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
+import com.simplifiedlogic.nitro.jlink.calls.simprep.CallSimpRep;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
 
 /**
@@ -112,6 +114,14 @@ public class CallView2D {
 	public void setDisplay(CallViewDisplay value) throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("View2D,SetDisplay", 0, NitroConstants.DEBUG_JLINK_KEY);
 		view.SetDisplay(value.getDisplay());
+	}
+
+	public CallSimpRep getSimpRep() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("View2D,GetSimpRep", 0, NitroConstants.DEBUG_JLINK_KEY);
+		SimpRep rep = view.GetSimpRep();
+		if (rep==null)
+			return null;
+		return new CallSimpRep(rep);
 	}
 
 	public View2D getView() {

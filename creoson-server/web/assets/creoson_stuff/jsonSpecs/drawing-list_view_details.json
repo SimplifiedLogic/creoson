@@ -43,7 +43,9 @@
             "y" : 4.0,
             "z" : 0.0
           },
-          "text_height" : 0.2
+          "text_height" : 0.2,
+          "view_model" : "box.prt",
+          "simp_rep" : "Master Rep"
         }, {
           "name" : "RIGHT",
           "sheet" : 1,
@@ -52,7 +54,9 @@
             "y" : 4.0,
             "z" : 0.0
           },
-          "text_height" : 0.2
+          "text_height" : 0.2,
+          "view_model" : "box.prt",
+          "simp_rep" : "Master Rep"
         }, {
           "name" : "TOP",
           "sheet" : 1,
@@ -61,7 +65,9 @@
             "y" : 7.2,
             "z" : 0.0
           },
-          "text_height" : 0.2
+          "text_height" : 0.2,
+          "view_model" : "box.prt",
+          "simp_rep" : "Master Rep"
         } ]
       }
     }
@@ -87,7 +93,9 @@
             "y" : 4.0,
             "z" : 0.0
           },
-          "text_height" : 0.2
+          "text_height" : 0.2,
+          "view_model" : "box.prt",
+          "simp_rep" : "Master Rep"
         } ]
       }
     }
