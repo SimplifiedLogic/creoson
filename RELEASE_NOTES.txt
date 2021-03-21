@@ -1,6 +1,40 @@
 R E L E A S E   N O T E S
 =========================
 
+2.8.0
+	- Added new functions:
+		creo
+			set_creo_version - set the Creo version (4,5,6,7,etc) as a fix for Creo 7 for regeneration handling.
+		feature
+			list_selected - list the currently selected features in Creo.
+
+	- Modified functions:
+		drawing
+			create_general_view - fix bug to make scale optional (Issue #55)
+			list_view_details - add view_model and simp_rep to output (#62)
+		familytable
+			create_inst - fix help doc to show return value
+		feature
+			list_params - return parameter descriptions (Issue #57)
+			set_param - allow parameter description to be set (Issue #57)
+		file
+			create_symbol - make the replace_values argument optional (Creopyson Issue #25)
+			get_cur_material - fix bug returning an error when no material (Issue #53)
+			list - fix help doc to show return value
+			list_simp_reps - fix help doc to show return value
+			load_material_file - fix help doc to show return value
+			set_cur_material - fix help doc to show return value
+			                 - fix bug not returning files (Issue #53, Creopyson Issue #24)
+		interface
+			export_image - return error when trying to export an image of a drawing (Issue #49)
+		parameter
+			list - return parameter descriptions (Issue #57)
+			set - allow parameter description to be set (Issue #57)
+
+		all functions 
+			- list functions will return an empty list rather than nothing when there are no results
+			- all functions that return values will return an empty data object rather than nothing when there are no results
+
 2.7.0
 	- Added new functions:
 		file
