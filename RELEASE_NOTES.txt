@@ -9,16 +9,20 @@ R E L E A S E   N O T E S
 			list_selected - list the currently selected features in Creo.
 
 	- Modified functions:
+		creo
+			list_dirs - make dirname argument optional
+			list_files - make dirname argument optional
 		drawing
 			create_general_view - fix bug to make scale optional (Issue #55)
+			create_symbol - make the replace_values argument optional (Creopyson Issue #25)
 			list_view_details - add view_model and simp_rep to output (#62)
 		familytable
 			create_inst - fix help doc to show return value
 		feature
 			list_params - return parameter descriptions (Issue #57)
 			set_param - allow parameter description to be set (Issue #57)
+			user_select_csys - add file to output, remove feat_number from output
 		file
-			create_symbol - make the replace_values argument optional (Creopyson Issue #25)
 			get_cur_material - fix bug returning an error when no material (Issue #53)
 			list - fix help doc to show return value
 			list_simp_reps - fix help doc to show return value
