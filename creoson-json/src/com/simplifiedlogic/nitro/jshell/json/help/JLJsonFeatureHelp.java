@@ -1203,7 +1203,7 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.putAll(sampleFeatures.get("CS3"));
     	rec.put(PARAM_MODEL, "box.prt");
     	rec.put(OUTPUT_ID, 44);
-    	rec.put(OUTPUT_FEATNO, 3);
+//    	rec.put(OUTPUT_FEATNO, 3);
     	feats.add(rec);
 		ex.addOutput(OUTPUT_FEATLIST, feats);
     	template.addExample(ex);
@@ -1216,12 +1216,12 @@ public class JLJsonFeatureHelp extends JLJsonCommandHelp implements JLFeatureReq
     	rec.putAll(sampleFeatures.get("CS3"));
     	rec.put(PARAM_MODEL, "box.prt");
     	rec.put(OUTPUT_ID, 44);
-    	rec.put(OUTPUT_FEATNO, 3);
+//    	rec.put(OUTPUT_FEATNO, 3);
     	feats.add(rec);
     	rec = new OrderedMap<String, Object>();
     	rec.putAll(sampleFeatures.get("CS0"));
     	rec.put(OUTPUT_ID, 40);
-    	rec.put(OUTPUT_FEATNO, 1);
+//    	rec.put(OUTPUT_FEATNO, 1);
     	feats.add(rec);
 		ex.addOutput(OUTPUT_FEATLIST, feats);
     	template.addExample(ex);
