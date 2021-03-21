@@ -40,8 +40,7 @@
           "type" : "COORDINATE SYSTEM",
           "status" : "ACTIVE",
           "file" : "box.prt",
-          "feat_id" : 44,
-          "feat_number" : 3
+          "feat_id" : 44
         } ]
       }
     }
@@ -65,14 +64,12 @@
           "type" : "COORDINATE SYSTEM",
           "status" : "ACTIVE",
           "file" : "box.prt",
-          "feat_id" : 44,
-          "feat_number" : 3
+          "feat_id" : 44
         }, {
           "name" : "CS0",
           "type" : "COORDINATE SYSTEM",
           "status" : "ACTIVE",
-          "feat_id" : 40,
-          "feat_number" : 1
+          "feat_id" : 40
         } ]
       }
     }
