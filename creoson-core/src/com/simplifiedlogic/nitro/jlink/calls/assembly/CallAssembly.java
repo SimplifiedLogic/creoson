@@ -60,6 +60,16 @@ public class CallAssembly extends CallSolid {
 		return new CallSolid(solid);
 	}
 	
+	public void Explode() throws jxthrowable {
+		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Assembly,Explode", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getAssembly().Explode();
+	}
+	
+	public void UnExplode() throws jxthrowable {
+		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Assembly,Explode", 0, NitroConstants.DEBUG_JLINK_KEY);
+		getAssembly().UnExplode();
+	}
+
 	public Assembly getAssembly() {
 		return (Assembly)m;
 	}

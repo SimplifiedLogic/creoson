@@ -211,4 +211,10 @@ public interface IJLFile {
 	
 	public JLAccuracy getAccuracy(String filename, String sessionId) throws JLIException;
 	public JLAccuracy getAccuracy(String filename, AbstractJLISession sess) throws JLIException;
+
+	public void explode(String filename, String sessionId) throws JLIException;
+	public void explode(String filename, AbstractJLISession sess) throws JLIException;
+
+	public void unExplode(String filename, String sessionId) throws JLIException;
+	public void unExplode(String filename, AbstractJLISession sess) throws JLIException;
 }

@@ -68,6 +68,8 @@ public interface JLFileRequestParams {
 	public static final String FUNC_LOAD_MATL_FILE			= "load_material_file";
 	public static final String FUNC_DELETE_MATERIAL			= "delete_material";
 	public static final String FUNC_GET_ACCURACY			= "get_accuracy";
+    public static final String FUNC_EXPLODE         = "explode";
+    public static final String FUNC_UNEXPLODE       = "unexplode";
 	
 	// request fields
     public static final String PARAM_MODEL       = "file";

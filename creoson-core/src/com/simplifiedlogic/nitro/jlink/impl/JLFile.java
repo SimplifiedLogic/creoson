@@ -3324,6 +3324,112 @@ public class JLFile implements IJLFile {
     	}
     }
 
+	@Override
+	public void explode(String asmName, String sessionId) throws JLIException {
+		JLISession sess = JLISession.getSession(sessionId);
+
+		explode(asmName, sess);
+	}
+
+	@Override
+	public void explode(String asmName, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("File.explode: " + asmName, NitroConstants.DEBUG_KEY);
+
+		if (sess==null)
+			throw new JLIException("No session found");
+		
+		if (asmName == null || asmName.trim().length()==0)
+			throw new JLIException("No ASM name parameter given");
+		
+		long start = 0;
+		if (NitroConstants.TIME_TASKS)
+			start = System.currentTimeMillis();
+
+		try {
+			JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+
+			if (session == null)
+				return;
+			
+			CallModel assemblyModel = JlinkUtils.getFile(session, asmName, false);
+			System.out.println(assemblyModel.getType());
+			if (assemblyModel==null) {
+				if (asmName==null)
+					throw new JLIException("No active assembly to explode");
+				else
+					throw new JLIException("Assembly " + asmName + " was not open");
+			}
+			if (!(assemblyModel instanceof CallAssembly))
+				throw new JLIException("The model " + (asmName==null?assemblyModel.getFileName():asmName) + " is not an assembly");
+			
+			CallAssembly assembly = (CallAssembly)assemblyModel;
+
+			assembly.Explode();
+		}
+		catch (jxthrowable e) {
+			throw JlinkUtils.createException(e);
+		}
+		finally {
+			if (NitroConstants.TIME_TASKS) {
+				DebugLogging.sendTimerMessage("view.explode,"+asmName, start, NitroConstants.DEBUG_KEY);
+			}
+		}
+	}
+
+	// @Override
+	public void unExplode(String asmName, String sessionId) throws JLIException {
+		JLISession sess = JLISession.getSession(sessionId);
+
+		unExplode(asmName, sess);
+	}
+
+	// @Override
+	public void unExplode(String asmName, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("File.unexplode: " + asmName, NitroConstants.DEBUG_KEY);
+
+		if (sess==null)
+			throw new JLIException("No session found");
+		
+		if (asmName == null || asmName.trim().length()==0)
+			throw new JLIException("No ASM name parameter given");
+		
+		long start = 0;
+		if (NitroConstants.TIME_TASKS)
+			start = System.currentTimeMillis();
+
+		try {
+			JLGlobal.loadLibrary();
+
+			CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+
+			if (session == null)
+				return;
+			
+			CallModel assemblyModel = JlinkUtils.getFile(session, asmName, false);
+			if (assemblyModel==null) {
+				if (asmName==null)
+					throw new JLIException("No active assembly to explode");
+				else
+					throw new JLIException("Assembly " + asmName + " was not open");
+			}
+			if (!(assemblyModel instanceof CallAssembly))
+				throw new JLIException("The model " + (asmName==null?assemblyModel.getFileName():asmName) + " is not an assembly");
+			
+			CallAssembly assembly = (CallAssembly)assemblyModel;
+			assembly.UnExplode();
+		}
+		catch (jxthrowable e) {
+			throw JlinkUtils.createException(e);
+		}
+		finally {
+			if (NitroConstants.TIME_TASKS) {
+				DebugLogging.sendTimerMessage("view.explode,"+asmName, start, NitroConstants.DEBUG_KEY);
+			}
+		}
+	}
+
     /**
      * Walk the hierarchy of an assembly to find a list of sub-components to assemble a new component to
      * 
