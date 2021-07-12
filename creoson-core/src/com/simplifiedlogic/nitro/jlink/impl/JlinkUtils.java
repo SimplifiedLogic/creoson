@@ -110,6 +110,7 @@ public class JlinkUtils {
     public static final int FILENAME_LIMIT 	= 31;
     
     public static final String CREO7_AUTH = "NTQzNWQyMzM1NjNmYmQ3YQ==";
+    public static final String CREO8_AUTH = "MWU3NTk2ZWFhYzYxZGM4Mw==";
 
     /**
      * Get a model that is open in Creo
@@ -1142,6 +1143,8 @@ public class JlinkUtils {
     	String encoded = null;
     	if (version==7)
     		encoded = CREO7_AUTH;
+    	else if (version==8)
+    		encoded = CREO8_AUTH;
     	if (encoded==null)
     		return;
         String precode = (String)DataUtils.decodeBase64(encoded);
