@@ -36,17 +36,19 @@ public interface IJLBom {
 	public static final boolean TRANSFORMASTABLE_NO = false;
 	public static final boolean EXCLUDEINACTIVE_YES = true;
 	public static final boolean EXCLUDEINACTIVE_NO = false;
+	public static final boolean INCSIMPREP_YES = true;
+	public static final boolean INCSIMPREP_NO = false;
 	
 	public GetPathsOutput getPaths(String modelname, boolean skeleton,
 			boolean paths, boolean toplevel, boolean incTransform, 
 	        boolean transformAsTable, 
-			boolean excludeInactive, 
+			boolean excludeInactive, boolean incSimpRep, 
 			String sessionId) throws JLIException;
 
 	public GetPathsOutput getPaths(String modelname, boolean skeleton,
 			boolean paths, boolean toplevel, boolean incTransform, 
 	        boolean transformAsTable, 
-			boolean excludeInactive, 
+			boolean excludeInactive, boolean incSimpRep,  
 			AbstractJLISession sess) throws JLIException;
 
 }

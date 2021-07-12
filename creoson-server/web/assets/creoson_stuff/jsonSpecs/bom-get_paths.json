@@ -34,6 +34,11 @@
       "type" : "boolean",
       "description" : "Whether to exclude components which do not have an ACTIVE status",
       "default" : "false"
+    }, {
+      "name" : "get_simpreps",
+      "type" : "boolean",
+      "description" : "Whether to return the Simplified Rep data for each component",
+      "default" : "false"
     } ],
     "response" : [ {
       "name" : "file",

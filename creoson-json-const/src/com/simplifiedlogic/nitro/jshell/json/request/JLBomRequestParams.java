@@ -38,5 +38,6 @@ public interface JLBomRequestParams {
     public static final String PARAM_PATHS				= "paths";
     public static final String PARAM_TRANSFORMS			= "get_transforms";
     public static final String PARAM_EXCLUDE_INACTIVE	= "exclude_inactive";
+    public static final String PARAM_SIMPREP			= "get_simpreps";
 
 }

@@ -62,11 +62,12 @@ public class JLBom implements IJLBom {
 	        boolean incTransform,
 	        boolean transformAsTable, 
 	        boolean excludeInactive,
+	        boolean incSimpRep, 
 	        String sessionId) throws JLIException {
 
         JLISession sess = JLISession.getSession(sessionId);
         
-        return getPaths(modelname, skeleton, paths, toplevel, incTransform, transformAsTable, excludeInactive, sess);
+        return getPaths(modelname, skeleton, paths, toplevel, incTransform, transformAsTable, excludeInactive, incSimpRep, sess);
     }
     	
     /* (non-Javadoc)
@@ -80,6 +81,7 @@ public class JLBom implements IJLBom {
 	        boolean incTransform,
 	        boolean transformAsTable, 
 	        boolean excludeInactive,
+	        boolean incSimpRep, 
 	        AbstractJLISession sess) throws JLIException {
     	
 		DebugLogging.sendDebugMessage("bom.get_paths: " + modelname, NitroConstants.DEBUG_KEY);
@@ -108,11 +110,14 @@ public class JLBom implements IJLBom {
 	            generic="";
 	        out.setGeneric(generic);
 
-	        SimpRepData simpRep = JlinkUtils.getSimpRepInfo(solid);
-	        if (simpRep!=null && !simpRep.isDefaultExclude() && simpRep.numPaths()==0)
-	        	simpRep = null;
-	        if (simpRep!=null)
-	        	out.setHasSimpRep(true);
+	        SimpRepData simpRep = null;
+	        if (incSimpRep) {
+		        simpRep = JlinkUtils.getSimpRepInfo(solid);
+		        if (simpRep!=null && !simpRep.isDefaultExclude() && simpRep.numPaths()==0)
+		        	simpRep = null;
+		        if (simpRep!=null)
+		        	out.setHasSimpRep(true);
+	        }
 	        
 	        ArrayList<Integer> curPath = new ArrayList<Integer>();
 	        BomChild dummy = new BomChild();

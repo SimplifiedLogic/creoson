@@ -68,8 +68,9 @@ public class JLJsonBomHandler extends JLJsonCommandHandler implements JLBomReque
         boolean toplevel = checkFlagParameter(input, PARAM_TOPLEVEL, false, false);
         boolean incTransform = checkFlagParameter(input, PARAM_TRANSFORMS, false, false);
         boolean excludeInactive = checkFlagParameter(input, PARAM_EXCLUDE_INACTIVE, false, false);
+        boolean incSimpRep = checkFlagParameter(input, PARAM_SIMPREP, false, false);
 
-        GetPathsOutput result = bomHandler.getPaths(modelname, skeleton, paths, toplevel, incTransform, true, excludeInactive, sessionId);
+        GetPathsOutput result = bomHandler.getPaths(modelname, skeleton, paths, toplevel, incTransform, true, excludeInactive, incSimpRep, sessionId);
 		
 		Hashtable<String, Object> out = new Hashtable<String, Object>();
         if (result!=null) {

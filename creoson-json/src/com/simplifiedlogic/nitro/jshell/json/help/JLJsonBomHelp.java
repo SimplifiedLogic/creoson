@@ -105,6 +105,11 @@ public class JLJsonBomHelp extends JLJsonCommandHelp implements JLBomRequestPara
     	arg.setDefaultValue("false");
     	spec.addArgument(arg);
 
+    	arg = new FunctionArgument(PARAM_SIMPREP, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to return the Simplified Rep data for each component");
+    	arg.setDefaultValue("false");
+    	spec.addArgument(arg);
+
     	ret = new FunctionReturn(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	ret.setDescription("Assembly file name");
     	spec.addReturn(ret);
