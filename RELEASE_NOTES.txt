@@ -1,6 +1,13 @@
 R E L E A S E   N O T E S
 =========================
 
+2.8.1
+	- Modified functions:
+		bom
+			get_paths - add get_simpreps input parameter, which controls whether Simplified Rep info is returned.
+		file
+			regenerate - add Creo 8 support.
+
 2.8.0
 	- Added new functions:
 		creo
