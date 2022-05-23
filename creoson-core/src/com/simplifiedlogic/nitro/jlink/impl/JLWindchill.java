@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitBadContext;
+import com.ptc.pfc.pfcExceptions.XToolkitCheckoutConflict;
 import com.ptc.pfc.pfcExceptions.XToolkitFound;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
 import com.simplifiedlogic.nitro.jlink.calls.seq.CallStringSeq;
@@ -570,6 +571,9 @@ public class JLWindchill implements IJLWindchill {
 	    	catch (XToolkitFound e) {
 	    		// ignore "found" error
 	    	}
+			catch (XToolkitCheckoutConflict e) {
+				throw new JLIException("Windchill Checkout Conflict: "+e.GetConflictDescription());
+			}
 	    	finally {
 		    	if (activeWorkspace!=null && !activeWorkspace.equals(workspace))
 		    		server.setActiveWorkspace(activeWorkspace);
@@ -630,7 +634,12 @@ public class JLWindchill implements IJLWindchill {
     		if (!workspaceExists(server, workspace))
     			throw new JLIException("Workspace '" + workspace + "' does not exist on the active server");
 
-	        server.deleteWorkspace(workspace);
+    		try {
+    			server.deleteWorkspace(workspace);
+    		}
+			catch (XToolkitCheckoutConflict e) {
+				throw new JLIException("Windchill Checkout Conflict: "+e.GetConflictDescription());
+			}
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
