@@ -992,7 +992,7 @@ public class JlinkUtils {
      * 
      * <p>This workaround is needed for Creo 2 (WF5) and higher.
      * 
-     * @param session The Creo session
+     * @param jlSession The JShell session
      * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back.
      * @throws jxthrowable
      */
@@ -1009,7 +1009,7 @@ public class JlinkUtils {
      * the config option to "resolve_mode".
      * 
      * <p>This workaround is needed for Creo 2 (WF5) and higher
-     * @param session The Creo session
+     * @param jlSession The JShell session
      * @param debugKey If not null, a debug log message is sent with this debug key
      * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back.
      * @throws jxthrowable
@@ -1174,7 +1174,7 @@ public class JlinkUtils {
 
     /**
      * Regenerate a Creo object
-     * @param session The Creo session
+     * @param jlSession The JShell session
      * @param regener The handler class which performs the regeneration
      * @param setConfig True to update the "regen_failure_handling" config option
      * @throws jxthrowable
@@ -1187,7 +1187,7 @@ public class JlinkUtils {
      * Regenerate a Creo object.  If the regeneration fails with a -56 
      * ("Regenerate Again") error, the regeneration will be tried again.
      * 
-     * @param session The Creo session
+     * @param jlSession The JShell session
      * @param regener The handler class which performs the regeneration
      * @param setConfig True to update the "regen_failure_handling" config option
      * @param debugKey If not null, a debug log message is sent with this debug key
@@ -1904,6 +1904,20 @@ public class JlinkUtils {
     		else
     			throw new JLIException("File name contains an invalid character: "+c);
     	}
-
+    }
+    
+    /**
+     * Checks whether the current Proe version is greater than or equal to a minimum version.
+     * @see JLFile.setProeVersion
+     * @param minVersion The minimum Creo version required
+     * @param jlSession The JShell session
+     * @throws JLIException
+     */
+    public static void checkProeVersion(int minVersion, AbstractJLISession jlSession) throws JLIException {
+    	if (minVersion==0)
+    		return;
+    	int version = jlSession.getProeVersion();
+    	if (version<minVersion)
+    		throw new JLIException("You must have at least Creo "+minVersion+" to run this function.");
     }
 }

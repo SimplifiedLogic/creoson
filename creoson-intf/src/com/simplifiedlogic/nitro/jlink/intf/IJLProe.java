@@ -80,4 +80,7 @@ public interface IJLProe {
 	
 	public void setProeVersion(int version, String sessionId) throws JLIException;
 	public void setProeVersion(int version, AbstractJLISession sess) throws JLIException;
+
+	public int getProeVersion(String sessionId) throws JLIException;
+	public int getProeVersion(AbstractJLISession sess) throws JLIException;
 }

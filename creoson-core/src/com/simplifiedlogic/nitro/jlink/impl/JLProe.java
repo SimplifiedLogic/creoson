@@ -742,4 +742,26 @@ public class JLProe implements IJLProe {
 
         sess.setProeVersion(version);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#getProeVersion(java.lang.String)
+	 */
+	public int getProeVersion(String sessionId) throws JLIException {
+
+		JLISession sess = JLISession.getSession(sessionId);
+        
+		return getProeVersion(sess);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLProe#getProeVersion(com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+	public int getProeVersion(AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("proe.set_creo_version", NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+        return sess.getProeVersion();
+	}
 }
