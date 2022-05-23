@@ -334,6 +334,12 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 				if (tmp!=null)
 					out.put(OUTPUT_COORD_SYS_INERTIA_TENSOR, tmp);
 			}
+
+			if (result.getGravityCenter()!=null) {
+				Hashtable<String, Object> tmp = writePoint(result.getGravityCenter());
+				if (tmp!=null)
+					out.put(OUTPUT_CTR_GRAV, tmp);
+			}
         }
     	return out;
 	}

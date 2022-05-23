@@ -32,6 +32,7 @@ public class MasspropsData {
 	private JLInertia centerGravityInertiaTensor;
 	private JLInertia coordSysInertia;
 	private JLInertia coordSysInertiaTensor;
+	private JLPoint gravityCenter;
 
 	/**
 	 * @return Model volume
@@ -129,6 +130,20 @@ public class MasspropsData {
 	 */
 	public void setCoordSysInertiaTensor(JLInertia coordSysInertiaTensor) {
 		this.coordSysInertiaTensor = coordSysInertiaTensor;
+	}
+
+	/**
+	 * @return Center of Gravity
+	 */
+	public JLPoint getGravityCenter() {
+		return gravityCenter;
+	}
+
+	/**
+	 * @param gravityCenter Center of Gravity
+	 */
+	public void setGravityCenter(JLPoint gravityCenter) {
+		this.gravityCenter = gravityCenter;
 	}
 
 }

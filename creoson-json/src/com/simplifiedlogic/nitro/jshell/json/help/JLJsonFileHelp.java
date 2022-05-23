@@ -675,6 +675,10 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ret.setDescription("Model's Inertia Tensor with respect to the coordinate frame.");
     	spec.addReturn(ret);
 
+    	ret = new FunctionReturn(OUTPUT_CTR_GRAV, FunctionSpec.TYPE_OBJECT, JLJsonFileHelp.OBJ_POINT);
+    	ret.setDescription("Model's center of gravity");
+    	spec.addReturn(ret);
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
@@ -701,6 +705,9 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     					makePoint(0, 2.654737361881583, 0), 
     					makePoint(0, 0, 0.003650664136195683) 
     					));
+    	ex.addOutput(OUTPUT_CTR_GRAV, 
+    			makePoint(0.0, 4.602518796279497, 0.0));
+
     	template.addExample(ex);
 
         return template;

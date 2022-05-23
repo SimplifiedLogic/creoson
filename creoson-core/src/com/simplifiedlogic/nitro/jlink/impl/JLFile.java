@@ -42,6 +42,7 @@ import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcUnits.UnitDimensionConversion;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
+import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
 import com.simplifiedlogic.nitro.jlink.calls.componentfeat.CallComponentConstraint;
 import com.simplifiedlogic.nitro.jlink.calls.componentfeat.CallComponentConstraints;
@@ -84,6 +85,7 @@ import com.simplifiedlogic.nitro.jlink.data.JLAccuracy;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraint;
 import com.simplifiedlogic.nitro.jlink.data.JLConstraintInput;
 import com.simplifiedlogic.nitro.jlink.data.JLMatrix;
+import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.JLTransform;
 import com.simplifiedlogic.nitro.jlink.data.ListMaterialResults;
 import com.simplifiedlogic.nitro.jlink.data.MasspropsData;
@@ -1449,6 +1451,9 @@ public class JLFile implements IJLFile {
 	        	ret.setCoordSysInertiaTensor(JLMatrixMaker.writeInertia(inertia));
 	        }
 	        
+	        CallPoint3D cgrav = prop.getGravityCenter();
+            ret.setGravityCenter(new JLPoint(cgrav.get(0), cgrav.get(1), cgrav.get(2)));
+
 	        return ret;
     	}
     	catch (jxthrowable e) {
@@ -3312,7 +3317,6 @@ public class JLFile implements IJLFile {
 	        result.setAccuracy(d.doubleValue());
 	        result.setRelative(relative);
 	        return result;
-	        
     	}
     	catch (jxthrowable e) {
     		throw JlinkUtils.createException(e);
