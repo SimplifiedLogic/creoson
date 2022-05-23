@@ -105,12 +105,13 @@ public class JLJsonInterfaceHelp extends JLJsonCommandHelp implements JLInterfac
 
     	arg = new FunctionArgument(PARAM_HEIGHT, FunctionSpec.TYPE_DOUBLE);
     	arg.setDescription("Image height");
-    	arg.setDefaultValue("7.5");
+    	arg.setDefaultValue("10.0");
+    	arg.setValidValues(new String[] {"100", "200", "300", "400", "500", "600"});
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_WIDTH, FunctionSpec.TYPE_DOUBLE);
     	arg.setDescription("Image width");
-    	arg.setDefaultValue("10.0");
+    	arg.setDefaultValue("7.5");
     	spec.addArgument(arg);
 
     	arg = new FunctionArgument(PARAM_DPI, FunctionSpec.TYPE_INTEGER);

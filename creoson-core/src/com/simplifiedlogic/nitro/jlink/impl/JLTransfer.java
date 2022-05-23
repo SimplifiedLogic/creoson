@@ -1456,8 +1456,8 @@ public class JLTransfer implements IJLTransfer {
 	        if (win==null)
 	            throw new JLIException("Could not find window to export");
 	        
-	        double rasterHeight = (height==null?7.5:height.doubleValue());
-	        double rasterWidth = (width==null?10.0:width.doubleValue());
+	        double rasterHeight = (height==null?10.0:height.doubleValue());
+	        double rasterWidth = (width==null?7.5:width.doubleValue());
 	        DotsPerInch dpiO;
 	        RasterDepth depthO;
 	        if (dpi!=null) {
@@ -1466,6 +1466,8 @@ public class JLTransfer implements IJLTransfer {
 		    		case 200: dpiO = DotsPerInch.RASTERDPI_200; break;
 		    		case 300: dpiO = DotsPerInch.RASTERDPI_300; break;
 		    		case 400: dpiO = DotsPerInch.RASTERDPI_400; break;
+		    		case 500: dpiO = DotsPerInch.RASTERDPI_500; break;
+		    		case 600: dpiO = DotsPerInch.RASTERDPI_600; break;
 	        		default:
 	                    throw new JLIException("Invalid value for dpi parameter: " + dpi);
 	        	}
@@ -1487,19 +1489,19 @@ public class JLTransfer implements IJLTransfer {
 	        String ext;
 	        switch (type) {
 	            case TRAN_BMP: 
-	                rxi = CallRasterImageExportInstructions.createBitmapExport(rasterHeight, rasterWidth);
+	                rxi = CallRasterImageExportInstructions.createBitmapExport(rasterWidth, rasterHeight);
 	                ext = EXT_BMP;
 	                break;
 	            case TRAN_EPS: 
-	                rxi = CallRasterImageExportInstructions.createEPSExport(rasterHeight, rasterWidth); 
+	                rxi = CallRasterImageExportInstructions.createEPSExport(rasterWidth, rasterHeight); 
 	                ext = EXT_EPS;
 	                break;
 	            case TRAN_JPEG: 
-	                rxi = CallRasterImageExportInstructions.createJPEGExport(rasterHeight, rasterWidth); 
+	                rxi = CallRasterImageExportInstructions.createJPEGExport(rasterWidth, rasterHeight); 
 	                ext = EXT_JPEG;
 	                break;
 	            case TRAN_TIFF: 
-	                rxi = CallRasterImageExportInstructions.createTIFFExport(rasterHeight, rasterWidth); 
+	                rxi = CallRasterImageExportInstructions.createTIFFExport(rasterWidth, rasterHeight); 
 	                ext = EXT_TIFF;
 	                break;
 	            default:
