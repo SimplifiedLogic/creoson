@@ -466,7 +466,7 @@ public class JLJsonCreoHelp extends JLJsonCommandHelp implements JLCreoRequestPa
     	spec.setFunctionDescription("Set the version of Creo you are running");
     	spec.addFootnote("This function only needs to be called once per creoson session.");
     	spec.addFootnote("This function must be called if you are doing certain functions in Creo 7 or later due to deprecated config options.");
-    	spec.addFootnote("At this time this function only supports 7 and 8.");
+    	spec.addFootnote("At this time this function only supports 7, 8 and 9.");
     	spec.addFootnote("This is needed for functions: "+
     			JLFamilyTableRequestParams.COMMAND+":"+JLFamilyTableRequestParams.FUNC_REPLACE+", "+
     			JLFileRequestParams.COMMAND+":"+JLFileRequestParams.FUNC_ASSEMBLE+", "+

@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2022 Simplified Logic, Inc
+ * Copyright 2000-2023 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -580,52 +580,53 @@ public class JLParameter implements IJLParameter {
 			toName = paramName;
 		
 		CallParameter to_param = m.getParam(toName);
+		CallParamValue to_value = JlinkUtils.getParamValue(to_param);
+		CallParamValue param_value = JlinkUtils.getParamValue(param);
         if (to_param!=null) {
-            if (param.getValue().getParamValueType() != to_param.getValue().getParamValueType())
+            if (param_value.getParamValueType() != to_value.getParamValueType())
                 throw new JLIException("Destination parameter exists but is a different type than the source parameter");
         }
 
-        int type = param.getValue().getParamValueType();
+        int type = param_value.getParamValueType();
         if (to_param!=null) {
         	// update an existing parameter
-        	CallParamValue pval = to_param.getValue();
             switch (type) {
                 case ParamValueType._PARAM_STRING:
-                    pval.setStringValue(param.getValue().getStringValue());
+                    to_value.setStringValue(param_value.getStringValue());
                     break;
                 case ParamValueType._PARAM_DOUBLE:
-                    pval.setDoubleValue(param.getValue().getDoubleValue());
+                	to_value.setDoubleValue(param_value.getDoubleValue());
                     break;
                 case ParamValueType._PARAM_INTEGER:
-                    pval.setIntValue(param.getValue().getIntValue());
+                	to_value.setIntValue(param_value.getIntValue());
                     break;
                 case ParamValueType._PARAM_BOOLEAN:
-                    pval.setBoolValue(param.getValue().getBoolValue());
+                	to_value.setBoolValue(param_value.getBoolValue());
                     break;
                 case ParamValueType._PARAM_NOTE:
-                    pval.setNoteId(param.getValue().getNoteId());
+                	to_value.setNoteId(param_value.getNoteId());
                     break;
             }
-            to_param.setValue(pval);
+            to_param.setValue(to_value);
         }        
         else {
         	// create a new parameter
         	CallParamValue pval = null;
             switch (type) {
                 case ParamValueType._PARAM_STRING:
-                	pval = CallParamValue.createStringParamValue(param.getValue().getStringValue());
+                	pval = CallParamValue.createStringParamValue(param_value.getStringValue());
                     break;
                 case ParamValueType._PARAM_DOUBLE:
-                	pval = CallParamValue.createDoubleParamValue(param.getValue().getDoubleValue());
+                	pval = CallParamValue.createDoubleParamValue(param_value.getDoubleValue());
                     break;
                 case ParamValueType._PARAM_INTEGER:
-                	pval = CallParamValue.createIntParamValue(param.getValue().getIntValue());
+                	pval = CallParamValue.createIntParamValue(param_value.getIntValue());
                     break;
                 case ParamValueType._PARAM_BOOLEAN:
-                	pval = CallParamValue.createBoolParamValue(param.getValue().getBoolValue());
+                	pval = CallParamValue.createBoolParamValue(param_value.getBoolValue());
                     break;
                 case ParamValueType._PARAM_NOTE:
-                    pval = CallParamValue.createNoteParamValue(param.getValue().getNoteId());
+                    pval = CallParamValue.createNoteParamValue(param_value.getNoteId());
                     break;
             }
             
@@ -680,7 +681,7 @@ public class JLParameter implements IJLParameter {
         DebugLogging.sendTimerMessage("jlink.GetParam," + paramName, start, NitroConstants.DEBUG_SET_PARAM_KEY);
         if (param!=null) {
         	start = System.currentTimeMillis();
-        	CallParamValue pval = param.getValue();
+        	CallParamValue pval = JlinkUtils.getParamValue(param);
 	        DebugLogging.sendTimerMessage("jlink.GetValue", start, NitroConstants.DEBUG_SET_PARAM_KEY);
 
 	        start = System.currentTimeMillis();

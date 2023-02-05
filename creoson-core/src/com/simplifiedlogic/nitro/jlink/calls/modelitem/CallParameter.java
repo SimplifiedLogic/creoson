@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2022 Simplified Logic, Inc
+ * Copyright 2000-2023 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -21,8 +21,9 @@ package com.simplifiedlogic.nitro.jlink.calls.modelitem;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcModelItem.ParamValue;
 import com.ptc.pfc.pfcModelItem.Parameter;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
+import com.simplifiedlogic.nitro.jlink.calls.units.CallUnit;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcModelItem.Parameter
@@ -46,11 +47,26 @@ public class CallParameter {
 		return new CallParamValue(pval);
 	}
 	
+	public CallParamValue getScaledValue() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Parameter,GetScaledValue", 0, NitroConstants.DEBUG_JLINK_KEY);
+		ParamValue pval = param.GetScaledValue();
+		if (pval==null)
+			return null;
+		return new CallParamValue(pval);
+	}
+	
 	public void setValue(CallParamValue pval) throws jxthrowable {
 		if (pval==null) 
 			return;
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Parameter,SetValue", 0, NitroConstants.DEBUG_JLINK_KEY);
 		param.SetValue(pval.getValue());
+	}
+	
+	public void setScaledValue(CallParamValue pval, CallUnit unit) throws jxthrowable {
+		if (pval==null) 
+			return;
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Parameter,SetScaledValue", 0, NitroConstants.DEBUG_JLINK_KEY);
+		param.SetScaledValue(pval.getValue(), unit!=null ? unit.getUnit() : null);
 	}
 	
 	public String getName() throws jxthrowable {

@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2022 Simplified Logic, Inc
+ * Copyright 2000-2023 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -46,6 +46,12 @@ public class CallRegenInstructions {
 			return null;
 		return new CallRegenInstructions(instr);
 	}
+
+	//  creo 7.0.2+  only
+//	public void setResolveModeRegen(boolean value) throws jxthrowable {
+//        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("RegenInstructions,SetResolveModeRegen", 0, NitroConstants.DEBUG_JLINK_KEY);
+//        instr.SetResolveModeRegen(value);
+//	}
 
 	public RegenInstructions getInstr() {
 		return instr;

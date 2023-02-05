@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2022 Simplified Logic, Inc
+ * Copyright 2000-2023 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -145,7 +145,7 @@ public class JLDimension implements IJLDimension {
 	            if (param==null) {
 	                throw new JLIException("Cannot modify dimension " + dimname + ", no such parameter " + pname);
 	            }
-	            pval = param.getValue();
+	            pval = JlinkUtils.getParamValue(param);
 	            JlinkUtils.setParamValue(m, pval, value, encoded);
 	            param.setValue(pval);
 	        }
@@ -357,7 +357,7 @@ public class JLDimension implements IJLDimension {
 	            if (param==null) {
 	                throw new JLIException("Cannot modify dimension " + dimname + ", no such parameter " + pname);
 	            }
-	            to_pval = param.getValue();
+	            to_pval = JlinkUtils.getParamValue(param);
 	            if (from_type != to_type)
 	                throw new JLIException("Destination dimension exists but is a different type than the source dimension");
 	            JlinkUtils.setParamValue(to_pval, from_pval);

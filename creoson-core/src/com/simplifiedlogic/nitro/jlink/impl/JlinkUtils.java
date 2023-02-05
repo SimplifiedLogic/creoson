@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2022 Simplified Logic, Inc
+ * Copyright 2000-2023 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -19,6 +19,7 @@
 package com.simplifiedlogic.nitro.jlink.impl;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ import com.ptc.pfc.pfcExceptions.XToolkitError;
 import com.ptc.pfc.pfcExceptions.XToolkitInvalidName;
 import com.ptc.pfc.pfcExceptions.XToolkitNotExist;
 import com.ptc.pfc.pfcExceptions.XToolkitNotFound;
+import com.ptc.pfc.pfcExceptions.XToolkitObsoleteFunc;
 import com.ptc.pfc.pfcExceptions.XUnimplemented;
 import com.ptc.pfc.pfcExceptions.XUnknownModelExtension;
 import com.ptc.pfc.pfcFeature.FeatureStatus;
@@ -45,6 +47,7 @@ import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
 import com.ptc.pfc.pfcSimpRep.SimpRepActionType;
 import com.ptc.pfc.pfcSimpRep.SubstType;
+import com.ptc.pfc.pfcSolid.RegenInstructions;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
@@ -111,6 +114,9 @@ public class JlinkUtils {
     
     public static final String CREO7_AUTH = "NTQzNWQyMzM1NjNmYmQ3YQ==";
     public static final String CREO8_AUTH = "MWU3NTk2ZWFhYzYxZGM4Mw==";
+    public static final String CREO9_AUTH = "N2VhNTdhM2Y5ZTZjMGNkMA==";
+
+    private static Method methodSetResolveModeRegen = null; 
 
     /**
      * Get a model that is open in Creo
@@ -939,7 +945,7 @@ public class JlinkUtils {
                 break;
         }
     }
-    
+
     /**
      * Retrieve a feature from a model given a component path
      * @param session The Creo session
@@ -993,7 +999,8 @@ public class JlinkUtils {
      * <p>This workaround is needed for Creo 2 (WF5) and higher.
      * 
      * @param jlSession The JShell session
-     * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back.
+     * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back;
+     * if it was not already set, then it needs to be unset.
      * @throws jxthrowable
      */
     public static boolean prefixResolveModeFix(CallSession session, AbstractJLISession jlSession) throws jxthrowable {
@@ -1011,13 +1018,14 @@ public class JlinkUtils {
      * <p>This workaround is needed for Creo 2 (WF5) and higher
      * @param jlSession The JShell session
      * @param debugKey If not null, a debug log message is sent with this debug key
-     * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back.
+     * @return True if the option was already set to "resolve_mode" before calling this method.  Needed when it comes to setting it back;
+     * if it was not already set, then it needs to be unset.
      * @throws jxthrowable
      */
     public static boolean prefixResolveModeFix(CallSession session, AbstractJLISession jlSession, String debugKey) throws jxthrowable {
 //    	if (detectResolveModeOption())
 //    		return true; // return true so that we don't try to turn resolve-mode off
-        boolean resolveMode = false;
+        boolean resolveModeWasSet = false;
         // required for WF5 and higher
         try {
         	long start = System.currentTimeMillis();
@@ -1027,9 +1035,9 @@ public class JlinkUtils {
             	DebugLogging.sendTimerMessage("jlink.GetConfigOption,"+OPTION_REGEN_HNDLG, start, debugKey);
             
             if (value!=null && value.equalsIgnoreCase(VALUE_RESOLVE))
-                resolveMode = true;
+                resolveModeWasSet = true;
             
-            if (!resolveMode) {
+            if (!resolveModeWasSet) {
             	start = System.currentTimeMillis();
                 session.setConfigOption(OPTION_REGEN_HNDLG, VALUE_RESOLVE);
                 if (debugKey!=null)
@@ -1037,9 +1045,11 @@ public class JlinkUtils {
             }
         }
         catch (Exception e) {
+        	System.err.println("Error occurred in regen prefix: "+e.getMessage());
+        	e.printStackTrace();
             // ignore exceptions, which occur with that option in WF4
         }
-        return resolveMode;
+        return resolveModeWasSet;
     }
     
     /**
@@ -1085,6 +1095,8 @@ public class JlinkUtils {
             }
         }
         catch (Exception e) {
+        	System.err.println("Error occurred in regen postfix: "+e.getMessage());
+        	e.printStackTrace();
             // ignore exceptions, which occur with that option in WF4
         }
     }
@@ -1106,17 +1118,16 @@ public class JlinkUtils {
     		return false;
     	}
     }
-    
+*/
     public static boolean setResolveModeOption(CallRegenInstructions reginst, boolean value) {
     	if (reginst==null)
     		return false;
     	try {
-    		System.out.println("---- Trying to set Resolve Mode Option");
-	    	Method meth = RegenInstructions.class.getMethod("SetResolveModeRegen", boolean.class);
-//	    	System.out.println("meth: "+meth);
-	    	if (meth!=null) {
-	    		meth.invoke(reginst.getInstr(), value);
-	    		System.out.println("---- Successfully set option");
+    		if (methodSetResolveModeRegen==null)
+    			methodSetResolveModeRegen = RegenInstructions.class.getMethod("SetResolveModeRegen", boolean.class);
+	    	if (methodSetResolveModeRegen!=null) {
+	            if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("RegenInstructions,SetResolveModeRegen", 0, NitroConstants.DEBUG_JLINK_KEY);
+	    		methodSetResolveModeRegen.invoke(reginst.getInstr(), value);
 		    	return true;
 	    	}
 	    	else
@@ -1131,7 +1142,7 @@ public class JlinkUtils {
     		return false;
     	}
     }
-*/
+
     private static final String OPTION_DEPRECATED_CONFIG = "allow_deprecated_config";
     
     public static void setAuthCode(CallSession session, AbstractJLISession jlSession) throws jxthrowable {
@@ -1145,6 +1156,8 @@ public class JlinkUtils {
     		encoded = CREO7_AUTH;
     	else if (version==8)
     		encoded = CREO8_AUTH;
+    	else if (version==9)
+    		encoded = CREO9_AUTH;
     	if (encoded==null)
     		return;
         String precode = (String)DataUtils.decodeBase64(encoded);
@@ -1196,16 +1209,15 @@ public class JlinkUtils {
     public static void regenerate(CallSession session, AbstractJLISession jlSession, Regenerator regener, boolean setConfig, String debugKey) throws jxthrowable {
         if (session==null)
             setConfig = false;
-        boolean resolveMode = false;
+        boolean resolveModeWasSet = false;
         long start;
-        if (setConfig) {
-        	// why comment this out?  because it is needless overhead when not in Creo 7.0.2 or higher, and 
-        	// since it won't work with Feature operations then we might as well stick with the old method.
-//        	if (!setResolveModeOption(regener.getInstructions(), false))
-        		resolveMode = prefixResolveModeFix(session, jlSession, debugKey);
+        if (jlSession.getProeVersion() >= 9)
+        	setResolveModeOption(regener.getInstructions(), true);
+        else {
+	        if (setConfig) {
+	       		resolveModeWasSet = prefixResolveModeFix(session, jlSession, debugKey);
+	        }
         }
-//        else 
-//        	setResolveModeOption(regener.getInstructions(), false);
         
         try {
         	start = System.currentTimeMillis();
@@ -1229,7 +1241,7 @@ public class JlinkUtils {
         }
         finally {
             if (setConfig) {
-            	if (resolveMode)
+            	if (!resolveModeWasSet)
             		postfixResolveModeFix(session, true, debugKey);
             }
         }
@@ -1295,7 +1307,7 @@ public class JlinkUtils {
         if (param==null || out==null)
             return false;
         
-        CallParamValue pval = param.getValue();
+        CallParamValue pval = getParamValue(param);
         Object value = null;
         String type = null;
         
@@ -1388,6 +1400,34 @@ public class JlinkUtils {
         return true;
     }
 
+//    public static CallParamValue getParamValue(CallParameter param, int version) throws JLIException,jxthrowable {
+    public static CallParamValue getParamValue(CallParameter param) throws JLIException,jxthrowable {
+        if (param==null)
+            return null;
+
+        /*
+        CallParamValue pval = null;
+    	if (version >= 9) {
+    		pval = param.getScaledValue();
+    	}
+    	else {
+    		try {
+    			pval = param.getValue();
+    		}
+    		catch (XToolkitObsoleteFunc e) {
+    			pval = param.getScaledValue();
+    		}
+    	}
+    	return pval;
+    	*/
+        try {
+        	return param.getValue();
+        }
+        catch (XToolkitObsoleteFunc e) {
+        	throw new JLIException("Cannot get parameter value using obsolete function; check that your PATH contains only one version of Creo");
+        }
+    }
+    
     /**
      * Make sure that the generic instance of a model is loaded into Creo.
      * 
@@ -1575,6 +1615,20 @@ public class JlinkUtils {
 		return data;
 	}
 	
+	/**
+	 * Convert a ComponentPath to a Java Integer list
+	 * @param path The component path
+	 * @return The integer list
+	 * @throws JLIException
+	 * @throws jxthrowable
+	 */
+	public static List<Integer> componentPathToList(CallComponentPath path) throws JLIException,jxthrowable {
+        if (path==null)
+        	return null;
+        CallIntSeq seq = path.getComponentIds();
+        return intSeqToList(seq);
+	}
+
 	/**
 	 * Convert a JLink intseq (integer sequence) to a Java Integer list
 	 * @param seq The integer sequence
