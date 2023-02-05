@@ -23,12 +23,13 @@
       "name" : "height",
       "type" : "double",
       "description" : "Image height",
-      "default" : "7.5"
+      "default" : "10.0",
+      "valid_values" : "100, 200, 300, 400, 500, 600"
     }, {
       "name" : "width",
       "type" : "double",
       "description" : "Image width",
-      "default" : "10.0"
+      "default" : "7.5"
     }, {
       "name" : "dpi",
       "type" : "integer",
