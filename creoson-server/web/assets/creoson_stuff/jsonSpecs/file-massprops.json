@@ -38,6 +38,10 @@
       "name" : "coord_sys_inertia_tensor",
       "type" : "object:JLInertia",
       "description" : "Model's Inertia Tensor with respect to the coordinate frame."
+    }, {
+      "name" : "ctr_grav",
+      "type" : "object:JLPoint",
+      "description" : "Model's center of gravity"
     } ]
   },
   "examples" : [ {
@@ -108,6 +112,11 @@
             "y" : 0.0,
             "z" : 0.003650664136195683
           }
+        },
+        "ctr_grav" : {
+          "x" : 0.0,
+          "y" : 4.602518796279497,
+          "z" : 0.0
         }
       }
     }
