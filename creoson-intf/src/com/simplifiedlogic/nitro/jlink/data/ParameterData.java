@@ -196,28 +196,32 @@ public class ParameterData implements Serializable {
 	}
 
 	/**
-	 * @return
+	 * @return Whether value's designated status should be changed;
+	 * IJLParameter.DESIGNATE_ON,IJLParameter.DESIGNATE_OFF, IJLParameter.DESIGNATE_UNKNOWN
+	 * @see IJLParameter  
 	 */
 	public int getSetDesignate() {
 		return setDesignate;
 	}
 
 	/**
-	 * @param setDesignate
+	 * @param setSetDesignate Whether value's designated status should be changed;
+	 * IJLParameter.DESIGNATE_ON,IJLParameter.DESIGNATE_OFF, IJLParameter.DESIGNATE_UNKNOWN
+	 * @see IJLParameter
 	 */
 	public void setSetDesignate(int setDesignate) {
 		this.setDesignate = setDesignate;
 	}
 
 	/**
-	 * @return
+	 * @return The parameter's description
 	 */
 	public String getDescription() {
 		return description;
 	}
 
 	/**
-	 * @param description
+	 * @param description The parameter's description
 	 */
 	public void setDescription(String description) {
 		this.description = description;

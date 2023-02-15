@@ -98,7 +98,7 @@ public class MasspropsData {
 	}
 
 	/**
-	 * @param density Model Center of Gravity Inertia Tensor
+	 * @param centerGravityInertiaTensor Model Center of Gravity Inertia Tensor
 	 */
 	public void setCenterGravityInertiaTensor(JLInertia centerGravityInertiaTensor) {
 		this.centerGravityInertiaTensor = centerGravityInertiaTensor;
@@ -112,7 +112,7 @@ public class MasspropsData {
 	}
 
 	/**
-	 * @param density Model Coordinate System Inertia
+	 * @param coordSysInertia Model Coordinate System Inertia
 	 */
 	public void setCoordSysInertia(JLInertia coordSysInertia) {
 		this.coordSysInertia = coordSysInertia;
@@ -126,7 +126,7 @@ public class MasspropsData {
 	}
 
 	/**
-	 * @param density Model Coordinate System Inertia Tensor
+	 * @param coordSysInertiaTensor Model Coordinate System Inertia Tensor
 	 */
 	public void setCoordSysInertiaTensor(JLInertia coordSysInertiaTensor) {
 		this.coordSysInertiaTensor = coordSysInertiaTensor;
