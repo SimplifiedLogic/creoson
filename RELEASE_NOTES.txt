@@ -1,10 +1,25 @@
 R E L E A S E   N O T E S
 =========================
 
+2.8.2
+	- Modified functions:
+		creo
+			set_creo_version - add Creo 9 support.
+		file
+			massprops - add center of gravity to output as "ctr_grav"
+		interface
+			export_image - fix bug where the input height/width were being swapped
+			             - handle 500 and 600 DPI (formerly only went up to 400 DPI)
+		windchill
+			clear_workspace - handle checkout conflict error with better message
+			delete_workspace - handle checkout conflict error with better message
+
 2.8.1
 	- Modified functions:
 		bom
 			get_paths - add get_simpreps input parameter, which controls whether Simplified Rep info is returned.
+		creo
+			set_creo_version - add Creo 8 support.
 		file
 			regenerate - add Creo 8 support.
 
