@@ -205,7 +205,7 @@ public class ParameterData implements Serializable {
 	}
 
 	/**
-	 * @param setSetDesignate Whether value's designated status should be changed;
+	 * @param setDesignate Whether value's designated status should be changed;
 	 * IJLParameter.DESIGNATE_ON,IJLParameter.DESIGNATE_OFF, IJLParameter.DESIGNATE_UNKNOWN
 	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLParameter
 	 */
