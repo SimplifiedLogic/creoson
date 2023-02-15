@@ -1962,7 +1962,7 @@ public class JlinkUtils {
     
     /**
      * Checks whether the current Proe version is greater than or equal to a minimum version.
-     * @see JLFile.setProeVersion
+     * @see com.simplifiedlogic.nitro.jlink.impl.JLProe#setProeVersion(int, AbstractJLISession)
      * @param minVersion The minimum Creo version required
      * @param jlSession The JShell session
      * @throws JLIException
