@@ -588,6 +588,7 @@ public class JLParameter implements IJLParameter {
         }
 
         int type = param_value.getParamValueType();
+        String desc = param.getDescription();
         if (to_param!=null) {
         	// update an existing parameter
             switch (type) {
@@ -608,7 +609,13 @@ public class JLParameter implements IJLParameter {
                     break;
             }
             to_param.setValue(to_value);
-        }        
+
+            if (desc!=null)
+            	to_param.setDescription(desc);
+            else if (to_param.getDescription()!=null)
+            	// We really should not be copying a null value as an empty string, but setting description to null crashes the JVM.
+            	to_param.setDescription("");
+        }
         else {
         	// create a new parameter
         	CallParamValue pval = null;
@@ -636,6 +643,9 @@ public class JLParameter implements IJLParameter {
             to_param = m.createParam(toName, pval);
             if (to_param==null)
                 throw new JLIException("Unable to create parameter");
+
+            if (desc!=null)
+            	to_param.setDescription(desc);
         }
 
         if (designate!=DESIGNATE_UNKNOWN) {
@@ -656,8 +666,6 @@ public class JLParameter implements IJLParameter {
             if (des!=to_param.getIsDesignated())
             	to_param.setIsDesignated(des);
         }
-
-        to_param.setDescription(param.getDescription());
     }
     
 	/**
