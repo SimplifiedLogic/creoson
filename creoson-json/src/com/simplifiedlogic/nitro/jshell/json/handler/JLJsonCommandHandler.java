@@ -179,7 +179,7 @@ public abstract class JLJsonCommandHandler {
      * @param input The input data to search
      * @param parmname Name of the parameter
      * @param required Whether the parameter is required; if true, the method will throw an exception if the parameter is missing.
-     * @return The value of the parameter converted to a Map<String, Object>, or null if the parameter was not found.
+     * @return The value of the parameter converted to a Map&lt;String, Object&gt;, or null if the parameter was not found.
      * @throws JLIException
      */
     @SuppressWarnings("unchecked")
@@ -251,7 +251,7 @@ public abstract class JLJsonCommandHandler {
     }
 
 	/**
-	 * Converts a generic object to a java.util.List<String>.  If the object is
+	 * Converts a generic object to a java.util.List&lt;String&gt;.  If the object is
 	 * a List or an array, it converts each entry into a String and adds it to 
 	 * the result.  Otherwise it just converts the object to a single-entry list.
 	 * 

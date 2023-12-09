@@ -39,9 +39,9 @@ public class JLPoint implements Serializable {
 	}
 
 	/**
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param x The X-coordinate of the point
+	 * @param y The Y-coordinate of the point
+	 * @param z The Z-coordinate of the point
 	 */
 	public JLPoint(double x, double y, double z) {
 		this.x = x;

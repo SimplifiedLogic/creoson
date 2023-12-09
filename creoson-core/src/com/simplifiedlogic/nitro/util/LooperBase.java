@@ -202,7 +202,7 @@ public abstract class LooperBase {
      * for a specific name.
      * @param name The name of the object that matched the filters
      * @throws JLIException
-     * @throws Exception
+     * @throws jxthrowable
      */
     protected abstract void processObjectByName(String name) throws JLIException,jxthrowable;
 

@@ -39,22 +39,22 @@ public class ServerException extends Exception {
 	}
 
 	/**
-	 * @param message
+	 * @param message Text for the error
 	 */
 	public ServerException(String message) {
 		super(message);
 	}
 
 	/**
-	 * @param cause
+	 * @param cause Underlying exception
 	 */
 	public ServerException(Throwable cause) {
 		super(cause);
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message Text for the error
+	 * @param cause Underlying exception
 	 */
 	public ServerException(String message, Throwable cause) {
 		super(message, cause);

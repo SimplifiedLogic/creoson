@@ -61,7 +61,7 @@ public class DimData implements Serializable {
 	/**
 	 * Compare two dimensions using the dimension name.
 	 * @see ParamNameCompare
-	 * @param data 
+	 * @param data The other Dimension to compare with
 	 * @return the value 0 if the dimension name is equal to the data argument's name; a value less than 0 if this dimensnion name is lexicographically less than the data argument's name; and a value greater than 0 if this dimension name is lexicographically greater than the data argument's name.
 	 */
 	public int compareTo(DimData data) {

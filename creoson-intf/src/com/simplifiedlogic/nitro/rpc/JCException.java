@@ -38,22 +38,22 @@ public class JCException extends Exception {
 	}
 
 	/**
-	 * @param message
+	 * @param message Text for the error
 	 */
 	public JCException(String message) {
 		super(message);
 	}
 
 	/**
-	 * @param cause
+	 * @param cause Underlying exception
 	 */
 	public JCException(Throwable cause) {
 		super(cause);
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message Text for the error
+	 * @param cause Underlying exception
 	 */
 	public JCException(String message, Throwable cause) {
 		super(message, cause);

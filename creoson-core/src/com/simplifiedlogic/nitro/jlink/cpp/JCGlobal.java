@@ -42,6 +42,7 @@ public class JCGlobal {
     /**
      * Detect whether the Nitro OTK native library is loaded; if not, then it
      * loads the native library.
+     * @throws JLIException
      */
     public static void loadLibrary() throws JLIException {
     	String bits = System.getProperty("sun.arch.data.model");
@@ -71,7 +72,7 @@ public class JCGlobal {
     
     /**
      * Sets the native library path/filename.
-     * @param path
+     * @param path Path to the native DLL library file
      */
     public static void setLibraryFile(File path) {
     	libraryFile = path;

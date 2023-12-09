@@ -39,7 +39,7 @@ public class DataUtils {
      * 
      * @param in The object to convert
      * @return The int value of the object
-     * @throws NumberFormatException
+     * @throws NumberFormatException if the value is not a valid integer
      * @throws IOException
      */
     public static int getIntValue(Object in) throws NumberFormatException, IOException {
@@ -52,7 +52,7 @@ public class DataUtils {
      * @param in The object to convert
      * @param encoded Whether the object is Base64-encoded
      * @return The int value of the object
-     * @throws NumberFormatException
+     * @throws NumberFormatException if the value is not a valid integer
      * @throws IOException
      */
     public static int getIntValue(Object in, boolean encoded) throws NumberFormatException, IOException {
@@ -86,7 +86,7 @@ public class DataUtils {
      * 
      * @param in The object to convert
      * @return The double value of the object
-     * @throws NumberFormatException
+     * @throws NumberFormatException if the value is not a valid double
      * @throws IOException
      */
     public static double getDoubleValue(Object in) throws NumberFormatException, IOException {
@@ -99,7 +99,7 @@ public class DataUtils {
      * @param in The object to convert
      * @param encoded Whether the object is Base64-encoded
      * @return The double value of the object
-     * @throws NumberFormatException
+     * @throws NumberFormatException if the value is not a valid double
      * @throws IOException
      */
     public static double getDoubleValue(Object in, boolean encoded) throws NumberFormatException, IOException {
@@ -181,6 +181,7 @@ public class DataUtils {
      * "false", and "off" as a boolean false value.
      *  
      * @param val The string to validate
+     * @return True if the value is a valid boolean
      */
     public static boolean validBoolean(String val) {
         if (val.equals("1") || 

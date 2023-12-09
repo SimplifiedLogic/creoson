@@ -34,21 +34,21 @@ public class JCConnection {
 
     /**
      * Native function to connect to Creo.
-     * @return
+     * @return The connection ID
      */
     public static native String connect();
     /**
      * Native function to connect to Creo with a specific connection ID.
-     * @param connId
-     * @return
+     * @param connId The connection ID
+     * @return The connection ID (may be different from input)
      */
     public static native String connectById(String connId);
     /**
-     * @param debug
+     * @param debug Whether to turn connection debugging on
      */
     public static native void setConnectionDebug(boolean debug);
     /**
-     * @param debug
+     * @param debug Whether to turn session debugging on
      */
     public static native void setSessionDebug(boolean debug);
 }

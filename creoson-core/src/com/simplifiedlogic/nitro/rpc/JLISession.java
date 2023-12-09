@@ -241,6 +241,7 @@ public class JLISession extends AbstractJLISession {
     /**
      * Sets the location of the command log.  Writes a new entry to the command log to indicate it.
      * @param commandLog The commandLog to set.
+     * @throws IOException
      */
     public void setCommandLog(String commandLog) throws IOException {
         if (commandLog!=null) {

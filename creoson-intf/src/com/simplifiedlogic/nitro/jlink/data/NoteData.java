@@ -61,7 +61,7 @@ public class NoteData implements Serializable {
 	
 	/**
 	 * Compares two notes to see if they have the same name
-	 * @param data
+	 * @param data The other Note to compare with
 	 * @return the value 0 if the note name is equal to the data argument's name; a value less than 0 if this note name is lexicographically less than the data argument's name; and a value greater than 0 if this note name is lexicographically greater than the data argument's name.
 	 */
 	public int compareTo(NoteData data) {

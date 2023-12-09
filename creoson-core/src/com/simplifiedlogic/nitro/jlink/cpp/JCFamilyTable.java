@@ -99,14 +99,14 @@ public class JCFamilyTable {
 
     /**
      * Native function to replace a component.
-     * @param sessionId
-     * @param parentAssemblyName
-     * @param compIds
-     * @param newSolidName
+     * @param sessionId The JShell session ID
+     * @param parentAssemblyName Name of the parent assembly
+     * @param compIds Component path to the component being replaced
+     * @param newSolidName Instance name to replace the component with
      */
     public native void replaceComponent(String sessionId, String parentAssemblyName, int[] compIds, String newSolidName);
     /**
-     * @param debug
+     * @param debug Whether to turn on debuggin in the native code
      */
     public native void setDebug(boolean debug);
 }

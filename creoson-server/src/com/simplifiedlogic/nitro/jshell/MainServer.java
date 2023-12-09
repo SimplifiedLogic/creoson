@@ -53,7 +53,7 @@ public class MainServer {
 	public static final String ENDPOINT_SERVER	= "/server";
 	
 	/**
-	 * @param args
+	 * @param args command-line arguments
 	 */
 	public static void main(String[] args) {
 		try {

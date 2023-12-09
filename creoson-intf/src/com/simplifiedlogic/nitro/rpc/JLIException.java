@@ -38,22 +38,22 @@ public class JLIException extends Exception {
 	}
 
 	/**
-	 * @param message
+	 * @param message Text for the error
 	 */
 	public JLIException(String message) {
 		super(message);
 	}
 
 	/**
-	 * @param cause
+	 * @param cause Underlying exception
 	 */
 	public JLIException(Throwable cause) {
 		super(cause);
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message Text for the error
+	 * @param cause Underlying exception
 	 */
 	public JLIException(String message, Throwable cause) {
 		super(message, cause);

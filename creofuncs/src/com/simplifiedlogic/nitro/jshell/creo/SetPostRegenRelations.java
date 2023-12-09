@@ -37,7 +37,7 @@ import com.simplifiedlogic.nitro.rpc.JLIException;
  * <li>The model for which to set the post-regen relations.  Must be of type 
  * {@link com.ptc.pfc.pfcModel.Model} or {@link CallModel}
  * 
- * <li>The relations to set, as a java.util.List<String> object.  One entry in the list per
+ * <li>The relations to set, as a java.util.List&lt;String&gt; object.  One entry in the list per
  * line of relations.  If this value is null or empty, the post-regen relations will be 
  * deleted.
  * </ol>

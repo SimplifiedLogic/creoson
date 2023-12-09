@@ -52,13 +52,13 @@ public class JCFile {
 
     /**
      * Native function to suppress a new component added to an assembly.
-     * @param sessionId
-     * @param modelName
-     * @param featureId
+     * @param sessionId The JShell session ID
+     * @param modelName Name of the model that owns the feature
+     * @param featureId Feature ID to suppress
      */
     public native void featureSuppress(String sessionId, String modelName, int featureId);
     /**
-     * @param debug
+     * @param debug Whether to turn on debuggin in the native code
      */
     public native void setDebug(boolean debug);
 }

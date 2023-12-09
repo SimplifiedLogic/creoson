@@ -61,6 +61,7 @@ public class SimpRepData {
 	/**
 	 * Add a new sub-rep to the representation
 	 * @param path The data for sub-representation
+	 * @param data The JShell object representing the data
 	 */
 	public void addSubItem(List<Integer> path, SimpRepData data) {
 		if (subItems==null)

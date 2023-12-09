@@ -38,7 +38,7 @@ public class ServerJsonHandler implements ServerRequestParams, ServerResponsePar
 	 * @param function Name of the function to execute
 	 * @param input Structure containing any JSON data passed in by the user
 	 * @return A standard response containing the results of the request
-	 * @throws ServerException
+	 * @throws ServerException if the function name is unknown
 	 */
 	public Hashtable<String, Object> handleFunction(String sessionId, String function, Hashtable<String, Object> input) throws ServerException {
 		if (function==null)

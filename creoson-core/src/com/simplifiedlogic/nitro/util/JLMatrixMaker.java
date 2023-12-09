@@ -426,7 +426,7 @@ public class JLMatrixMaker {
      * Convert a Creo Inertia object to a JLInertia
      * @param inertia The Creo inertia object
      * @return The JShell inertia object created
-     * @throws JLIException
+     * @throws jxthrowable
      */
     public static JLInertia writeInertia(CallInertia inertia) throws jxthrowable {
         JLInertia xf = new JLInertia();

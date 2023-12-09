@@ -31,9 +31,9 @@ public class JLColor {
 	
 	/**
 	 * Constructor which takes standard RGB integer values (0-255)
-	 * @param red
-	 * @param green
-	 * @param blue
+	 * @param red The Red component of the color
+	 * @param green The Green component of the color
+	 * @param blue The Blue component of the color
 	 */
 	public JLColor(int red, int green, int blue) {
 		this.red = red;
@@ -55,7 +55,7 @@ public class JLColor {
 
 	/**
 	 * Constructor which takes a standard long color value
-	 * @param color
+	 * @param color A long color value to convert to RGB
 	 */
 	public JLColor(long color) {
 		this.red = (int)((color & 0xFF0000)>>16);

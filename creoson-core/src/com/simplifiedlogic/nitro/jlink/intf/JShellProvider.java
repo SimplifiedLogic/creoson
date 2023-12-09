@@ -210,7 +210,7 @@ public class JShellProvider implements IJShellProvider {
 	}
 
 	/**
-	 * @param path
+	 * @param path Path to the native DLL library
 	 */
 	public static void setNativeLibraryFile(File path) {
 		JCGlobal.setLibraryFile(path);

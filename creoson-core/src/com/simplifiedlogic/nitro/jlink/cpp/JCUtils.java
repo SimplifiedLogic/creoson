@@ -36,8 +36,8 @@ public class JCUtils {
 
     /**
      * Convert a JCException to a JLIException
-     * @param e
-     * @return
+     * @param e The underlying exception
+     * @return A new JLIException
      */
     public static JLIException createException(JCException e) {
     	return createException(e, null);
@@ -45,9 +45,9 @@ public class JCUtils {
     
     /**
      * Convert a JCException to a JLIException, with a message
-     * @param e
-     * @param msg
-     * @return
+     * @param e The underlying exception
+     * @param msg Text for the error
+     * @return A new JLIException
      */
     public static JLIException createException(JCException e, String msg) {
     	if (e instanceof JCToolkitException && 
@@ -60,9 +60,9 @@ public class JCUtils {
 
     /**
      * Return appropriate error text for a JCException
-     * @param e
-     * @param msg
-     * @return
+     * @param e The exception to parse
+     * @param msg Additional text to include in the error text
+     * @return New text for the error
      */
     public static String ptcError(JCException e, String msg) {
     	// this if is here because this exception is a child of XToolkitError
@@ -104,9 +104,9 @@ public class JCUtils {
     
     /**
      * Return appropriate error text for a JCToolkitException
-     * @param e
-     * @param msg
-     * @return
+     * @param e The exception to parse
+     * @param msg Additional text to include in the error text
+     * @return New text for the error
      */
     public static String toolkitError(JCToolkitException e, String msg) {
         String kitMsg = null;
@@ -121,8 +121,8 @@ public class JCUtils {
 
     /**
      * Convert an integer collection to an int array so that the array can be passed to a native function.
-     * @param ids
-     * @return
+     * @param ids The input list of integer IDs
+     * @return An array of integer IDs
      */
     public static int[] intListToArray(List<Integer> ids) {
     	if (ids==null)

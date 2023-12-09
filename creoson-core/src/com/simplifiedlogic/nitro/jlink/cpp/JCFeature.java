@@ -172,29 +172,29 @@ public class JCFeature {
 
     /**
      * Native function to suppress a list of feature IDs.
-     * @param sessionId
-     * @param modelName
-     * @param featureIds
-     * @param clip
+     * @param sessionId The JShell session ID
+     * @param modelName Name of the model that owns the features
+     * @param featureIds Array of feature IDs to suppress
+     * @param clip Whether to clip the features
      */
     public native void featuresSuppress(String sessionId, String modelName, int[] featureIds, boolean clip);
     /**
      * Native function to resume a list of feature IDs.
-     * @param sessionId
-     * @param modelName
-     * @param featureIds
+     * @param sessionId The JShell session ID
+     * @param modelName Name of the model that owns the features
+     * @param featureIds Array of feature IDs to resume
      */
     public native void featuresResume(String sessionId, String modelName, int[] featureIds);
     /**
      * Native function to delete a list of feature IDs.
-     * @param sessionId
-     * @param modelName
-     * @param featureIds
-     * @param clip
+     * @param sessionId The JShell session ID
+     * @param modelName Name of the model that owns the features
+     * @param featureIds Array of feature IDs to delete
+     * @param clip Whether to clip the features
      */
     public native void featuresDelete(String sessionId, String modelName, int[] featureIds, boolean clip);
     /**
-     * @param debug
+     * @param debug Whether to turn on debuggin in the native code
      */
     public native void setDebug(boolean debug);
 }

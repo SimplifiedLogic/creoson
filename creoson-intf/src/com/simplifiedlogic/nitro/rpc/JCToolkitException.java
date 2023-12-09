@@ -28,16 +28,21 @@ import com.ptc.pfc.pfcExceptions.XToolkitError;
 public class JCToolkitException extends JCException {
 
 	private static final String TOOLKIT_PREFIX = "pfcExceptions::";
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Creo Toolkit error code
+	 */
 	private int errorCode;
+	/** 
+	 * If the error message starts with TOOLKIT_PREFIX, this contains
+	 * the remainder of the text which is the PTC exception class 
+	 */
 	private String toolkitName;
 	
 	/**
-	 * 
+	 * @param errorCode Creo Toolkit error code
 	 */
 	public JCToolkitException(int errorCode) {
 		super();
@@ -45,7 +50,8 @@ public class JCToolkitException extends JCException {
 	}
 
 	/**
-	 * @param message
+	 * @param message Text for the error
+	 * @param errorCode Creo Toolkit error code
 	 */
 	public JCToolkitException(String message, int errorCode) {
 		super(message);
@@ -55,7 +61,8 @@ public class JCToolkitException extends JCException {
 	}
 
 	/**
-	 * @param cause
+	 * @param cause Underlying exception
+	 * @param errorCode Creo Toolkit error code
 	 */
 	public JCToolkitException(Throwable cause, int errorCode) {
 		super(cause);
@@ -63,8 +70,9 @@ public class JCToolkitException extends JCException {
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message Text for the error
+	 * @param cause Underlying exception
+	 * @param errorCode Creo Toolkit error code
 	 */
 	public JCToolkitException(String message, Throwable cause, int errorCode) {
 		super(message, cause);
@@ -73,6 +81,10 @@ public class JCToolkitException extends JCException {
 		setErrorCode(errorCode);
 	}
 
+	/**
+	 * @param clazz A class object which must extend XToolkitError
+	 * @return True if the class name in toolkitName matches the given class' name
+	 */
 	public boolean isInstanceOf(Class<? extends XToolkitError> clazz) {
 		if (this.toolkitName==null)
 			return false;
@@ -81,18 +93,30 @@ public class JCToolkitException extends JCException {
 		return false;
 	}
 
+	/**
+	 * @return Creo Toolkit error code
+	 */
 	public int getErrorCode() {
 		return errorCode;
 	}
 
+	/**
+	 * @param errorCode Creo Toolkit error code
+	 */
 	public void setErrorCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
 
+	/**
+	 * @return Toolkit exception class name
+	 */
 	public String getToolkitName() {
 		return toolkitName;
 	}
 
+	/**
+	 * @param toolkitName Toolkit exception class name
+	 */
 	public void setToolkitName(String toolkitName) {
 		this.toolkitName = toolkitName;
 	}

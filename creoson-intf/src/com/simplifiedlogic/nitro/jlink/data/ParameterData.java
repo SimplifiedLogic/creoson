@@ -66,7 +66,7 @@ public class ParameterData implements Serializable {
 	
 	/**
 	 * Compares two parameter-data objects based on parameter name
-	 * @param data
+	 * @param data The other Parameter to compare with
 	 * @return the value 0 if the param name is equal to the data argument's name; a value less than 0 if this param name is lexicographically less than the data argument's name; and a value greater than 0 if this param name is lexicographically greater than the data argument's name.
 	 */
 	public int compareTo(ParameterData data) {

@@ -1746,7 +1746,7 @@ public class JlinkUtils {
 
     /**
      * Combine an instance filename (such as long_bolt.prt) and a generic name (such as bolt)
-     * to a standard Creo filename (such as long_bolt<bolt>.prt).
+     * to a standard Creo filename (such as long_bolt&lt;bolt&gt;.prt).
      * @param instanceFilename The instance file name, including the file extension
      * @param generic The generic name, which does NOT include the file extension
      * @return The formatted, combined name
@@ -1768,7 +1768,7 @@ public class JlinkUtils {
 
     /**
      * Combine a generic filename (such as bolt.prt) and an instance name (such as long_bolt)
-     * to a standard Creo filename (such as long_bolt<bolt>.prt).
+     * to a standard Creo filename (such as long_bolt&lt;bolt&gt;.prt).
      * @param genericFilename The generic file name, including the file extension
      * @param instanceName The instance name, which does NOT include the file extension
      * @return The formatted, combined name
@@ -1790,7 +1790,7 @@ public class JlinkUtils {
 
     /**
      * Combine an instance name (such as long_bolt), a generic name (such as bolt) and a file 
-     * extension (such as .prt) to a standard Creo filename (such as long_bolt<bolt>.prt).
+     * extension (such as .prt) to a standard Creo filename (such as long_bolt&lt;bolt&gt;.prt).
      * @param instanceName The instance name, which does NOT include the file extension
      * @param genericName The generic name, which does NOT include the file extension
      * @param extension The file extension, which may or may not include the dot
@@ -1846,7 +1846,7 @@ public class JlinkUtils {
 	}
 
 	/**
-	 * Construct a URL for a Windchill workspace of the form wtws://<server-alias>/<workspace>/
+	 * Construct a URL for a Windchill workspace of the form wtws://&lt;server-alias&gt;/&lt;workspace&gt;/
 	 * @param server The JLink server object
 	 * @param workspace The Windchill workspace name
 	 * @return The URL for the workspace
@@ -1857,7 +1857,7 @@ public class JlinkUtils {
 	}
 	
 	/**
-	 * Construct a URL for a Windchill workspace of the form wtws://<server-alias>/<workspace>/
+	 * Construct a URL for a Windchill workspace of the form wtws://&lt;server-alias&gt;/&lt;workspace&gt;/
 	 * @param serverAlias The Windchill server alias
 	 * @param workspace The Windchill workspace name
 	 * @return The URL for the workspace
