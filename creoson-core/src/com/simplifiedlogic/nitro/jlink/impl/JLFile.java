@@ -75,6 +75,7 @@ import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitConversionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystem;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystems;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
+import com.simplifiedlogic.nitro.jlink.cpp.JCFile;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.AssembleInstructions;
 import com.simplifiedlogic.nitro.jlink.data.FileAssembleResults;
@@ -105,6 +106,8 @@ import com.simplifiedlogic.nitro.util.ModelLooper;
  *
  */
 public class JLFile implements IJLFile {
+
+    private JCFile nativeHandler = new JCFile();
 
     /* (non-Javadoc)
 	 * @see com.simplifiedlogic.nitro.jlink.impl.IJLFile#open(java.lang.String, java.lang.String, java.util.List, java.lang.String, boolean, boolean, boolean, boolean, java.lang.String)
@@ -970,7 +973,7 @@ public class JLFile implements IJLFile {
 		        looper.loop();
 	        }
 	        finally {
-	        	JlinkUtils.postfixResolveModeFix(session, resolveMode, NitroConstants.DEBUG_REGEN_KEY);
+	        	JlinkUtils.postfixResolveModeFix(session, sess, resolveMode, NitroConstants.DEBUG_REGEN_KEY);
 	        }
     	}
     	catch (jxthrowable e) {
@@ -2186,7 +2189,7 @@ public class JLFile implements IJLFile {
 		                        if (fname.equalsIgnoreCase(filename)) {
 		        			        out.setFeatureId(compFeat.getId());
 		    	                    if (suppress) {
-		    	                    	suppressNewFeature(session, assembly, compFeat);
+		    	                    	suppressNewFeature(sess, assembly, compFeat);
 		    	                    }
 		                        	break;
 		                        }
@@ -2250,7 +2253,7 @@ public class JLFile implements IJLFile {
 			                        ModelItemEntry entry;
 			                        for (int k=0; k<num_items; k++) {
 			                            entry = (ModelItemEntry)looper.items.get(k);
-			                            assembleItem(session, assembly, subComponent, m, compPath, transform, csys_con, other_con, entry.item, suppress, packageAssembly);
+			                            assembleItem(sess, assembly, subComponent, m, compPath, transform, csys_con, other_con, entry.item, suppress, packageAssembly);
 			                        }
 			                        looper.items.clear();
 			                        cntAssembled += num_items;
@@ -2275,7 +2278,7 @@ public class JLFile implements IJLFile {
 						        	newfeat.redefineThroughUI();
 	
 			                    if (suppress) {
-			                    	suppressNewFeature(session, assembly, newfeat);
+			                    	suppressNewFeature(sess, assembly, newfeat);
 			                    }
 	
 			                    cntAssembled++;
@@ -2295,7 +2298,7 @@ public class JLFile implements IJLFile {
 					        	newfeat.redefineThroughUI();
 	
 		                    if (suppress) {
-		                    	suppressNewFeature(session, assembly, newfeat);
+		                    	suppressNewFeature(sess, assembly, newfeat);
 		                    }
 	
 			            }
@@ -2308,7 +2311,7 @@ public class JLFile implements IJLFile {
 	        }
 	        finally {
 		        // this is really only needed when suppress=true
-	        	JlinkUtils.postfixResolveModeFix(session, resolveMode);
+	        	JlinkUtils.postfixResolveModeFix(session, sess, resolveMode);
 	        }
 
 	        return out;
@@ -2456,6 +2459,7 @@ public class JLFile implements IJLFile {
 
     /**
      * Assemble a component into an assembly
+     * @param sess
      * @param assembly The assembly to receive the component
      * @param subComponent
      * @param part
@@ -2464,11 +2468,13 @@ public class JLFile implements IJLFile {
      * @param csys_con A CSYS-type constraint
      * @param other_con Other constraints
      * @param item
+     * @param suppress
+     * @param packageAssembly
      * @throws JLIException
      * @throws jxthrowable
      */
     private void assembleItem(
-    		CallSession session, 
+    		AbstractJLISession sess, 
     		CallAssembly assembly,
     		CallModel subComponent,
     		CallModel part,
@@ -2501,13 +2507,24 @@ public class JLFile implements IJLFile {
         	newfeat.redefineThroughUI();
 
         if (suppress) {
-        	suppressNewFeature(session, assembly, newfeat);
+        	suppressNewFeature(sess, assembly, newfeat);
         }
 
     }
 
-    private void suppressNewFeature(CallSession session, CallAssembly assembly, CallFeature newfeat) throws jxthrowable {
-    	//System.out.println("Suppressing new feature: "+newfeat.getId());
+    /**
+     * Suppress the new component feature that has been added to an assembly.
+     * @param jliSession
+     * @param assembly
+     * @param newfeat
+     * @throws JLIException
+     * @throws jxthrowable
+     */
+    public void suppressNewFeature(AbstractJLISession jliSession, CallAssembly assembly, CallFeature newfeat) throws JLIException,jxthrowable {
+    	if (jliSession.getProeVersion()>=9 && nativeHandler!=null) {
+    		nativeHandler.suppressNewFeature(jliSession, assembly, newfeat);
+    		return;
+    	}
         CallFeatureOperations featOps = CallFeatureOperations.create();
         CallSuppressOperation supop = newfeat.createSuppressOp();
         supop.setClip(true);

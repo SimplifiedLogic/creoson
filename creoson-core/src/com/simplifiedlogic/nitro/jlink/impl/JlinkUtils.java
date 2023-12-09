@@ -114,7 +114,7 @@ public class JlinkUtils {
     
     public static final String CREO7_AUTH = "NTQzNWQyMzM1NjNmYmQ3YQ==";
     public static final String CREO8_AUTH = "MWU3NTk2ZWFhYzYxZGM4Mw==";
-    public static final String CREO9_AUTH = "N2VhNTdhM2Y5ZTZjMGNkMA==";
+//    public static final String CREO9_AUTH = "N2VhNTdhM2Y5ZTZjMGNkMA==";
 
     private static Method methodSetResolveModeRegen = null; 
 
@@ -423,7 +423,7 @@ public class JlinkUtils {
      * @param code The code to convert
      * @return The text resulting from a lookup
      */
-    private static String getPtcErrorText(int code) {
+    public static String getPtcErrorText(int code) {
         switch (code) {
             case -1: return "General Error";
             case -2: return "Bad Inputs";
@@ -1023,6 +1023,8 @@ public class JlinkUtils {
      * @throws jxthrowable
      */
     public static boolean prefixResolveModeFix(CallSession session, AbstractJLISession jlSession, String debugKey) throws jxthrowable {
+    	if (jlSession.getProeVersion()>=9)
+    		return true; // return true so that we don't try to turn resolve-mode off
 //    	if (detectResolveModeOption())
 //    		return true; // return true so that we don't try to turn resolve-mode off
         boolean resolveModeWasSet = false;
@@ -1062,11 +1064,12 @@ public class JlinkUtils {
      * 
      * <p>This workaround is needed for Creo 2 (WF5) and higher
      * @param session The Creo session
+     * @param jlSession The jshell session
      * @param resolveMode Whether the option was already set to "resolve_mode" before the 
      * @throws jxthrowable
      */
-    public static void postfixResolveModeFix(CallSession session, boolean resolveMode) throws jxthrowable {
-    	postfixResolveModeFix(session, resolveMode, null);
+    public static void postfixResolveModeFix(CallSession session, AbstractJLISession jlSession, boolean resolveMode) throws jxthrowable {
+    	postfixResolveModeFix(session, jlSession, resolveMode, null);
     }
     
     /**
@@ -1079,11 +1082,14 @@ public class JlinkUtils {
      * 
      * <p>This workaround is needed for Creo 2 (WF5) and higher
      * @param session The Creo session
+     * @param jlSession The jshell session
      * @param resolveMode Whether the option was already set to "resolve_mode" before prefixResolveModeFix was called 
      * @param debugKey If not null, a debug log message is sent with this debug key
      * @throws jxthrowable
      */
-    public static void postfixResolveModeFix(CallSession session, boolean resolveMode, String debugKey) throws jxthrowable {
+    public static void postfixResolveModeFix(CallSession session, AbstractJLISession jlSession, boolean resolveMode, String debugKey) throws jxthrowable {
+    	if (jlSession.getProeVersion()>=9)
+    		return;
         try {
             if (!resolveMode) {
 //            	if (detectResolveModeOption())
@@ -1156,8 +1162,8 @@ public class JlinkUtils {
     		encoded = CREO7_AUTH;
     	else if (version==8)
     		encoded = CREO8_AUTH;
-    	else if (version==9)
-    		encoded = CREO9_AUTH;
+//    	else if (version==9)
+//    		encoded = CREO9_AUTH;
     	if (encoded==null)
     		return;
         String precode = (String)DataUtils.decodeBase64(encoded);
@@ -1242,7 +1248,7 @@ public class JlinkUtils {
         finally {
             if (setConfig) {
             	if (!resolveModeWasSet)
-            		postfixResolveModeFix(session, true, debugKey);
+            		postfixResolveModeFix(session, jlSession, true, debugKey);
             }
         }
     }

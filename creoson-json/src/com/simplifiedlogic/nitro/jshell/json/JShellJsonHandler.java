@@ -18,6 +18,7 @@
  */
 package com.simplifiedlogic.nitro.jshell.json;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -74,6 +75,14 @@ public class JShellJsonHandler {
 	private ObjectMapper mapper = new ObjectMapper();
 	
 	public JShellJsonHandler() {
+    	File file = getLibraryFile();
+    	// do this instead of loading it ourselves, because it needs to be loaded 
+    	// in the jshell.core package classloader in order to be used by jshell.core classes.
+		if (file.exists())
+			JShellProvider.setNativeLibraryFile(file);
+		else
+			System.err.println("Native library not found: "+file.getAbsolutePath());
+
 		JShellProvider jp = JShellProvider.getInstance();
 		jp.initializeStandalone();
 		if (jp!=null) {
@@ -235,4 +244,10 @@ public class JShellJsonHandler {
 		resp.setStatus(status);
 	}
 	
+	private File getLibraryFile() {
+		String libname = JShellProvider.NATIVE_LIBNAME;
+		String filename = libname+".dll";
+		
+		return new File(filename);
+	}
 }

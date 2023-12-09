@@ -18,6 +18,9 @@
  */
 package com.simplifiedlogic.nitro.jlink.intf;
 
+import java.io.File;
+
+import com.simplifiedlogic.nitro.jlink.cpp.JCGlobal;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.impl.JLBom;
 import com.simplifiedlogic.nitro.jlink.impl.JLConnection;
@@ -45,7 +48,12 @@ import com.simplifiedlogic.nitro.rpc.JLISession;
  *
  */
 public class JShellProvider implements IJShellProvider {
-	
+
+	/**
+	 * Default name for the native library
+	 */
+	public static final String NATIVE_LIBNAME = "jshellnative";
+
 	private IJLBom bomHandler = null;
 	private IJLConnection connHandler = null;
 	private IJLDimension dimHandler = null;
@@ -201,4 +209,10 @@ public class JShellProvider implements IJShellProvider {
 		return JLISession.getSession(sessionId);
 	}
 
+	/**
+	 * @param path
+	 */
+	public static void setNativeLibraryFile(File path) {
+		JCGlobal.setLibraryFile(path);
+	}
 }

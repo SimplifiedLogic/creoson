@@ -33,7 +33,6 @@ import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
-import com.simplifiedlogic.nitro.jlink.calls.feature.CallDeleteOperation;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureGroup;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
@@ -59,6 +58,7 @@ import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFReferences;
 import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantDimension;
 import com.simplifiedlogic.nitro.jlink.calls.udfcreate.CallUDFVariantValues;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
+import com.simplifiedlogic.nitro.jlink.cpp.JCFeature;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.FeatSelectData;
 import com.simplifiedlogic.nitro.jlink.data.FeatureData;
@@ -84,6 +84,8 @@ public class JLFeature implements IJLFeature {
      * Maximum number of characters in a feature name
      */
     public static final int FEATURE_LIMIT = 31;
+
+    private JCFeature nativeHandler = new JCFeature();
 
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLFeature#delete(java.lang.String, java.lang.String, java.util.List, java.lang.String, java.lang.String, boolean, java.lang.String)
@@ -121,7 +123,7 @@ public class JLFeature implements IJLFeature {
 	            return;
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
+        	boolean resolveModeWasSet = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        DeleteLooper looper = new DeleteLooper();
@@ -137,11 +139,12 @@ public class JLFeature implements IJLFeature {
 		    	looper.featureStatus = featureStatus;
 		    	looper.featureType = featureType;
 		        looper.clip = clip;
+		        looper.jliSession = sess;
 		        
 		        looper.loop();
 	        }
 	        finally {
-	        	JlinkUtils.postfixResolveModeFix(session, resolveMode);
+	        	JlinkUtils.postfixResolveModeFix(session, sess, resolveModeWasSet);
 	        }
 	        
     	}
@@ -725,7 +728,7 @@ public class JLFeature implements IJLFeature {
 		        return;
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
+	        boolean resolveModeWasSet = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        ResumeLooper looper = new ResumeLooper();
@@ -742,12 +745,13 @@ public class JLFeature implements IJLFeature {
 		    	looper.featureType = featureType;
 		    	looper.withChildren = withChildren;
 		    	looper.featureId = featureId;
+		        looper.jliSession = sess;
 
 		        looper.loop();
 		        
 	        }
 	        finally {
-	        	JlinkUtils.postfixResolveModeFix(session, resolveMode);
+	        	JlinkUtils.postfixResolveModeFix(session, sess, resolveModeWasSet);
 	        }
 	        
 	    	
@@ -765,23 +769,23 @@ public class JLFeature implements IJLFeature {
 
     /**
      * Walk recursively through a hierarchy of sub-features and accumulate a list of resume operations 
-     * @param features The list of feature objects to check
-     * @param featOps The output list of accumulated resume operations
+     * @param featuresResumed The list of feature objects to check
+     * @param features The output list of accumulated features to resume
      * @throws JLIException
      * @throws jxthrowable
      */
-    private void resumeChildren(Vector<CallFeature> features, CallFeatureOperations featOps) throws JLIException,jxthrowable {
-        if (features!=null) {
-            int len = features.size();
+    private void resumeChildren(Vector<CallFeature> featuresResumed, List<CallFeature> features) throws JLIException,jxthrowable {
+        if (featuresResumed!=null) {
+            int len = featuresResumed.size();
             CallFeature feat;
             ResumeLooper2 subLooper;
             // loop through each input feature
             for (int i=0; i<len; i++) {
-                feat = (CallFeature)features.elementAt(i);
+                feat = (CallFeature)featuresResumed.elementAt(i);
                 // use a looper to resume sub-features
                 subLooper = new ResumeLooper2();
                 subLooper.setStatusPattern("suppressed");
-                subLooper.featOps = featOps;
+                subLooper.features = features;
                 subLooper.setIncludeUnnamed(true);
 
                 subLooper.loop(feat);
@@ -793,7 +797,7 @@ public class JLFeature implements IJLFeature {
 
                 // if any new resume operations were added in the looper, walk the children of this feature
                 if (subLooper.featuresResumed!=null) {
-                    resumeChildren(subLooper.featuresResumed, subLooper.featOps);
+                    resumeChildren(subLooper.featuresResumed, subLooper.features);
                 }
             }
         }
@@ -835,7 +839,7 @@ public class JLFeature implements IJLFeature {
 		        return;
 	
 	        // required for WF5 and higher
-	        boolean resolveMode = JlinkUtils.prefixResolveModeFix(session, sess);
+        	boolean resolveModeWasSet = JlinkUtils.prefixResolveModeFix(session, sess);
 
 	        try {
 		        SuppressLooper looper = new SuppressLooper();
@@ -853,12 +857,13 @@ public class JLFeature implements IJLFeature {
 		    	looper.withChildren = withChildren;
 		    	looper.clip = clip;
 		    	looper.featureId = featureId;
+		        looper.jliSession = sess;
 
 		        looper.loop();
 		        
 	        }
 	        finally {
-	        	JlinkUtils.postfixResolveModeFix(session, resolveMode);
+	        	JlinkUtils.postfixResolveModeFix(session, sess, resolveModeWasSet);
 	        }
 	    	
 	        return;
@@ -875,24 +880,23 @@ public class JLFeature implements IJLFeature {
 
     /**
      * Walk recursively through a hierarchy of sub-features and accumulate a list of suppress operations 
-     * @param features The list of feature objects to check
-     * @param featOps The output list of accumulated suppress operations
+     * @param featuresSuppressed The list of feature objects to check
+     * @param features The output list of accumulated features to suppress
      * @param clip Whether to clip-suppress suppressed features to the end of the structure
      * @throws JLIException
      * @throws jxthrowable
      */
-    private void suppressChildren(Vector<CallFeature> features, CallFeatureOperations featOps, boolean clip) throws JLIException,jxthrowable {
-        if (features!=null) {
-            int len = features.size();
+    private void suppressChildren(Vector<CallFeature> featuresSuppressed, List<CallFeature> features, boolean clip) throws JLIException,jxthrowable {
+        if (featuresSuppressed!=null) {
+            int len = featuresSuppressed.size();
             CallFeature feat;
             SuppressLooper2 subLooper;
             // loop through each input feature
             for (int i=0; i<len; i++) {
-                feat = (CallFeature)features.elementAt(i);
+                feat = (CallFeature)featuresSuppressed.elementAt(i);
                 // use a looper to resume sub-features
                 subLooper = new SuppressLooper2();
-                subLooper.featOps = featOps;
-                subLooper.clip = clip;
+                subLooper.features = features;
                 subLooper.setIncludeUnnamed(true);
                 
                 subLooper.loop(feat);
@@ -904,7 +908,7 @@ public class JLFeature implements IJLFeature {
 
                 // if any new suppress operations were added in the looper, walk the children of this feature
                 if (subLooper.featuresSuppressed!=null) {
-                    suppressChildren(subLooper.featuresSuppressed, subLooper.featOps, clip);
+                    suppressChildren(subLooper.featuresSuppressed, subLooper.features, clip);
                 }
             }
         }
@@ -1629,6 +1633,10 @@ public class JLFeature implements IJLFeature {
          * Whether to clip-delete ANY features from this feature through the end of the structure
          */
         boolean clip;
+        /**
+		 * JShell session object
+         */
+        public AbstractJLISession jliSession;
 
 		/* (non-Javadoc)
 		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
@@ -1651,20 +1659,11 @@ public class JLFeature implements IJLFeature {
 	        looper.setTypePattern(featureType);
 	        if (featureName==null && featureNameList==null)
 	        	looper.setIncludeUnnamed(true);
-	        looper.clip = clip;
 
 	        looper.loop(solid);
-	        
-	        // perform the delete operations
-	        if (looper.featOps!=null && looper.featOps.getarraysize()>0) {
-	            solid.executeFeatureOps(looper.featOps, null);
-	            
-	            CallWindow win = getSession().getModelWindow(solid);
-	            if (win!=null)
-	                win.refresh();
-	        }
-	        else {
-//	        	throw new JLIException("No features found to delete");
+
+	        if (looper.features!=null && looper.features.size()>0) {
+	        	doDelete(jliSession, solid, looper.features, clip);
 	        }
 			return false;
 		}
@@ -1677,22 +1676,41 @@ public class JLFeature implements IJLFeature {
      */
     private static class DeleteLooper2 extends FeatureLooper {
         /**
-         * Whether to clip-delete ANY features from this feature through the end of the structure
+         * A list of features accumulated for processing
          */
-        public boolean clip = false;
-        /**
-         * A list of delete operations accumulated for processing
-         */
-        public CallFeatureOperations featOps = null;
+
+        public List<CallFeature> features = null;
 
         public void loopAction(CallFeature feat) throws JLIException, jxthrowable {
-        	if (featOps==null)
-			    featOps = CallFeatureOperations.create();
-
-        	CallDeleteOperation delop = feat.createDeleteOp();
-            delop.setClip(clip);
-            featOps.append(delop);
+            if (features==null)
+            	features = new ArrayList<CallFeature>();
+            features.add(feat);
         }
+    }
+
+    /**
+     * Perform the delete operations.  Meant to be overridden by child classes.
+     * @param jliSession The JShell session
+     * @param solid The Solid that owns the features
+     * @param features The features to delete 
+     * @param clip Whether to clip children
+     * @throws JLIException
+     * @throws jxthrowable
+     */
+    public void doDelete(AbstractJLISession jliSession, CallSolid solid, List<CallFeature> features, boolean clip) throws JLIException, jxthrowable {
+    	if (jliSession.getProeVersion()>=9 && nativeHandler!=null) {
+    		nativeHandler.doDelete(jliSession, solid, features, clip);
+    		return;
+    	}
+    	CallFeatureOperations featOps = CallFeatureOperations.create();
+    	for (CallFeature feat : features) {
+            // accumulate the suppress operation and feature object
+            CallSuppressOperation supop = feat.createSuppressOp();
+            supop.setClip(clip);
+            featOps.append(supop);
+    	}
+
+		solid.executeFeatureOps(featOps, null);
     }
 
     /**
@@ -1725,6 +1743,10 @@ public class JLFeature implements IJLFeature {
     	 * Whether to also resume children of the features
     	 */
     	boolean withChildren;
+        /**
+		 * JShell session object
+         */
+        AbstractJLISession jliSession;
 
 		/* (non-Javadoc)
 		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
@@ -1760,14 +1782,14 @@ public class JLFeature implements IJLFeature {
 	        // remove this code if going with separate featOps
 	        if (withChildren) {
 	            if (looper.featuresResumed!=null) {
-	                resumeChildren(looper.featuresResumed, looper.featOps);
+	                resumeChildren(looper.featuresResumed, looper.features);
 	            }
 	        }
 
 	        // perform the resume operations
 	        boolean resumed = false;
-	        if (looper.featOps!=null && looper.featOps.getarraysize()>0) {
-	            solid.executeFeatureOps(looper.featOps, null);
+	        if (looper.features!=null && looper.features.size()>0) {
+	        	doResume(jliSession, solid, looper.features);
 	            resumed = true;
 	        }
 
@@ -1794,9 +1816,9 @@ public class JLFeature implements IJLFeature {
      */
     private static class ResumeLooper2 extends FeatureLooper {
         /**
-         * A list of resume operations accumulated for processing
+         * A list of features accumulated for processing
          */
-        public CallFeatureOperations featOps = null;
+        public List<CallFeature> features = null;
         /**
          * A list of feature objects that were resumed
          */
@@ -1806,20 +1828,40 @@ public class JLFeature implements IJLFeature {
 
             // Note: only resume user-suppressed features, not ones suppressed by the app
             if (feat!=null && feat.getStatus() == FeatureStatus._FEAT_SUPPRESSED) {
-                if (featOps==null)
-                    featOps = CallFeatureOperations.create();
-
-                // accumulate the resume operation and feature object
-                CallResumeOperation resop = feat.createResumeOp();
-                // resop.SetWithParents(with_parents); // legacy code
-                resop.setWithParents(true);
-                featOps.append(resop);
+                if (features==null)
+                	features = new ArrayList<CallFeature>();
+                features.add(feat);
                 
                 if (featuresResumed==null)
                     featuresResumed = new Vector<CallFeature>();
                 featuresResumed.add(feat);
             }
         }
+    }
+
+    /**
+     * Perform the resume operations.  Meant to be overridden by child classes.
+     * @param jliSession The JShell session
+     * @param solid The Solid that owns the features
+     * @param features The features to resume 
+     * @throws JLIException
+     * @throws jxthrowable
+     */
+    public void doResume(AbstractJLISession jliSession, CallSolid solid, List<CallFeature> features) throws JLIException, jxthrowable {
+    	if (jliSession.getProeVersion()>=9 && nativeHandler!=null) {
+    		nativeHandler.doResume(jliSession, solid, features);
+    		return;
+    	}
+    	CallFeatureOperations featOps = CallFeatureOperations.create();
+    	for (CallFeature feat : features) {
+            // accumulate the suppress operation and feature object
+            CallResumeOperation resop = feat.createResumeOp();
+            // resop.SetWithParents(with_parents); // legacy code
+            resop.setWithParents(true);
+            featOps.append(resop);
+    	}
+
+		solid.executeFeatureOps(featOps, null);
     }
 
     /**
@@ -1856,6 +1898,10 @@ public class JLFeature implements IJLFeature {
          * Whether to clip-suppress ANY features from this feature through the end of the structure
          */
     	boolean clip;
+        /**
+		 * JShell session object
+         */
+        AbstractJLISession jliSession;
 
 		/* (non-Javadoc)
 		 * @see com.simplifiedlogic.nitro.util.ModelLooper#loopAction(com.simplifiedlogic.nitro.jlink.calls.model.CallModel)
@@ -1866,7 +1912,6 @@ public class JLFeature implements IJLFeature {
 				return false;
 			CallSolid solid = (CallSolid)m;
 	        SuppressLooper2 looper = new SuppressLooper2();
-	        looper.clip = clip;
 			if (featureId>0) {
 				CallFeature feat = solid.getFeatureById(featureId);
 				if (feat!=null) {
@@ -1892,13 +1937,13 @@ public class JLFeature implements IJLFeature {
 	        // remove this code if going with separate featOps
 	        if (withChildren) {
 	            if (looper.featuresSuppressed!=null) {
-	                suppressChildren(looper.featuresSuppressed, looper.featOps, clip);
+	                suppressChildren(looper.featuresSuppressed, looper.features, clip);
 	            }
 	        }
 
 	        // perform the suppress operations
-	        if (looper.featOps!=null && looper.featOps.getarraysize()>0) {
-	        	solid.executeFeatureOps(looper.featOps, null);
+	        if (looper.features!=null && looper.features.size()>0) {
+	        	doSuppress(jliSession, solid, looper.features, clip);
 	            
 	            CallWindow win = getSession().getModelWindow(solid);
 	            if (win!=null)
@@ -1916,13 +1961,9 @@ public class JLFeature implements IJLFeature {
      */
     private static class SuppressLooper2 extends FeatureLooper {
         /**
-         * Whether to clip-suppress ANY features from this feature through the end of the structure
+         * A list of features accumulated for processing
          */
-        public boolean clip = false;
-        /**
-         * A list of suppress operations accumulated for processing
-         */
-        public CallFeatureOperations featOps = null;
+        public List<CallFeature> features = null;
         /**
          * A list of feature objects that were resumed
          */
@@ -1933,23 +1974,44 @@ public class JLFeature implements IJLFeature {
          */
         public void loopAction(CallFeature feat) throws JLIException, jxthrowable {
             if (!JlinkUtils.isSuppressed(feat)) {
-                if (featOps==null)
-                    featOps = CallFeatureOperations.create();
+                if (features==null)
+                	features = new ArrayList<CallFeature>();
+                features.add(feat);
 
-                // accumulate the suppress operation and feature object
-                CallSuppressOperation supop = feat.createSuppressOp();
-                supop.setClip(clip);
-                if (clip) {
-	                supop.setAllowGroupMembers(true);
-	                supop.setAllowChildGroupMembers(true);
-                }
-                featOps.append(supop);
-                
                 if (featuresSuppressed==null)
                     featuresSuppressed = new Vector<CallFeature>();
                 featuresSuppressed.add(feat);
             }
         }
+    }
+
+    /**
+     * Perform the suppress operations.  Meant to be overridden by child classes.
+     * @param jliSession The JShell session
+     * @param solid The Solid that owns the features
+     * @param features The features to suppress 
+     * @param clip Whether to clip children
+     * @throws JLIException
+     * @throws jxthrowable
+     */
+    public void doSuppress(AbstractJLISession jliSession, CallSolid solid, List<CallFeature> features, boolean clip) throws JLIException, jxthrowable {
+    	if (jliSession.getProeVersion()>=9 && nativeHandler!=null) {
+    		nativeHandler.doSuppress(jliSession, solid, features, clip);
+    		return;
+    	}
+    	CallFeatureOperations featOps = CallFeatureOperations.create();
+    	for (CallFeature feat : features) {
+            // accumulate the suppress operation and feature object
+            CallSuppressOperation supop = feat.createSuppressOp();
+            supop.setClip(clip);
+            if (clip) {
+                supop.setAllowGroupMembers(true);
+                supop.setAllowChildGroupMembers(true);
+            }
+            featOps.append(supop);
+    	}
+
+		solid.executeFeatureOps(featOps, null);
     }
 
     /**

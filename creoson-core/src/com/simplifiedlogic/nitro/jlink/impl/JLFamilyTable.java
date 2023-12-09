@@ -30,7 +30,6 @@ import com.ptc.pfc.pfcFamily.FamilyColumnType;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcModelItem.ParamValueType;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.DataUtils;
 import com.simplifiedlogic.nitro.jlink.calls.componentfeat.CallCompModelReplace;
 import com.simplifiedlogic.nitro.jlink.calls.componentfeat.CallComponentFeat;
@@ -49,10 +48,12 @@ import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallRegenInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
+import com.simplifiedlogic.nitro.jlink.cpp.JCFamilyTable;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.FamTableInstance;
 import com.simplifiedlogic.nitro.jlink.data.FamilyTableGetRowReturn;
 import com.simplifiedlogic.nitro.jlink.data.FamilyTableRowColumns;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.intf.IJLFamilyTable;
 import com.simplifiedlogic.nitro.rpc.JLIException;
 import com.simplifiedlogic.nitro.rpc.JLISession;
@@ -77,6 +78,8 @@ public class JLFamilyTable implements IJLFamilyTable {
     private static final String TYPE_COMP_CURVE_PARAM = "param_comp_curve";
     private static final String TYPE_QUILT_PARAM = "param_quilt";
     private static final String TYPE_ANNOT_ELEM_PARAM = "param_annot_elem";
+
+    private JCFamilyTable nativeHandler = new JCFamilyTable();
 
 /*
     public int actionCreate(Hashtable cmd, Hashtable out_cmd, JLISession sess) throws JLIException,Exception {
@@ -870,12 +873,12 @@ public class JLFamilyTable implements IJLFamilyTable {
 
 	        try {
 		        if (path!=null)
-		            navigateReplace(session, wrapping_solid, path, new_solid);
+		            navigateReplace(session, sess, wrapping_solid, path, new_solid);
 		        else
-		        	walkReplace(session, wrapping_solid, oldinst, new_solid, "  ");
+		        	walkReplace(session, sess, wrapping_solid, oldinst, new_solid, "  ");
 	        }
 	        finally {
-	        	JlinkUtils.postfixResolveModeFix(session, resolveMode);
+		        JlinkUtils.postfixResolveModeFix(session, sess, resolveMode);
 	        }
 	
 	        CallWindow win = session.getModelWindow(wrapping_solid);
@@ -895,6 +898,7 @@ public class JLFamilyTable implements IJLFamilyTable {
     /**
      * Recursively walk the assembly to replace one instance with another.  The walk is done postfix.  The window will be refreshed at the end.
      * @param session The Creo session
+     * @param jliSession The jshell session
      * @param wrapping_solid The parent component whose children are being examined
      * @param oldinst The name of the old instance
      * @param new_solid The new solid to use to replace the old instance
@@ -902,14 +906,14 @@ public class JLFamilyTable implements IJLFamilyTable {
      * @throws JLIException
      * @throws jxthrowable
      */
-    private void walkReplace(CallSession session, CallSolid wrapping_solid, String oldinst, CallSolid new_solid, String indent) throws JLIException, jxthrowable {
+    private void walkReplace(CallSession session, AbstractJLISession jliSession, CallSolid wrapping_solid, String oldinst, CallSolid new_solid, String indent) throws JLIException, jxthrowable {
     	// list the child components of the current component
         CallFeatures components = wrapping_solid.listFeaturesByType(Boolean.FALSE, FeatureType.FEATTYPE_COMPONENT);
         if (components==null)
             return;
         int len = components.getarraysize();
         if (len==0) return;
-        CallFeatureOperations replaceOps = null;
+        List<CallComponentFeat> replaceComps = null;
 
         CallComponentFeat component;
         CallCompModelReplace replace;
@@ -925,27 +929,25 @@ public class JLFamilyTable implements IJLFamilyTable {
                 // recurse into the child components
                 if (type==ModelType._MDL_ASSEMBLY) {
                     if (child!=null && child instanceof CallSolid) {
-                        walkReplace(session, (CallSolid)child, oldinst, new_solid, indent+"  ");
+                        walkReplace(session, jliSession, (CallSolid)child, oldinst, new_solid, indent+"  ");
                     }
                 }
             
                 // accumulate replace operations
                 // FIXME: need to check that base name is same as input curmodel
                 if (instname.equalsIgnoreCase(oldinst)) {
-                    replace = component.createReplaceOp(new_solid);
-                    if (replaceOps==null)
-                        replaceOps = CallFeatureOperations.create();
-                    replaceOps.insert(0, replace);
+                	if (replaceComps==null)
+                		replaceComps = new ArrayList<CallComponentFeat>();
+                	replaceComps.add(component);
                 }
             }
             catch (jxthrowable jxe) {
                 throw JlinkUtils.createException(jxe, "A PTC error has occurred when retriving component " + component.getModelDescr().getFileName());
             }
         }
-        // perform the replace operations that have been accumulated for the children of this solid
-        if (replaceOps!=null && replaceOps.getarraysize()>0) {
-            CallRegenInstructions inst = CallRegenInstructions.create(Boolean.FALSE, null, null); 
-            wrapping_solid.executeFeatureOps(replaceOps, inst);
+
+        if (replaceComps!=null && replaceComps.size()>0) {
+        	doReplace(jliSession, wrapping_solid, replaceComps, new_solid);
             
             CallWindow win = session.getModelWindow(wrapping_solid);
             if (win!=null)
@@ -954,17 +956,44 @@ public class JLFamilyTable implements IJLFamilyTable {
     }
     
     /**
+     * Perform the component replace.  Meant to be overridden by child classes.
+     * @param jliSession The JShell session
+     * @param wrapping_solid The parent assembly of the components being replaced
+     * @param components List of component objects to replace
+     * @param new_solid The new object to replace the components with
+     * @throws JLIException
+     * @throws jxthrowable
+     */
+    public void doReplace(AbstractJLISession jliSession, CallSolid wrapping_solid, List<CallComponentFeat> components, CallSolid new_solid) throws JLIException, jxthrowable {
+    	if (components==null || components.size()==0)
+    		return;
+    	if (jliSession.getProeVersion()>=9 && nativeHandler!=null) {
+    		nativeHandler.doReplace(jliSession, wrapping_solid, components, new_solid);
+    		return;
+    	}
+        CallCompModelReplace replace;
+        CallFeatureOperations replaceOps = CallFeatureOperations.create();
+    	for (CallComponentFeat component: components) {
+            replace = component.createReplaceOp(new_solid);
+            replaceOps.insert(0, replace);
+    	}
+
+        CallRegenInstructions inst = CallRegenInstructions.create(Boolean.FALSE, null, null); 
+        wrapping_solid.executeFeatureOps(replaceOps, inst);
+    }
+    
+    /**
      * Navigate directly to a component specified by a component path and replace it with another instance.  The window will be refreshed at the end.
      * @param session The Creo session
+     * @param jliSession The jshell session
      * @param wrapping_solid The parent component whose children are being examined
      * @param path The component path for the component to replace
      * @param new_solid The new solid to use to replace the old instance
      * @throws JLIException
      * @throws jxthrowable
      */
-    private void navigateReplace(CallSession session, CallSolid wrapping_solid, List<Integer> path, CallSolid new_solid) throws JLIException,jxthrowable {
-    	CallFeatureOperations replaceOps = null;
-    	CallCompModelReplace replace;
+    private void navigateReplace(CallSession session, AbstractJLISession jliSession, CallSolid wrapping_solid, List<Integer> path, CallSolid new_solid) throws JLIException,jxthrowable {
+    	List<CallComponentFeat> replaceComps = null;
 
         int len = path.size();
         Integer id;
@@ -992,20 +1021,18 @@ public class JLFamilyTable implements IJLFamilyTable {
                 parentSolid = (CallSolid)child;
             }
         }
-        // create a replace operation
-        replace = componentF.createReplaceOp(new_solid);
-        if (replaceOps==null)
-            replaceOps = CallFeatureOperations.create();
-        replaceOps.insert(0, replace);
+
+        if (replaceComps==null)
+        	replaceComps = new ArrayList<CallComponentFeat>();
+        replaceComps.add(componentF);
         
         // perform the replace operation
-        if (replaceOps!=null && replaceOps.getarraysize()>0) {
-            CallRegenInstructions inst = CallRegenInstructions.create(Boolean.FALSE, null, null); 
-            parentSolid.executeFeatureOps(replaceOps, inst);
+        if (replaceComps!=null && replaceComps.size()>0) {
+        	doReplace(jliSession, parentSolid, replaceComps, new_solid);
             
             CallWindow win = session.getModelWindow(parentSolid);
             if (win!=null)
-                win.refresh();
+            	win.refresh();
         }
     }
     

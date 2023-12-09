@@ -1,0 +1,2 @@
+#define JSHELLNATIVE_API __declspec(dllexport)
+#define JSHELLNATIVE_API __declspec(dllimport)
