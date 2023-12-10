@@ -1,6 +1,20 @@
 R E L E A S E   N O T E S
 =========================
 
+2.9.0
+	- Modified functions:
+		familytable
+			replace - uses jshellnative.dll native library if Creo 9 or 10
+		feature
+			delete - uses jshellnative.dll native library if Creo 9 or 10
+			suppress - uses jshellnative.dll native library if Creo 9 or 10
+			resume - uses jshellnative.dll native library if Creo 9 or 10
+		file
+			assemble - uses jshellnative.dll native library when new component is suppressed if Creo 9 or 10
+			regenerate - no longer uses deprecated Creo option if Creo 9 or 10
+		parameter
+			copy - now copies parameter description
+
 2.8.2
 	- Modified functions:
 		creo
