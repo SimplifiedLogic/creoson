@@ -2,6 +2,7 @@ R E L E A S E   N O T E S
 =========================
 
 2.9.0
+	- Removed the 32-bit version from the release; Creo hasn't supported 32-bit in years.
 	- Modified functions:
 		familytable
 			replace - uses jshellnative.dll native library if Creo 9 or 10
