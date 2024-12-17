@@ -45,6 +45,7 @@ public interface JLFileResponseParams {
     public static final String OUTPUT_REVISION	= "revision";
     public static final String OUTPUT_ACTIVE	= "active";
     public static final String OUTPUT_UNITS		= "units";
+    public static final String OUTPUT_NAME		= "name";
     public static final String OUTPUT_MATERIAL	= "material";
     public static final String OUTPUT_MATERIALS	= "materials";
     public static final String OUTPUT_CTR_GRAV	= "ctr_grav";

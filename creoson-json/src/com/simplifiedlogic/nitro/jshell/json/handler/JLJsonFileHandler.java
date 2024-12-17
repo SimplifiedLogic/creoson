@@ -90,6 +90,8 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 		else if (function.equals(FUNC_GET_LENGTH_UNITS)) return actionGetLengthUnits(sessionId, input);
 		else if (function.equals(FUNC_GET_MASS_UNITS)) return actionGetMassUnits(sessionId, input);
 		else if (function.equals(FUNC_SET_LENGTH_UNITS)) return actionSetLengthUnits(sessionId, input);
+		else if (function.equals(FUNC_GET_UNIT_SYSTEM)) return actionGetUnitSystem(sessionId, input);
+		else if (function.equals(FUNC_SET_UNIT_SYSTEM)) return actionSetUnitSystem(sessionId, input);
 		else if (function.equals(FUNC_SET_MASS_UNITS)) return actionSetMassUnits(sessionId, input);
 		else if (function.equals(FUNC_ASSEMBLE)) return actionAssemble(sessionId, input);
 		else if (function.equals(FUNC_GET_TRANSFORM)) return actionGetTransform(sessionId, input);
@@ -102,6 +104,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 		else if (function.equals(FUNC_LOAD_MATL_FILE)) return actionLoadMaterialFile(sessionId, input);
 		else if (function.equals(FUNC_DELETE_MATERIAL)) return actionDeleteMaterial(sessionId, input);
 		else if (function.equals(FUNC_GET_ACCURACY)) return actionGetAccuracy(sessionId, input);
+		else if (function.equals(FUNC_CREATE_UNIT_SYSTEM)) return actionCreateUnitSystem(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -384,6 +387,28 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         boolean convert = checkFlagParameter(input, PARAM_CONVERT, false, true);
         
         fileHandler.setLengthUnits(filename, units, convert, sessionId);
+
+		return null;
+	}
+
+	private Hashtable<String, Object> actionGetUnitSystem(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        
+        String name = fileHandler.getUnitSystem(filename, sessionId);
+
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        if (name!=null) {
+			out.put(OUTPUT_NAME, name);
+        }
+    	return out;
+	}
+
+	private Hashtable<String, Object> actionSetUnitSystem(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String name = checkStringParameter(input, PARAM_NAME, true);
+        boolean convert = checkFlagParameter(input, PARAM_CONVERT, false, true);
+        
+        fileHandler.setUnitSystem(filename, name, convert, sessionId);
 
 		return null;
 	}
@@ -709,6 +734,20 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
        		out.put(OUTPUT_RELATIVE, String.valueOf(accuracy.isRelative()));
         }
     	return out;
+	}
+
+	private Hashtable<String, Object> actionCreateUnitSystem(String sessionId, Hashtable<String, Object> input) throws JLIException {
+        String filename = checkStringParameter(input, PARAM_MODEL, false);
+        String name = checkStringParameter(input, PARAM_NAME, true);
+        String unitLength = checkStringParameter(input, PARAM_UNIT_LENGTH, false);
+        String unitMassForce = checkStringParameter(input, PARAM_UNIT_MASS_FORCE, false);
+        String unitTime = checkStringParameter(input, PARAM_UNIT_TIME, false);
+        String unitTemp = checkStringParameter(input, PARAM_UNIT_TEMP, false);
+        boolean mass = checkFlagParameter(input, PARAM_MASS, false, true);
+        
+        fileHandler.createUnitSystem(filename, name, mass, unitMassForce, unitLength, unitTime, unitTemp, sessionId);
+
+		return null;
 	}
 
     protected JLConstraintInput readConstraint(Map<String, Object> rec) throws JLIException {

@@ -179,6 +179,12 @@ public interface IJLFile {
     public void setLengthUnits(String filename, String units, boolean convert, String sessionId) throws JLIException;
     public void setLengthUnits(String filename, String units, boolean convert, AbstractJLISession sess) throws JLIException;
 
+	public String getUnitSystem(String filename, String sessionId) throws JLIException;
+    public String getUnitSystem(String filename, AbstractJLISession sess) throws JLIException;
+
+    public void setUnitSystem(String filename, String name, boolean convert, String sessionId) throws JLIException;
+    public void setUnitSystem(String filename, String name, boolean convert, AbstractJLISession sess) throws JLIException;
+
     public JLTransform getTransform(String assembly, List<Integer> path, String csys, String sessionId) throws JLIException;
     public JLTransform getTransform(String assembly, List<Integer> path, String csys, AbstractJLISession sess) throws JLIException;
 
@@ -211,4 +217,7 @@ public interface IJLFile {
 	
 	public JLAccuracy getAccuracy(String filename, String sessionId) throws JLIException;
 	public JLAccuracy getAccuracy(String filename, AbstractJLISession sess) throws JLIException;
+
+	public void createUnitSystem(String filename, String name, boolean mass, String unit_mass_force, String unit_length, String unit_time, String unit_temp, String sessionId) throws JLIException;
+	public void createUnitSystem(String filename, String name, boolean mass, String unit_mass_force, String unit_length, String unit_time, String unit_temp, AbstractJLISession sess) throws JLIException;
 }

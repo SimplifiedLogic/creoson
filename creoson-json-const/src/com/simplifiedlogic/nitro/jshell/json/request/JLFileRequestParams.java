@@ -57,6 +57,8 @@ public interface JLFileRequestParams {
 	public static final String FUNC_GET_MASS_UNITS		= "get_mass_units";
 	public static final String FUNC_SET_LENGTH_UNITS	= "set_length_units";
 	public static final String FUNC_SET_MASS_UNITS		= "set_mass_units";
+	public static final String FUNC_GET_UNIT_SYSTEM		= "get_unit_system";
+	public static final String FUNC_SET_UNIT_SYSTEM		= "set_unit_system";
 	public static final String FUNC_ASSEMBLE		= "assemble";
 	public static final String FUNC_GET_TRANSFORM	= "get_transform";
 	public static final String FUNC_LIST_SIMP_REPS	= "list_simp_reps";
@@ -68,6 +70,7 @@ public interface JLFileRequestParams {
 	public static final String FUNC_LOAD_MATL_FILE			= "load_material_file";
 	public static final String FUNC_DELETE_MATERIAL			= "delete_material";
 	public static final String FUNC_GET_ACCURACY			= "get_accuracy";
+	public static final String FUNC_CREATE_UNIT_SYSTEM		= "create_unit_system";
 	
 	// request fields
     public static final String PARAM_MODEL       = "file";
@@ -110,6 +113,12 @@ public interface JLFileRequestParams {
     public static final String PARAM_SUPPRESS	= "suppress";
     public static final String PARAM_MATERIAL	= "material";
     public static final String PARAM_INCLUDE_NON_MATCHING = "include_non_matching_parts";
+	public static final String PARAM_UNIT_MASS_FORCE 	= "unit_mass";
+	public static final String PARAM_UNIT_LENGTH 		= "unit_length";
+	public static final String PARAM_UNIT_TIME 			= "unit_time";
+	public static final String PARAM_UNIT_TEMP 			= "unit_temp";
+	public static final String PARAM_NAME 		= "name";
+	public static final String PARAM_MASS 		= "mass";
 
     // point/matrix/transform params
 	public static final String PARAM_X			= "x";
