@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.DatumSide;
 import com.ptc.pfc.pfcBase.UnitType;
+import com.ptc.pfc.pfcUnits.UnitSystemType;
 import com.ptc.pfc.pfcComponentFeat.ComponentConstraintType;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
 import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
@@ -74,6 +75,7 @@ import com.simplifiedlogic.nitro.jlink.calls.units.CallUnit;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitConversionOptions;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystem;
 import com.simplifiedlogic.nitro.jlink.calls.units.CallUnitSystems;
+import com.simplifiedlogic.nitro.jlink.calls.units.CallUnits;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.cpp.JCFile;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
@@ -1768,6 +1770,137 @@ public class JLFile implements IJLFile {
         	}
     	}
     }
+
+	 /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getUnitSystem(java.lang.String, java.lang.String)
+     */
+    @Override
+    public String getUnitSystem(String filename, String sessionId) throws JLIException {
+    	
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        return getUnitSystem(filename, sess);
+    }
+    
+    /* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getUnitSystem(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    @Override
+    public String getUnitSystem(String filename, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("file.get_unit_system: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        
+	        if (!(m instanceof CallSolid))
+	            throw new JLIException("File '" + m.getFileName() + "' must be a solid");
+
+	        CallSolid solid = (CallSolid)m;
+
+            CallUnitSystem system = solid.getPrincipalUnits();
+
+	        if (system==null)
+//	        	throw new JLIException("No Unit System found for part");
+	        	return null;
+	        
+	        return system.getName();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.get_unit_system,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
+
+	/* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#setUnitSystem(java.lang.String, java.lang.String, boolean, java.lang.String)
+     */
+    @Override
+    public void setUnitSystem(String filename, String name, boolean convert, String sessionId) throws JLIException {
+    	
+        JLISession sess = JLISession.getSession(sessionId);
+        
+        setUnitSystem(filename, name, convert, sess);
+    }
+
+	/* (non-Javadoc)
+     * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#setUnitSystem(java.lang.String, java.lang.String, boolean, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+     */
+    @Override
+    public void setUnitSystem(String filename, String name, boolean convert, AbstractJLISession sess) throws JLIException {
+    	
+		DebugLogging.sendDebugMessage("file.set_unit_system: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (name==null)
+    		throw new JLIException("No name parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+	
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallModel m = JlinkUtils.getFile(session, filename, true);
+	        
+	        if (!(m instanceof CallSolid))
+	            throw new JLIException("File '" + m.getFileName() + "' must be a solid");
+
+	        CallSolid solid = (CallSolid)m;
+	        
+            CallUnitSystems systems = solid.listUnitSystems();
+            boolean found=false;
+            if (systems!=null) {
+	            int len = systems.getarraysize();
+	            for (int i=0; i<len; i++) {
+	            	CallUnitSystem system = systems.get(i);
+		        	if (system.getName().equals(name)) {
+		        		UnitDimensionConversion convertOpt;
+		        		if (convert)
+		        			convertOpt = UnitDimensionConversion.UNITCONVERT_SAME_SIZE;
+		        		else
+		        			convertOpt = UnitDimensionConversion.UNITCONVERT_SAME_DIMS;
+		        		CallUnitConversionOptions opts = CallUnitConversionOptions.create(convertOpt);
+		        		opts.setDimensionOption(convertOpt);
+		        		solid.setPrincipalUnits(system, opts);
+		        		found=true;
+		        		break;
+		        	}
+	            }
+            }
+            
+            if (!found)
+            	throw new JLIException("No unit system '" + name + "' was found for this part.");	
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("file.set_unit_system,"+filename, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
     
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getRelations(java.lang.String, java.lang.String)
@@ -3344,6 +3477,116 @@ public class JLFile implements IJLFile {
         	}
     	}
     }
+
+	public void createUnitSystem(
+			String filename,
+			String name,
+			boolean mass,
+			String unit_mass_force,
+			String unit_length,
+			String unit_time,
+			String unit_temp,
+			String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+		
+		createUnitSystem(filename, name, mass, unit_mass_force, unit_length, unit_time, unit_temp, sess);
+    }
+
+	public void createUnitSystem(
+			String filename,
+			String name,
+			boolean mass,
+			String unit_mass_force,
+			String unit_length,
+			String unit_time,
+			String unit_temp,
+			AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("file.create_unit_system: " + filename, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+		long start = 0;
+		if (NitroConstants.TIME_TASKS)
+			start = System.currentTimeMillis();
+		try {
+			JLGlobal.loadLibrary();
+	
+			CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+			if (session == null)
+				return;
+
+			CallModel m = JlinkUtils.getFile(session, filename, true);
+			
+			if (!(m instanceof CallSolid))
+				throw new JLIException("File '" + m.getFileName() + "' must be a solid");
+
+			CallSolid solid = (CallSolid)m;
+			
+			CallUnitSystems systems = solid.listUnitSystems();
+			if (systems!=null) {
+				int len = systems.getarraysize();
+				for (int i=0; i<len; i++) {
+					CallUnitSystem system = systems.get(i);
+					String existing_name = system.getName();
+					if (existing_name.equals(name))
+						throw new JLIException("Unit system '" + name + "' already exists");
+				}
+			}
+
+			CallUnit found_mass_force = null;
+			CallUnit found_length = null;
+			CallUnit found_time = null;
+			CallUnit found_temp = null;
+			CallUnits available_units = solid.ListUnits();
+			String availableUnits = "";
+			if(available_units!=null){
+				int len = available_units.getarraysize();
+				for(int i=0; i<len; i++){
+					CallUnit unit = available_units.get(i);
+					String existing_name = unit.getName();
+					availableUnits += existing_name + " ";
+					if (existing_name.equalsIgnoreCase(unit_length))
+						found_length = unit;
+					if(existing_name.equalsIgnoreCase(unit_mass_force))
+						found_mass_force = unit;
+					if(existing_name.equalsIgnoreCase(unit_time))
+						found_time = unit;
+					if(existing_name.equalsIgnoreCase(unit_temp))
+						found_temp = unit;
+				}
+			}
+
+			if(unit_length != null && null == found_length)
+				throw new JLIException("Length unit '" + unit_length + "' not found. Available units are: " + availableUnits);
+			if(unit_mass_force != null && null == found_mass_force)
+				throw new JLIException("Mass/Force unit '" + unit_mass_force + "' not found. Available units are: " + availableUnits);
+			if(unit_time != null && null == found_time)
+				throw new JLIException("Time unit '" + unit_time + "' not found. Available units are: " + availableUnits);
+			if(unit_temp != null && null == found_temp)
+				throw new JLIException("Temp unit '" + unit_temp + "' not found. Available units are: " + availableUnits);
+
+			UnitSystemType unitSystemType = UnitSystemType.UNIT_SYSTEM_MASS_LENGTH_TIME;
+			if(!mass)
+				unitSystemType = UnitSystemType.UNIT_SYSTEM_FORCE_LENGTH_TIME;
+
+			CallUnits units = CallUnits.create();
+			units.append(found_length);
+			units.append(found_mass_force);
+			units.append(found_time);
+			units.append(found_temp);
+
+			solid.createUnitSystem(name, unitSystemType, units.getUnits());
+		}
+		catch (jxthrowable e) {
+			throw JlinkUtils.createException(e);
+		}
+		finally {
+			if (NitroConstants.TIME_TASKS) {
+				DebugLogging.sendTimerMessage("file.create_unit_system,"+filename, start, NitroConstants.DEBUG_KEY);
+			}
+		}
+	}
 
     /**
      * Walk the hierarchy of an assembly to find a list of sub-components to assemble a new component to

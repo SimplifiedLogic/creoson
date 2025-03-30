@@ -70,11 +70,13 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpEraseNotDisplayed());
 		list.add(helpExists());
 		list.add(helpGetAccuracy());
+		list.add(helpCreateUnitSystem());
 		list.add(helpGetActive());
 		list.add(helpGetCurrentMaterial());
 		list.add(helpGetCurrentMaterialWildcard());
 		list.add(helpGetFileinfo());
 		list.add(helpGetLengthUnits());
+		list.add(helpGetUnitSystem());
 		list.add(helpGetMassUnits());
 		list.add(helpGetTransform());
 		list.add(helpHasInstances());
@@ -100,6 +102,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpSetCurrentMaterial());
 		list.add(helpSetLengthUnits());
 		list.add(helpSetMassUnits());
+		list.add(helpSetUnitSystem());
 		return list;
 	}
 	
@@ -775,6 +778,43 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
         return template;
     }
+
+	private FunctionTemplate helpSetUnitSystem() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_MASS_UNITS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Set the current unit system for a model");
+    	spec.addFootnote("This will search the model's available Unit Systems for the first one which holds the given name");
+    	FunctionArgument arg;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New unit system's name");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_CONVERT, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("Whether to convert the model's mass values to the new units (true) or leave them the same value (false)");
+    	arg.setDefaultValue("true");
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "bracket.prt");
+    	ex.addInput(PARAM_NAME, "custom_units");
+    	ex.addInput(PARAM_CONVERT, false);
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_NAME, "custom_units");
+    	template.addExample(ex);
+
+        return template;
+    }
     
 	private FunctionTemplate helpGetLengthUnits() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_LENGTH_UNITS);
@@ -797,6 +837,32 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "bracket.prt");
     	ex.addOutput(OUTPUT_UNITS, "cm");
+    	template.addExample(ex);
+
+        return template;
+    }
+
+	private FunctionTemplate helpGetUnitSystem() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_LENGTH_UNITS);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Get the name of the current unit system for a model");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+    	
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("Currently active model");
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_NAME, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Unit system name");
+    	spec.addReturn(ret);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "bracket.prt");
+    	ex.addOutput(OUTPUT_NAME, "custom_units");
     	template.addExample(ex);
 
         return template;
@@ -1751,6 +1817,72 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	ex.addInput(PARAM_MODEL, "wingnut.prt");
     	ex.addOutput(OUTPUT_ACCURACY, "0.001");
     	ex.addOutput(OUTPUT_RELATIVE, "false");
+    	template.addExample(ex);
+
+        return template;
+    }
+
+	private FunctionTemplate helpCreateUnitSystem() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_ACCURACY);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Creates a new unit system in the model");
+    	spec.addFootnote("If the model already has a unit system with the same name, this function will not work. All units must already exist.");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name");
+    	arg.setDefaultValue("Currently active model");
+    	arg.setWildcards(false);
+    	spec.addArgument(arg);
+
+		arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New unit system name");
+		arg.setRequired(true);
+    	spec.addArgument(arg);
+
+		arg = new FunctionArgument(PARAM_UNIT_LENGTH, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New unit system length unit");
+		arg.setRequired(false);
+    	spec.addArgument(arg);
+
+		arg = new FunctionArgument(PARAM_UNIT_MASS_FORCE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New unit system mass/force unit. Decided by mass flag, default mass");
+		arg.setRequired(false);
+    	spec.addArgument(arg);
+
+		arg = new FunctionArgument(PARAM_UNIT_TIME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New unit system time unit");
+		arg.setRequired(false);
+    	spec.addArgument(arg);
+
+		arg = new FunctionArgument(PARAM_UNIT_TEMP, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("New unit system temperature unit");
+		arg.setRequired(false);
+    	spec.addArgument(arg);
+
+		arg = new FunctionArgument(PARAM_MASS, FunctionSpec.TYPE_BOOL);
+    	arg.setDescription("If mass/force unit is mass");
+		arg.setRequired(false);
+    	spec.addArgument(arg);
+        
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.asm");
+    	ex.addInput(PARAM_NAME, "CustomUnits");
+    	ex.addInput(PARAM_UNIT_LENGTH, "mm");
+    	ex.addInput(PARAM_UNIT_MASS_FORCE, "g");
+    	ex.addInput(PARAM_UNIT_TIME, "sec");
+    	template.addExample(ex);
+
+		ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "box.asm");
+    	ex.addInput(PARAM_NAME, "CustomUnits");
+    	ex.addInput(PARAM_UNIT_LENGTH, "mm");
+    	ex.addInput(PARAM_UNIT_MASS_FORCE, "n");
+    	ex.addInput(PARAM_UNIT_TIME, "sec");
+    	ex.addInput(PARAM_MASS, false);
     	template.addExample(ex);
 
         return template;
