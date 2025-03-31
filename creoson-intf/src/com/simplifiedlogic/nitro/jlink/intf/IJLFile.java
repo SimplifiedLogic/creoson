@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -179,7 +179,7 @@ public interface IJLFile {
     public void setLengthUnits(String filename, String units, boolean convert, String sessionId) throws JLIException;
     public void setLengthUnits(String filename, String units, boolean convert, AbstractJLISession sess) throws JLIException;
 
-	public String getUnitSystem(String filename, String sessionId) throws JLIException;
+    public String getUnitSystem(String filename, String sessionId) throws JLIException;
     public String getUnitSystem(String filename, AbstractJLISession sess) throws JLIException;
 
     public void setUnitSystem(String filename, String name, boolean convert, String sessionId) throws JLIException;

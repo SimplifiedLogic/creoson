@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -30,8 +30,8 @@ import com.ptc.pfc.pfcSimpRep.SimpRep;
 import com.ptc.pfc.pfcSolid.MassProperty;
 import com.ptc.pfc.pfcSolid.Solid;
 import com.ptc.pfc.pfcUnits.UnitSystem;
-import com.ptc.pfc.pfcUnits.UnitSystems;
 import com.ptc.pfc.pfcUnits.UnitSystemType;
+import com.ptc.pfc.pfcUnits.UnitSystems;
 import com.ptc.pfc.pfcUnits.Units;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallOutline3D;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallTransform3D;
@@ -195,15 +195,18 @@ public class CallSolid extends CallFamilyMember {
 		return accuracy;
 	}
 
-	public void createUnitSystem(String Name, UnitSystemType Type, Units Units) throws jxthrowable{
+	public CallUnitSystem createUnitSystem(String name, UnitSystemType type, Units units) throws jxthrowable{
 		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,CreateUnitSystem", 0, NitroConstants.DEBUG_JLINK_KEY);
-		getSolid().CreateUnitSystem(Name, Type, Units);
+		UnitSystem system = getSolid().CreateUnitSystem(name, type, units);
+		return new CallUnitSystem(system);
 	}
 
 	public CallUnits ListUnits() throws jxthrowable{
 		if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Solid,ListUnits", 0, NitroConstants.DEBUG_JLINK_KEY);
-		CallUnits units = new CallUnits(getSolid().ListUnits(null));
-		return units;
+		Units units = getSolid().ListUnits(null);
+		if (units==null)
+			return null;
+		return new CallUnits(units);
 	}
 
 	public Solid getSolid() {

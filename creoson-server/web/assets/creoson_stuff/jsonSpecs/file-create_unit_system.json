@@ -1,0 +1,79 @@
+{
+  "spec" : {
+    "function_description" : "Creates a new unit system in the model",
+    "command" : "file",
+    "function" : "create_unit_system",
+    "notes" : [ "If the model already has a unit system with the same name, this function will not work. All units must already exist." ],
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "New unit system name",
+      "required" : true
+    }, {
+      "name" : "unit_length",
+      "type" : "string",
+      "description" : "New unit system length unit"
+    }, {
+      "name" : "unit_mass",
+      "type" : "string",
+      "description" : "New unit system mass/force unit. Decided by mass flag"
+    }, {
+      "name" : "unit_time",
+      "type" : "string",
+      "description" : "New unit system time unit"
+    }, {
+      "name" : "unit_temp",
+      "type" : "string",
+      "description" : "New unit system temperature unit"
+    }, {
+      "name" : "mass",
+      "type" : "boolean",
+      "description" : "Whether the unit_mass is mass (true), or force (false).",
+      "default" : "true"
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "create_unit_system",
+      "data" : {
+        "file" : "box.asm",
+        "name" : "custom_units",
+        "unit_length" : "mm",
+        "unit_mass" : "g",
+        "unit_time" : "sec"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "create_unit_system",
+      "data" : {
+        "file" : "box.asm",
+        "name" : "custom_units",
+        "unit_length" : "mm",
+        "unit_mass" : "n",
+        "unit_time" : "sec",
+        "mass" : false
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -64,21 +64,21 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 		list.add(helpAssemble());
 		list.add(helpBackup());
 		list.add(helpCloseWindow());
+		list.add(helpCreateUnitSystem());
 		list.add(helpDeleteMaterial());
 		list.add(helpDisplay());
 		list.add(helpErase());
 		list.add(helpEraseNotDisplayed());
 		list.add(helpExists());
 		list.add(helpGetAccuracy());
-		list.add(helpCreateUnitSystem());
 		list.add(helpGetActive());
 		list.add(helpGetCurrentMaterial());
 		list.add(helpGetCurrentMaterialWildcard());
 		list.add(helpGetFileinfo());
 		list.add(helpGetLengthUnits());
-		list.add(helpGetUnitSystem());
 		list.add(helpGetMassUnits());
 		list.add(helpGetTransform());
+		list.add(helpGetUnitSystem());
 		list.add(helpHasInstances());
 		list.add(helpIsActive());
 		list.add(helpList());
@@ -778,14 +778,14 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
         return template;
     }
-
+    
 	private FunctionTemplate helpSetUnitSystem() {
-    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_MASS_UNITS);
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_UNIT_SYSTEM);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Set the current unit system for a model");
     	spec.addFootnote("This will search the model's available Unit Systems for the first one which holds the given name");
     	FunctionArgument arg;
-    	
+
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("File name");
     	arg.setDefaultValue("Currently active model");
@@ -815,7 +815,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
         return template;
     }
-    
+
 	private FunctionTemplate helpGetLengthUnits() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_LENGTH_UNITS);
     	FunctionSpec spec = template.getSpec();
@@ -841,14 +841,14 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
         return template;
     }
-
+    
 	private FunctionTemplate helpGetUnitSystem() {
-    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_LENGTH_UNITS);
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_UNIT_SYSTEM);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Get the name of the current unit system for a model");
     	FunctionArgument arg;
     	FunctionReturn ret;
-    	
+
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("File name");
     	arg.setDefaultValue("Currently active model");
@@ -867,7 +867,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
         return template;
     }
-    
+
 	private FunctionTemplate helpSetLengthUnits() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_LENGTH_UNITS);
     	FunctionSpec spec = template.getSpec();
@@ -1823,12 +1823,11 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     }
 
 	private FunctionTemplate helpCreateUnitSystem() {
-    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_GET_ACCURACY);
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_CREATE_UNIT_SYSTEM);
     	FunctionSpec spec = template.getSpec();
     	spec.setFunctionDescription("Creates a new unit system in the model");
     	spec.addFootnote("If the model already has a unit system with the same name, this function will not work. All units must already exist.");
     	FunctionArgument arg;
-    	FunctionReturn ret;
 
     	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
     	arg.setDescription("File name");
@@ -1847,7 +1846,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	spec.addArgument(arg);
 
 		arg = new FunctionArgument(PARAM_UNIT_MASS_FORCE, FunctionSpec.TYPE_STRING);
-    	arg.setDescription("New unit system mass/force unit. Decided by mass flag, default mass");
+    	arg.setDescription("New unit system mass/force unit. Decided by "+PARAM_MASS+" flag");
 		arg.setRequired(false);
     	spec.addArgument(arg);
 
@@ -1862,15 +1861,16 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
     	spec.addArgument(arg);
 
 		arg = new FunctionArgument(PARAM_MASS, FunctionSpec.TYPE_BOOL);
-    	arg.setDescription("If mass/force unit is mass");
+    	arg.setDescription("Whether the "+PARAM_UNIT_MASS_FORCE+" is mass (true), or force (false).");
+    	arg.setDefaultValue("true");
 		arg.setRequired(false);
     	spec.addArgument(arg);
-        
+
     	FunctionExample ex;
 
     	ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.asm");
-    	ex.addInput(PARAM_NAME, "CustomUnits");
+    	ex.addInput(PARAM_NAME, "custom_units");
     	ex.addInput(PARAM_UNIT_LENGTH, "mm");
     	ex.addInput(PARAM_UNIT_MASS_FORCE, "g");
     	ex.addInput(PARAM_UNIT_TIME, "sec");
@@ -1878,7 +1878,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
 		ex = new FunctionExample();
     	ex.addInput(PARAM_MODEL, "box.asm");
-    	ex.addInput(PARAM_NAME, "CustomUnits");
+    	ex.addInput(PARAM_NAME, "custom_units");
     	ex.addInput(PARAM_UNIT_LENGTH, "mm");
     	ex.addInput(PARAM_UNIT_MASS_FORCE, "n");
     	ex.addInput(PARAM_UNIT_TIME, "sec");
@@ -1887,7 +1887,7 @@ public class JLJsonFileHelp extends JLJsonCommandHelp implements JLFileRequestPa
 
         return template;
     }
-    
+
 	private FunctionObject helpJLConstraint() {
     	FunctionObject obj = new FunctionObject(OBJ_CONSTRAINT);
     	obj.setDescription("An assembly constraint");

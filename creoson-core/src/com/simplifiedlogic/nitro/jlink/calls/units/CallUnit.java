@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -19,9 +19,10 @@
 package com.simplifiedlogic.nitro.jlink.calls.units;
 
 import com.ptc.cipjava.jxthrowable;
+import com.ptc.pfc.pfcBase.UnitType;
 import com.ptc.pfc.pfcUnits.Unit;
-import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
+import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 
 /**
  * Wrapper for JLink's com.ptc.pfc.pfcUnits.Unit
@@ -40,6 +41,11 @@ public class CallUnit {
 	public String getName() throws jxthrowable {
         if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Unit,GetName", 0, NitroConstants.DEBUG_JLINK_KEY);
 		return unit.GetName();
+	}
+	
+	public UnitType getType() throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Unit,GetType", 0, NitroConstants.DEBUG_JLINK_KEY);
+		return unit.GetType();
 	}
 	
 	public Unit getUnit() {

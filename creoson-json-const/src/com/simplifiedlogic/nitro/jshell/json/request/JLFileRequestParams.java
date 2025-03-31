@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -113,7 +113,7 @@ public interface JLFileRequestParams {
     public static final String PARAM_SUPPRESS	= "suppress";
     public static final String PARAM_MATERIAL	= "material";
     public static final String PARAM_INCLUDE_NON_MATCHING = "include_non_matching_parts";
-	public static final String PARAM_UNIT_MASS_FORCE 	= "unit_mass";
+    public static final String PARAM_UNIT_MASS_FORCE 	= "unit_mass";
 	public static final String PARAM_UNIT_LENGTH 		= "unit_length";
 	public static final String PARAM_UNIT_TIME 			= "unit_time";
 	public static final String PARAM_UNIT_TEMP 			= "unit_temp";

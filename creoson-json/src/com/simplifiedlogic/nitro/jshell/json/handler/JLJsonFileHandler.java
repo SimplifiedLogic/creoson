@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -393,7 +393,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
 
 	private Hashtable<String, Object> actionGetUnitSystem(String sessionId, Hashtable<String, Object> input) throws JLIException {
         String filename = checkStringParameter(input, PARAM_MODEL, false);
-        
+
         String name = fileHandler.getUnitSystem(filename, sessionId);
 
 		Hashtable<String, Object> out = new Hashtable<String, Object>();
@@ -407,7 +407,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         String filename = checkStringParameter(input, PARAM_MODEL, false);
         String name = checkStringParameter(input, PARAM_NAME, true);
         boolean convert = checkFlagParameter(input, PARAM_CONVERT, false, true);
-        
+
         fileHandler.setUnitSystem(filename, name, convert, sessionId);
 
 		return null;
@@ -744,7 +744,7 @@ public class JLJsonFileHandler extends JLJsonCommandHandler implements JLFileReq
         String unitTime = checkStringParameter(input, PARAM_UNIT_TIME, false);
         String unitTemp = checkStringParameter(input, PARAM_UNIT_TEMP, false);
         boolean mass = checkFlagParameter(input, PARAM_MASS, false, true);
-        
+
         fileHandler.createUnitSystem(filename, name, mass, unitMassForce, unitLength, unitTime, unitTemp, sessionId);
 
 		return null;

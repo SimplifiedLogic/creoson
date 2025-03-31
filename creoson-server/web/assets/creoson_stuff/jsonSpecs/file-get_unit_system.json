@@ -1,0 +1,36 @@
+{
+  "spec" : {
+    "function_description" : "Get the name of the current unit system for a model",
+    "command" : "file",
+    "function" : "get_unit_system",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name",
+      "default" : "Currently active model"
+    } ],
+    "response" : [ {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Unit system name"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "file",
+      "function" : "get_unit_system",
+      "data" : {
+        "file" : "bracket.prt"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "name" : "custom_units"
+      }
+    }
+  } ]
+}

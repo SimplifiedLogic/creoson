@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcBase.DatumSide;
 import com.ptc.pfc.pfcBase.UnitType;
-import com.ptc.pfc.pfcUnits.UnitSystemType;
 import com.ptc.pfc.pfcComponentFeat.ComponentConstraintType;
 import com.ptc.pfc.pfcExceptions.XToolkitCantOpen;
 import com.ptc.pfc.pfcExceptions.XToolkitGeneralError;
@@ -41,6 +40,7 @@ import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModel.ModelType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.ptc.pfc.pfcUnits.UnitDimensionConversion;
+import com.ptc.pfc.pfcUnits.UnitSystemType;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallAssembly;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
 import com.simplifiedlogic.nitro.jlink.calls.base.CallPoint3D;
@@ -1771,23 +1771,23 @@ public class JLFile implements IJLFile {
     	}
     }
 
-	 /* (non-Javadoc)
+    /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getUnitSystem(java.lang.String, java.lang.String)
      */
     @Override
     public String getUnitSystem(String filename, String sessionId) throws JLIException {
-    	
+
         JLISession sess = JLISession.getSession(sessionId);
-        
+
         return getUnitSystem(filename, sess);
     }
-    
+
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getUnitSystem(java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
      */
     @Override
     public String getUnitSystem(String filename, AbstractJLISession sess) throws JLIException {
-    	
+
 		DebugLogging.sendDebugMessage("file.get_unit_system: " + filename, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
@@ -1797,13 +1797,13 @@ public class JLFile implements IJLFile {
     		start = System.currentTimeMillis();
     	try {
 	        JLGlobal.loadLibrary();
-	
+
 	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
 	        if (session == null)
 	            return null;
 
 	        CallModel m = JlinkUtils.getFile(session, filename, true);
-	        
+
 	        if (!(m instanceof CallSolid))
 	            throw new JLIException("File '" + m.getFileName() + "' must be a solid");
 
@@ -1814,7 +1814,7 @@ public class JLFile implements IJLFile {
 	        if (system==null)
 //	        	throw new JLIException("No Unit System found for part");
 	        	return null;
-	        
+
 	        return system.getName();
     	}
     	catch (jxthrowable e) {
@@ -1832,9 +1832,9 @@ public class JLFile implements IJLFile {
      */
     @Override
     public void setUnitSystem(String filename, String name, boolean convert, String sessionId) throws JLIException {
-    	
+
         JLISession sess = JLISession.getSession(sessionId);
-        
+
         setUnitSystem(filename, name, convert, sess);
     }
 
@@ -1843,7 +1843,7 @@ public class JLFile implements IJLFile {
      */
     @Override
     public void setUnitSystem(String filename, String name, boolean convert, AbstractJLISession sess) throws JLIException {
-    	
+
 		DebugLogging.sendDebugMessage("file.set_unit_system: " + filename, NitroConstants.DEBUG_KEY);
 		if (sess==null)
 			throw new JLIException("No session found");
@@ -1856,18 +1856,18 @@ public class JLFile implements IJLFile {
     		start = System.currentTimeMillis();
     	try {
 	        JLGlobal.loadLibrary();
-	
+
 	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
 	        if (session == null)
 	            return;
 
 	        CallModel m = JlinkUtils.getFile(session, filename, true);
-	        
+
 	        if (!(m instanceof CallSolid))
 	            throw new JLIException("File '" + m.getFileName() + "' must be a solid");
 
 	        CallSolid solid = (CallSolid)m;
-	        
+
             CallUnitSystems systems = solid.listUnitSystems();
             boolean found=false;
             if (systems!=null) {
@@ -1888,7 +1888,7 @@ public class JLFile implements IJLFile {
 		        	}
 	            }
             }
-            
+
             if (!found)
             	throw new JLIException("No unit system '" + name + "' was found for this part.");	
     	}
@@ -1901,7 +1901,7 @@ public class JLFile implements IJLFile {
         	}
     	}
     }
-    
+
     /* (non-Javadoc)
      * @see com.simplifiedlogic.nitro.jlink.intf.IJLFile#getRelations(java.lang.String, java.lang.String)
      */
@@ -3478,7 +3478,7 @@ public class JLFile implements IJLFile {
     	}
     }
 
-	public void createUnitSystem(
+    public void createUnitSystem(
 			String filename,
 			String name,
 			boolean mass,
@@ -3488,7 +3488,7 @@ public class JLFile implements IJLFile {
 			String unit_temp,
 			String sessionId) throws JLIException {
         JLISession sess = JLISession.getSession(sessionId);
-		
+
 		createUnitSystem(filename, name, mass, unit_mass_force, unit_length, unit_time, unit_temp, sess);
     }
 
@@ -3511,18 +3511,18 @@ public class JLFile implements IJLFile {
 			start = System.currentTimeMillis();
 		try {
 			JLGlobal.loadLibrary();
-	
+
 			CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
 			if (session == null)
 				return;
 
 			CallModel m = JlinkUtils.getFile(session, filename, true);
-			
+
 			if (!(m instanceof CallSolid))
 				throw new JLIException("File '" + m.getFileName() + "' must be a solid");
 
 			CallSolid solid = (CallSolid)m;
-			
+
 			CallUnitSystems systems = solid.listUnitSystems();
 			if (systems!=null) {
 				int len = systems.getarraysize();
@@ -3539,42 +3539,72 @@ public class JLFile implements IJLFile {
 			CallUnit found_time = null;
 			CallUnit found_temp = null;
 			CallUnits available_units = solid.ListUnits();
-			String availableUnits = "";
+			String available_length_units = "";
+			String available_mass_units = "";
+			String available_force_units = "";
+			String available_time_units = "";
+			String available_temp_units = "";
 			if(available_units!=null){
 				int len = available_units.getarraysize();
 				for(int i=0; i<len; i++){
 					CallUnit unit = available_units.get(i);
 					String existing_name = unit.getName();
-					availableUnits += existing_name + " ";
-					if (existing_name.equalsIgnoreCase(unit_length))
-						found_length = unit;
-					if(existing_name.equalsIgnoreCase(unit_mass_force))
-						found_mass_force = unit;
-					if(existing_name.equalsIgnoreCase(unit_time))
-						found_time = unit;
-					if(existing_name.equalsIgnoreCase(unit_temp))
-						found_temp = unit;
+		        	int existing_type = unit.getType().getValue();
+					if (unit_length!=null && existing_type==UnitType._UNIT_LENGTH) {
+						if (existing_name.equalsIgnoreCase(unit_length))
+							found_length = unit;
+						else if (found_length==null)
+							available_length_units += existing_name + " ";
+					}
+					else if (unit_mass_force!=null && mass && existing_type==UnitType._UNIT_MASS) {
+						if (existing_name.equalsIgnoreCase(unit_mass_force))
+							found_mass_force = unit;
+						else if (found_mass_force==null)
+							available_mass_units += existing_name + " ";
+					}
+					else if (unit_mass_force!=null && !mass && existing_type==UnitType._UNIT_FORCE) {
+						if (existing_name.equalsIgnoreCase(unit_mass_force))
+							found_mass_force = unit;
+						else if (found_mass_force==null)
+							available_force_units += existing_name + " ";
+					}
+					else if (unit_time!=null && existing_type==UnitType._UNIT_TIME) {
+						if (existing_name.equalsIgnoreCase(unit_time))
+							found_time = unit;
+						else if (found_time==null)
+							available_time_units += existing_name + " ";
+					}
+					else if (unit_temp!=null && existing_type==UnitType._UNIT_TEMPERATURE) {
+						if (existing_name.equalsIgnoreCase(unit_temp))
+							found_temp = unit;
+						else if (found_temp==null)
+							available_temp_units += existing_name + " ";
+					}
 				}
 			}
 
 			if(unit_length != null && null == found_length)
-				throw new JLIException("Length unit '" + unit_length + "' not found. Available units are: " + availableUnits);
+				throw new JLIException("Length unit '" + unit_length + "' not found. Available units are: " + available_length_units);
 			if(unit_mass_force != null && null == found_mass_force)
-				throw new JLIException("Mass/Force unit '" + unit_mass_force + "' not found. Available units are: " + availableUnits);
+				throw new JLIException("Mass/Force unit '" + unit_mass_force + "' not found. Available units are: " + (mass ? available_mass_units : available_force_units));
 			if(unit_time != null && null == found_time)
-				throw new JLIException("Time unit '" + unit_time + "' not found. Available units are: " + availableUnits);
+				throw new JLIException("Time unit '" + unit_time + "' not found. Available units are: " + available_time_units);
 			if(unit_temp != null && null == found_temp)
-				throw new JLIException("Temp unit '" + unit_temp + "' not found. Available units are: " + availableUnits);
+				throw new JLIException("Temp unit '" + unit_temp + "' not found. Available units are: " + available_temp_units);
 
 			UnitSystemType unitSystemType = UnitSystemType.UNIT_SYSTEM_MASS_LENGTH_TIME;
 			if(!mass)
 				unitSystemType = UnitSystemType.UNIT_SYSTEM_FORCE_LENGTH_TIME;
 
 			CallUnits units = CallUnits.create();
-			units.append(found_length);
-			units.append(found_mass_force);
-			units.append(found_time);
-			units.append(found_temp);
+			if (found_length!=null)
+				units.append(found_length);
+			if (found_mass_force!=null)
+				units.append(found_mass_force);
+			if (found_time!=null)
+				units.append(found_time);
+			if (found_temp!=null)
+				units.append(found_temp);
 
 			solid.createUnitSystem(name, unitSystemType, units.getUnits());
 		}
