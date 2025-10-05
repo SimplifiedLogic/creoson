@@ -15,9 +15,9 @@
 			author="false">
 			
 			<classpath>
-				<pathelement path="${jackson_dir}/jackson-core-2.0.5.jar"/>
-				<pathelement path="${jackson_dir}/jackson-annotations-2.0.5.jar"/>
-				<pathelement path="${jackson_dir}/jackson-databind-2.0.5.jar"/>
+				<pathelement path="${jackson_dir}/jackson-core-2.12.7.jar"/>
+				<pathelement path="${jackson_dir}/jackson-annotations-2.12.7.jar"/>
+				<pathelement path="${jackson_dir}/jackson-databind-2.12.7.2.jar"/>
 				<pathelement path="${apache_commons_codec_dir}/commons-codec-1.10.jar"/>
 				<pathelement path="${creo_common_dir}/text/java/pfcasync.jar"/>
 			</classpath>

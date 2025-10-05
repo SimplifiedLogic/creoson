@@ -21,8 +21,8 @@ with version 1.10 of commons-codec.jar.
 https://commons.apache.org/proper/commons-codec/
 
 4) A copy of the Jackson library for manipulating JSON data.  The current
-releases were built with version 2.0.5 of jackson-core, jackson-annotations,
-and jackson-databind.
+releases were built with version 2.12.7 of jackson-core and jackson-annotations,
+and 2.12.7.2 of jackson-databind.
 https://github.com/FasterXML/jackson
 
 5) An output directory to which the built jars will be written.

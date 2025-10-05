@@ -25,9 +25,9 @@
 	    				<include name="creoson-jsonconst*.jar"/>
 	    			</fileset>
 	    			<fileset dir="${jackson_dir}">
-	    				<include name="jackson-core-2.0.5.jar"/>
-	    				<include name="jackson-annotations-2.0.5.jar"/>
-	    				<include name="jackson-databind-2.0.5.jar"/>
+	    				<include name="jackson-core-2.12.7.jar"/>
+	    				<include name="jackson-annotations-2.12.7.jar"/>
+	    				<include name="jackson-databind-2.12.7.2.jar"/>
 	    			</fileset>
 				</path>
     		</classpath>
