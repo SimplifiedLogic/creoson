@@ -1,6 +1,14 @@
 R E L E A S E   N O T E S
 =========================
 
+3.0.0
+	- Made compatible with Creo 12 by changing the embedded JRE to Java 21.
+	- Added realjavabot's unit-system functions:
+		file
+			create_unit_system
+			get_unit_system
+			set_unit_system
+
 2.9.0
 	- Removed the 32-bit version from the release; Creo hasn't supported 32-bit in years.
 	- Modified functions:

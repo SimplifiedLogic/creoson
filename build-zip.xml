@@ -6,7 +6,7 @@
 	<property name="batfile_dir" value="${server_dir}/src" />
 	<property name="native_dir" value="${server_dir}" />
 	<property name="extract_dir" value="${out_dir}" />
-	<property name="jar_ver" value="2.9.0" />
+	<property name="jar_ver" value="3.0.0" />
 
 	<target name="extract_setup">
 		<delete dir="${extract_dir}/extract_32"/>
