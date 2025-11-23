@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2025 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -25,16 +25,15 @@ import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
 
 /**
- * Wrapper for JLink's com.ptc.pfc.pfcUnits.Unit
+ * Wrapper for JLink's com.ptc.pfc.pfcUnits.Units
  * 
- * @author Adam Andrews
+ * @author realJavabot on github
  *
  */
 public class CallUnits {
 
 	private Units units;
-    private int currentIndex = 0;
-	
+
 	public CallUnits(Units units) {
 		this.units = units;
 	}
@@ -48,10 +47,10 @@ public class CallUnits {
 	}
 
     public void append(CallUnit unit) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Units,append", 0, NitroConstants.DEBUG_JLINK_KEY);
         if(null == unit)
             return;
-        insert(currentIndex, unit);
-        currentIndex++;
+        units.append(unit.getUnit());
 	}
 
     public void insert(int index, CallUnit unit) throws jxthrowable {
@@ -61,17 +60,18 @@ public class CallUnits {
         units.insert(index, unit.getUnit());
 	}
 
-	public Units getUnits() {
-		return units;
-	}
-
     public int getarraysize() throws jxthrowable{
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Units,getarraysize", 0, NitroConstants.DEBUG_JLINK_KEY);
         return units.getarraysize();
     }
 
-    public CallUnit get(int i) throws jxthrowable{
-        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Units,Get", 0, NitroConstants.DEBUG_JLINK_KEY);
-        Unit unit = units.get(i);
+    public CallUnit get(int idx) throws jxthrowable{
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("Units,get(" + idx + ")", 0, NitroConstants.DEBUG_JLINK_KEY);
+        Unit unit = units.get(idx);
         return new CallUnit(unit);
     }
+
+	public Units getUnits() {
+		return units;
+	}
 }
