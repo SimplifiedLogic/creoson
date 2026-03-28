@@ -1,6 +1,6 @@
 /*
  * MIT LICENSE
- * Copyright 2000-2023 Simplified Logic, Inc
+ * Copyright 2000-2026 Simplified Logic, Inc
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal 
  * in the Software without restriction, including without limitation the rights 
@@ -33,6 +33,7 @@ import com.ptc.pfc.pfcFeature.FeatureStatus;
 import com.ptc.pfc.pfcFeature.FeatureType;
 import com.ptc.pfc.pfcModelItem.ModelItemType;
 import com.simplifiedlogic.nitro.jlink.calls.assembly.CallComponentPath;
+import com.simplifiedlogic.nitro.jlink.calls.feature.CallDeleteOperation;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureGroup;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
@@ -1705,9 +1706,9 @@ public class JLFeature implements IJLFeature {
     	CallFeatureOperations featOps = CallFeatureOperations.create();
     	for (CallFeature feat : features) {
             // accumulate the suppress operation and feature object
-            CallSuppressOperation supop = feat.createSuppressOp();
-            supop.setClip(clip);
-            featOps.append(supop);
+            CallDeleteOperation delop = feat.createDeleteOp();
+            delop.setClip(clip);
+            featOps.append(delop);
     	}
 
 		solid.executeFeatureOps(featOps, null);
