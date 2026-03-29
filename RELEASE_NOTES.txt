@@ -1,6 +1,11 @@
 R E L E A S E   N O T E S
 =========================
 
+3.0.1
+	- Modified functions:
+		feature
+			delete - fix bug where features were suppressed, not deleted.
+
 3.0.0
 	- Made compatible with Creo 12 by changing the embedded JRE to Java 21.
 	- Added realjavabot's unit-system functions:
