@@ -602,10 +602,14 @@ public class JlinkUtils {
     public static String getPath(CallModel m) throws jxthrowable {
     	CallModelDescriptor desc = m.getDescr();
     	String drive = desc.getDevice();
-    	if (drive!=null && drive.length()>0)
-    		return drive + ':' + desc.getPath();
-    	else
-    		return desc.getPath();
+    	String path = desc.getPath();
+    	if (drive!=null && drive.length()>0) {
+
+    		String drivePrefix = drive.substring(0, 1) + ':';
+    		if (!path.regionMatches(true, 0, drivePrefix, 0, drivePrefix.length()))
+    			return drivePrefix + path;
+    	}
+    	return path;
     }
 
     /**
