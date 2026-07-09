@@ -94,6 +94,26 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
 		list.add(helpSetCurModel());
 		list.add(helpSetSheetFormat());
 		list.add(helpSetViewLoc());
+		list.add(helpTableList());
+		list.add(helpTableGetInfo());
+		list.add(helpTableGetCell());
+		list.add(helpTableSetCell());
+		list.add(helpTableGetRange());
+		list.add(helpTableSetRange());
+		list.add(helpTableInsertRows());
+		list.add(helpTableDeleteRows());
+		list.add(helpTableInsertColumns());
+		list.add(helpTableDeleteColumns());
+		list.add(helpTableClearCell());
+		list.add(helpTableClearRange());
+		list.add(helpTableMove());
+		list.add(helpTableSetColumnWidth());
+		list.add(helpTableSetRowHeight());
+		list.add(helpTableMergeCells());
+		list.add(helpTableUnmergeCells());
+		list.add(helpTableCreate());
+		list.add(helpTableDelete());
+		list.add(helpTableRegenerate());
 		list.add(helpViewBoundingBox());
 		return list;
 	}
@@ -1844,6 +1864,387 @@ public class JLJsonDrawingHelp extends JLJsonCommandHelp implements JLDrawingReq
     	
         return template;
     }
+
+	private FunctionTemplate helpTableList() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_LIST, "List all 2D tables in the active drawing");
+		FunctionSpec spec = template.getSpec();
+		FunctionReturn ret = new FunctionReturn(OUTPUT_TABLES, FunctionSpec.TYPE_OBJARRAY, "DrawingTableData");
+		ret.setDescription("Tables in the drawing");
+		spec.addReturn(ret);
+		FunctionExample ex = new FunctionExample();
+		ex.addOutput(OUTPUT_TABLES, new Object[] {sampleTable(false)});
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableGetInfo() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_GET_INFO, "Get detailed information for one 2D drawing table");
+		addTableIndexArg(template.getSpec());
+		addTableReturns(template.getSpec(), true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		addTableOutput(ex, true);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableGetCell() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_GET_CELL, "Read one drawing table cell");
+		addTableIndexArg(template.getSpec());
+		addCellArgs(template.getSpec());
+		addCellReturns(template.getSpec(), true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_ROW, 1);
+		ex.addInput(PARAM_COLUMN, 2);
+		ex.addOutput(OUTPUT_ROW, 1);
+		ex.addOutput(OUTPUT_COLUMN, 2);
+		ex.addOutput(OUTPUT_TEXT, "Part number");
+		ex.addOutput(OUTPUT_VALUE, "Part number");
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableSetCell() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_SET_CELL, "Set one drawing table cell text value");
+		addTableIndexArg(template.getSpec());
+		addCellArgs(template.getSpec());
+		addArg(template.getSpec(), PARAM_VALUE, FunctionSpec.TYPE_STRING, "Cell text", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_ROW, 2);
+		ex.addInput(PARAM_COLUMN, 3);
+		ex.addInput(PARAM_VALUE, "A-123");
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableGetRange() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_GET_RANGE, "Read a rectangular drawing table cell range");
+		addTableIndexArg(template.getSpec());
+		addRangeArgs(template.getSpec());
+		FunctionReturn ret = new FunctionReturn(OUTPUT_VALUES, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_ARRAY);
+		ret.setDescription("2D array of cell text values");
+		template.getSpec().addReturn(ret);
+		FunctionExample ex = new FunctionExample();
+		addRangeInput(ex);
+		ex.addOutput(OUTPUT_VALUES, new String[][] {{"A1", "B1"}, {"A2", "B2"}});
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableSetRange() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_SET_RANGE, "Write multiple cell text values into a rectangular drawing table range");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_START_ROW, FunctionSpec.TYPE_INTEGER, "Start row, 1-based", true);
+		addArg(template.getSpec(), PARAM_START_COLUMN, FunctionSpec.TYPE_INTEGER, "Start column, 1-based", true);
+		addArg(template.getSpec(), PARAM_VALUES, FunctionSpec.TYPE_ARRAY, "2D array of cell text values", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_START_ROW, 2);
+		ex.addInput(PARAM_START_COLUMN, 1);
+		ex.addInput(PARAM_VALUES, new String[][] {{"A2", "B2"}, {"A3", "B3"}});
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableInsertRows() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_INSERT_ROWS, "Insert one or more rows before or after a drawing table row");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_AT_ROW, FunctionSpec.TYPE_INTEGER, "Reference row, 1-based", true);
+		addArg(template.getSpec(), PARAM_COUNT, FunctionSpec.TYPE_INTEGER, "Number of rows to insert", true);
+		addPositionArg(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_AT_ROW, 4);
+		ex.addInput(PARAM_COUNT, 3);
+		ex.addInput(PARAM_POSITION, "after");
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableDeleteRows() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_DELETE_ROWS, "Delete one or more drawing table rows");
+		template.getSpec().addFootnote("Rows are deleted from highest index to lowest index.");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_ROWS, FunctionSpec.TYPE_ARRAY, "Rows to delete, 1-based", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_ROWS, new int[] {4, 5, 6});
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableInsertColumns() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_INSERT_COLUMNS, "Insert one or more columns before or after a drawing table column");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_AT_COLUMN, FunctionSpec.TYPE_INTEGER, "Reference column, 1-based", true);
+		addArg(template.getSpec(), PARAM_COUNT, FunctionSpec.TYPE_INTEGER, "Number of columns to insert", true);
+		addPositionArg(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_AT_COLUMN, 2);
+		ex.addInput(PARAM_COUNT, 1);
+		ex.addInput(PARAM_POSITION, "before");
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableDeleteColumns() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_DELETE_COLUMNS, "Delete one or more drawing table columns");
+		template.getSpec().addFootnote("Columns are deleted from highest index to lowest index.");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_COLUMNS, FunctionSpec.TYPE_ARRAY, "Columns to delete, 1-based", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_COLUMNS, new int[] {3, 4});
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableClearCell() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_CLEAR_CELL, "Clear one drawing table cell");
+		addTableIndexArg(template.getSpec());
+		addCellArgs(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_ROW, 2);
+		ex.addInput(PARAM_COLUMN, 2);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableClearRange() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_CLEAR_RANGE, "Clear a rectangular drawing table cell range");
+		addTableIndexArg(template.getSpec());
+		addRangeArgs(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		addRangeInput(ex);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableMove() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_MOVE, "Move a drawing table to a new drawing position");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_POINT, FunctionSpec.TYPE_OBJECT, "New drawing position point", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_POINT, samplePoint(10.0, 20.0, 0.0));
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableSetColumnWidth() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_SET_COLUMN_WIDTH, "Set a drawing table column width");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_COLUMN, FunctionSpec.TYPE_INTEGER, "Column, 1-based", true);
+		addArg(template.getSpec(), PARAM_WIDTH, FunctionSpec.TYPE_DOUBLE, "Column width in drawing units", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_COLUMN, 2);
+		ex.addInput(PARAM_WIDTH, 25.0);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableSetRowHeight() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_SET_ROW_HEIGHT, "Set a drawing table row height");
+		addTableIndexArg(template.getSpec());
+		addArg(template.getSpec(), PARAM_ROW, FunctionSpec.TYPE_INTEGER, "Row, 1-based", true);
+		addArg(template.getSpec(), PARAM_HEIGHT, FunctionSpec.TYPE_DOUBLE, "Row height in drawing units", true);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_ROW, 2);
+		ex.addInput(PARAM_HEIGHT, 8.0);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableMergeCells() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_MERGE_CELLS, "Merge a rectangular drawing table cell range");
+		addTableIndexArg(template.getSpec());
+		addRangeArgs(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		addRangeInput(ex);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableUnmergeCells() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_UNMERGE_CELLS, "Unmerge drawing table cells in a rectangular range");
+		addTableIndexArg(template.getSpec());
+		addRangeArgs(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		addRangeInput(ex);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableCreate() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_CREATE, "Create a simple drawing table");
+		template.getSpec().addFootnote("Created tables use generic defaults: TABLESIZE_BY_NUM_CHARS, row height 1.0, column width 10.0, and left column justification.");
+		addArg(template.getSpec(), PARAM_ROWS, FunctionSpec.TYPE_INTEGER, "Number of rows", true);
+		addArg(template.getSpec(), PARAM_COLUMNS, FunctionSpec.TYPE_INTEGER, "Number of columns", true);
+		addArg(template.getSpec(), PARAM_POINT, FunctionSpec.TYPE_OBJECT, "Table origin point", false);
+		addArg(template.getSpec(), PARAM_VALUES, FunctionSpec.TYPE_ARRAY, "Optional 2D array of initial cell text values", false);
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_ROWS, 2);
+		ex.addInput(PARAM_COLUMNS, 2);
+		ex.addInput(PARAM_POINT, samplePoint(10.0, 20.0, 0.0));
+		ex.addInput(PARAM_VALUES, new String[][] {{"Name", "Value"}, {"Part", "A-123"}});
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableDelete() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_DELETE, "Delete an entire drawing table");
+		addTableIndexArg(template.getSpec());
+		FunctionExample ex = new FunctionExample();
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate helpTableRegenerate() {
+		FunctionTemplate template = tableTemplate(FUNC_TABLE_REGENERATE, "Regenerate or update drawing table display");
+		FunctionExample ex = new FunctionExample();
+		template.addExample(ex);
+		return template;
+	}
+
+	private FunctionTemplate tableTemplate(String function, String description) {
+		FunctionTemplate template = new FunctionTemplate(COMMAND, function);
+		FunctionSpec spec = template.getSpec();
+		spec.setFunctionDescription(description);
+		spec.addFootnote("Compact command form is drawing.table." + function.substring("table_".length()) + ".");
+		spec.addFootnote("tableIndex is 0-based. Row and column parameters use Creo/J-Link native 1-based indexing.");
+		spec.addFootnote("If the Creo J-Link API does not expose this operation, the response status message begins with not_supported.");
+		FunctionArgument arg = new FunctionArgument(PARAM_DRAWING, FunctionSpec.TYPE_STRING);
+		arg.setDescription("Drawing name");
+		arg.setDefaultValue("Current active drawing");
+		spec.addArgument(arg);
+		return template;
+	}
+
+	private void addTableIndexArg(FunctionSpec spec) {
+		addArg(spec, PARAM_TABLE_INDEX, FunctionSpec.TYPE_INTEGER, "0-based table index from table_list", true);
+	}
+
+	private void addCellArgs(FunctionSpec spec) {
+		addArg(spec, PARAM_ROW, FunctionSpec.TYPE_INTEGER, "Row, 1-based", true);
+		addArg(spec, PARAM_COLUMN, FunctionSpec.TYPE_INTEGER, "Column, 1-based", true);
+	}
+
+	private void addRangeArgs(FunctionSpec spec) {
+		addArg(spec, PARAM_START_ROW, FunctionSpec.TYPE_INTEGER, "Start row, 1-based", true);
+		addArg(spec, PARAM_START_COLUMN, FunctionSpec.TYPE_INTEGER, "Start column, 1-based", true);
+		addArg(spec, PARAM_END_ROW, FunctionSpec.TYPE_INTEGER, "End row, 1-based", true);
+		addArg(spec, PARAM_END_COLUMN, FunctionSpec.TYPE_INTEGER, "End column, 1-based", true);
+	}
+
+	private void addPositionArg(FunctionSpec spec) {
+		FunctionArgument arg = addArg(spec, PARAM_POSITION, FunctionSpec.TYPE_STRING, "Insert position relative to the reference row or column", false);
+		arg.setDefaultValue("after");
+		arg.setValidValues(new String[] {"before", "after"});
+	}
+
+	private FunctionArgument addArg(FunctionSpec spec, String name, String type, String description, boolean required) {
+		FunctionArgument arg = new FunctionArgument(name, type);
+		arg.setDescription(description);
+		arg.setRequired(required);
+		spec.addArgument(arg);
+		return arg;
+	}
+
+	private void addTableReturns(FunctionSpec spec, boolean includeCells) {
+		FunctionReturn ret;
+		ret = new FunctionReturn(OUTPUT_TABLE_INDEX, FunctionSpec.TYPE_INTEGER);
+		ret.setDescription("0-based table index");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_ROWS, FunctionSpec.TYPE_INTEGER);
+		ret.setDescription("Row count");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_COLUMNS, FunctionSpec.TYPE_INTEGER);
+		ret.setDescription("Column count");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_LOCATION, FunctionSpec.TYPE_OBJECT);
+		ret.setDescription("Table position/origin, if available");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_ROW_HEIGHTS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_DOUBLE);
+		ret.setDescription("Row heights, if available");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_COLUMN_WIDTHS, FunctionSpec.TYPE_ARRAY, FunctionSpec.TYPE_DOUBLE);
+		ret.setDescription("Column widths, if available");
+		spec.addReturn(ret);
+		if (includeCells) {
+			ret = new FunctionReturn(OUTPUT_CELLS, FunctionSpec.TYPE_OBJARRAY, "DrawingTableCellData");
+			ret.setDescription("Cell text values");
+			spec.addReturn(ret);
+		}
+	}
+
+	private void addCellReturns(FunctionSpec spec, boolean includeValueAlias) {
+		FunctionReturn ret;
+		ret = new FunctionReturn(OUTPUT_ROW, FunctionSpec.TYPE_INTEGER);
+		ret.setDescription("Row, 1-based");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_COLUMN, FunctionSpec.TYPE_INTEGER);
+		ret.setDescription("Column, 1-based");
+		spec.addReturn(ret);
+		ret = new FunctionReturn(OUTPUT_TEXT, FunctionSpec.TYPE_STRING);
+		ret.setDescription("Cell text");
+		spec.addReturn(ret);
+		if (includeValueAlias) {
+			ret = new FunctionReturn(OUTPUT_VALUE, FunctionSpec.TYPE_STRING);
+			ret.setDescription("Cell text value alias");
+			spec.addReturn(ret);
+		}
+	}
+
+	private void addRangeInput(FunctionExample ex) {
+		ex.addInput(PARAM_TABLE_INDEX, 0);
+		ex.addInput(PARAM_START_ROW, 1);
+		ex.addInput(PARAM_START_COLUMN, 1);
+		ex.addInput(PARAM_END_ROW, 2);
+		ex.addInput(PARAM_END_COLUMN, 2);
+	}
+
+	private void addTableOutput(FunctionExample ex, boolean includeCells) {
+		ex.addOutput(OUTPUT_TABLE_INDEX, 0);
+		ex.addOutput(OUTPUT_ROWS, 2);
+		ex.addOutput(OUTPUT_COLUMNS, 2);
+		ex.addOutput(OUTPUT_LOCATION, samplePoint(10.0, 20.0, 0.0));
+		if (includeCells)
+			ex.addOutput(OUTPUT_CELLS, new Object[] {sampleCell(1, 1, "Name"), sampleCell(1, 2, "Value")});
+	}
+
+	private Map<String, Object> sampleTable(boolean includeCells) {
+		Map<String, Object> table = new OrderedMap<String, Object>();
+		table.put(OUTPUT_TABLE_INDEX, 0);
+		table.put(OUTPUT_ROWS, 2);
+		table.put(OUTPUT_COLUMNS, 2);
+		table.put(OUTPUT_LOCATION, samplePoint(10.0, 20.0, 0.0));
+		if (includeCells)
+			table.put(OUTPUT_CELLS, new Object[] {sampleCell(1, 1, "Name"), sampleCell(1, 2, "Value")});
+		return table;
+	}
+
+	private Map<String, Object> sampleCell(int row, int column, String text) {
+		Map<String, Object> cell = new OrderedMap<String, Object>();
+		cell.put(OUTPUT_ROW, row);
+		cell.put(OUTPUT_COLUMN, column);
+		cell.put(OUTPUT_TEXT, text);
+		return cell;
+	}
+
+	private Map<String, Object> samplePoint(double x, double y, double z) {
+		Map<String, Object> point = new OrderedMap<String, Object>();
+		point.put("x", x);
+		point.put("y", y);
+		point.put("z", z);
+		return point;
+	}
     
 	
 }

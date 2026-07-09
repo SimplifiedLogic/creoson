@@ -86,6 +86,7 @@ Sub-project folders -- these contain the project source and Ant build script for
 * The various root-level build files -- build-javadoc.xml, build-zip.xml, build-all.xml
 * RELEASE_NOTES.txt -- release notes
 * creoson_source_doc.pdf -- high-level documentation about how the source code is organised
+* DRAWING_TABLE_API.md -- generic drawing table API notes and manual test examples
 
 
 

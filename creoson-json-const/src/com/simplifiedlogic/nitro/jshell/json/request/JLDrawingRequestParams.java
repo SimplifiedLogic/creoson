@@ -65,6 +65,26 @@ public interface JLDrawingRequestParams {
     public static final String FUNC_DELETE_SYMBOL_INST	= "delete_symbol_inst";
     public static final String FUNC_GET_SHEET_FORMAT	= "get_sheet_format";
     public static final String FUNC_SET_SHEET_FORMAT	= "set_sheet_format";
+    public static final String FUNC_TABLE_LIST			= "table_list";
+    public static final String FUNC_TABLE_GET_INFO		= "table_get_info";
+    public static final String FUNC_TABLE_GET_CELL		= "table_get_cell";
+    public static final String FUNC_TABLE_SET_CELL		= "table_set_cell";
+    public static final String FUNC_TABLE_GET_RANGE		= "table_get_range";
+    public static final String FUNC_TABLE_SET_RANGE		= "table_set_range";
+    public static final String FUNC_TABLE_INSERT_ROWS	= "table_insert_rows";
+    public static final String FUNC_TABLE_DELETE_ROWS	= "table_delete_rows";
+    public static final String FUNC_TABLE_INSERT_COLUMNS	= "table_insert_columns";
+    public static final String FUNC_TABLE_DELETE_COLUMNS	= "table_delete_columns";
+    public static final String FUNC_TABLE_CLEAR_CELL		= "table_clear_cell";
+    public static final String FUNC_TABLE_CLEAR_RANGE	= "table_clear_range";
+    public static final String FUNC_TABLE_MOVE			= "table_move";
+    public static final String FUNC_TABLE_SET_COLUMN_WIDTH	= "table_set_column_width";
+    public static final String FUNC_TABLE_SET_ROW_HEIGHT	= "table_set_row_height";
+    public static final String FUNC_TABLE_MERGE_CELLS	= "table_merge_cells";
+    public static final String FUNC_TABLE_UNMERGE_CELLS	= "table_unmerge_cells";
+    public static final String FUNC_TABLE_CREATE			= "table_create";
+    public static final String FUNC_TABLE_DELETE			= "table_delete";
+    public static final String FUNC_TABLE_REGENERATE	= "table_regenerate";
 
     // request fields
     public static final String PARAM_MODEL		= "model";
@@ -92,6 +112,22 @@ public interface JLDrawingRequestParams {
     public static final String PARAM_SYMBOL_FILE	= "symbol_file";
     public static final String PARAM_SYMBOL_ID	= "symbol_id";
     public static final String PARAM_REPLACE_VALUES	= "replace_values";
+    public static final String PARAM_TABLE_INDEX	= "tableIndex";
+    public static final String PARAM_AT_ROW		= "atRow";
+    public static final String PARAM_AT_COLUMN	= "atColumn";
+    public static final String PARAM_ROW		= "row";
+    public static final String PARAM_COLUMN		= "column";
+    public static final String PARAM_START_ROW	= "startRow";
+    public static final String PARAM_START_COLUMN	= "startColumn";
+    public static final String PARAM_END_ROW	= "endRow";
+    public static final String PARAM_END_COLUMN	= "endColumn";
+    public static final String PARAM_ROWS		= "rows";
+    public static final String PARAM_COLUMNS	= "columns";
+    public static final String PARAM_COUNT		= "count";
+    public static final String PARAM_VALUE		= "value";
+    public static final String PARAM_VALUES		= "values";
+    public static final String PARAM_WIDTH		= "width";
+    public static final String PARAM_HEIGHT		= "height";
 
     // view display data params
     public static final String PARAM_DISPLAY_DATA				= "display_data";

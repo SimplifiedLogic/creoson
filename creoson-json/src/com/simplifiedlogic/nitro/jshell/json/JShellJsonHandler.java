@@ -179,6 +179,8 @@ public class JShellJsonHandler {
 			createError(resp, "Request is missing the 'command' property");
 			return resp;
 		}
+
+		normalizeDottedCommand(req);
 		
 		JLJsonCommandHandler handler = commands.get(req.getCommand());
 		// check for invalid command
@@ -230,6 +232,27 @@ public class JShellJsonHandler {
 		}
 		
 		return resp;
+	}
+
+	/**
+	 * Convert dotted drawing table command names into the command/function
+	 * structure used by Creoson.
+	 */
+	private void normalizeDottedCommand(BaseRequest req) {
+		String command = req.getCommand();
+		if (command==null)
+			return;
+		if (command.startsWith("drawing.table.")) {
+			String tableFunction = command.substring("drawing.table.".length());
+			req.setCommand("drawing");
+			if (req.getFunction()==null)
+				req.setFunction("table_" + tableFunction);
+		}
+		else if (command.equals("drawing.table")) {
+			req.setCommand("drawing");
+			if (req.getFunction()!=null && !req.getFunction().startsWith("table_"))
+				req.setFunction("table_" + req.getFunction());
+		}
 	}
 	
 	/**
