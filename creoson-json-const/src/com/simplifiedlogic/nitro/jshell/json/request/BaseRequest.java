@@ -20,6 +20,7 @@ package com.simplifiedlogic.nitro.jshell.json.request;
 
 import java.util.Hashtable;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -70,6 +71,18 @@ public class BaseRequest {
 		if (data==null)
 			return null;
 		return data.get(key);
+	}
+
+	/**
+	 * Put unknown top-level JSON fields into the data map.  This preserves the
+	 * standard Creoson request shape while allowing compact requests such as
+	 * {"command":"drawing.table.list"}.
+	 * @param key The JSON field key
+	 * @param value The JSON field value
+	 */
+	@JsonAnySetter
+	public void putUnknown(String key, Object value) {
+		put(key, value);
 	}
 
 	/**
@@ -140,7 +153,10 @@ public class BaseRequest {
 	 * @param data The input data as a generic Hashtable object
 	 */
 	public void setData(Hashtable<String, Object> data) {
-		this.data = data;
+		if (this.data==null)
+			this.data = data;
+		else if (data!=null)
+			this.data.putAll(data);
 	}
 	
 }

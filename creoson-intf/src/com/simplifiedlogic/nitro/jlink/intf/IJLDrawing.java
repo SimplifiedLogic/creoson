@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
+import com.simplifiedlogic.nitro.jlink.data.DrawingTableCellData;
+import com.simplifiedlogic.nitro.jlink.data.DrawingTableData;
 import com.simplifiedlogic.nitro.jlink.data.DrawingFormatData;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
@@ -208,4 +210,64 @@ public interface IJLDrawing {
     
     public void setSheetFormat(String filename, int sheet, String dirname, String formatFilename, String sessionId) throws JLIException;
     public void setSheetFormat(String filename, int sheet, String dirname, String formatFilename, AbstractJLISession sess) throws JLIException;
+
+    public List<DrawingTableData> tableList(String filename, String sessionId) throws JLIException;
+    public List<DrawingTableData> tableList(String filename, AbstractJLISession sess) throws JLIException;
+
+    public DrawingTableData tableGetInfo(String filename, int tableIndex, String sessionId) throws JLIException;
+    public DrawingTableData tableGetInfo(String filename, int tableIndex, AbstractJLISession sess) throws JLIException;
+
+    public DrawingTableCellData tableGetCell(String filename, int tableIndex, int row, int column, String sessionId) throws JLIException;
+    public DrawingTableCellData tableGetCell(String filename, int tableIndex, int row, int column, AbstractJLISession sess) throws JLIException;
+
+    public void tableSetCell(String filename, int tableIndex, int row, int column, String value, String sessionId) throws JLIException;
+    public void tableSetCell(String filename, int tableIndex, int row, int column, String value, AbstractJLISession sess) throws JLIException;
+
+    public List<List<String>> tableGetRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException;
+    public List<List<String>> tableGetRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException;
+
+    public void tableSetRange(String filename, int tableIndex, int startRow, int startColumn, List<List<String>> values, String sessionId) throws JLIException;
+    public void tableSetRange(String filename, int tableIndex, int startRow, int startColumn, List<List<String>> values, AbstractJLISession sess) throws JLIException;
+
+    public void tableInsertRows(String filename, int tableIndex, int atRow, int count, boolean after, String sessionId) throws JLIException;
+    public void tableInsertRows(String filename, int tableIndex, int atRow, int count, boolean after, AbstractJLISession sess) throws JLIException;
+
+    public void tableDeleteRows(String filename, int tableIndex, List<Integer> rows, String sessionId) throws JLIException;
+    public void tableDeleteRows(String filename, int tableIndex, List<Integer> rows, AbstractJLISession sess) throws JLIException;
+
+    public void tableInsertColumns(String filename, int tableIndex, int atColumn, int count, boolean after, String sessionId) throws JLIException;
+    public void tableInsertColumns(String filename, int tableIndex, int atColumn, int count, boolean after, AbstractJLISession sess) throws JLIException;
+
+    public void tableDeleteColumns(String filename, int tableIndex, List<Integer> columns, String sessionId) throws JLIException;
+    public void tableDeleteColumns(String filename, int tableIndex, List<Integer> columns, AbstractJLISession sess) throws JLIException;
+
+    public void tableClearCell(String filename, int tableIndex, int row, int column, String sessionId) throws JLIException;
+    public void tableClearCell(String filename, int tableIndex, int row, int column, AbstractJLISession sess) throws JLIException;
+
+    public void tableClearRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException;
+    public void tableClearRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException;
+
+    public void tableMove(String filename, int tableIndex, JLPoint position, String sessionId) throws JLIException;
+    public void tableMove(String filename, int tableIndex, JLPoint position, AbstractJLISession sess) throws JLIException;
+
+    public void tableSetColumnWidth(String filename, int tableIndex, int column, double width, String sessionId) throws JLIException;
+    public void tableSetColumnWidth(String filename, int tableIndex, int column, double width, AbstractJLISession sess) throws JLIException;
+
+    public void tableSetRowHeight(String filename, int tableIndex, int row, double height, String sessionId) throws JLIException;
+    public void tableSetRowHeight(String filename, int tableIndex, int row, double height, AbstractJLISession sess) throws JLIException;
+
+    public void tableMergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException;
+    public void tableMergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException;
+
+    public void tableUnmergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException;
+    public void tableUnmergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException;
+
+    public void tableCreate(String filename, int rows, int columns, JLPoint position, List<List<String>> values, String sessionId) throws JLIException;
+    public void tableCreate(String filename, int rows, int columns, JLPoint position, List<List<String>> values, AbstractJLISession sess) throws JLIException;
+
+    public void tableDelete(String filename, int tableIndex, String sessionId) throws JLIException;
+    public void tableDelete(String filename, int tableIndex, AbstractJLISession sess) throws JLIException;
+
+    public void tableRegenerate(String filename, String sessionId) throws JLIException;
+    public void tableRegenerate(String filename, AbstractJLISession sess) throws JLIException;
 }

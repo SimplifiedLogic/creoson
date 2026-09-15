@@ -76,6 +76,8 @@ import com.simplifiedlogic.nitro.jlink.calls.view2d.CallViewDisplay;
 import com.simplifiedlogic.nitro.jlink.calls.window.CallWindow;
 import com.simplifiedlogic.nitro.jlink.data.AbstractJLISession;
 import com.simplifiedlogic.nitro.jlink.data.DrawingFormatData;
+import com.simplifiedlogic.nitro.jlink.data.DrawingTableCellData;
+import com.simplifiedlogic.nitro.jlink.data.DrawingTableData;
 import com.simplifiedlogic.nitro.jlink.data.JLBox;
 import com.simplifiedlogic.nitro.jlink.data.JLPoint;
 import com.simplifiedlogic.nitro.jlink.data.SymbolDefData;
@@ -2681,6 +2683,246 @@ public class JLDrawing implements IJLDrawing {
         		DebugLogging.sendTimerMessage("drawing.set_sheet_format,"+filename+","+sheet, start, NitroConstants.DEBUG_KEY);
         	}
     	}
+	}
+
+	@Override
+	public List<DrawingTableData> tableList(String filename, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        return tableList(filename, sess);
+	}
+
+	@Override
+	public List<DrawingTableData> tableList(String filename, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.list: " + filename, NitroConstants.DEBUG_KEY);
+		return DrawingTableHelper.tableList(filename, sess);
+	}
+
+	@Override
+	public DrawingTableData tableGetInfo(String filename, int tableIndex, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        return tableGetInfo(filename, tableIndex, sess);
+	}
+
+	@Override
+	public DrawingTableData tableGetInfo(String filename, int tableIndex, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.get_info: " + filename, NitroConstants.DEBUG_KEY);
+		return DrawingTableHelper.tableGetInfo(filename, tableIndex, sess);
+	}
+
+	@Override
+	public DrawingTableCellData tableGetCell(String filename, int tableIndex, int row, int column, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        return tableGetCell(filename, tableIndex, row, column, sess);
+	}
+
+	@Override
+	public DrawingTableCellData tableGetCell(String filename, int tableIndex, int row, int column, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.get_cell: " + filename, NitroConstants.DEBUG_KEY);
+		return DrawingTableHelper.tableGetCell(filename, tableIndex, row, column, sess);
+	}
+
+	@Override
+	public void tableSetCell(String filename, int tableIndex, int row, int column, String value, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableSetCell(filename, tableIndex, row, column, value, sess);
+	}
+
+	@Override
+	public void tableSetCell(String filename, int tableIndex, int row, int column, String value, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.set_cell: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableSetCell(filename, tableIndex, row, column, value, sess);
+	}
+
+	@Override
+	public List<List<String>> tableGetRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        return tableGetRange(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public List<List<String>> tableGetRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.get_range: " + filename, NitroConstants.DEBUG_KEY);
+		return DrawingTableHelper.tableGetRange(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableSetRange(String filename, int tableIndex, int startRow, int startColumn, List<List<String>> values, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableSetRange(filename, tableIndex, startRow, startColumn, values, sess);
+	}
+
+	@Override
+	public void tableSetRange(String filename, int tableIndex, int startRow, int startColumn, List<List<String>> values, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.set_range: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableSetRange(filename, tableIndex, startRow, startColumn, values, sess);
+	}
+
+	@Override
+	public void tableInsertRows(String filename, int tableIndex, int atRow, int count, boolean after, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableInsertRows(filename, tableIndex, atRow, count, after, sess);
+	}
+
+	@Override
+	public void tableInsertRows(String filename, int tableIndex, int atRow, int count, boolean after, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.insert_rows: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableInsertRows(filename, tableIndex, atRow, count, after, sess);
+	}
+
+	@Override
+	public void tableDeleteRows(String filename, int tableIndex, List<Integer> rows, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableDeleteRows(filename, tableIndex, rows, sess);
+	}
+
+	@Override
+	public void tableDeleteRows(String filename, int tableIndex, List<Integer> rows, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.delete_rows: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableDeleteRows(filename, tableIndex, rows, sess);
+	}
+
+	@Override
+	public void tableInsertColumns(String filename, int tableIndex, int atColumn, int count, boolean after, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableInsertColumns(filename, tableIndex, atColumn, count, after, sess);
+	}
+
+	@Override
+	public void tableInsertColumns(String filename, int tableIndex, int atColumn, int count, boolean after, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.insert_columns: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableInsertColumns(filename, tableIndex, atColumn, count, after, sess);
+	}
+
+	@Override
+	public void tableDeleteColumns(String filename, int tableIndex, List<Integer> columns, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableDeleteColumns(filename, tableIndex, columns, sess);
+	}
+
+	@Override
+	public void tableDeleteColumns(String filename, int tableIndex, List<Integer> columns, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.delete_columns: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableDeleteColumns(filename, tableIndex, columns, sess);
+	}
+
+	@Override
+	public void tableClearCell(String filename, int tableIndex, int row, int column, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableClearCell(filename, tableIndex, row, column, sess);
+	}
+
+	@Override
+	public void tableClearCell(String filename, int tableIndex, int row, int column, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.clear_cell: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableClearCell(filename, tableIndex, row, column, sess);
+	}
+
+	@Override
+	public void tableClearRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableClearRange(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableClearRange(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.clear_range: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableClearRange(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableMove(String filename, int tableIndex, JLPoint position, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableMove(filename, tableIndex, position, sess);
+	}
+
+	@Override
+	public void tableMove(String filename, int tableIndex, JLPoint position, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.move: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableMove(filename, tableIndex, position, sess);
+	}
+
+	@Override
+	public void tableSetColumnWidth(String filename, int tableIndex, int column, double width, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableSetColumnWidth(filename, tableIndex, column, width, sess);
+	}
+
+	@Override
+	public void tableSetColumnWidth(String filename, int tableIndex, int column, double width, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.set_column_width: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableSetColumnWidth(filename, tableIndex, column, width, sess);
+	}
+
+	@Override
+	public void tableSetRowHeight(String filename, int tableIndex, int row, double height, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableSetRowHeight(filename, tableIndex, row, height, sess);
+	}
+
+	@Override
+	public void tableSetRowHeight(String filename, int tableIndex, int row, double height, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.set_row_height: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableSetRowHeight(filename, tableIndex, row, height, sess);
+	}
+
+	@Override
+	public void tableMergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableMergeCells(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableMergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.merge_cells: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableMergeCells(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableUnmergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableUnmergeCells(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableUnmergeCells(String filename, int tableIndex, int startRow, int startColumn, int endRow, int endColumn, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.unmerge_cells: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableUnmergeCells(filename, tableIndex, startRow, startColumn, endRow, endColumn, sess);
+	}
+
+	@Override
+	public void tableCreate(String filename, int rows, int columns, JLPoint position, List<List<String>> values, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableCreate(filename, rows, columns, position, values, sess);
+	}
+
+	@Override
+	public void tableCreate(String filename, int rows, int columns, JLPoint position, List<List<String>> values, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.create: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableCreate(filename, rows, columns, position, values, sess);
+	}
+
+	@Override
+	public void tableDelete(String filename, int tableIndex, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableDelete(filename, tableIndex, sess);
+	}
+
+	@Override
+	public void tableDelete(String filename, int tableIndex, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.delete: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableDelete(filename, tableIndex, sess);
+	}
+
+	@Override
+	public void tableRegenerate(String filename, String sessionId) throws JLIException {
+        JLISession sess = JLISession.getSession(sessionId);
+        tableRegenerate(filename, sess);
+	}
+
+	@Override
+	public void tableRegenerate(String filename, AbstractJLISession sess) throws JLIException {
+		DebugLogging.sendDebugMessage("drawing.table.regenerate: " + filename, NitroConstants.DEBUG_KEY);
+		DrawingTableHelper.tableRegenerate(filename, sess);
 	}
 
     /**

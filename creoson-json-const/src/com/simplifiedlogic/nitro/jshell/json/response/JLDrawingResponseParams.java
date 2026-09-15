@@ -44,6 +44,19 @@ public interface JLDrawingResponseParams {
 	public static final String OUTPUT_SYMBOLS	= "symbols";
 	public static final String OUTPUT_VIEW_MODEL = "view_model";
 	public static final String OUTPUT_SIMPREP	= "simp_rep";
+	public static final String OUTPUT_TABLES	= "tables";
+	public static final String OUTPUT_TABLE_INDEX	= "tableIndex";
+	public static final String OUTPUT_ROWS		= "rows";
+	public static final String OUTPUT_COLUMNS	= "columns";
+	public static final String OUTPUT_CELLS		= "cells";
+	public static final String OUTPUT_ROW		= "row";
+	public static final String OUTPUT_COLUMN		= "column";
+	public static final String OUTPUT_TEXT		= "text";
+	public static final String OUTPUT_VALUE		= "value";
+	public static final String OUTPUT_VALUES		= "values";
+	public static final String OUTPUT_ROW_HEIGHTS	= "rowHeights";
+	public static final String OUTPUT_COLUMN_WIDTHS	= "columnWidths";
+	public static final String OUTPUT_NOT_SUPPORTED	= "not_supported";
 
     public static final String OUTPUT_XMIN	= "xmin";
 	public static final String OUTPUT_XMAX	= "xmax";
