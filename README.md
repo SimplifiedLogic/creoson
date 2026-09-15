@@ -4,7 +4,9 @@ CREOSON is an OpenSource initiative by [Simplified Logic, Inc.](http://www.simpl
 
 CREOSON uses simple JSON Requests to send commands/functions to CREO, JSON Responses are used to communicate the results of your requests.
 
+DONATE / SUPPORT CREOSON
 
+<a href="https://www.buymeacoffee.com/davidhbigelow" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 # Pre-Packaged Download(s)!
 If you are not a "developer"... and don't want to build CREOSON from "scratch" ... a Pre-Packaged Distribution is available for 32-bit or 64-bit CREO.  The Pre-Packaged Distributions have everything (including the correct version of Java) already baked-in and ready to rock!
