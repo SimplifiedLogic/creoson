@@ -1,6 +1,12 @@
 R E L E A S E   N O T E S
 =========================
 
+3.1.0
+	- Added functions:
+		familytable
+			add_column - add a dimension or parameter column to a family table
+			remove_column - remove a column from a family table
+
 3.0.2
 	- Made compatible with Creo 13 by changing the embedded JRE to Java 25.
 
