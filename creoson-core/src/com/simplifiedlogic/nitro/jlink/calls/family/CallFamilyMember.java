@@ -29,7 +29,9 @@ import com.ptc.pfc.pfcModel.ModelDescriptor;
 import com.ptc.pfc.pfcModelItem.ParamValue;
 import com.simplifiedlogic.nitro.jlink.intf.DebugLogging;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
+import com.simplifiedlogic.nitro.jlink.calls.dimension.CallDimension;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
+import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParamValue;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParamValues;
 import com.simplifiedlogic.nitro.jlink.impl.NitroConstants;
@@ -108,6 +110,41 @@ public class CallFamilyMember extends CallModel {
 		getFmbr().RemoveRow(row.getRow());
 	}
 	
+	/**
+	 * Create (but do not yet add) a family table column for a dimension.
+	 */
+	public CallFamilyTableColumn createDimensionColumn(CallDimension dim) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("FamilyMember,CreateDimensionColumn", 0, NitroConstants.DEBUG_JLINK_KEY);
+		FamilyTableColumn col = getFmbr().CreateDimensionColumn(dim.getDim());
+		if (col==null)
+			return null;
+		return new CallFamilyTableColumn(col);
+	}
+
+	/**
+	 * Create (but do not yet add) a family table column for a parameter.
+	 */
+	public CallFamilyTableColumn createParamColumn(CallParameter param) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("FamilyMember,CreateParamColumn", 0, NitroConstants.DEBUG_JLINK_KEY);
+		FamilyTableColumn col = getFmbr().CreateParamColumn(param.getParam());
+		if (col==null)
+			return null;
+		return new CallFamilyTableColumn(col);
+	}
+
+	/**
+	 * Add a column to the family table.
+	 * @param col A column created with createDimensionColumn or createParamColumn
+	 * @param pvals The cell values for each row; null to accept the default value ("*") in every row
+	 */
+	public CallFamilyTableColumn addColumn(CallFamilyTableColumn col, CallParamValues pvals) throws jxthrowable {
+        if (NitroConstants.DEBUG_JLINK) DebugLogging.sendTimerMessage("FamilyMember,AddColumn", 0, NitroConstants.DEBUG_JLINK_KEY);
+		FamilyTableColumn newcol = getFmbr().AddColumn(col.getCol(), pvals!=null ? pvals.getValues() : null);
+		if (newcol==null)
+			return null;
+		return new CallFamilyTableColumn(newcol);
+	}
+
 	public void removeColumn(CallFamilyTableColumn col) throws jxthrowable {
 		if (col==null)
 			return;

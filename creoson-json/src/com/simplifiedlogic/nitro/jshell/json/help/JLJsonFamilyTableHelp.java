@@ -56,6 +56,7 @@ public class JLJsonFamilyTableHelp extends JLJsonCommandHelp implements JLFamily
 	 */
 	public List<FunctionTemplate> getHelp() {
 		List<FunctionTemplate> list = new ArrayList<FunctionTemplate>();
+		list.add(helpAddColumn());
 		list.add(helpAddInst());
 		list.add(helpCreateInst());
 		list.add(helpDelete());
@@ -67,6 +68,7 @@ public class JLJsonFamilyTableHelp extends JLJsonCommandHelp implements JLFamily
 		list.add(helpGetRow());
 		list.add(helpList());
 		list.add(helpListTree());
+		list.add(helpRemoveColumn());
 		list.add(helpReplace());
 		list.add(helpSetCell());
 		return list;
@@ -278,6 +280,78 @@ public class JLJsonFamilyTableHelp extends JLJsonCommandHelp implements JLFamily
         return template;
     }
     
+	private FunctionTemplate helpAddColumn() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_ADD_COLUMN);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Add a column to a family table, based on a dimension or a parameter of the model.  The cells of all instances accept the default value of the column; use set_cell to change them");
+    	FunctionArgument arg;
+    	FunctionReturn ret;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name of the generic model");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_NAME, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Name of a dimension, dimension ID (d#), or name of a parameter");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_COLTYPE, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Column type: dimension or param");
+    	arg.setDefaultValue("A dimension of that name is tried first, then a parameter");
+    	arg.setValidValues(new String[] {"dimension", "param"});
+    	spec.addArgument(arg);
+
+    	ret = new FunctionReturn(OUTPUT_COLID, FunctionSpec.TYPE_STRING);
+    	ret.setDescription("Column ID of the new column");
+    	spec.addReturn(ret);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "bracket.prt");
+    	ex.addInput(PARAM_NAME, "BRACKET_WIDTH");
+    	ex.addInput(PARAM_COLTYPE, "dimension");
+    	ex.addOutput(OUTPUT_COLID, "d12");
+    	template.addExample(ex);
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "bracket.prt");
+    	ex.addInput(PARAM_NAME, "MATERIAL");
+    	ex.addInput(PARAM_COLTYPE, "param");
+    	ex.addOutput(OUTPUT_COLID, "MATERIAL");
+    	template.addExample(ex);
+
+        return template;
+    }
+
+	private FunctionTemplate helpRemoveColumn() {
+    	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_REMOVE_COLUMN);
+    	FunctionSpec spec = template.getSpec();
+    	spec.setFunctionDescription("Remove a column from a family table");
+    	FunctionArgument arg;
+
+    	arg = new FunctionArgument(PARAM_MODEL, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("File name of the generic model");
+    	arg.setDefaultValue("The currently active model");
+    	spec.addArgument(arg);
+
+    	arg = new FunctionArgument(PARAM_COLID, FunctionSpec.TYPE_STRING);
+    	arg.setDescription("Column ID");
+    	arg.setRequired(true);
+    	spec.addArgument(arg);
+
+    	FunctionExample ex;
+
+    	ex = new FunctionExample();
+    	ex.addInput(PARAM_MODEL, "bracket.prt");
+    	ex.addInput(PARAM_COLID, "d12");
+    	template.addExample(ex);
+
+        return template;
+    }
+
 	private FunctionTemplate helpSetCell() {
     	FunctionTemplate template = new FunctionTemplate(COMMAND, FUNC_SET_CELL);
     	FunctionSpec spec = template.getSpec();

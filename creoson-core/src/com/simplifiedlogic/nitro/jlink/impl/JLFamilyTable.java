@@ -24,6 +24,7 @@ import java.util.List;
 import com.ptc.cipjava.jxthrowable;
 import com.ptc.pfc.pfcExceptions.XToolkitAbort;
 import com.ptc.pfc.pfcExceptions.XToolkitBadInputs;
+import com.ptc.pfc.pfcExceptions.XToolkitFound;
 import com.ptc.pfc.pfcExceptions.XToolkitInUse;
 import com.ptc.pfc.pfcExceptions.XToolkitNotExist;
 import com.ptc.pfc.pfcFamily.FamilyColumnType;
@@ -38,12 +39,15 @@ import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyTableColumn;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyTableColumns;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyTableRow;
 import com.simplifiedlogic.nitro.jlink.calls.family.CallFamilyTableRows;
+import com.simplifiedlogic.nitro.jlink.calls.dimension.CallBaseDimension;
+import com.simplifiedlogic.nitro.jlink.calls.dimension.CallDimension;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeature;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatureOperations;
 import com.simplifiedlogic.nitro.jlink.calls.feature.CallFeatures;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModel;
 import com.simplifiedlogic.nitro.jlink.calls.model.CallModelDescriptor;
 import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParamValue;
+import com.simplifiedlogic.nitro.jlink.calls.modelitem.CallParameter;
 import com.simplifiedlogic.nitro.jlink.calls.session.CallSession;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallRegenInstructions;
 import com.simplifiedlogic.nitro.jlink.calls.solid.CallSolid;
@@ -1408,6 +1412,175 @@ public class JLFamilyTable implements IJLFamilyTable {
                 break;
         }
         return coltype;
+    }
+
+    /* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFamilyTable#addColumn(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+    public String addColumn(
+    		String modelname,
+    		String name,
+    		String coltype,
+    		String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+    	return addColumn(modelname, name, coltype, sess);
+    }
+
+    /* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFamilyTable#addColumn(java.lang.String, java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+    public String addColumn(
+    		String modelname,
+    		String name,
+    		String coltype,
+    		AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("familytable.add_column: " + name, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (name==null || name.trim().length()==0)
+    		throw new JLIException("No name parameter given");
+    	if (coltype!=null && !coltype.equals(TYPE_DIMENSION) && !coltype.equals(TYPE_PARAM))
+    		throw new JLIException("Unsupported column type '" + coltype + "', must be '" + TYPE_DIMENSION + "' or '" + TYPE_PARAM + "'");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return null;
+
+	        CallSolid solid = JlinkUtils.getModelSolid(session, modelname);
+
+	        CallFamilyMember fmbr = solid;
+
+	        CallFamilyTableColumn col = null;
+	        if (coltype==null || coltype.equals(TYPE_DIMENSION)) {
+	        	CallBaseDimension dim = JlinkUtils.getDimension(solid, name, false);
+	        	if (dim instanceof CallDimension) {
+	        		col = fmbr.createDimensionColumn((CallDimension)dim);
+	        	}
+	        	else if (coltype!=null) {
+	        		throw new JLIException("Dimension '" + name + "' was not found in model '" + solid.getFileName() + "'");
+	        	}
+	        }
+	        if (col==null && (coltype==null || coltype.equals(TYPE_PARAM))) {
+	        	CallParameter param = solid.getParam(name);
+	        	if (param!=null) {
+	        		col = fmbr.createParamColumn(param);
+	        	}
+	        	else if (coltype!=null) {
+	        		throw new JLIException("Parameter '" + name + "' was not found in model '" + solid.getFileName() + "'");
+	        	}
+	        }
+	        if (col==null)
+	        	throw new JLIException("Neither a dimension nor a parameter named '" + name + "' was found in model '" + solid.getFileName() + "'");
+
+	        // the symbol of a new dimension column is the dimension name, but the column ID in the
+	        // table is the dimension ID (d#), so find the new column by comparing the headers
+	        List<String> before = getColumnSymbols(fmbr);
+
+	        try {
+	        	// null values: every instance accepts the default value of the column
+	        	fmbr.addColumn(col, null);
+	        }
+	        catch (XToolkitFound e) {
+	        	throw new JLIException("A column for '" + name + "' already exists in the family table");
+	        }
+
+	        for (String symbol : getColumnSymbols(fmbr)) {
+	        	if (!before.contains(symbol))
+	        		return symbol;
+	        }
+	        return col.getSymbol();
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("familytable.add_column,"+name, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
+    }
+
+    /**
+     * Get the symbols (column IDs) of all the columns in a family table
+     */
+    private List<String> getColumnSymbols(CallFamilyMember fmbr) throws jxthrowable {
+    	List<String> symbols = new ArrayList<String>();
+        CallFamilyTableColumns cols = fmbr.listColumns();
+        if (cols!=null) {
+            int len = cols.getarraysize();
+            for (int i=0; i<len; i++) {
+            	symbols.add(cols.get(i).getSymbol());
+            }
+        }
+        return symbols;
+    }
+
+    /* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFamilyTable#removeColumn(java.lang.String, java.lang.String, java.lang.String)
+	 */
+    public void removeColumn(
+    		String modelname,
+    		String colid,
+    		String sessionId) throws JLIException {
+
+        JLISession sess = JLISession.getSession(sessionId);
+
+    	removeColumn(modelname, colid, sess);
+    }
+
+    /* (non-Javadoc)
+	 * @see com.simplifiedlogic.nitro.jlink.intf.IJLFamilyTable#removeColumn(java.lang.String, java.lang.String, com.simplifiedlogic.nitro.jlink.data.AbstractJLISession)
+	 */
+    public void removeColumn(
+    		String modelname,
+    		String colid,
+    		AbstractJLISession sess) throws JLIException {
+
+		DebugLogging.sendDebugMessage("familytable.remove_column: " + colid, NitroConstants.DEBUG_KEY);
+		if (sess==null)
+			throw new JLIException("No session found");
+
+    	if (colid==null || colid.trim().length()==0)
+    		throw new JLIException("No column id parameter given");
+
+    	long start = 0;
+    	if (NitroConstants.TIME_TASKS)
+    		start = System.currentTimeMillis();
+    	try {
+	        JLGlobal.loadLibrary();
+
+	        CallSession session = JLConnectionUtil.getJLSession(sess.getConnectionId());
+	        if (session == null)
+	            return;
+
+	        CallSolid solid = JlinkUtils.getModelSolid(session, modelname);
+
+	        CallFamilyMember fmbr = solid;
+
+	        CallFamilyTableColumn col = fmbr.getColumn(colid);
+	        if (col==null)
+	            throw new JLIException("Column '" + colid + "' was not found in family table");
+
+	        fmbr.removeColumn(col);
+    	}
+    	catch (jxthrowable e) {
+    		throw JlinkUtils.createException(e);
+    	}
+    	finally {
+        	if (NitroConstants.TIME_TASKS) {
+        		DebugLogging.sendTimerMessage("familytable.remove_column,"+colid, start, NitroConstants.DEBUG_KEY);
+        	}
+    	}
     }
 
     /**
