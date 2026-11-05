@@ -6,11 +6,13 @@ creo = (function (pub) {
     pub.FamilytableObj = function(propsObj) {
         // BASE OBJECT
         this.colid = undefined; // string - Column ID
+        this.coltype = undefined; // string - Column type: dimension or param
         this.cur_inst = undefined; // string - Instance name to replace
         this.cur_model = undefined; // string - Generic model containing the instances
         this.erase = undefined; // boolean - Erase model and non-displayed models afterwards
         this.file = undefined; // string - File name
         this.instance = undefined; // string - New instance name
+        this.name = undefined; // string - Name of a dimension, dimension ID (d#), or name of a parameter
         this.new_inst = undefined; // string - New instance name
         this.path = undefined; // array:integer - Path to component to replace
         this.value = undefined; // depends on data type - Cell value
@@ -27,6 +29,39 @@ creo = (function (pub) {
 		        }
 		    }
 		}
+    };
+
+
+    // Add a column to a family table, based on a dimension or a parameter of the model
+    pub.FamilytableObj.prototype.add_column = function () {
+
+        console.log('got into : pub.FamilytableObj.add_column');
+
+        let reqObj = {
+            command : "familytable",
+            function : "add_column",
+            data : {}
+        };
+
+        // set the properties for the request
+        if (this.file) reqObj.data.file = this.file;
+        if (this.name) reqObj.data.name = this.name;
+        if (this.coltype) reqObj.data.coltype = this.coltype;
+
+
+        return creo.ajax.request(reqObj)
+            .then(function (respObj) {
+                if (respObj.data) {
+                    return Promise.resolve(respObj.data);
+                } else {
+                    return Promise.resolve(respObj);
+                }
+            })
+            .catch(function (err) {
+                console.log('Error : '+JSON.stringify(err));
+                return Promise.reject(err);
+            });
+
     };
 
 
@@ -362,6 +397,38 @@ creo = (function (pub) {
         // set the properties for the request
         if (this.file) reqObj.data.file = this.file;
         if (this.erase) reqObj.data.erase = this.erase;
+
+
+        return creo.ajax.request(reqObj)
+            .then(function (respObj) {
+                if (respObj.data) {
+                    return Promise.resolve(respObj.data);
+                } else {
+                    return Promise.resolve(respObj);
+                }
+            })
+            .catch(function (err) {
+                console.log('Error : '+JSON.stringify(err));
+                return Promise.reject(err);
+            });
+
+    };
+
+
+    // Remove a column from a family table
+    pub.FamilytableObj.prototype.remove_column = function () {
+
+        console.log('got into : pub.FamilytableObj.remove_column');
+
+        let reqObj = {
+            command : "familytable",
+            function : "remove_column",
+            data : {}
+        };
+
+        // set the properties for the request
+        if (this.file) reqObj.data.file = this.file;
+        if (this.colid) reqObj.data.colid = this.colid;
 
 
         return creo.ajax.request(reqObj)

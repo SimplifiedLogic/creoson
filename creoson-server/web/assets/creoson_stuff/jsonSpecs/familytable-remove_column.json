@@ -1,0 +1,35 @@
+{
+  "spec" : {
+    "function_description" : "Remove a column from a family table",
+    "command" : "familytable",
+    "function" : "remove_column",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name of the generic model",
+      "default" : "The currently active model"
+    }, {
+      "name" : "colid",
+      "type" : "string",
+      "description" : "Column ID",
+      "required" : true
+    } ],
+    "response" : [ ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "remove_column",
+      "data" : {
+        "file" : "bracket.prt",
+        "colid" : "d12"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      }
+    }
+  } ]
+}

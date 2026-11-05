@@ -82,6 +82,10 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
 			return actionCreateInst(sessionId, input);
 		else if (function.equals(FUNC_GET_PARENTS))
 			return actionGetParents(sessionId, input);
+		else if (function.equals(FUNC_ADD_COLUMN))
+			return actionAddColumn(sessionId, input);
+		else if (function.equals(FUNC_REMOVE_COLUMN))
+			return actionRemoveColumn(sessionId, input);
 		else {
 			throw new JLIException("Unknown function name: " + function);
 		}
@@ -305,6 +309,30 @@ public class JLJsonFamilyTableHandler extends JLJsonCommandHandler implements JL
 		Hashtable<String, Object> out = new Hashtable<String, Object>();
         out.put(OUTPUT_NAME, filename);
        	return out;
+	}
+
+	private Hashtable<String, Object> actionAddColumn(String sessionId, Hashtable<String, Object> input) throws JLIException {
+
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String name = checkStringParameter(input, PARAM_NAME, true);
+        String coltype = checkStringParameter(input, PARAM_COLTYPE, false);
+
+        String colid = ftHandler.addColumn(modelname, name, coltype, sessionId);
+
+		Hashtable<String, Object> out = new Hashtable<String, Object>();
+        if (colid!=null)
+        	out.put(OUTPUT_COLID, colid);
+       	return out;
+	}
+
+	private Hashtable<String, Object> actionRemoveColumn(String sessionId, Hashtable<String, Object> input) throws JLIException {
+
+        String modelname = checkStringParameter(input, PARAM_MODEL, false);
+        String colid = checkStringParameter(input, PARAM_COLID, true);
+
+        ftHandler.removeColumn(modelname, colid, sessionId);
+
+       	return null;
 	}
 
 	private Hashtable<String, Object> actionGetParents(String sessionId, Hashtable<String, Object> input) throws JLIException {

@@ -1,0 +1,68 @@
+{
+  "spec" : {
+    "function_description" : "Add a column to a family table, based on a dimension or a parameter of the model.  The cells of all instances accept the default value of the column; use set_cell to change them",
+    "command" : "familytable",
+    "function" : "add_column",
+    "request" : [ {
+      "name" : "file",
+      "type" : "string",
+      "description" : "File name of the generic model",
+      "default" : "The currently active model"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "description" : "Name of a dimension, dimension ID (d#), or name of a parameter",
+      "required" : true
+    }, {
+      "name" : "coltype",
+      "type" : "string",
+      "description" : "Column type: dimension or param",
+      "default" : "A dimension of that name is tried first, then a parameter",
+      "valid_values" : "dimension, param"
+    } ],
+    "response" : [ {
+      "name" : "colid",
+      "type" : "string",
+      "description" : "Column ID of the new column"
+    } ]
+  },
+  "examples" : [ {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "add_column",
+      "data" : {
+        "file" : "bracket.prt",
+        "name" : "BRACKET_WIDTH",
+        "coltype" : "dimension"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "colid" : "d12"
+      }
+    }
+  }, {
+    "request" : {
+      "sessionId" : "~sessionId~",
+      "command" : "familytable",
+      "function" : "add_column",
+      "data" : {
+        "file" : "bracket.prt",
+        "name" : "MATERIAL",
+        "coltype" : "param"
+      }
+    },
+    "response" : {
+      "status" : {
+        "error" : false
+      },
+      "data" : {
+        "colid" : "MATERIAL"
+      }
+    }
+  } ]
+}

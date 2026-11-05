@@ -108,4 +108,24 @@ public interface IJLFamilyTable {
     public String createInstance(String modelname, String instname,
     		AbstractJLISession sess) throws JLIException;
 
+	/**
+	 * Add a column to a family table, based on a dimension or a parameter of the model.
+	 * The new cells of all instances accept the default value (the value in the generic).
+	 * @param modelname The generic model
+	 * @param name Name or ID (d#) of a dimension, or name of a parameter
+	 * @param coltype "dimension" or "param"; null to try a dimension first and then a parameter
+	 * @return The column ID (symbol) of the new column; Creo creates the family table if the model has none
+	 */
+	public String addColumn(String modelname, String name, String coltype,
+			String sessionId) throws JLIException;
+
+	public String addColumn(String modelname, String name, String coltype,
+			AbstractJLISession sess) throws JLIException;
+
+	public void removeColumn(String modelname, String colid,
+			String sessionId) throws JLIException;
+
+	public void removeColumn(String modelname, String colid,
+			AbstractJLISession sess) throws JLIException;
+
 }

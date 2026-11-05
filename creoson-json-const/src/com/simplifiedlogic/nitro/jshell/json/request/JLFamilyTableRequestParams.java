@@ -42,11 +42,15 @@ public interface JLFamilyTableRequestParams {
     public static final String FUNC_REPLACE     	= "replace";
     public static final String FUNC_CREATE_INST		= "create_inst";
     public static final String FUNC_GET_PARENTS    	= "get_parents";
+    public static final String FUNC_ADD_COLUMN    	= "add_column";
+    public static final String FUNC_REMOVE_COLUMN  	= "remove_column";
 
     // request fields
     public static final String PARAM_MODEL    = "file";
     public static final String PARAM_INSTANCE = "instance";
     public static final String PARAM_COLID    = "colid";
+    public static final String PARAM_NAME     = "name";
+    public static final String PARAM_COLTYPE  = "coltype";
     public static final String PARAM_VALUE    = "value";
     public static final String PARAM_CURMODEL = "cur_model";
     public static final String PARAM_CURINST  = "cur_inst";
